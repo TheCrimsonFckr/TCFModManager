@@ -380,6 +380,7 @@ public partial class OptionsViewModel : LocalizedViewModel
         _showServerOnProfile = settings.ShowServerOnProfile;
         _directLaunch = settings.DirectLaunch;
         _minimizeWhilePlaying = settings.MinimizeWhilePlaying;
+        _showFeatureTours = settings.ShowFeatureTours;
 
         _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
             ?? InstallModeOptions[0];

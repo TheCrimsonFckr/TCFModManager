@@ -308,6 +308,7 @@
                     Margin="0,0,0,8"
                     PlaceholderText="{loc:Str Configs_SearchPlaceholder}"
                     behaviors:PageKeys.Role="Search"
+                    behaviors:TourTarget.Key="configs.search"
                     Icon="{ui:SymbolIcon Search24}"
                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -349,6 +350,7 @@
 
                 <ScrollViewer
                     x:Name="ListScrollViewer"
+                    behaviors:TourTarget.Key="configs.list"
                     Grid.Row="3"
                     Focusable="False"
                     VerticalScrollBarVisibility="Auto"
@@ -836,6 +838,7 @@
 
                     <Grid
                         x:Name="FormPanel"
+                        behaviors:TourTarget.Key="configs.form"
                         Grid.Row="3"
                         Background="Transparent"
                         Visibility="{Binding ShowFormList, Converter={StaticResource BoolToVis}}">

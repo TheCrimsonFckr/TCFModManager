@@ -213,6 +213,33 @@
 
         <ui:CardControl
             Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Lightbulb24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_ToursHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_ToursHint}" />
+                    <TextBlock
+                        Style="{StaticResource SettingNote}"
+                        Margin="0,4,0,0"
+                        Text="{Binding ToursMessage}"
+                        Visibility="{Binding ToursMessage, Converter={StaticResource NullToCollapsed}}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <StackPanel Orientation="Horizontal">
+                <ui:Button
+                    Margin="0,0,14,0"
+                    VerticalAlignment="Center"
+                    Content="{loc:Str Options_ToursAgain}"
+                    ToolTip="{loc:Str Options_ToursAgainToolTip}"
+                    Command="{Binding ShowToursAgainCommand}" />
+                <tcf:SettingSwitch
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding ShowFeatureTours}" />
+            </StackPanel>
+        </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
             Icon="{ui:SymbolIcon Window24}">
             <ui:CardControl.Header>
                 <StackPanel>

@@ -6,6 +6,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:views="clr-namespace:TCFModManager.App.Views"
     xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{Binding WindowTitle, Source={x:Static app:AppServices.SptEnvironment}}"
     Height="980"
     Width="1720"
@@ -213,6 +214,7 @@
                     Visibility="{Binding IsServerPageShown, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Browse}"
+                    behaviors:TourTarget.Key="nav.browse"
                     Icon="{ui:SymbolIcon Apps24}"
                     NavigationCacheMode="Required"
                     TargetPageType="{x:Type views:BrowsePage}" />
@@ -291,6 +293,7 @@
                      command and navigates nowhere. -->
                 <ui:NavigationViewItem
                     Icon="{ui:SymbolIcon Play24}"
+                    behaviors:TourTarget.Key="profile.quickplay"
                     DataContext="{x:Static app:AppServices.Play}"
                     Command="{Binding QuickPlayCommand}"
                     ToolTip="{Binding QuickPlayLine}">

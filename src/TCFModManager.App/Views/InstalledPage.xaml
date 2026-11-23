@@ -400,7 +400,7 @@
                  page rather than a small toggle buried among the filter row's other switches.
                  Whichever mode is active shows tinted with the theme accent (Appearance="Primary"
                  via BoolToAppearance); the other stays Secondary. -->
-            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,0,20,4">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,0,20,4" behaviors:TourTarget.Key="installed.views">
                 <ui:Button
                     Padding="12,7"
                     FontWeight="SemiBold"
@@ -507,6 +507,7 @@
                 <ui:Button
                     Margin="0,0,8,4"
                     Content="{loc:Str Installed_MultiSelect}"
+                    behaviors:TourTarget.Key="installed.multiselect"
                     Icon="{ui:SymbolIcon SelectAllOn24}"
                     ToolTip="{loc:Str Installed_MultiSelectToolTip}"
                     Appearance="{Binding SelectionMode, Converter={StaticResource BoolToAppearance}}"
@@ -525,6 +526,7 @@
                     Margin="0,0,0,4"
                     Content="{loc:Str Common_Rescan}"
                     behaviors:PageKeys.Role="Refresh"
+                    behaviors:TourTarget.Key="installed.rescan"
                     Command="{Binding RescanCommand}" />
             </WrapPanel>
         </Grid>
@@ -584,6 +586,7 @@
 
                     <ToggleButton
                         x:Name="MoreFiltersToggle"
+                        behaviors:TourTarget.Key="installed.filters"
                         MinWidth="130"
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"

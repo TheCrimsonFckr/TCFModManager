@@ -799,6 +799,7 @@
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon Add24}"
                 Content="{loc:Str ModLists_NewList}"
+                behaviors:TourTarget.Key="modlists.new"
                 ToolTip="{loc:Str ModLists_NewListToolTip}"
                 Click="OpenMenu_Click">
                 <ui:Button.ContextMenu>
@@ -858,6 +859,7 @@
 
                     <ListBox
                         x:Name="ListsBox"
+                        behaviors:TourTarget.Key="modlists.lists"
                         BorderThickness="0"
                         Background="Transparent"
                         ItemContainerStyle="{StaticResource BareContainer}"
@@ -1092,6 +1094,7 @@
                         Appearance="Primary"
                         Icon="{ui:SymbolIcon Eye24}"
                         Content="{Binding PreviewLabel}"
+                        behaviors:TourTarget.Key="modlists.preview"
                         ToolTip="{Binding PreviewToolTip}"
                         Visibility="{Binding ShowPreviewStep, Converter={StaticResource BoolToVis}}"
                         Command="{Binding PreviewCommand}" />

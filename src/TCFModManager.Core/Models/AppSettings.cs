@@ -101,6 +101,8 @@ public sealed class AppSettings
 
     public List<string> SeenTours { get; set; } = [];
 
+    public string? LastRunVersion { get; set; }
+
     //
     // OPEN-12 F20, experimental: the Play page's Play card starts the game itself - server, profile,
     // the launcher's checks, patches and bundles - instead of opening SPT's launcher

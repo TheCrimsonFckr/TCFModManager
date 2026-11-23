@@ -11114,4 +11114,121 @@
   <data name="Tour_Browse_Card_Body" xml:space="preserve">
     <value>Нажмите на карточку, чтобы увидеть описание и все версии. Правый клик покажет всё остальное, что можно сделать.</value>
   </data>
+  <data name="Tour_Installed_Views_Title" xml:space="preserve">
+    <value>Три вида для ваших модов</value>
+  </data>
+  <data name="Tour_Installed_Views_Body" xml:space="preserve">
+    <value>Карточки для подробностей, Группы, чтобы раскладывать моды по своим группам, и Список - по строке на мод.</value>
+  </data>
+  <data name="Tour_Installed_Filters_Title" xml:space="preserve">
+    <value>Найдите моды, которым нужно внимание</value>
+  </data>
+  <data name="Tour_Installed_Filters_Body" xml:space="preserve">
+    <value>Показывайте только моды с обновлением, моды не для вашей SPT и другое. Закрепляйте фильтры и сохраняйте пресеты, как в обзоре.</value>
+  </data>
+  <data name="Tour_Installed_Multi_Title" xml:space="preserve">
+    <value>Несколько сразу</value>
+  </data>
+  <data name="Tour_Installed_Multi_Body" xml:space="preserve">
+    <value>Отметьте моды, чтобы обновить, включить, отключить или удалить их вместе. Ctrl-клик, Shift-клик и Ctrl+A тоже отмечают.</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Title" xml:space="preserve">
+    <value>Пересканировать</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Body" xml:space="preserve">
+    <value>Заново читает папку с модами и проверяет новые версии на sp-mod. F5 делает то же самое.</value>
+  </data>
+  <data name="Tour_ModLists_New_Title" xml:space="preserve">
+    <value>Создайте список</value>
+  </data>
+  <data name="Tour_ModLists_New_Body" xml:space="preserve">
+    <value>Из установленного, с нуля, из файла, которым поделились, или по ссылке на Mod List sp-mod.</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Title" xml:space="preserve">
+    <value>Ваши списки</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Body" xml:space="preserve">
+    <value>Выберите список, чтобы посмотреть, что в нём, и изменить его.</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Title" xml:space="preserve">
+    <value>Предпросмотр перед применением</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Body" xml:space="preserve">
+    <value>Посмотрите, что именно применение списка установит, обновит и отложит. Ничего не меняется, пока вы его не примените.</value>
+  </data>
+  <data name="Tour_Profile_Server_Title" xml:space="preserve">
+    <value>Сервер SPT</value>
+  </data>
+  <data name="Tour_Profile_Server_Body" xml:space="preserve">
+    <value>Запускайте, останавливайте и перезапускайте сервер здесь и читайте его журнал во время работы.</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Title" xml:space="preserve">
+    <value>Запустите игру</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Body" xml:space="preserve">
+    <value>Открывает лаунчер SPT, где вы выбираете профиль и играете. Сначала запустите сервер.</value>
+  </data>
+  <data name="Tour_Profile_Stats_Title" xml:space="preserve">
+    <value>Ваш профиль</value>
+  </data>
+  <data name="Tour_Profile_Stats_Body" xml:space="preserve">
+    <value>Уровень, рейды и другая статистика вашего профиля, как в лаунчере SPT.</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Title" xml:space="preserve">
+    <value>Быстрая игра</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Body" xml:space="preserve">
+    <value>Запускает сервер и игру с последним профилем в один клик.</value>
+  </data>
+  <data name="Tour_Configs_Search_Title" xml:space="preserve">
+    <value>Найдите настройку</value>
+  </data>
+  <data name="Tour_Configs_Search_Body" xml:space="preserve">
+    <value>Ищите по названиям модов и их настройкам.</value>
+  </data>
+  <data name="Tour_Configs_List_Title" xml:space="preserve">
+    <value>Все моды с настройками</value>
+  </data>
+  <data name="Tour_Configs_List_Body" xml:space="preserve">
+    <value>Каждый мод с файлом настроек. Выберите мод, чтобы открыть его настройки.</value>
+  </data>
+  <data name="Tour_Configs_Form_Title" xml:space="preserve">
+    <value>Меняйте настройки здесь</value>
+  </data>
+  <data name="Tour_Configs_Form_Body" xml:space="preserve">
+    <value>Не нужно править файл вручную. «Сбросить» возвращает настройку к значению по умолчанию, а «Сохранить все» записывает изменения, сначала сохраняя копию каждого файла.</value>
+  </data>
+  <data name="Options_ToursHeader" xml:space="preserve">
+    <value>Туры по функциям</value>
+  </data>
+  <data name="Options_ToursHint" xml:space="preserve">
+    <value>Короткий тур при первом открытии каждой основной страницы и тур по новому после обновления.</value>
+  </data>
+  <data name="Options_ToursAgain" xml:space="preserve">
+    <value>Показать туры снова</value>
+  </data>
+  <data name="Options_ToursAgainToolTip" xml:space="preserve">
+    <value>Забыть, какие туры вы уже видели, чтобы каждый снова показался при следующем открытии своей страницы.</value>
+  </data>
+  <data name="Options_ToursAgainDone" xml:space="preserve">
+    <value>Готово - каждый тур снова покажется при следующем открытии своей страницы.</value>
+  </data>
+  <data name="Help_TakeTour" xml:space="preserve">
+    <value>Пройти тур</value>
+  </data>
+  <data name="Help_TakeTourToolTip" xml:space="preserve">
+    <value>Открывает страницу и по очереди показывает, что на ней есть.</value>
+  </data>
+  <data name="Tour_New131_Search_Title" xml:space="preserve">
+    <value>Новое: вставьте ссылку, очистите клавишей Esc</value>
+  </data>
+  <data name="Tour_New131_Search_Body" xml:space="preserve">
+    <value>Вставьте сюда ссылку sp-mod, чтобы найти этот мод, и нажмите Esc, чтобы очистить поиск. Поле поиска на странице установленных умеет то же.</value>
+  </data>
+  <data name="Tour_New131_Keys_Title" xml:space="preserve">
+    <value>Новое: Ctrl и стрелки</value>
+  </data>
+  <data name="Tour_New131_Keys_Body" xml:space="preserve">
+    <value>Ctrl+Вверх и Ctrl+Вниз перемещают по этому меню. В обзоре и среди установленных Ctrl+Влево и Ctrl+Вправо листают страницы результатов.</value>
+  </data>
 </root>

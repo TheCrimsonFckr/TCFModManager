@@ -22,6 +22,8 @@ internal static class TourRunner
     private static ContentPresenter? _dialogs;
 
     private static Tour? _tour;
+    private static string? _requested;
+    private static string? _whatsNewAfter;
     private static int _step;
     private static int _generation;
     private static TourRing? _ring;
@@ -35,6 +37,7 @@ internal static class TourRunner
         _card = card;
         _root = root;
         _dialogs = dialogs;
+        _whatsNewAfter = RecordRun();
 
         card.Acted += (_, action) => OnActed(action);
 
@@ -55,12 +58,47 @@ internal static class TourRunner
         if (_tour is not null) End(markSeen: true);
 
         var generation = ++_generation;
-        if (TourCatalog.ForPage(page) is not { } tour) return;
+        var requested = _requested;
+        _requested = null;
+
+        if (Pick(page, requested) is { } tour) _ = StartWhenReadyAsync(tour, generation);
+    }
+
+    private static Tour? Pick(Type? page, string? requested)
+    {
+        var pageTour = TourCatalog.ForPage(page);
+        if (pageTour is not null && string.Equals(requested, pageTour.Id, StringComparison.Ordinal)) return pageTour;
 
         var settings = Settings.Load();
-        if (!settings.ShowFeatureTours || settings.SeenTours.Contains(tour.Id)) return;
+        if (!settings.ShowFeatureTours) return null;
 
-        _ = StartWhenReadyAsync(tour, generation);
+        if (pageTour is not null && !settings.SeenTours.Contains(pageTour.Id)) return pageTour;
+
+        return TourCatalog.WhatsNewFor(page, _whatsNewAfter, AppVersion.Current)
+            .FirstOrDefault(t => !settings.SeenTours.Contains(t.Id));
+    }
+
+    private static string? RecordRun()
+    {
+        var settings = Settings.Load();
+        var after = settings.LastRunVersion
+            ?? (string.IsNullOrWhiteSpace(settings.SptInstallPath) ? AppVersion.Current : null);
+
+        if (!string.Equals(settings.LastRunVersion, AppVersion.Current, StringComparison.Ordinal))
+        {
+            settings.LastRunVersion = AppVersion.Current;
+            Settings.Save(settings);
+        }
+
+        return after;
+    }
+
+    public static void Start(string id)
+    {
+        if (TourCatalog.ById(id) is not { } tour) return;
+
+        _requested = tour.Id;
+        AppNavigation.Navigate(tour.Page);
     }
 
     public static void Close()
@@ -175,7 +213,7 @@ internal static class TourRunner
 
             AddRing(target);
             _card.Show(target, step.Title(), step.Body(), position, shown.Count,
-                canGoBack: shown.Any(i => i < index), isLast: !shown.Any(i => i > index));
+                canGoBack: shown.Any(i => i < index), isLast: !shown.Any(i => i > index), beside: step.Beside);
             Suspend();
         });
     }

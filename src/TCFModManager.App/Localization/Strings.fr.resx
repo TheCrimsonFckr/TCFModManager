@@ -10691,4 +10691,121 @@ Les détails sont dans le journal :
   <data name="Tour_Browse_Card_Body" xml:space="preserve">
     <value>Cliquez sur une carte pour ses détails et toutes ses versions. Un clic droit montre tout ce que vous pouvez faire d'autre.</value>
   </data>
+  <data name="Tour_Installed_Views_Title" xml:space="preserve">
+    <value>Trois façons de voir vos mods</value>
+  </data>
+  <data name="Tour_Installed_Views_Body" xml:space="preserve">
+    <value>Cartes pour les détails, Groupes pour glisser les mods dans vos propres groupes, et Liste pour une ligne par mod.</value>
+  </data>
+  <data name="Tour_Installed_Filters_Title" xml:space="preserve">
+    <value>Trouvez les mods qui ont besoin de vous</value>
+  </data>
+  <data name="Tour_Installed_Filters_Body" xml:space="preserve">
+    <value>N'affichez que les mods avec une mise à jour, ceux qui ne sont pas pour votre SPT, et plus. Épinglez des filtres et enregistrez des préréglages comme sur Parcourir.</value>
+  </data>
+  <data name="Tour_Installed_Multi_Title" xml:space="preserve">
+    <value>Agir sur plusieurs à la fois</value>
+  </data>
+  <data name="Tour_Installed_Multi_Body" xml:space="preserve">
+    <value>Cochez des mods pour les mettre à jour, les activer, les désactiver ou les supprimer ensemble. Ctrl-clic, Maj-clic et Ctrl+A les cochent aussi.</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Title" xml:space="preserve">
+    <value>Réanalyser</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Body" xml:space="preserve">
+    <value>Relit votre dossier de mods et vérifie les nouvelles versions sur sp-mod. F5 fait de même.</value>
+  </data>
+  <data name="Tour_ModLists_New_Title" xml:space="preserve">
+    <value>Créer une liste</value>
+  </data>
+  <data name="Tour_ModLists_New_Body" xml:space="preserve">
+    <value>À partir de ce qui est installé, de zéro, d'un fichier partagé ou d'un lien de Mod List sp-mod.</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Title" xml:space="preserve">
+    <value>Vos listes</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Body" xml:space="preserve">
+    <value>Choisissez-en une pour voir son contenu et la modifier.</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Title" xml:space="preserve">
+    <value>Aperçu avant d'appliquer</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Body" xml:space="preserve">
+    <value>Voyez exactement ce que l'application de la liste installerait, mettrait à jour et mettrait de côté. Rien ne change avant que vous l'appliquiez.</value>
+  </data>
+  <data name="Tour_Profile_Server_Title" xml:space="preserve">
+    <value>Le serveur SPT</value>
+  </data>
+  <data name="Tour_Profile_Server_Body" xml:space="preserve">
+    <value>Démarrez, arrêtez et redémarrez le serveur ici, et lisez son journal pendant qu'il tourne.</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Title" xml:space="preserve">
+    <value>Lancer le jeu</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Body" xml:space="preserve">
+    <value>Ouvre le lanceur de SPT, où vous choisissez un profil et jouez. Démarrez d'abord le serveur.</value>
+  </data>
+  <data name="Tour_Profile_Stats_Title" xml:space="preserve">
+    <value>Votre profil</value>
+  </data>
+  <data name="Tour_Profile_Stats_Body" xml:space="preserve">
+    <value>Le niveau, les raids et les autres statistiques de votre profil, comme le lanceur de SPT les montre.</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Title" xml:space="preserve">
+    <value>Jeu rapide</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Body" xml:space="preserve">
+    <value>Démarre le serveur et le jeu avec le dernier profil joué, en un clic.</value>
+  </data>
+  <data name="Tour_Configs_Search_Title" xml:space="preserve">
+    <value>Trouver un réglage</value>
+  </data>
+  <data name="Tour_Configs_Search_Body" xml:space="preserve">
+    <value>Cherchez dans les noms des mods et les réglages qu'ils contiennent.</value>
+  </data>
+  <data name="Tour_Configs_List_Title" xml:space="preserve">
+    <value>Tous les mods à régler</value>
+  </data>
+  <data name="Tour_Configs_List_Body" xml:space="preserve">
+    <value>Chaque mod avec un fichier de configuration. Choisissez-en un pour ouvrir ses réglages.</value>
+  </data>
+  <data name="Tour_Configs_Form_Title" xml:space="preserve">
+    <value>Modifiez les réglages ici</value>
+  </data>
+  <data name="Tour_Configs_Form_Body" xml:space="preserve">
+    <value>Inutile de modifier le fichier à la main. Réinitialiser remet un réglage par défaut, et Tout enregistrer écrit vos changements en sauvegardant chaque fichier d'abord.</value>
+  </data>
+  <data name="Options_ToursHeader" xml:space="preserve">
+    <value>Visites guidées</value>
+  </data>
+  <data name="Options_ToursHint" xml:space="preserve">
+    <value>Une courte visite la première fois que vous ouvrez chaque page principale, et une sur les nouveautés après une mise à jour.</value>
+  </data>
+  <data name="Options_ToursAgain" xml:space="preserve">
+    <value>Revoir les visites</value>
+  </data>
+  <data name="Options_ToursAgainToolTip" xml:space="preserve">
+    <value>Oublie les visites déjà vues, pour que chacune s'affiche à la prochaine ouverture de sa page.</value>
+  </data>
+  <data name="Options_ToursAgainDone" xml:space="preserve">
+    <value>C'est fait - chaque visite s'affichera à la prochaine ouverture de sa page.</value>
+  </data>
+  <data name="Help_TakeTour" xml:space="preserve">
+    <value>Faire la visite</value>
+  </data>
+  <data name="Help_TakeTourToolTip" xml:space="preserve">
+    <value>Ouvre la page et vous montre ce qu'elle contient, un élément à la fois.</value>
+  </data>
+  <data name="Tour_New131_Search_Title" xml:space="preserve">
+    <value>Nouveau : collez un lien, effacez avec Échap</value>
+  </data>
+  <data name="Tour_New131_Search_Body" xml:space="preserve">
+    <value>Collez ici un lien sp-mod pour chercher ce mod, et appuyez sur Échap pour effacer la recherche. Le champ de recherche d'Installés fait les deux aussi.</value>
+  </data>
+  <data name="Tour_New131_Keys_Title" xml:space="preserve">
+    <value>Nouveau : Ctrl et les flèches</value>
+  </data>
+  <data name="Tour_New131_Keys_Body" xml:space="preserve">
+    <value>Ctrl+Haut et Ctrl+Bas montent et descendent dans ce menu. Sur Parcourir et Installés, Ctrl+Gauche et Ctrl+Droite tournent les pages de résultats.</value>
+  </data>
 </root>

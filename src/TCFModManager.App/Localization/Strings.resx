@@ -13057,4 +13057,160 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Click a card for its details and every version. Right-click it for everything else you can do with it.</value>
     <comment>Feature tour, Browse: a mod card.</comment>
   </data>
+  <data name="Tour_Installed_Views_Title" xml:space="preserve">
+    <value>Three ways to see your mods</value>
+    <comment>Feature tour, Installed: title of the step on the Cards/Groups/List buttons.</comment>
+  </data>
+  <data name="Tour_Installed_Views_Body" xml:space="preserve">
+    <value>Cards for the details, Groups to drag mods into groups of your own, and List for one line per mod.</value>
+    <comment>Feature tour, Installed: the Cards/Groups/List buttons.</comment>
+  </data>
+  <data name="Tour_Installed_Filters_Title" xml:space="preserve">
+    <value>Find the mods that need you</value>
+    <comment>Feature tour, Installed: title of the step on the Filters button.</comment>
+  </data>
+  <data name="Tour_Installed_Filters_Body" xml:space="preserve">
+    <value>Show only mods with an update, ones that aren't for your SPT, and more. Pin filters and save presets as on Browse.</value>
+    <comment>Feature tour, Installed: the Filters and view options button.</comment>
+  </data>
+  <data name="Tour_Installed_Multi_Title" xml:space="preserve">
+    <value>Act on several at once</value>
+    <comment>Feature tour, Installed: title of the step on Multi select.</comment>
+  </data>
+  <data name="Tour_Installed_Multi_Body" xml:space="preserve">
+    <value>Tick mods to update, enable, disable or remove them together. Ctrl-click, Shift-click and Ctrl+A tick them too.</value>
+    <comment>Feature tour, Installed: the Multi select button.</comment>
+  </data>
+  <data name="Tour_Installed_Rescan_Title" xml:space="preserve">
+    <value>Rescan</value>
+    <comment>Feature tour, Installed: title of the step on Rescan.</comment>
+  </data>
+  <data name="Tour_Installed_Rescan_Body" xml:space="preserve">
+    <value>Reads your mods folder again and checks sp-mod for new versions. F5 does the same.</value>
+    <comment>Feature tour, Installed: the Rescan button.</comment>
+  </data>
+  <data name="Tour_ModLists_New_Title" xml:space="preserve">
+    <value>Start a list</value>
+    <comment>Feature tour, Mod lists: title of the step on New list.</comment>
+  </data>
+  <data name="Tour_ModLists_New_Body" xml:space="preserve">
+    <value>From what's installed, from scratch, from a file someone shared, or from a sp-mod Mod List link.</value>
+    <comment>Feature tour, Mod lists: the New list button.</comment>
+  </data>
+  <data name="Tour_ModLists_Lists_Title" xml:space="preserve">
+    <value>Your lists</value>
+    <comment>Feature tour, Mod lists: title of the step on the saved lists.</comment>
+  </data>
+  <data name="Tour_ModLists_Lists_Body" xml:space="preserve">
+    <value>Pick one to see what's on it and change it.</value>
+    <comment>Feature tour, Mod lists: the saved lists.</comment>
+  </data>
+  <data name="Tour_ModLists_Preview_Title" xml:space="preserve">
+    <value>Preview before you apply</value>
+    <comment>Feature tour, Mod lists: title of the step on Preview to apply.</comment>
+  </data>
+  <data name="Tour_ModLists_Preview_Body" xml:space="preserve">
+    <value>See exactly what applying the list would install, update and set aside. Nothing changes until you apply it.</value>
+    <comment>Feature tour, Mod lists: the Preview to apply button.</comment>
+  </data>
+  <data name="Tour_Profile_Server_Title" xml:space="preserve">
+    <value>The SPT server</value>
+    <comment>Feature tour, Profile: title of the step on the SPT server card.</comment>
+  </data>
+  <data name="Tour_Profile_Server_Body" xml:space="preserve">
+    <value>Start, stop and restart the server here, and read its log as it runs.</value>
+    <comment>Feature tour, Profile: the SPT server card.</comment>
+  </data>
+  <data name="Tour_Profile_Launcher_Title" xml:space="preserve">
+    <value>Start the game</value>
+    <comment>Feature tour, Profile: title of the step on the Game launcher card.</comment>
+  </data>
+  <data name="Tour_Profile_Launcher_Body" xml:space="preserve">
+    <value>Opens SPT's launcher, where you pick a profile and play. Start the server first.</value>
+    <comment>Feature tour, Profile: the Game launcher card.</comment>
+  </data>
+  <data name="Tour_Profile_Stats_Title" xml:space="preserve">
+    <value>Your profile</value>
+    <comment>Feature tour, Profile: title of the step on the profile stats card.</comment>
+  </data>
+  <data name="Tour_Profile_Stats_Body" xml:space="preserve">
+    <value>Your profile's level, raids and other stats, as SPT's launcher shows them.</value>
+    <comment>Feature tour, Profile: the profile stats card.</comment>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Title" xml:space="preserve">
+    <value>Quick play</value>
+    <comment>Feature tour, Profile: title of the step on Quick play in the sidebar.</comment>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Body" xml:space="preserve">
+    <value>Starts the server and the game with the profile you played last, in one click.</value>
+    <comment>Feature tour, Profile: the Quick play item in the sidebar.</comment>
+  </data>
+  <data name="Tour_Configs_Search_Title" xml:space="preserve">
+    <value>Find a setting</value>
+    <comment>Feature tour, Configs: title of the step on the search box.</comment>
+  </data>
+  <data name="Tour_Configs_Search_Body" xml:space="preserve">
+    <value>Search mod names and the settings inside them.</value>
+    <comment>Feature tour, Configs: the search box.</comment>
+  </data>
+  <data name="Tour_Configs_List_Title" xml:space="preserve">
+    <value>Every mod you can set up</value>
+    <comment>Feature tour, Configs: title of the step on the list of mods with configs.</comment>
+  </data>
+  <data name="Tour_Configs_List_Body" xml:space="preserve">
+    <value>Each mod with a config file. Pick one to open its settings.</value>
+    <comment>Feature tour, Configs: the list of mods with config files.</comment>
+  </data>
+  <data name="Tour_Configs_Form_Title" xml:space="preserve">
+    <value>Change settings here</value>
+    <comment>Feature tour, Configs: title of the step on the settings form.</comment>
+  </data>
+  <data name="Tour_Configs_Form_Body" xml:space="preserve">
+    <value>No need to edit the file by hand. Reset puts a setting back to its default, and Save all writes your changes, backing each file up first.</value>
+    <comment>Feature tour, Configs: the settings form.</comment>
+  </data>
+  <data name="Options_ToursHeader" xml:space="preserve">
+    <value>Feature tours</value>
+    <comment>Options: title of the feature tours setting.</comment>
+  </data>
+  <data name="Options_ToursHint" xml:space="preserve">
+    <value>A short tour the first time you open each main page, and one for what's new after an update.</value>
+    <comment>Options: hint under the feature tours setting.</comment>
+  </data>
+  <data name="Options_ToursAgain" xml:space="preserve">
+    <value>Show the tours again</value>
+    <comment>Options: button beside the feature tours switch. Forgets which tours were seen.</comment>
+  </data>
+  <data name="Options_ToursAgainToolTip" xml:space="preserve">
+    <value>Forget which tours you've seen, so each one shows on its page's next visit.</value>
+    <comment>Tooltip on Show the tours again.</comment>
+  </data>
+  <data name="Options_ToursAgainDone" xml:space="preserve">
+    <value>Done - each tour shows again on its page's next visit.</value>
+    <comment>Options: note after Show the tours again is pressed.</comment>
+  </data>
+  <data name="Help_TakeTour" xml:space="preserve">
+    <value>Take the tour</value>
+    <comment>Help: button beside a section's title. Goes to that page and starts its feature tour.</comment>
+  </data>
+  <data name="Help_TakeTourToolTip" xml:space="preserve">
+    <value>Goes to the page and points out what's on it, one thing at a time.</value>
+    <comment>Help: tooltip on Take the tour.</comment>
+  </data>
+  <data name="Tour_New131_Search_Title" xml:space="preserve">
+    <value>New: paste a link, clear with Esc</value>
+    <comment>What's new tour (v1.31.0), Browse: title of the step on the search box.</comment>
+  </data>
+  <data name="Tour_New131_Search_Body" xml:space="preserve">
+    <value>Paste a sp-mod link here to search for that mod, and press Esc to clear the search. Installed's search box does both too.</value>
+    <comment>What's new tour (v1.31.0), Browse: the search box.</comment>
+  </data>
+  <data name="Tour_New131_Keys_Title" xml:space="preserve">
+    <value>New: Ctrl and the arrow keys</value>
+    <comment>What's new tour (v1.31.0): title of the step on the sidebar.</comment>
+  </data>
+  <data name="Tour_New131_Keys_Body" xml:space="preserve">
+    <value>Ctrl+Up and Ctrl+Down go up and down this menu. On Browse and Installed, Ctrl+Left and Ctrl+Right turn the pages of results.</value>
+    <comment>What's new tour (v1.31.0): the sidebar.</comment>
+  </data>
 </root>

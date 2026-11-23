@@ -111,6 +111,14 @@
                                     FontWeight="SemiBold"
                                     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Text="{Binding Title}" />
+                                <ui:Button
+                                    Margin="16,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Icon="{ui:SymbolIcon Lightbulb24}"
+                                    Content="{loc:Str Help_TakeTour}"
+                                    ToolTip="{loc:Str Help_TakeTourToolTip}"
+                                    Command="{Binding TakeTourCommand}"
+                                    Visibility="{Binding HasTour, Converter={StaticResource BoolToVisibility}}" />
                             </StackPanel>
 
                             <ItemsControl Focusable="False" ItemsSource="{Binding Topics}">

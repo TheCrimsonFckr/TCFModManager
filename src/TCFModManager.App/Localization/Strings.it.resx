@@ -10691,4 +10691,121 @@ I dettagli sono nel log:
   <data name="Tour_Browse_Card_Body" xml:space="preserve">
     <value>Fai clic su una scheda per i dettagli e tutte le versioni. Con il clic destro trovi tutto il resto che puoi fare.</value>
   </data>
+  <data name="Tour_Installed_Views_Title" xml:space="preserve">
+    <value>Tre modi di vedere le tue mod</value>
+  </data>
+  <data name="Tour_Installed_Views_Body" xml:space="preserve">
+    <value>Schede per i dettagli, Gruppi per trascinare le mod in gruppi tuoi, e Elenco per una riga per mod.</value>
+  </data>
+  <data name="Tour_Installed_Filters_Title" xml:space="preserve">
+    <value>Trova le mod che hanno bisogno di te</value>
+  </data>
+  <data name="Tour_Installed_Filters_Body" xml:space="preserve">
+    <value>Mostra solo le mod con un aggiornamento, quelle non adatte al tuo SPT e altro. Fissa filtri e salva preset come in Sfoglia.</value>
+  </data>
+  <data name="Tour_Installed_Multi_Title" xml:space="preserve">
+    <value>Agisci su più mod insieme</value>
+  </data>
+  <data name="Tour_Installed_Multi_Body" xml:space="preserve">
+    <value>Spunta le mod per aggiornarle, attivarle, disattivarle o rimuoverle insieme. Anche Ctrl-clic, Maiusc-clic e Ctrl+A le spuntano.</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Title" xml:space="preserve">
+    <value>Ripeti scansione</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Body" xml:space="preserve">
+    <value>Rilegge la cartella delle mod e controlla le nuove versioni su sp-mod. F5 fa lo stesso.</value>
+  </data>
+  <data name="Tour_ModLists_New_Title" xml:space="preserve">
+    <value>Crea una lista</value>
+  </data>
+  <data name="Tour_ModLists_New_Body" xml:space="preserve">
+    <value>Da ciò che è installato, da zero, da un file condiviso o da un link a una Mod List di sp-mod.</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Title" xml:space="preserve">
+    <value>Le tue liste</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Body" xml:space="preserve">
+    <value>Scegline una per vedere cosa contiene e modificarla.</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Title" xml:space="preserve">
+    <value>Anteprima prima di applicare</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Body" xml:space="preserve">
+    <value>Vedi esattamente cosa installerebbe, aggiornerebbe e metterebbe da parte l'applicazione della lista. Nulla cambia finché non la applichi.</value>
+  </data>
+  <data name="Tour_Profile_Server_Title" xml:space="preserve">
+    <value>Il server SPT</value>
+  </data>
+  <data name="Tour_Profile_Server_Body" xml:space="preserve">
+    <value>Avvia, ferma e riavvia il server qui, e leggi il suo log mentre è in esecuzione.</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Title" xml:space="preserve">
+    <value>Avvia il gioco</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Body" xml:space="preserve">
+    <value>Apre il launcher di SPT, dove scegli un profilo e giochi. Avvia prima il server.</value>
+  </data>
+  <data name="Tour_Profile_Stats_Title" xml:space="preserve">
+    <value>Il tuo profilo</value>
+  </data>
+  <data name="Tour_Profile_Stats_Body" xml:space="preserve">
+    <value>Livello, raid e altre statistiche del tuo profilo, come le mostra il launcher di SPT.</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Title" xml:space="preserve">
+    <value>Gioco rapido</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Body" xml:space="preserve">
+    <value>Avvia il server e il gioco con l'ultimo profilo usato, con un clic.</value>
+  </data>
+  <data name="Tour_Configs_Search_Title" xml:space="preserve">
+    <value>Trova un'impostazione</value>
+  </data>
+  <data name="Tour_Configs_Search_Body" xml:space="preserve">
+    <value>Cerca nei nomi delle mod e nelle impostazioni che contengono.</value>
+  </data>
+  <data name="Tour_Configs_List_Title" xml:space="preserve">
+    <value>Ogni mod che puoi configurare</value>
+  </data>
+  <data name="Tour_Configs_List_Body" xml:space="preserve">
+    <value>Ogni mod con un file di configurazione. Scegline una per aprirne le impostazioni.</value>
+  </data>
+  <data name="Tour_Configs_Form_Title" xml:space="preserve">
+    <value>Cambia le impostazioni qui</value>
+  </data>
+  <data name="Tour_Configs_Form_Body" xml:space="preserve">
+    <value>Non serve modificare il file a mano. Ripristina riporta un'impostazione al valore predefinito, e Salva tutto scrive le modifiche, facendo prima un backup di ogni file.</value>
+  </data>
+  <data name="Options_ToursHeader" xml:space="preserve">
+    <value>Tour delle funzioni</value>
+  </data>
+  <data name="Options_ToursHint" xml:space="preserve">
+    <value>Un breve tour la prima volta che apri ogni pagina principale, e uno sulle novità dopo un aggiornamento.</value>
+  </data>
+  <data name="Options_ToursAgain" xml:space="preserve">
+    <value>Mostra di nuovo i tour</value>
+  </data>
+  <data name="Options_ToursAgainToolTip" xml:space="preserve">
+    <value>Dimentica quali tour hai visto, così ognuno ricompare alla prossima visita della sua pagina.</value>
+  </data>
+  <data name="Options_ToursAgainDone" xml:space="preserve">
+    <value>Fatto - ogni tour ricompare alla prossima visita della sua pagina.</value>
+  </data>
+  <data name="Help_TakeTour" xml:space="preserve">
+    <value>Fai il tour</value>
+  </data>
+  <data name="Help_TakeTourToolTip" xml:space="preserve">
+    <value>Apre la pagina e ti mostra cosa contiene, una cosa alla volta.</value>
+  </data>
+  <data name="Tour_New131_Search_Title" xml:space="preserve">
+    <value>Novità: incolla un link, svuota con Esc</value>
+  </data>
+  <data name="Tour_New131_Search_Body" xml:space="preserve">
+    <value>Incolla qui un link di sp-mod per cercare quella mod, e premi Esc per svuotare la ricerca. Anche la casella di ricerca di Installati fa entrambe le cose.</value>
+  </data>
+  <data name="Tour_New131_Keys_Title" xml:space="preserve">
+    <value>Novità: Ctrl e le frecce</value>
+  </data>
+  <data name="Tour_New131_Keys_Body" xml:space="preserve">
+    <value>Ctrl+Su e Ctrl+Giù salgono e scendono in questo menu. In Sfoglia e Installati, Ctrl+Sinistra e Ctrl+Destra sfogliano le pagine dei risultati.</value>
+  </data>
 </root>

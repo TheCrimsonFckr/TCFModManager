@@ -10691,4 +10691,121 @@ Die Details stehen im Log:
   <data name="Tour_Browse_Card_Body" xml:space="preserve">
     <value>Klicke auf eine Karte für Details und alle Versionen. Ein Rechtsklick zeigt alles andere, was du damit machen kannst.</value>
   </data>
+  <data name="Tour_Installed_Views_Title" xml:space="preserve">
+    <value>Drei Ansichten für deine Mods</value>
+  </data>
+  <data name="Tour_Installed_Views_Body" xml:space="preserve">
+    <value>Karten für die Details, Gruppen, um Mods in eigene Gruppen zu ziehen, und Liste für eine Zeile pro Mod.</value>
+  </data>
+  <data name="Tour_Installed_Filters_Title" xml:space="preserve">
+    <value>Finde die Mods, die dich brauchen</value>
+  </data>
+  <data name="Tour_Installed_Filters_Body" xml:space="preserve">
+    <value>Zeige nur Mods mit Update, solche, die nicht zu deiner SPT-Version passen, und mehr. Filter anheften und Vorlagen speichern wie beim Durchsuchen.</value>
+  </data>
+  <data name="Tour_Installed_Multi_Title" xml:space="preserve">
+    <value>Mehrere auf einmal</value>
+  </data>
+  <data name="Tour_Installed_Multi_Body" xml:space="preserve">
+    <value>Hake Mods an, um sie gemeinsam zu aktualisieren, zu aktivieren, zu deaktivieren oder zu entfernen. Strg-Klick, Umschalt-Klick und Strg+A haken sie auch an.</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Title" xml:space="preserve">
+    <value>Neu einlesen</value>
+  </data>
+  <data name="Tour_Installed_Rescan_Body" xml:space="preserve">
+    <value>Liest deinen Mod-Ordner neu ein und prüft sp-mod auf neue Versionen. F5 macht dasselbe.</value>
+  </data>
+  <data name="Tour_ModLists_New_Title" xml:space="preserve">
+    <value>Eine Liste anlegen</value>
+  </data>
+  <data name="Tour_ModLists_New_Body" xml:space="preserve">
+    <value>Aus dem, was installiert ist, ganz neu, aus einer geteilten Datei oder aus einem sp-mod-Mod-List-Link.</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Title" xml:space="preserve">
+    <value>Deine Listen</value>
+  </data>
+  <data name="Tour_ModLists_Lists_Body" xml:space="preserve">
+    <value>Wähle eine aus, um zu sehen, was darauf steht, und sie zu ändern.</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Title" xml:space="preserve">
+    <value>Vorschau vor dem Anwenden</value>
+  </data>
+  <data name="Tour_ModLists_Preview_Body" xml:space="preserve">
+    <value>Sieh genau, was das Anwenden der Liste installieren, aktualisieren und beiseitelegen würde. Nichts ändert sich, bevor du sie anwendest.</value>
+  </data>
+  <data name="Tour_Profile_Server_Title" xml:space="preserve">
+    <value>Der SPT-Server</value>
+  </data>
+  <data name="Tour_Profile_Server_Body" xml:space="preserve">
+    <value>Starte, stoppe und starte den Server hier neu, und lies sein Log, während er läuft.</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Title" xml:space="preserve">
+    <value>Das Spiel starten</value>
+  </data>
+  <data name="Tour_Profile_Launcher_Body" xml:space="preserve">
+    <value>Öffnet den SPT-Launcher, wo du ein Profil wählst und spielst. Starte zuerst den Server.</value>
+  </data>
+  <data name="Tour_Profile_Stats_Title" xml:space="preserve">
+    <value>Dein Profil</value>
+  </data>
+  <data name="Tour_Profile_Stats_Body" xml:space="preserve">
+    <value>Stufe, Raids und weitere Werte deines Profils, wie der SPT-Launcher sie zeigt.</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Title" xml:space="preserve">
+    <value>Schnellstart</value>
+  </data>
+  <data name="Tour_Profile_QuickPlay_Body" xml:space="preserve">
+    <value>Startet Server und Spiel mit dem zuletzt gespielten Profil, mit einem Klick.</value>
+  </data>
+  <data name="Tour_Configs_Search_Title" xml:space="preserve">
+    <value>Eine Einstellung finden</value>
+  </data>
+  <data name="Tour_Configs_Search_Body" xml:space="preserve">
+    <value>Durchsuche Mod-Namen und die Einstellungen darin.</value>
+  </data>
+  <data name="Tour_Configs_List_Title" xml:space="preserve">
+    <value>Jeder Mod, den du einstellen kannst</value>
+  </data>
+  <data name="Tour_Configs_List_Body" xml:space="preserve">
+    <value>Jeder Mod mit einer Konfigurationsdatei. Wähle einen, um seine Einstellungen zu öffnen.</value>
+  </data>
+  <data name="Tour_Configs_Form_Title" xml:space="preserve">
+    <value>Einstellungen hier ändern</value>
+  </data>
+  <data name="Tour_Configs_Form_Body" xml:space="preserve">
+    <value>Die Datei musst du nicht von Hand bearbeiten. Zurücksetzen stellt eine Einstellung auf den Standard zurück, und Alle speichern schreibt deine Änderungen und sichert jede Datei vorher.</value>
+  </data>
+  <data name="Options_ToursHeader" xml:space="preserve">
+    <value>Funktionstouren</value>
+  </data>
+  <data name="Options_ToursHint" xml:space="preserve">
+    <value>Eine kurze Tour beim ersten Öffnen jeder Hauptseite, und eine zu den Neuerungen nach einem Update.</value>
+  </data>
+  <data name="Options_ToursAgain" xml:space="preserve">
+    <value>Touren erneut zeigen</value>
+  </data>
+  <data name="Options_ToursAgainToolTip" xml:space="preserve">
+    <value>Vergisst, welche Touren du gesehen hast, damit jede beim nächsten Besuch ihrer Seite erscheint.</value>
+  </data>
+  <data name="Options_ToursAgainDone" xml:space="preserve">
+    <value>Erledigt - jede Tour erscheint beim nächsten Besuch ihrer Seite wieder.</value>
+  </data>
+  <data name="Help_TakeTour" xml:space="preserve">
+    <value>Tour starten</value>
+  </data>
+  <data name="Help_TakeTourToolTip" xml:space="preserve">
+    <value>Öffnet die Seite und zeigt dir nacheinander, was es dort gibt.</value>
+  </data>
+  <data name="Tour_New131_Search_Title" xml:space="preserve">
+    <value>Neu: Link einfügen, mit Esc leeren</value>
+  </data>
+  <data name="Tour_New131_Search_Body" xml:space="preserve">
+    <value>Füge hier einen sp-mod-Link ein, um nach diesem Mod zu suchen, und drücke Esc, um die Suche zu leeren. Das Suchfeld unter Installiert kann beides auch.</value>
+  </data>
+  <data name="Tour_New131_Keys_Title" xml:space="preserve">
+    <value>Neu: Strg und die Pfeiltasten</value>
+  </data>
+  <data name="Tour_New131_Keys_Body" xml:space="preserve">
+    <value>Strg+Oben und Strg+Unten wechseln in diesem Menü nach oben und unten. Beim Durchsuchen und unter Installiert blättern Strg+Links und Strg+Rechts durch die Ergebnisseiten.</value>
+  </data>
 </root>

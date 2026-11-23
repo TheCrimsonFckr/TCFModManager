@@ -22,6 +22,7 @@ public partial class TourCard : UserControl
 
     private bool _wanted;
     private bool _suspended;
+    private bool _beside;
 
     public TourCard()
     {
@@ -31,11 +32,12 @@ public partial class TourCard : UserControl
 
     public event EventHandler<TourAction>? Acted;
 
-    public void Show(FrameworkElement target, string title, string body, int position, int count, bool canGoBack, bool isLast)
+    public void Show(FrameworkElement target, string title, string body, int position, int count, bool canGoBack, bool isLast, bool beside)
     {
+        _beside = beside;
         TitleText.Text = title;
         BodyText.Text = body;
-        CountText.Text = string.Format(Strings.Tour_StepFormat, position, count);
+        CountText.Text = LocalizationService.Text(Strings.Tour_StepFormat, position, count);
         BackButton.Visibility = canGoBack ? Visibility.Visible : Visibility.Collapsed;
         NextButton.Content = isLast ? Strings.Tour_Done : Strings.Tour_Next;
 
@@ -70,20 +72,27 @@ public partial class TourCard : UserControl
 
     private void Apply() => Popup.IsOpen = _wanted && !_suspended;
 
-    private static CustomPopupPlacement[] Place(Size popup, Size target, Point offset)
+    private CustomPopupPlacement[] Place(Size popup, Size target, Point _)
     {
         var width = popup.Width - ShadowLeft * 2;
         var height = popup.Height - ShadowTop - ShadowBottom;
 
-        return
+        CustomPopupPlacement[] below =
         [
             new(new Point(-ShadowLeft, target.Height + Gap - ShadowTop), PopupPrimaryAxis.Horizontal),
             new(new Point(target.Width - width - ShadowLeft, target.Height + Gap - ShadowTop), PopupPrimaryAxis.Horizontal),
             new(new Point(-ShadowLeft, -height - Gap - ShadowTop), PopupPrimaryAxis.Horizontal),
             new(new Point(target.Width - width - ShadowLeft, -height - Gap - ShadowTop), PopupPrimaryAxis.Horizontal),
+        ];
+
+        CustomPopupPlacement[] beside =
+        [
             new(new Point(target.Width + Gap - ShadowLeft, -ShadowTop), PopupPrimaryAxis.Vertical),
+            new(new Point(target.Width + Gap - ShadowLeft, target.Height - height - ShadowTop), PopupPrimaryAxis.Vertical),
             new(new Point(-width - Gap - ShadowLeft, -ShadowTop), PopupPrimaryAxis.Vertical),
         ];
+
+        return _beside ? [.. beside, .. below] : [.. below, .. beside];
     }
 
     private void Next_Click(object sender, RoutedEventArgs e) => Acted?.Invoke(this, TourAction.Next);

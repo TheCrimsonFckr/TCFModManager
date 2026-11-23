@@ -184,6 +184,14 @@ public partial class HelpSectionViewModel : LocalizedViewModel
 
     public IReadOnlyList<HelpTopicViewModel> Topics { get; }
 
+    public bool HasTour => Tours.TourCatalog.ForPage(_section.PageType) is not null;
+
+    [RelayCommand]
+    private void TakeTour()
+    {
+        if (Tours.TourCatalog.ForPage(_section.PageType) is { } tour) Tours.TourRunner.Start(tour.Id);
+    }
+
     [ObservableProperty]
     private bool _isVisible = true;
 }

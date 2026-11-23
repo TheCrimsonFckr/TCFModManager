@@ -4,16 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:play="clr-namespace:TCFModManager.App.Views.Play"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{loc:Str Nav_Profile}">
     <!-- Arranged in code: the server cards join in, and the order changes, while
          AppServices.ServerPageGate says the Server page's cards are here (OPEN-42). -->
     <StackPanel x:Name="Root" Margin="16,16,16,0">
         <play:InstallWarningCards x:Name="Warnings" />
         <play:BeforeYouJoinCard x:Name="BeforeYouJoin" />
-        <play:ServerCard x:Name="Server" FillsWindow="False" />
+        <play:ServerCard x:Name="Server" FillsWindow="False" behaviors:TourTarget.Key="profile.server" />
         <play:PlayCard x:Name="DirectPlay" />
-        <play:ProfileStatsCard x:Name="Stats" />
-        <play:GameLauncherCard x:Name="Launcher" />
+        <play:ProfileStatsCard x:Name="Stats" behaviors:TourTarget.Key="profile.stats" />
+        <play:GameLauncherCard x:Name="Launcher" behaviors:TourTarget.Key="profile.launcher" />
         <play:HeadlessCard x:Name="Headless" />
         <play:ModToolsCard x:Name="Tools" />
         <play:MessageCard x:Name="Message" />
