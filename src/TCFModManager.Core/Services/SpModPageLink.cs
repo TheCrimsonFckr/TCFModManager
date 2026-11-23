@@ -10,13 +10,13 @@ public enum SpModLinkKind
     List,
 }
 
-public readonly record struct SpModLink(SpModLinkKind Kind, int Id);
+public readonly record struct SpModLink(SpModLinkKind Kind, int Id, string? Slug = null);
 
 public static partial class SpModPageLink
 {
     private const string Host = "sp-mod.com";
 
-    [GeneratedRegex(@"^/(mod|addon)/(\d{1,9})(?:/[^/?#]*)?/?$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"^(?:/index\.php)?/(mod|addon)/(\d{1,9})(?:/([^/?#]*))?/?$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)]
     private static partial Regex PagePath();
 
     public static SpModLink? Parse(string? text)
@@ -40,6 +40,7 @@ public static partial class SpModPageLink
         if (id <= 0) return null;
 
         var kind = string.Equals(match.Groups[1].Value, "addon", StringComparison.OrdinalIgnoreCase) ? SpModLinkKind.Addon : SpModLinkKind.Mod;
-        return new SpModLink(kind, id);
+        var slug = Uri.UnescapeDataString(match.Groups[3].Value);
+        return new SpModLink(kind, id, slug.Length == 0 ? null : slug);
     }
 }

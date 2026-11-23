@@ -309,7 +309,7 @@ public static partial class SpModListImport
     // A fixed namespace for the v5 ids below. Changing it would orphan every imported list.
     private static readonly Guid IdNamespace = new("6f1c8e3a-2b7d-5c49-9a0e-4d3b1f8a7c26");
 
-    [GeneratedRegex(@"^/list/(\d{1,9})(?:/[^/?#]*)?/?$", RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"^(?:/index\.php)?/list/(\d{1,9})(?:/[^/?#]*)?/?$", RegexOptions.CultureInvariant)]
     private static partial Regex ListPath();
 
     [GeneratedRegex(@"/(mod|addon)/(\d{1,9})(?:[/?#]|$)", RegexOptions.CultureInvariant)]

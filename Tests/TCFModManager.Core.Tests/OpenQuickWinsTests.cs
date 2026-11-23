@@ -27,6 +27,9 @@ public class OpenQuickWinsTests
     [InlineData("sp-mod.com/mod/791", SpModLinkKind.Mod, 791)]
     [InlineData("  https://www.sp-mod.com/addon/98/some-addon?tab=versions  ", SpModLinkKind.Addon, 98)]
     [InlineData("https://sp-mod.com/list/12/my-list", SpModLinkKind.List, 12)]
+    [InlineData("https://sp-mod.com/index.php/addon/177/sain-personality-mixer", SpModLinkKind.Addon, 177)]
+    [InlineData("https://sp-mod.com/index.php/mod/791/sain", SpModLinkKind.Mod, 791)]
+    [InlineData("https://sp-mod.com/index.php/list/12/my-list", SpModLinkKind.List, 12)]
     public void SpModPageLink_ReadsModAddonAndListLinks(string text, SpModLinkKind kind, int id)
     {
         var link = SpModPageLink.Parse(text);
@@ -43,6 +46,12 @@ public class OpenQuickWinsTests
     [InlineData("https://sp-mod.com/mod/791\nhttps://sp-mod.com/mod/792")]
     [InlineData(null)]
     public void SpModPageLink_IgnoresAnythingElse(string? text) => Assert.Null(SpModPageLink.Parse(text));
+
+    [Theory]
+    [InlineData("https://sp-mod.com/index.php/addon/177/sain-personality-mixer", "sain-personality-mixer")]
+    [InlineData("https://sp-mod.com/mod/791/sain?tab=versions", "sain")]
+    [InlineData("https://sp-mod.com/mod/791", null)]
+    public void SpModPageLink_KeepsTheSlug(string text, string? slug) => Assert.Equal(slug, SpModPageLink.Parse(text)!.Value.Slug);
 
     private const string CoreJson = """
         {

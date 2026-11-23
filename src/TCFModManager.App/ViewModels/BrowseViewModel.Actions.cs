@@ -5,6 +5,7 @@ using TCFModManager.App.Services;
 using TCFModManager.App.Views;
 using TCFModManager.Core.SpModApi;
 using TCFModManager.Core.Models;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -169,6 +170,18 @@ public partial class BrowseViewModel
             InstallTarget.For(mod), chosenVersion, installPath, () => _spModApi.FindModVersionAsync(mod.Id.ToString(), chosenVersion),
             downloadOnly: downloadOnly);
         StatusMessage = Text(Strings.Browse_QueuedFormat, mod.Name, chosenVersion);
+    }
+
+    public static string? SearchTextForLink(string? text)
+    {
+        if (SpModPageLink.Parse(text) is not { Kind: not SpModLinkKind.List } link) return null;
+
+        var name = link.Kind == SpModLinkKind.Mod
+            ? AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == link.Id)?.Name
+            : AppServices.Addons.AllAddons.FirstOrDefault(a => a.Id == link.Id)?.Name;
+
+        if (!string.IsNullOrWhiteSpace(name)) return name.Trim();
+        return link.Slug?.Replace('-', ' ');
     }
 
     // OPEN-52 N21: a mod or addon from a pasted or dropped sp-mod link. False when the catalog has no such listing.

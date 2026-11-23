@@ -189,6 +189,7 @@
 
                 <WrapPanel>
                     <ui:TextBox
+                        x:Name="SearchBox"
                         Width="320"
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"
