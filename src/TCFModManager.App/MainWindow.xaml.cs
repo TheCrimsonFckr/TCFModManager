@@ -51,6 +51,13 @@ public partial class MainWindow : FluentWindow
         {
             if (RootContentDialogPresenter.Content is not null) return;
 
+            if (e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None && Tours.TourRunner.IsOpen)
+            {
+                Tours.TourRunner.Close();
+                e.Handled = true;
+                return;
+            }
+
             if (PageKeys.TryHandle(RootNavigationView, e))
             {
                 e.Handled = true;
@@ -130,6 +137,8 @@ public partial class MainWindow : FluentWindow
             // The theme itself was applied at startup. This hooks up the two things that need a
             // window: repainting the chrome when the theme changes, and following Windows.
             AppTheme.Attach(this);
+
+            Tours.TourRunner.Attach(this, FeatureTourCard, RootNavigationView, RootContentDialogPresenter);
 
             // Installed when this launch came from clicking an update notification (§6), Browse
             // otherwise. Attached first, so a click landing from here on navigates by itself.

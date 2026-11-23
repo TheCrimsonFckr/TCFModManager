@@ -10655,4 +10655,40 @@ Les détails sont dans le journal :
   <data name="Common_CheckingSpMod" xml:space="preserve">
     <value>Recherche de nouvelles versions sur sp-mod...</value>
   </data>
+  <data name="Tour_Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="Tour_Skip" xml:space="preserve">
+    <value>Passer la visite</value>
+  </data>
+  <data name="Tour_Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Tour_Next" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="Tour_Done" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Tour_StepFormat" xml:space="preserve">
+    <value>{0} sur {1}</value>
+  </data>
+  <data name="Tour_Browse_Search_Title" xml:space="preserve">
+    <value>Chercher sur sp-mod</value>
+  </data>
+  <data name="Tour_Browse_Search_Body" xml:space="preserve">
+    <value>Cherchez par nom, ou tapez @ suivi du nom d'un auteur pour voir tout ce qu'il a fait. Collez un lien sp-mod pour trouver ce mod.</value>
+  </data>
+  <data name="Tour_Browse_Filters_Title" xml:space="preserve">
+    <value>Combinez les filtres</value>
+  </data>
+  <data name="Tour_Browse_Filters_Body" xml:space="preserve">
+    <value>Version de SPT, catégorie, Fika et plus. Épinglez un filtre à la barre sous la recherche, ou enregistrez-en plusieurs comme préréglage.</value>
+  </data>
+  <data name="Tour_Browse_Card_Title" xml:space="preserve">
+    <value>Ouvrir un mod</value>
+  </data>
+  <data name="Tour_Browse_Card_Body" xml:space="preserve">
+    <value>Cliquez sur une carte pour ses détails et toutes ses versions. Un clic droit montre tout ce que vous pouvez faire d'autre.</value>
+  </data>
 </root>

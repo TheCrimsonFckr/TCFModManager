@@ -11078,4 +11078,40 @@
   <data name="Common_CheckingSpMod" xml:space="preserve">
     <value>Проверка новых версий на sp-mod...</value>
   </data>
+  <data name="Tour_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="Tour_Skip" xml:space="preserve">
+    <value>Пропустить тур</value>
+  </data>
+  <data name="Tour_Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Tour_Next" xml:space="preserve">
+    <value>Далее</value>
+  </data>
+  <data name="Tour_Done" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="Tour_StepFormat" xml:space="preserve">
+    <value>{0} из {1}</value>
+  </data>
+  <data name="Tour_Browse_Search_Title" xml:space="preserve">
+    <value>Поиск по sp-mod</value>
+  </data>
+  <data name="Tour_Browse_Search_Body" xml:space="preserve">
+    <value>Ищите по названию или введите @ и имя автора, чтобы увидеть всё, что он сделал. Вставьте ссылку sp-mod, чтобы найти этот мод.</value>
+  </data>
+  <data name="Tour_Browse_Filters_Title" xml:space="preserve">
+    <value>Сочетайте фильтры</value>
+  </data>
+  <data name="Tour_Browse_Filters_Body" xml:space="preserve">
+    <value>Версия SPT, категория, Fika и другое. Закрепите фильтр на панели под поиском или сохраните набор фильтров как пресет.</value>
+  </data>
+  <data name="Tour_Browse_Card_Title" xml:space="preserve">
+    <value>Откройте мод</value>
+  </data>
+  <data name="Tour_Browse_Card_Body" xml:space="preserve">
+    <value>Нажмите на карточку, чтобы увидеть описание и все версии. Правый клик покажет всё остальное, что можно сделать.</value>
+  </data>
 </root>

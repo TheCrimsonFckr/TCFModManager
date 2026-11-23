@@ -393,6 +393,7 @@ internal static class AppNavigation
     {
         _currentPage = page;
         if (page is not null && !_replaying) Visit(PlaceFor(page));
+        Tours.TourRunner.PageShown(page);
     }
 
     private static NavigationPlace PlaceFor(Type page) =>

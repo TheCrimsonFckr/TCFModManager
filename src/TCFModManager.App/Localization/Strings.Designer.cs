@@ -3559,4 +3559,16 @@ internal static class Strings
     internal static string CardLayout_DetailsInWindowHint => LocalizationService.Get("CardLayout_DetailsInWindowHint");
     internal static string ModUpdate_InstallDetails => LocalizationService.Get("ModUpdate_InstallDetails");
     internal static string Common_CheckingSpMod => LocalizationService.Get("Common_CheckingSpMod");
+    internal static string Tour_Close => LocalizationService.Get("Tour_Close");
+    internal static string Tour_Skip => LocalizationService.Get("Tour_Skip");
+    internal static string Tour_Back => LocalizationService.Get("Tour_Back");
+    internal static string Tour_Next => LocalizationService.Get("Tour_Next");
+    internal static string Tour_Done => LocalizationService.Get("Tour_Done");
+    internal static string Tour_StepFormat => LocalizationService.Get("Tour_StepFormat");
+    internal static string Tour_Browse_Search_Title => LocalizationService.Get("Tour_Browse_Search_Title");
+    internal static string Tour_Browse_Search_Body => LocalizationService.Get("Tour_Browse_Search_Body");
+    internal static string Tour_Browse_Filters_Title => LocalizationService.Get("Tour_Browse_Filters_Title");
+    internal static string Tour_Browse_Filters_Body => LocalizationService.Get("Tour_Browse_Filters_Body");
+    internal static string Tour_Browse_Card_Title => LocalizationService.Get("Tour_Browse_Card_Title");
+    internal static string Tour_Browse_Card_Body => LocalizationService.Get("Tour_Browse_Card_Body");
 }

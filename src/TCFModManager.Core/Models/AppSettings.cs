@@ -96,6 +96,11 @@ public sealed class AppSettings
     // lowercased). See ModTools.
     public List<string> HiddenModTools { get; set; } = [];
 
+    // OPEN-68 feature tours.
+    public bool ShowFeatureTours { get; set; } = true;
+
+    public List<string> SeenTours { get; set; } = [];
+
     //
     // OPEN-12 F20, experimental: the Play page's Play card starts the game itself - server, profile,
     // the launcher's checks, patches and bundles - instead of opening SPT's launcher

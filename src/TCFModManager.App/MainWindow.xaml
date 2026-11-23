@@ -387,6 +387,8 @@
             </ui:Card>
         </Border>
 
+        <views:TourCard x:Name="FeatureTourCard" Grid.Row="0" />
+
         <!-- Host presenter for content dialogs, topmost in the grid. -->
         <ContentPresenter
             x:Name="RootContentDialogPresenter"

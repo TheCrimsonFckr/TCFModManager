@@ -190,6 +190,7 @@
                 <WrapPanel>
                     <ui:TextBox
                         x:Name="SearchBox"
+                        behaviors:TourTarget.Key="browse.search"
                         Width="320"
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"
@@ -199,6 +200,7 @@
 
                     <ToggleButton
                         x:Name="MoreFiltersToggle"
+                        behaviors:TourTarget.Key="browse.filters"
                         MinWidth="130"
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"
@@ -542,6 +544,7 @@
                     <!-- Ensures the item fills its UniformGrid cell. -->
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="VerticalAlignment" Value="Stretch" />
+                    <Setter Property="behaviors:TourTarget.Key" Value="browse.card" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">

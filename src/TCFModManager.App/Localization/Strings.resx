@@ -13009,4 +13009,52 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Checking sp-mod for new versions...</value>
     <comment>Status line while Rescan or Refresh asks sp-mod about the installed mods.</comment>
   </data>
+  <data name="Tour_Close" xml:space="preserve">
+    <value>Close</value>
+    <comment>Tooltip on the feature tour card's X. Ends the tour.</comment>
+  </data>
+  <data name="Tour_Skip" xml:space="preserve">
+    <value>Skip tour</value>
+    <comment>Button on the feature tour card. Ends the tour.</comment>
+  </data>
+  <data name="Tour_Back" xml:space="preserve">
+    <value>Back</value>
+    <comment>Button on the feature tour card: the previous step.</comment>
+  </data>
+  <data name="Tour_Next" xml:space="preserve">
+    <value>Next</value>
+    <comment>Button on the feature tour card: the next step.</comment>
+  </data>
+  <data name="Tour_Done" xml:space="preserve">
+    <value>Done</value>
+    <comment>The Next button on a feature tour's last step. Ends the tour.</comment>
+  </data>
+  <data name="Tour_StepFormat" xml:space="preserve">
+    <value>{0} of {1}</value>
+    <comment>Step count on the feature tour card. {0} this step, {1} the steps in the tour.</comment>
+  </data>
+  <data name="Tour_Browse_Search_Title" xml:space="preserve">
+    <value>Search sp-mod</value>
+    <comment>Feature tour, Browse: title of the step on the search box.</comment>
+  </data>
+  <data name="Tour_Browse_Search_Body" xml:space="preserve">
+    <value>Search by name, or type @ and an author's name for everything they've made. Paste a sp-mod link to find that mod.</value>
+    <comment>Feature tour, Browse: the search box.</comment>
+  </data>
+  <data name="Tour_Browse_Filters_Title" xml:space="preserve">
+    <value>Mix and match filters</value>
+    <comment>Feature tour, Browse: title of the step on the Filters button.</comment>
+  </data>
+  <data name="Tour_Browse_Filters_Body" xml:space="preserve">
+    <value>SPT version, category, Fika and more. Pin a filter to the bar under search, or save a set of them as a preset.</value>
+    <comment>Feature tour, Browse: the Filters and view options button.</comment>
+  </data>
+  <data name="Tour_Browse_Card_Title" xml:space="preserve">
+    <value>Open a mod</value>
+    <comment>Feature tour, Browse: title of the step on a mod card.</comment>
+  </data>
+  <data name="Tour_Browse_Card_Body" xml:space="preserve">
+    <value>Click a card for its details and every version. Right-click it for everything else you can do with it.</value>
+    <comment>Feature tour, Browse: a mod card.</comment>
+  </data>
 </root>
