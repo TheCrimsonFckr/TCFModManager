@@ -25,17 +25,7 @@ public partial class BrowsePage : Page
 
         HookCardLayout();
 
-        DataObject.AddPastingHandler(SearchBox, SearchBox_Pasting);
-    }
-
-    private void SearchBox_Pasting(object sender, DataObjectPastingEventArgs e)
-    {
-        if (e.DataObject.GetData(DataFormats.UnicodeText, true) is not string text) return;
-        if (BrowseViewModel.SearchTextForLink(text) is not { } search) return;
-
-        e.CancelCommand();
-        ViewModel.SearchText = search;
-        SearchBox.CaretIndex = search.Length;
+        Services.SpModLinkSearch.Attach(SearchBox);
     }
 
     private async void BrowsePage_Loaded(object sender, RoutedEventArgs e)

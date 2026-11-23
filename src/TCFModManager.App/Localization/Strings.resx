@@ -11521,7 +11521,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help how-to title.</comment>
   </data>
   <data name="Help_Start_Keys_Step1" xml:space="preserve">
-    <value>Ctrl+F goes to the page's search box, where it has one.</value>
+    <value>Ctrl+F goes to the page's search box, where it has one. Esc in the box clears it.</value>
     <comment>Help step.</comment>
   </data>
   <data name="Help_Start_Keys_Step2" xml:space="preserve">
@@ -11529,15 +11529,15 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help step.</comment>
   </data>
   <data name="Help_Start_Keys_Step3" xml:space="preserve">
-    <value>With a sp-mod link copied, Ctrl+V outside a text box opens that mod or addon. A Mod List link opens the list import. Dragging a link from your browser onto the window does the same.</value>
-    <comment>Help step.</comment>
+    <value>With a sp-mod link copied, Ctrl+V outside a text box opens that mod or addon. A Mod List link opens the list import. Dragging a link from your browser onto the window does the same. Pasted into the search box on {0} or {1}, the link searches for that mod or addon instead.</value>
+    <comment>Help step. {0} Browse, {1} Installed.</comment>
   </data>
   <data name="Help_Start_Keys_Step4" xml:space="preserve">
     <value>F1 opens Help for the page you are on. On {0}, Ctrl+A picks every mod shown and Esc leaves Multi select.</value>
     <comment>Help step.</comment>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link, Alt+Left, Alt+Right, back, forward, Ctrl+Up, Ctrl+Down, Ctrl+Left, Ctrl+Right, next page, previous page, arrow keys</value>
+    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link, Alt+Left, Alt+Right, back, forward, Ctrl+Up, Ctrl+Down, Ctrl+Left, Ctrl+Right, next page, previous page, arrow keys, Esc, clear search, paste link in search</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">

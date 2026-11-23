@@ -9498,19 +9498,19 @@ I dettagli sono nel log:
     <value>Usare le scorciatoie da tastiera</value>
   </data>
   <data name="Help_Start_Keys_Step1" xml:space="preserve">
-    <value>Ctrl+F va nella casella di ricerca della pagina, se c'è.</value>
+    <value>Ctrl+F va nella casella di ricerca della pagina, se c'è. Esc nella casella la svuota.</value>
   </data>
   <data name="Help_Start_Keys_Step2" xml:space="preserve">
     <value>F5 fa ciò che fa il pulsante {0} o Aggiorna della pagina, se c'è.</value>
   </data>
   <data name="Help_Start_Keys_Step3" xml:space="preserve">
-    <value>Con un link di sp-mod copiato, Ctrl+V fuori da una casella di testo apre quella mod o quell'addon. Un link a una Mod List apre l'importazione della lista. Trascinare un link dal browser sulla finestra fa lo stesso.</value>
+    <value>Con un link di sp-mod copiato, Ctrl+V fuori da una casella di testo apre quella mod o quell'addon. Un link a una Mod List apre l'importazione della lista. Trascinare un link dal browser sulla finestra fa lo stesso. Incollato nella casella di ricerca di {0} o {1}, il link cerca invece quella mod o quell'addon.</value>
   </data>
   <data name="Help_Start_Keys_Step4" xml:space="preserve">
     <value>F1 apre la guida della pagina in cui sei. In {0}, Ctrl+A seleziona tutte le mod mostrate ed Esc esce dalla selezione multipla.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>tastiera, scorciatoia, Ctrl+F, F5, incolla link, Ctrl+V, trascina link, Alt+Sinistra, Alt+Destra, indietro, avanti, Ctrl+Su, Ctrl+Giù, Ctrl+Sinistra, Ctrl+Destra, pagina successiva, pagina precedente, frecce</value>
+    <value>tastiera, scorciatoia, Ctrl+F, F5, incolla link, Ctrl+V, trascina link, Alt+Sinistra, Alt+Destra, indietro, avanti, Ctrl+Su, Ctrl+Giù, Ctrl+Sinistra, Ctrl+Destra, pagina successiva, pagina precedente, frecce, Esc, svuota ricerca, incolla link nella ricerca</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Non trovato</value>

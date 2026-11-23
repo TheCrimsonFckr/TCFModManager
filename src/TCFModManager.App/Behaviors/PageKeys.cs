@@ -26,6 +26,13 @@ public static class PageKeys
 
     public static bool TryHandle(DependencyObject root, KeyEventArgs e)
     {
+        if (e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None
+            && Keyboard.FocusedElement is TextBox { Text.Length: > 0 } search && GetRole(search) == PageKeyRole.Search)
+        {
+            search.Clear();
+            return true;
+        }
+
         var role = (e.Key, Keyboard.Modifiers) switch
         {
             (Key.F, ModifierKeys.Control) => PageKeyRole.Search,

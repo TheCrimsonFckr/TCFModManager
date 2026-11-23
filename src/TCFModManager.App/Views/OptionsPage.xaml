@@ -94,8 +94,7 @@
             PlaceholderText="{loc:Str Options_SearchPlaceholder}"
             behaviors:PageKeys.Role="Search"
             Icon="{ui:SymbolIcon Search24}"
-            TextChanged="SettingsSearch_TextChanged"
-            PreviewKeyDown="SettingsSearch_PreviewKeyDown" />
+            TextChanged="SettingsSearch_TextChanged" />
 
         <TextBlock
             x:Name="SettingsNoMatches"

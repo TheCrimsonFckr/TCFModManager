@@ -9498,19 +9498,19 @@ Die Details stehen im Log:
     <value>Tastenkürzel verwenden</value>
   </data>
   <data name="Help_Start_Keys_Step1" xml:space="preserve">
-    <value>Strg+F springt in das Suchfeld der Seite, wenn sie eines hat.</value>
+    <value>Strg+F springt in das Suchfeld der Seite, wenn sie eines hat. Esc im Suchfeld leert es.</value>
   </data>
   <data name="Help_Start_Keys_Step2" xml:space="preserve">
     <value>F5 macht das, was die Schaltfläche {0} oder Aktualisieren der Seite macht, wenn sie eine hat.</value>
   </data>
   <data name="Help_Start_Keys_Step3" xml:space="preserve">
-    <value>Mit einem kopierten sp-mod-Link öffnet Strg+V außerhalb eines Textfelds diesen Mod oder dieses Addon. Ein Mod-List-Link öffnet den Listenimport. Einen Link aus dem Browser auf das Fenster ziehen macht dasselbe.</value>
+    <value>Mit einem kopierten sp-mod-Link öffnet Strg+V außerhalb eines Textfelds diesen Mod oder dieses Addon. Ein Mod-List-Link öffnet den Listenimport. Einen Link aus dem Browser auf das Fenster ziehen macht dasselbe. In das Suchfeld auf {0} oder {1} eingefügt, sucht der Link stattdessen nach diesem Mod oder Addon.</value>
   </data>
   <data name="Help_Start_Keys_Step4" xml:space="preserve">
     <value>F1 öffnet die Hilfe zur aktuellen Seite. Auf {0} wählt Strg+A alle angezeigten Mods und Esc beendet die Mehrfachauswahl.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>Tastatur, Tastenkürzel, Hotkey, Strg+F, F5, Link einfügen, Strg+V, Link ziehen, Alt+Links, Alt+Rechts, zurück, vor, Strg+Oben, Strg+Unten, Strg+Links, Strg+Rechts, nächste Seite, vorherige Seite, Pfeiltasten</value>
+    <value>Tastatur, Tastenkürzel, Hotkey, Strg+F, F5, Link einfügen, Strg+V, Link ziehen, Alt+Links, Alt+Rechts, zurück, vor, Strg+Oben, Strg+Unten, Strg+Links, Strg+Rechts, nächste Seite, vorherige Seite, Pfeiltasten, Esc, Suche leeren, Link in Suche einfügen</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Nicht gefunden</value>

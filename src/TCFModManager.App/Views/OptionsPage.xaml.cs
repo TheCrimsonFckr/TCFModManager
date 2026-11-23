@@ -3,7 +3,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using TCFModManager.App.ViewModels;
 
 namespace TCFModManager.App.Views;
@@ -46,14 +45,6 @@ public partial class OptionsPage : Page
         new DataFilesWindow { Owner = Window.GetWindow(this) }.Show();
 
     private void Credits_Click(object sender, RoutedEventArgs e) => CreditsWindow.Open(Window.GetWindow(this));
-
-    private void SettingsSearch_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key != Key.Escape || SettingsSearch.Text.Length == 0) return;
-
-        SettingsSearch.Text = string.Empty;
-        e.Handled = true;
-    }
 
     private void SettingsSearch_TextChanged(object sender, TextChangedEventArgs e) => ApplySearch();
 

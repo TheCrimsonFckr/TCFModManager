@@ -43,7 +43,7 @@ internal static class HelpCatalog
             Topic("start.keys", () => Strings.Help_Start_Keys_Title,
                 Step(() => Strings.Help_Start_Keys_Step1),
                 Step(() => Strings.Help_Start_Keys_Step2, () => Strings.Common_Rescan),
-                Step(() => Strings.Help_Start_Keys_Step3),
+                Step(() => Strings.Help_Start_Keys_Step3, () => Strings.Nav_Browse, () => Strings.Nav_Installed),
                 Step(() => Strings.Help_Start_Keys_Step4, () => Strings.Nav_Installed),
                 Step(() => Strings.Help_Start_Keys_Step5, () => Strings.Nav_Back, () => Strings.Nav_Forward),
                 Step(() => Strings.Help_Start_Keys_Step6, () => Strings.Nav_Browse, () => Strings.Nav_Installed))
