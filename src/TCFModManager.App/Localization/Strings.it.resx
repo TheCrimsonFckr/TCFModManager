@@ -9510,7 +9510,7 @@ I dettagli sono nel log:
     <value>F1 apre la guida della pagina in cui sei. In {0}, Ctrl+A seleziona tutte le mod mostrate ed Esc esce dalla selezione multipla.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>tastiera, scorciatoia, Ctrl+F, F5, incolla link, Ctrl+V, trascina link, Alt+Sinistra, Alt+Destra, indietro, avanti</value>
+    <value>tastiera, scorciatoia, Ctrl+F, F5, incolla link, Ctrl+V, trascina link, Alt+Sinistra, Alt+Destra, indietro, avanti, Ctrl+Su, Ctrl+Giù, Ctrl+Sinistra, Ctrl+Destra, pagina successiva, pagina precedente, frecce</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Non trovato</value>
@@ -10318,6 +10318,9 @@ I dettagli sono nel log:
   </data>
   <data name="Help_Start_Keys_Step5" xml:space="preserve">
     <value>Alt+Sinistra e Alt+Destra sono {0} e {1}, così come i tasti laterali del mouse.</value>
+  </data>
+  <data name="Help_Start_Keys_Step6" xml:space="preserve">
+    <value>Ctrl+Su e Ctrl+Giù passano alla voce del menu sopra o sotto. In {0} e {1}, Ctrl+Sinistra e Ctrl+Destra passano alla pagina di risultati precedente o successiva.</value>
   </data>
   <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
     <value>Vedere quando il server o il gioco si è bloccato</value>

@@ -45,7 +45,8 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Start_Keys_Step2, () => Strings.Common_Rescan),
                 Step(() => Strings.Help_Start_Keys_Step3),
                 Step(() => Strings.Help_Start_Keys_Step4, () => Strings.Nav_Installed),
-                Step(() => Strings.Help_Start_Keys_Step5, () => Strings.Nav_Back, () => Strings.Nav_Forward))
+                Step(() => Strings.Help_Start_Keys_Step5, () => Strings.Nav_Back, () => Strings.Nav_Forward),
+                Step(() => Strings.Help_Start_Keys_Step6, () => Strings.Nav_Browse, () => Strings.Nav_Installed))
                 .WithKeywords(() => Strings.Help_Start_Keys_Keywords),
 
             // OPEN-56 N18.

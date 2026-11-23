@@ -9897,7 +9897,7 @@
     <value>F1 открывает справку по текущей странице. На странице «{0}» Ctrl+A выбирает все показанные моды, а Esc выходит из множественного выбора.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>клавиатура, сочетание клавиш, горячие клавиши, Ctrl+F, F5, вставить ссылку, Ctrl+V, перетащить ссылку, Alt+Влево, Alt+Вправо, назад, вперёд</value>
+    <value>клавиатура, сочетание клавиш, горячие клавиши, Ctrl+F, F5, вставить ссылку, Ctrl+V, перетащить ссылку, Alt+Влево, Alt+Вправо, назад, вперёд, Ctrl+Вверх, Ctrl+Вниз, Ctrl+Влево, Ctrl+Вправо, следующая страница, предыдущая страница, стрелки</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Не найдено</value>
@@ -10741,6 +10741,9 @@
   </data>
   <data name="Help_Start_Keys_Step5" xml:space="preserve">
     <value>Alt+Влево и Alt+Вправо - это «{0}» и «{1}», как и боковые кнопки мыши.</value>
+  </data>
+  <data name="Help_Start_Keys_Step6" xml:space="preserve">
+    <value>Ctrl+Вверх и Ctrl+Вниз переходят к пункту меню выше или ниже. На страницах «{0}» и «{1}» Ctrl+Влево и Ctrl+Вправо листают к предыдущей или следующей странице результатов.</value>
   </data>
   <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
     <value>Узнать, что сервер или игра упали</value>

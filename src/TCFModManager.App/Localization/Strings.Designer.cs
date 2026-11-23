@@ -3447,6 +3447,7 @@ internal static class Strings
     internal static string Help_Start_BackForward_Step3 => LocalizationService.Get("Help_Start_BackForward_Step3");
     internal static string Help_Start_BackForward_Keywords => LocalizationService.Get("Help_Start_BackForward_Keywords");
     internal static string Help_Start_Keys_Step5 => LocalizationService.Get("Help_Start_Keys_Step5");
+    internal static string Help_Start_Keys_Step6 => LocalizationService.Get("Help_Start_Keys_Step6");
     internal static string Help_Diagnose_CrashBar_Title => LocalizationService.Get("Help_Diagnose_CrashBar_Title");
     internal static string Help_Diagnose_CrashBar_Step1 => LocalizationService.Get("Help_Diagnose_CrashBar_Step1");
     internal static string Help_Diagnose_CrashBar_Step2 => LocalizationService.Get("Help_Diagnose_CrashBar_Step2");

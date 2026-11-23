@@ -11,6 +11,8 @@ public enum PageKeyRole
     None,
     Search,
     Refresh,
+    PreviousPage,
+    NextPage,
 }
 
 public static class PageKeys
@@ -28,6 +30,8 @@ public static class PageKeys
         {
             (Key.F, ModifierKeys.Control) => PageKeyRole.Search,
             (Key.F5, ModifierKeys.None) => PageKeyRole.Refresh,
+            (Key.Left, ModifierKeys.Control) when !IsTyping() => PageKeyRole.PreviousPage,
+            (Key.Right, ModifierKeys.Control) when !IsTyping() => PageKeyRole.NextPage,
             _ => PageKeyRole.None,
         };
 
@@ -53,6 +57,8 @@ public static class PageKeys
 
         return true;
     }
+
+    private static bool IsTyping() => Keyboard.FocusedElement is TextBoxBase or PasswordBox;
 
     private static UIElement? Find(DependencyObject node, PageKeyRole role)
     {

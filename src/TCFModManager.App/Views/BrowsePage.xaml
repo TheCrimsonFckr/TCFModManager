@@ -817,6 +817,7 @@
             Visibility="{Binding IsEndless, Converter={StaticResource FalseToVisible}}">
             <ui:Button
                 Content="{loc:Str Common_Previous}"
+                behaviors:PageKeys.Role="PreviousPage"
                 Command="{Binding PreviousPageCommand}" />
 
             <!-- One TextBlock rather than "Page 3" beside "of 10": a page count is one sentence,
@@ -836,6 +837,7 @@
             <ui:Button
                 Margin="12,0,0,0"
                 Content="{loc:Str Common_Next}"
+                behaviors:PageKeys.Role="NextPage"
                 Command="{Binding NextPageCommand}" />
         </StackPanel>
     </Grid>

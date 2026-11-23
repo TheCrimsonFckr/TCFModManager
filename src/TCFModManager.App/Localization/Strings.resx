@@ -11537,7 +11537,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help step.</comment>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link, Alt+Left, Alt+Right, back, forward</value>
+    <value>keyboard, shortcut, hotkey, Ctrl+F, F5, paste link, Ctrl+V, drag link, Alt+Left, Alt+Right, back, forward, Ctrl+Up, Ctrl+Down, Ctrl+Left, Ctrl+Right, next page, previous page, arrow keys</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
@@ -12615,6 +12615,10 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Help_Start_Keys_Step5" xml:space="preserve">
     <value>Alt+Left and Alt+Right are {0} and {1}, and so are the mouse's side buttons.</value>
     <comment>Help how-to step (OPEN-56). {0} Back, {1} Forward.</comment>
+  </data>
+  <data name="Help_Start_Keys_Step6" xml:space="preserve">
+    <value>Ctrl+Up and Ctrl+Down go to the menu item above or below. On {0} and {1}, Ctrl+Left and Ctrl+Right turn to the previous or next page of results.</value>
+    <comment>Help how-to step. {0} Browse, {1} Installed.</comment>
   </data>
   <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
     <value>See when the server or the game crashed</value>

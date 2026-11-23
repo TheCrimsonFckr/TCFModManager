@@ -1362,6 +1362,7 @@
             Visibility="{Binding ShowPager, Converter={StaticResource BoolToVis}}">
             <ui:Button
                 Content="{loc:Str Common_Previous}"
+                behaviors:PageKeys.Role="PreviousPage"
                 Command="{Binding PreviousPageCommand}" />
 
             <!-- One TextBlock rather than "Page 3" beside "of 10" - see BrowsePage's pager. -->
@@ -1379,6 +1380,7 @@
             <ui:Button
                 Margin="12,0,0,0"
                 Content="{loc:Str Common_Next}"
+                behaviors:PageKeys.Role="NextPage"
                 Command="{Binding NextPageCommand}" />
         </StackPanel>
     </Grid>

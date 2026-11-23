@@ -57,6 +57,14 @@ public partial class MainWindow : FluentWindow
                 return;
             }
 
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key is Key.Up or Key.Down
+                && Keyboard.FocusedElement is not TextBoxBase { AcceptsReturn: true }
+                && AppNavigation.Step(e.Key == Key.Down ? 1 : -1))
+            {
+                e.Handled = true;
+                return;
+            }
+
             if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control
                 && Keyboard.FocusedElement is not (TextBoxBase or System.Windows.Controls.PasswordBox or System.Windows.Controls.ComboBox)
                 && ClipboardText() is { } text

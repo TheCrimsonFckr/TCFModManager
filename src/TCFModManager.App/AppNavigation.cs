@@ -78,6 +78,23 @@ internal static class AppNavigation
         ShowHelp(HelpCatalog.SectionIdFor(_currentPage));
     }
 
+    public static bool Step(int direction)
+    {
+        if (_navigation is null || _currentPage is null) return false;
+
+        var pages = _navigation.MenuItems.OfType<NavigationViewItem>()
+            .Where(i => i.TargetPageType is not null && i.Visibility == Visibility.Visible)
+            .Select(i => i.TargetPageType!)
+            .ToList();
+
+        var at = pages.IndexOf(_currentPage);
+        var next = at + direction;
+        if (at < 0 || next < 0 || next >= pages.Count) return false;
+
+        Navigate(pages[next]);
+        return true;
+    }
+
     // Any page by type - the Open button on a Help topic. The Server page goes through ShowServer.
     public static void Navigate(Type page)
     {

@@ -9510,7 +9510,7 @@ Les détails sont dans le journal :
     <value>F1 ouvre l'aide de la page en cours. Sur {0}, Ctrl+A sélectionne tous les mods affichés et Échap quitte la sélection multiple.</value>
   </data>
   <data name="Help_Start_Keys_Keywords" xml:space="preserve">
-    <value>clavier, raccourci, Ctrl+F, F5, coller un lien, Ctrl+V, glisser un lien, Alt+Gauche, Alt+Droite, précédent, suivant</value>
+    <value>clavier, raccourci, Ctrl+F, F5, coller un lien, Ctrl+V, glisser un lien, Alt+Gauche, Alt+Droite, précédent, suivant, Ctrl+Haut, Ctrl+Bas, Ctrl+Gauche, Ctrl+Droite, page suivante, page précédente, flèches</value>
   </data>
   <data name="Links_NotFoundTitle" xml:space="preserve">
     <value>Introuvable</value>
@@ -10318,6 +10318,9 @@ Les détails sont dans le journal :
   </data>
   <data name="Help_Start_Keys_Step5" xml:space="preserve">
     <value>Alt+Gauche et Alt+Droite sont {0} et {1}, tout comme les boutons latéraux de la souris.</value>
+  </data>
+  <data name="Help_Start_Keys_Step6" xml:space="preserve">
+    <value>Ctrl+Haut et Ctrl+Bas passent à l'élément du menu au-dessus ou en dessous. Sur {0} et {1}, Ctrl+Gauche et Ctrl+Droite passent à la page de résultats précédente ou suivante.</value>
   </data>
   <data name="Help_Diagnose_CrashBar_Title" xml:space="preserve">
     <value>Voir quand le serveur ou le jeu a planté</value>
