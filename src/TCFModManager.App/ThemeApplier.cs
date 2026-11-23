@@ -26,11 +26,18 @@ internal static class ThemeApplier
 
     private static readonly string[] AccentTintKeys = ["RowHoverBrush", "RowSelectedBrush", "SelectedRowStroke"];
 
+    private static readonly string[] StockLightBackgroundKeys = ["ApplicationBackgroundBrush", "WindowBackground", "LoadingScreenBackground"];
+    private static readonly MediaColor StockLightBackground = MediaColor.FromRgb(0xF8, 0xF8, 0xFF);
+
     private static readonly HashSet<string> Written = new(StringComparer.Ordinal);
     private static ResourceDictionary? _shadow;
     private static bool _fontActive;
     private static bool _fontHooked;
     private static bool _backgroundHooked;
+    private static SolidColorBrush? _stockLightBrush;
+    private static bool _stockLightActive;
+
+    private static bool OwnsWindowBackground => Active is not null || _stockLightActive;
 
     public static ThemeDefinition? Active { get; private set; }
 
@@ -91,9 +98,34 @@ internal static class ThemeApplier
         if (Application.Current is { } app && WineHost.IsWine) ApplyFont(app, null);
     }
 
+    public static void ApplyStockLightBackground(bool light)
+    {
+        if (Application.Current is not { } app) return;
+
+        _stockLightActive = light && Active is null;
+
+        if (_stockLightActive)
+        {
+            if (_stockLightBrush is null)
+            {
+                _stockLightBrush = new SolidColorBrush(StockLightBackground);
+                _stockLightBrush.Freeze();
+            }
+
+            foreach (var key in StockLightBackgroundKeys) app.Resources[key] = _stockLightBrush;
+        }
+        else if (_stockLightBrush is not null)
+        {
+            foreach (var key in StockLightBackgroundKeys)
+            {
+                if (ReferenceEquals(app.Resources[key], _stockLightBrush)) app.Resources.Remove(key);
+            }
+        }
+    }
+
     public static void ReferenceWindowBackgrounds(Application app)
     {
-        if (Active is null) return;
+        if (!OwnsWindowBackground) return;
 
         if (!_backgroundHooked)
         {
@@ -101,14 +133,14 @@ internal static class ThemeApplier
             EventManager.RegisterClassHandler(typeof(Window), FrameworkElement.LoadedEvent,
                 new RoutedEventHandler((s, _) =>
                 {
-                    if (Active is not null && s is Window window)
+                    if (OwnsWindowBackground && s is Window window)
                         window.SetResourceReference(Control.BackgroundProperty, "ApplicationBackgroundBrush");
                 }), true);
         }
 
         app.Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
         {
-            if (Active is null) return;
+            if (!OwnsWindowBackground) return;
             foreach (Window window in app.Windows)
             {
                 window.SetResourceReference(Control.BackgroundProperty, "ApplicationBackgroundBrush");
