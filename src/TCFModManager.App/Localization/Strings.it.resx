@@ -10779,7 +10779,7 @@ I dettagli sono nel log:
     <value>Tour delle funzioni</value>
   </data>
   <data name="Options_ToursHint" xml:space="preserve">
-    <value>Un breve tour la prima volta che apri ogni pagina principale, e uno sulle novità dopo un aggiornamento.</value>
+    <value>Un breve tour la prima volta che apri ogni pagina, e uno sulle novità dopo un aggiornamento.</value>
   </data>
   <data name="Options_ToursAgain" xml:space="preserve">
     <value>Mostra di nuovo i tour</value>
@@ -10807,5 +10807,173 @@ I dettagli sono nel log:
   </data>
   <data name="Tour_New131_Keys_Body" xml:space="preserve">
     <value>Ctrl+Su e Ctrl+Giù salgono e scendono in questo menu. In Sfoglia e Installati, Ctrl+Sinistra e Ctrl+Destra sfogliano le pagine dei risultati.</value>
+  </data>
+  <data name="Tour_Server_Headless_Title" xml:space="preserve">
+    <value>Fika headless</value>
+  </data>
+  <data name="Tour_Server_Headless_Body" xml:space="preserve">
+    <value>Avvia il client headless che ospita i raid per gli altri giocatori. Avvia prima il server, o fallo partire insieme al server.</value>
+  </data>
+  <data name="Tour_Server_Tools_Title" xml:space="preserve">
+    <value>Strumenti delle mod</value>
+  </data>
+  <data name="Tour_Server_Tools_Body" xml:space="preserve">
+    <value>I programmi installati dalle tue mod, da aprire da qui. Nascondi quelli che non ti servono.</value>
+  </data>
+  <data name="Tour_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Conflitti</value>
+  </data>
+  <data name="Tour_Dependencies_Conflicts_Body" xml:space="preserve">
+    <value>Mod che non si caricano insieme. Tieni questa tiene la mod scelta e rimuove le altre.</value>
+  </data>
+  <data name="Tour_Dependencies_Versions_Title" xml:space="preserve">
+    <value>Conflitti di versione</value>
+  </data>
+  <data name="Tour_Dependencies_Versions_Body" xml:space="preserve">
+    <value>Mod che richiedono una versione di un'altra mod diversa da quella che hai, e cosa puoi fare.</value>
+  </data>
+  <data name="Tour_Dependencies_Tree_Title" xml:space="preserve">
+    <value>Ciò di cui ha bisogno ogni mod</value>
+  </data>
+  <data name="Tour_Dependencies_Tree_Body" xml:space="preserve">
+    <value>Le dipendenze di ogni mod, e se le hai.</value>
+  </data>
+  <data name="Tour_Dependencies_Refresh_Title" xml:space="preserve">
+    <value>Aggiorna</value>
+  </data>
+  <data name="Tour_Dependencies_Refresh_Body" xml:space="preserve">
+    <value>Rilegge le tue mod controllando le novità su sp-mod. F5 fa lo stesso.</value>
+  </data>
+  <data name="Tour_Diagnose_Findings_Title" xml:space="preserve">
+    <value>Cosa è andato storto</value>
+  </data>
+  <data name="Tour_Diagnose_Findings_Body" xml:space="preserve">
+    <value>I problemi dell'ultima esecuzione del server e della tua ultima sessione di gioco, ognuno con la mod da cui viene e cosa puoi fare.</value>
+  </data>
+  <data name="Tour_Diagnose_Copy_Title" xml:space="preserve">
+    <value>Chiedi aiuto</value>
+  </data>
+  <data name="Tour_Diagnose_Copy_Body" xml:space="preserve">
+    <value>Copia ciò che è stato trovato e le righe di log relative, pronti da incollare. Il tuo nome utente Windows, gli id e gli indirizzi degli altri giocatori vengono tolti.</value>
+  </data>
+  <data name="Tour_Diagnose_Refresh_Title" xml:space="preserve">
+    <value>Rileggi i log</value>
+  </data>
+  <data name="Tour_Diagnose_Refresh_Body" xml:space="preserve">
+    <value>Dopo aver giocato di nuovo, leggi i log più recenti. F5 fa lo stesso.</value>
+  </data>
+  <data name="Tour_Footprint_Rescan_Title" xml:space="preserve">
+    <value>Ripeti scansione</value>
+  </data>
+  <data name="Tour_Footprint_Rescan_Body" xml:space="preserve">
+    <value>Rilegge i file di ogni mod installata. F5 fa lo stesso.</value>
+  </data>
+  <data name="Tour_Footprint_Rows_Title" xml:space="preserve">
+    <value>Quanto arriva ogni mod</value>
+  </data>
+  <data name="Tour_Footprint_Rows_Body" xml:space="preserve">
+    <value>Cosa ogni mod modifica, esegue a intervalli e mette su disco. Ordina l'elenco per portare in cima le più grandi.</value>
+  </data>
+  <data name="Tour_Footprint_Reads_Title" xml:space="preserve">
+    <value>Letto, non misurato</value>
+  </data>
+  <data name="Tour_Footprint_Reads_Body" xml:space="preserve">
+    <value>Qui non si misura nulla mentre giochi. Descrive cosa contiene una mod.</value>
+  </data>
+  <data name="Tour_ServerMap_Connection_Title" xml:space="preserve">
+    <value>Il tuo server</value>
+  </data>
+  <data name="Tour_ServerMap_Connection_Body" xml:space="preserve">
+    <value>Il server a cui è collegata questa installazione. Riconnettiti se era offline.</value>
+  </data>
+  <data name="Tour_ServerMap_List_Title" xml:space="preserve">
+    <value>La lista mod del server</value>
+  </data>
+  <data name="Tour_ServerMap_List_Body" xml:space="preserve">
+    <value>Le mod del server, confrontate con le tue. Recuperala di nuovo dopo che il server cambia la sua lista.</value>
+  </data>
+  <data name="Tour_ServerMap_Machines_Title" xml:space="preserve">
+    <value>Macchine su questo server</value>
+  </data>
+  <data name="Tour_ServerMap_Machines_Body" xml:space="preserve">
+    <value>Ogni macchina che si segnala a questo server.</value>
+  </data>
+  <data name="Tour_ServerMap_Owners_Title" xml:space="preserve">
+    <value>Di chi è ogni profilo</value>
+  </data>
+  <data name="Tour_ServerMap_Owners_Body" xml:space="preserve">
+    <value>A quale macchina appartiene ogni profilo, per quando le Opzioni nascondono o proteggono i profili delle altre macchine.</value>
+  </data>
+  <data name="Tour_Downloads_Queue_Title" xml:space="preserve">
+    <value>La coda dei download</value>
+  </data>
+  <data name="Tour_Downloads_Queue_Body" xml:space="preserve">
+    <value>I download si installano uno alla volta, nell'ordine in cui li hai messi in coda, e mostrano qui l'avanzamento.</value>
+  </data>
+  <data name="Tour_Downloads_Pause_Title" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="Tour_Downloads_Pause_Body" xml:space="preserve">
+    <value>Ferma i download finché non riprendi, poi continua da dove si erano fermati. Un'installazione in corso viene completata.</value>
+  </data>
+  <data name="Tour_Downloads_Clear_Title" xml:space="preserve">
+    <value>Rimuovi completati</value>
+  </data>
+  <data name="Tour_Downloads_Clear_Body" xml:space="preserve">
+    <value>Toglie dall'elenco gli elementi completati.</value>
+  </data>
+  <data name="Tour_AppUpdate_Version_Title" xml:space="preserve">
+    <value>La tua versione</value>
+  </data>
+  <data name="Tour_AppUpdate_Version_Body" xml:space="preserve">
+    <value>La versione che stai usando, e la più recente su sp-mod.</value>
+  </data>
+  <data name="Tour_AppUpdate_Check_Title" xml:space="preserve">
+    <value>Controlla ora</value>
+  </data>
+  <data name="Tour_AppUpdate_Check_Body" xml:space="preserve">
+    <value>Chiede subito a sp-mod se c'è una versione più recente.</value>
+  </data>
+  <data name="Tour_AppUpdate_ServerMap_Title" xml:space="preserve">
+    <value>Mod Server Map</value>
+  </data>
+  <data name="Tour_AppUpdate_ServerMap_Body" xml:space="preserve">
+    <value>Se questa installazione ha la mod Server Map, anche la sua versione viene controllata qui.</value>
+  </data>
+  <data name="Tour_Help_Search_Title" xml:space="preserve">
+    <value>Cerca nella guida</value>
+  </data>
+  <data name="Tour_Help_Search_Body" xml:space="preserve">
+    <value>Scrivi cosa vuoi fare, e ogni guida corrispondente si apre.</value>
+  </data>
+  <data name="Tour_Help_Guide_Title" xml:space="preserve">
+    <value>La guida completa</value>
+  </data>
+  <data name="Tour_Help_Guide_Body" xml:space="preserve">
+    <value>Apre la guida completa su GitHub, in inglese, con tutto più in dettaglio.</value>
+  </data>
+  <data name="Tour_Help_Tour_Title" xml:space="preserve">
+    <value>Fai il tour</value>
+  </data>
+  <data name="Tour_Help_Tour_Body" xml:space="preserve">
+    <value>Riavvia il tour di una pagina quando vuoi.</value>
+  </data>
+  <data name="Tour_Options_Search_Title" xml:space="preserve">
+    <value>Trova un'impostazione</value>
+  </data>
+  <data name="Tour_Options_Search_Body" xml:space="preserve">
+    <value>Scrivi una parola e restano solo le impostazioni che la contengono. Esc svuota la ricerca.</value>
+  </data>
+  <data name="Tour_Options_Folder_Title" xml:space="preserve">
+    <value>La tua cartella SPT</value>
+  </data>
+  <data name="Tour_Options_Folder_Body" xml:space="preserve">
+    <value>La cartella del gioco con EscapeFromTarkov.exe dentro. Tutto ciò che l'app installa finisce qui.</value>
+  </data>
+  <data name="Tour_Options_Tours_Title" xml:space="preserve">
+    <value>Tour delle funzioni</value>
+  </data>
+  <data name="Tour_Options_Tours_Body" xml:space="preserve">
+    <value>Disattiva i tour qui, o mostrali tutti di nuovo.</value>
   </data>
 </root>

@@ -45,6 +45,7 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
+                behaviors:TourTarget.Key="dependencies.refresh"
                 Content="{loc:Str Dependencies_Refresh}"
                 behaviors:PageKeys.Role="Refresh"
                 Icon="{ui:SymbolIcon ArrowSync24}"
@@ -158,6 +159,7 @@
                 FontSize="16"
                 FontWeight="SemiBold"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                behaviors:TourTarget.Key="dependencies.versions"
                 Text="{loc:Str Dependencies_VersionsHeader}"
                 Visibility="{Binding HasVersionReports, Converter={StaticResource BoolToVisibility}}" />
             <ItemsControl Margin="0,0,0,16" ItemsSource="{Binding VersionReports}">
@@ -258,6 +260,7 @@
                 FontSize="16"
                 FontWeight="SemiBold"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                behaviors:TourTarget.Key="dependencies.conflicts"
                 Text="{loc:Str Conflicts_Header}"
                 Visibility="{Binding ConflictsChecked, Converter={StaticResource BoolToVisibility}}" />
             <TextBlock
@@ -344,6 +347,7 @@
                 FontSize="16"
                 FontWeight="SemiBold"
                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                behaviors:TourTarget.Key="dependencies.tree"
                 Text="{loc:Str Dependencies_Header}"
                 Visibility="{Binding HasLoaded, Converter={StaticResource BoolToVisibility}}" />
             <!-- Shown once a scan has finished and found no dependencies to report. -->

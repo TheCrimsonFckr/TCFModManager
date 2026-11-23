@@ -101,6 +101,7 @@
                 DockPanel.Dock="Left"
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon ArrowSync24}"
+                behaviors:TourTarget.Key="footprint.rescan"
                 Content="{loc:Str Common_Rescan}"
                 behaviors:PageKeys.Role="Refresh"
                 IsEnabled="{Binding IsIdle}"
@@ -142,7 +143,7 @@
             mod ships on disk, and a user who reads these levels as measured frame cost has been
             misled by the page rather than by the numbers.
         -->
-        <ui:Card Grid.Row="1" Margin="0,16,0,0" Padding="16">
+        <ui:Card Grid.Row="1" Margin="0,16,0,0" Padding="16" behaviors:TourTarget.Key="footprint.reads">
             <StackPanel>
                 <TextBlock
                     FontWeight="SemiBold"
@@ -166,6 +167,7 @@
                 Visibility="{Binding HasRows, Converter={StaticResource FalseToVisible}}" />
 
             <ScrollViewer
+                behaviors:TourTarget.Key="footprint.rows"
                 x:Name="RowsScrollViewer"
                 Focusable="False"
                 VerticalScrollBarVisibility="Auto"

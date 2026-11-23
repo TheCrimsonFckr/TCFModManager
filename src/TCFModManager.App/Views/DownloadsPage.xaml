@@ -68,12 +68,14 @@
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <ui:Button
                 DockPanel.Dock="Right"
+                behaviors:TourTarget.Key="downloads.clear"
                 Content="{loc:Str Downloads_ClearFinished}"
                 Click="ClearFinishedButton_Click" />
 
             <ui:Button
                 DockPanel.Dock="Right"
                 Margin="0,0,8,0"
+                behaviors:TourTarget.Key="downloads.pause"
                 Content="{Binding PauseLabel}"
                 Icon="{ui:SymbolIcon Pause24}"
                 ToolTip="{loc:Str Downloads_PauseToolTip}"
@@ -94,6 +96,7 @@
                 <TextBlock
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     TextWrapping="Wrap"
+                    behaviors:TourTarget.Key="downloads.queue"
                     Text="{loc:Str Downloads_Description}" />
 
                 <DockPanel

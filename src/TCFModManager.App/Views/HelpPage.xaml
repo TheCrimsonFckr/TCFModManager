@@ -45,6 +45,7 @@
                     DockPanel.Dock="Right"
                     Margin="12,0,0,0"
                     VerticalAlignment="Center"
+                    behaviors:TourTarget.Key="help.guide"
                     Content="{loc:Str Help_OpenGuide}"
                     Icon="{ui:SymbolIcon Open24}"
                     Command="{Binding OpenGuideCommand}"
@@ -60,6 +61,7 @@
         <ui:TextBox
             Grid.Row="1"
             Margin="0,0,0,12"
+            behaviors:TourTarget.Key="help.search"
             PlaceholderText="{loc:Str Help_SearchPlaceholder}"
             behaviors:PageKeys.Role="Search"
             Icon="{ui:SymbolIcon Search24}"
@@ -115,6 +117,7 @@
                                     Margin="16,0,0,0"
                                     VerticalAlignment="Center"
                                     Icon="{ui:SymbolIcon Lightbulb24}"
+                                    behaviors:TourTarget.Key="help.tour"
                                     Content="{loc:Str Help_TakeTour}"
                                     ToolTip="{loc:Str Help_TakeTourToolTip}"
                                     Command="{Binding TakeTourCommand}"

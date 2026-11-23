@@ -11202,7 +11202,7 @@
     <value>Туры по функциям</value>
   </data>
   <data name="Options_ToursHint" xml:space="preserve">
-    <value>Короткий тур при первом открытии каждой основной страницы и тур по новому после обновления.</value>
+    <value>Короткий тур при первом открытии каждой страницы и тур по новому после обновления.</value>
   </data>
   <data name="Options_ToursAgain" xml:space="preserve">
     <value>Показать туры снова</value>
@@ -11230,5 +11230,173 @@
   </data>
   <data name="Tour_New131_Keys_Body" xml:space="preserve">
     <value>Ctrl+Вверх и Ctrl+Вниз перемещают по этому меню. В обзоре и среди установленных Ctrl+Влево и Ctrl+Вправо листают страницы результатов.</value>
+  </data>
+  <data name="Tour_Server_Headless_Title" xml:space="preserve">
+    <value>Fika headless</value>
+  </data>
+  <data name="Tour_Server_Headless_Body" xml:space="preserve">
+    <value>Запускает headless-клиент, который проводит рейды для других игроков. Сначала запустите сервер или настройте запуск вместе с ним.</value>
+  </data>
+  <data name="Tour_Server_Tools_Title" xml:space="preserve">
+    <value>Инструменты модов</value>
+  </data>
+  <data name="Tour_Server_Tools_Body" xml:space="preserve">
+    <value>Программы, которые установили ваши моды, - открывайте их отсюда. Скройте ненужные.</value>
+  </data>
+  <data name="Tour_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Конфликты</value>
+  </data>
+  <data name="Tour_Dependencies_Conflicts_Body" xml:space="preserve">
+    <value>Моды, которые не загружаются вместе. «Оставить этот» оставляет выбранный мод и удаляет остальные.</value>
+  </data>
+  <data name="Tour_Dependencies_Versions_Title" xml:space="preserve">
+    <value>Конфликты версий</value>
+  </data>
+  <data name="Tour_Dependencies_Versions_Body" xml:space="preserve">
+    <value>Моды, которым нужна другая версия другого мода, чем у вас, и что с этим можно сделать.</value>
+  </data>
+  <data name="Tour_Dependencies_Tree_Title" xml:space="preserve">
+    <value>Что нужно каждому моду</value>
+  </data>
+  <data name="Tour_Dependencies_Tree_Body" xml:space="preserve">
+    <value>Зависимости каждого мода и есть ли они у вас.</value>
+  </data>
+  <data name="Tour_Dependencies_Refresh_Title" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Tour_Dependencies_Refresh_Body" xml:space="preserve">
+    <value>Заново читает моды и проверяет новое на sp-mod. F5 делает то же самое.</value>
+  </data>
+  <data name="Tour_Diagnose_Findings_Title" xml:space="preserve">
+    <value>Что пошло не так</value>
+  </data>
+  <data name="Tour_Diagnose_Findings_Body" xml:space="preserve">
+    <value>Проблемы последнего запуска сервера и вашей последней игровой сессии - у каждой указан мод-источник и что можно сделать.</value>
+  </data>
+  <data name="Tour_Diagnose_Copy_Title" xml:space="preserve">
+    <value>Попросите помощи</value>
+  </data>
+  <data name="Tour_Diagnose_Copy_Body" xml:space="preserve">
+    <value>Копирует найденное и строки журнала за ним, чтобы вставить куда нужно. Имя пользователя Windows, идентификаторы и адреса других игроков убираются.</value>
+  </data>
+  <data name="Tour_Diagnose_Refresh_Title" xml:space="preserve">
+    <value>Перечитать журналы</value>
+  </data>
+  <data name="Tour_Diagnose_Refresh_Body" xml:space="preserve">
+    <value>Сыграв снова, прочитайте свежие журналы. F5 делает то же самое.</value>
+  </data>
+  <data name="Tour_Footprint_Rescan_Title" xml:space="preserve">
+    <value>Пересканировать</value>
+  </data>
+  <data name="Tour_Footprint_Rescan_Body" xml:space="preserve">
+    <value>Заново читает файлы каждого установленного мода. F5 делает то же самое.</value>
+  </data>
+  <data name="Tour_Footprint_Rows_Title" xml:space="preserve">
+    <value>Насколько далеко заходит каждый мод</value>
+  </data>
+  <data name="Tour_Footprint_Rows_Body" xml:space="preserve">
+    <value>Что каждый мод патчит, запускает по таймеру и кладёт на диск. Отсортируйте список, чтобы крупные оказались сверху.</value>
+  </data>
+  <data name="Tour_Footprint_Reads_Title" xml:space="preserve">
+    <value>Прочитано, а не измерено</value>
+  </data>
+  <data name="Tour_Footprint_Reads_Body" xml:space="preserve">
+    <value>Здесь ничего не замеряется во время игры. Это описание того, что содержит мод.</value>
+  </data>
+  <data name="Tour_ServerMap_Connection_Title" xml:space="preserve">
+    <value>Ваш сервер</value>
+  </data>
+  <data name="Tour_ServerMap_Connection_Body" xml:space="preserve">
+    <value>Сервер, к которому подключена эта установка. Переподключитесь, если он был недоступен.</value>
+  </data>
+  <data name="Tour_ServerMap_List_Title" xml:space="preserve">
+    <value>Список модов сервера</value>
+  </data>
+  <data name="Tour_ServerMap_List_Body" xml:space="preserve">
+    <value>Моды сервера в сравнении с вашими. Получите список снова, когда сервер его изменит.</value>
+  </data>
+  <data name="Tour_ServerMap_Machines_Title" xml:space="preserve">
+    <value>Машины на этом сервере</value>
+  </data>
+  <data name="Tour_ServerMap_Machines_Body" xml:space="preserve">
+    <value>Все машины, которые отчитываются этому серверу.</value>
+  </data>
+  <data name="Tour_ServerMap_Owners_Title" xml:space="preserve">
+    <value>Кому принадлежит каждый профиль</value>
+  </data>
+  <data name="Tour_ServerMap_Owners_Body" xml:space="preserve">
+    <value>К какой машине относится каждый профиль - на случай, если в настройках профили других машин скрыты или защищены.</value>
+  </data>
+  <data name="Tour_Downloads_Queue_Title" xml:space="preserve">
+    <value>Очередь загрузок</value>
+  </data>
+  <data name="Tour_Downloads_Queue_Body" xml:space="preserve">
+    <value>Загрузки устанавливаются по одной, в порядке очереди, и показывают здесь свой прогресс.</value>
+  </data>
+  <data name="Tour_Downloads_Pause_Title" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="Tour_Downloads_Pause_Body" xml:space="preserve">
+    <value>Останавливает загрузки до возобновления, затем они продолжаются с того же места. Начатая установка завершается.</value>
+  </data>
+  <data name="Tour_Downloads_Clear_Title" xml:space="preserve">
+    <value>Убрать завершённые</value>
+  </data>
+  <data name="Tour_Downloads_Clear_Body" xml:space="preserve">
+    <value>Убирает завершённые элементы из списка.</value>
+  </data>
+  <data name="Tour_AppUpdate_Version_Title" xml:space="preserve">
+    <value>Ваша версия</value>
+  </data>
+  <data name="Tour_AppUpdate_Version_Body" xml:space="preserve">
+    <value>Версия, которую вы используете, и самая новая на sp-mod.</value>
+  </data>
+  <data name="Tour_AppUpdate_Check_Title" xml:space="preserve">
+    <value>Проверить сейчас</value>
+  </data>
+  <data name="Tour_AppUpdate_Check_Body" xml:space="preserve">
+    <value>Сразу спрашивает sp-mod о новой версии.</value>
+  </data>
+  <data name="Tour_AppUpdate_ServerMap_Title" xml:space="preserve">
+    <value>Мод Server Map</value>
+  </data>
+  <data name="Tour_AppUpdate_ServerMap_Body" xml:space="preserve">
+    <value>Если в этой установке есть мод Server Map, его версия тоже проверяется здесь.</value>
+  </data>
+  <data name="Tour_Help_Search_Title" xml:space="preserve">
+    <value>Поиск по справке</value>
+  </data>
+  <data name="Tour_Help_Search_Body" xml:space="preserve">
+    <value>Напишите, что хотите сделать, - откроются все подходящие инструкции.</value>
+  </data>
+  <data name="Tour_Help_Guide_Title" xml:space="preserve">
+    <value>Полное руководство</value>
+  </data>
+  <data name="Tour_Help_Guide_Body" xml:space="preserve">
+    <value>Открывает полное руководство на GitHub (на английском), где всё описано подробнее.</value>
+  </data>
+  <data name="Tour_Help_Tour_Title" xml:space="preserve">
+    <value>Пройти тур</value>
+  </data>
+  <data name="Tour_Help_Tour_Body" xml:space="preserve">
+    <value>Запускает тур по странице снова, когда захотите.</value>
+  </data>
+  <data name="Tour_Options_Search_Title" xml:space="preserve">
+    <value>Найдите настройку</value>
+  </data>
+  <data name="Tour_Options_Search_Body" xml:space="preserve">
+    <value>Введите слово - останутся только настройки, где оно есть. Esc очищает поиск.</value>
+  </data>
+  <data name="Tour_Options_Folder_Title" xml:space="preserve">
+    <value>Ваша папка SPT</value>
+  </data>
+  <data name="Tour_Options_Folder_Body" xml:space="preserve">
+    <value>Папка игры с EscapeFromTarkov.exe. Всё, что устанавливает приложение, попадает сюда.</value>
+  </data>
+  <data name="Tour_Options_Tours_Title" xml:space="preserve">
+    <value>Туры по функциям</value>
+  </data>
+  <data name="Tour_Options_Tours_Body" xml:space="preserve">
+    <value>Здесь можно отключить туры или показать их все снова.</value>
   </data>
 </root>

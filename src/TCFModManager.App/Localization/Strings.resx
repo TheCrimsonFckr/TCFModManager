@@ -13174,7 +13174,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Options: title of the feature tours setting.</comment>
   </data>
   <data name="Options_ToursHint" xml:space="preserve">
-    <value>A short tour the first time you open each main page, and one for what's new after an update.</value>
+    <value>A short tour the first time you open each page, and one for what's new after an update.</value>
     <comment>Options: hint under the feature tours setting.</comment>
   </data>
   <data name="Options_ToursAgain" xml:space="preserve">
@@ -13212,5 +13212,229 @@ Right-click to save the current filters to it, rename it or delete it.</value>
   <data name="Tour_New131_Keys_Body" xml:space="preserve">
     <value>Ctrl+Up and Ctrl+Down go up and down this menu. On Browse and Installed, Ctrl+Left and Ctrl+Right turn the pages of results.</value>
     <comment>What's new tour (v1.31.0): the sidebar.</comment>
+  </data>
+  <data name="Tour_Server_Headless_Title" xml:space="preserve">
+    <value>Fika headless</value>
+    <comment>Feature tour, Server: the Fika headless card: step title.</comment>
+  </data>
+  <data name="Tour_Server_Headless_Body" xml:space="preserve">
+    <value>Starts the headless client that hosts raids for other players. Start the server first, or have it start with the server.</value>
+    <comment>Feature tour, Server: the Fika headless card.</comment>
+  </data>
+  <data name="Tour_Server_Tools_Title" xml:space="preserve">
+    <value>Mod tools</value>
+    <comment>Feature tour, Server: the Mod tools card: step title.</comment>
+  </data>
+  <data name="Tour_Server_Tools_Body" xml:space="preserve">
+    <value>Programs your mods installed, ready to open from here. Hide any you don't need.</value>
+    <comment>Feature tour, Server: the Mod tools card.</comment>
+  </data>
+  <data name="Tour_Dependencies_Conflicts_Title" xml:space="preserve">
+    <value>Conflicts</value>
+    <comment>Feature tour, Dependencies: the Conflicts heading: step title.</comment>
+  </data>
+  <data name="Tour_Dependencies_Conflicts_Body" xml:space="preserve">
+    <value>Mods that won't load together. Keep this one keeps the mod you pick and removes the others.</value>
+    <comment>Feature tour, Dependencies: the Conflicts heading.</comment>
+  </data>
+  <data name="Tour_Dependencies_Versions_Title" xml:space="preserve">
+    <value>Version conflicts</value>
+    <comment>Feature tour, Dependencies: the Version conflicts heading: step title.</comment>
+  </data>
+  <data name="Tour_Dependencies_Versions_Body" xml:space="preserve">
+    <value>Mods that need a different version of another mod than the one you have, and what you can do about it.</value>
+    <comment>Feature tour, Dependencies: the Version conflicts heading.</comment>
+  </data>
+  <data name="Tour_Dependencies_Tree_Title" xml:space="preserve">
+    <value>What each mod needs</value>
+    <comment>Feature tour, Dependencies: the Dependencies heading: step title.</comment>
+  </data>
+  <data name="Tour_Dependencies_Tree_Body" xml:space="preserve">
+    <value>Every mod's dependencies, and whether you have them.</value>
+    <comment>Feature tour, Dependencies: the Dependencies heading.</comment>
+  </data>
+  <data name="Tour_Dependencies_Refresh_Title" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>Feature tour, Dependencies: the Refresh button: step title.</comment>
+  </data>
+  <data name="Tour_Dependencies_Refresh_Body" xml:space="preserve">
+    <value>Reads your mods again, checking sp-mod for anything new. F5 does the same.</value>
+    <comment>Feature tour, Dependencies: the Refresh button.</comment>
+  </data>
+  <data name="Tour_Diagnose_Findings_Title" xml:space="preserve">
+    <value>What went wrong</value>
+    <comment>Feature tour, Diagnose: the list of findings: step title.</comment>
+  </data>
+  <data name="Tour_Diagnose_Findings_Body" xml:space="preserve">
+    <value>Problems from the server's last run and your last game session, each with the mod it comes from and what you can do.</value>
+    <comment>Feature tour, Diagnose: the list of findings.</comment>
+  </data>
+  <data name="Tour_Diagnose_Copy_Title" xml:space="preserve">
+    <value>Ask for help</value>
+    <comment>Feature tour, Diagnose: the Copy a report button: step title.</comment>
+  </data>
+  <data name="Tour_Diagnose_Copy_Body" xml:space="preserve">
+    <value>Copies what was found and the log lines behind it, ready to paste. Your Windows user name, ids and other players' addresses are taken out.</value>
+    <comment>Feature tour, Diagnose: the Copy a report button.</comment>
+  </data>
+  <data name="Tour_Diagnose_Refresh_Title" xml:space="preserve">
+    <value>Read the logs again</value>
+    <comment>Feature tour, Diagnose: the Read the logs again button: step title.</comment>
+  </data>
+  <data name="Tour_Diagnose_Refresh_Body" xml:space="preserve">
+    <value>After you've played again, read the latest logs. F5 does the same.</value>
+    <comment>Feature tour, Diagnose: the Read the logs again button.</comment>
+  </data>
+  <data name="Tour_Footprint_Rescan_Title" xml:space="preserve">
+    <value>Rescan</value>
+    <comment>Feature tour, Mod footprint: the Rescan button: step title.</comment>
+  </data>
+  <data name="Tour_Footprint_Rescan_Body" xml:space="preserve">
+    <value>Reads every installed mod's files again. F5 does the same.</value>
+    <comment>Feature tour, Mod footprint: the Rescan button.</comment>
+  </data>
+  <data name="Tour_Footprint_Rows_Title" xml:space="preserve">
+    <value>How far each mod reaches</value>
+    <comment>Feature tour, Mod footprint: the list of mods: step title.</comment>
+  </data>
+  <data name="Tour_Footprint_Rows_Body" xml:space="preserve">
+    <value>What each mod patches, runs on a timer and puts on disk. Sort the list to bring the biggest to the top.</value>
+    <comment>Feature tour, Mod footprint: the list of mods.</comment>
+  </data>
+  <data name="Tour_Footprint_Reads_Title" xml:space="preserve">
+    <value>Read, not measured</value>
+    <comment>Feature tour, Mod footprint: the What this reads card: step title.</comment>
+  </data>
+  <data name="Tour_Footprint_Reads_Body" xml:space="preserve">
+    <value>Nothing here is timed while you play. It describes what a mod contains.</value>
+    <comment>Feature tour, Mod footprint: the What this reads card.</comment>
+  </data>
+  <data name="Tour_ServerMap_Connection_Title" xml:space="preserve">
+    <value>Your server</value>
+    <comment>Feature tour, Server map: the server this install is connected to: step title.</comment>
+  </data>
+  <data name="Tour_ServerMap_Connection_Body" xml:space="preserve">
+    <value>The server this install is connected to. Reconnect if it was offline.</value>
+    <comment>Feature tour, Server map: the server this install is connected to.</comment>
+  </data>
+  <data name="Tour_ServerMap_List_Title" xml:space="preserve">
+    <value>The server's mod list</value>
+    <comment>Feature tour, Server map: the Published mod list heading: step title.</comment>
+  </data>
+  <data name="Tour_ServerMap_List_Body" xml:space="preserve">
+    <value>The mods the server runs, compared with yours. Fetch it again after the server changes its list.</value>
+    <comment>Feature tour, Server map: the Published mod list heading.</comment>
+  </data>
+  <data name="Tour_ServerMap_Machines_Title" xml:space="preserve">
+    <value>Machines on this server</value>
+    <comment>Feature tour, Server map: the Machines on this server heading: step title.</comment>
+  </data>
+  <data name="Tour_ServerMap_Machines_Body" xml:space="preserve">
+    <value>Every machine that reports to this server.</value>
+    <comment>Feature tour, Server map: the Machines on this server heading.</comment>
+  </data>
+  <data name="Tour_ServerMap_Owners_Title" xml:space="preserve">
+    <value>Who owns each profile</value>
+    <comment>Feature tour, Server map: the Who owns each profile heading: step title.</comment>
+  </data>
+  <data name="Tour_ServerMap_Owners_Body" xml:space="preserve">
+    <value>Which machine each profile belongs to, for when Options hides or protects other machines' profiles.</value>
+    <comment>Feature tour, Server map: the Who owns each profile heading.</comment>
+  </data>
+  <data name="Tour_Downloads_Queue_Title" xml:space="preserve">
+    <value>The download queue</value>
+    <comment>Feature tour, Downloads: the description at the top: step title.</comment>
+  </data>
+  <data name="Tour_Downloads_Queue_Body" xml:space="preserve">
+    <value>Downloads install one at a time, in the order you queued them, and show their progress here.</value>
+    <comment>Feature tour, Downloads: the description at the top.</comment>
+  </data>
+  <data name="Tour_Downloads_Pause_Title" xml:space="preserve">
+    <value>Pause</value>
+    <comment>Feature tour, Downloads: the Pause button: step title.</comment>
+  </data>
+  <data name="Tour_Downloads_Pause_Body" xml:space="preserve">
+    <value>Stops downloads until you resume, then carries on where they left off. An install under way finishes.</value>
+    <comment>Feature tour, Downloads: the Pause button.</comment>
+  </data>
+  <data name="Tour_Downloads_Clear_Title" xml:space="preserve">
+    <value>Clear finished</value>
+    <comment>Feature tour, Downloads: the Clear finished button: step title.</comment>
+  </data>
+  <data name="Tour_Downloads_Clear_Body" xml:space="preserve">
+    <value>Takes the finished items off the list.</value>
+    <comment>Feature tour, Downloads: the Clear finished button.</comment>
+  </data>
+  <data name="Tour_AppUpdate_Version_Title" xml:space="preserve">
+    <value>Your version</value>
+    <comment>Feature tour, App update: the Version card: step title.</comment>
+  </data>
+  <data name="Tour_AppUpdate_Version_Body" xml:space="preserve">
+    <value>The version you're running, and the newest one on sp-mod.</value>
+    <comment>Feature tour, App update: the Version card.</comment>
+  </data>
+  <data name="Tour_AppUpdate_Check_Title" xml:space="preserve">
+    <value>Check now</value>
+    <comment>Feature tour, App update: the Check now button: step title.</comment>
+  </data>
+  <data name="Tour_AppUpdate_Check_Body" xml:space="preserve">
+    <value>Asks sp-mod for a newer version straight away.</value>
+    <comment>Feature tour, App update: the Check now button.</comment>
+  </data>
+  <data name="Tour_AppUpdate_ServerMap_Title" xml:space="preserve">
+    <value>Server Map mod</value>
+    <comment>Feature tour, App update: the Server Map mod card: step title.</comment>
+  </data>
+  <data name="Tour_AppUpdate_ServerMap_Body" xml:space="preserve">
+    <value>When this install has the Server Map mod, its version is checked here too.</value>
+    <comment>Feature tour, App update: the Server Map mod card.</comment>
+  </data>
+  <data name="Tour_Help_Search_Title" xml:space="preserve">
+    <value>Search Help</value>
+    <comment>Feature tour, Help: the search box: step title.</comment>
+  </data>
+  <data name="Tour_Help_Search_Body" xml:space="preserve">
+    <value>Type what you want to do, and every how-to that matches opens.</value>
+    <comment>Feature tour, Help: the search box.</comment>
+  </data>
+  <data name="Tour_Help_Guide_Title" xml:space="preserve">
+    <value>The full guide</value>
+    <comment>Feature tour, Help: the Open the full guide button: step title.</comment>
+  </data>
+  <data name="Tour_Help_Guide_Body" xml:space="preserve">
+    <value>Opens the full guide on GitHub, in English, with everything in more depth.</value>
+    <comment>Feature tour, Help: the Open the full guide button.</comment>
+  </data>
+  <data name="Tour_Help_Tour_Title" xml:space="preserve">
+    <value>Take the tour</value>
+    <comment>Feature tour, Help: a Take the tour button: step title.</comment>
+  </data>
+  <data name="Tour_Help_Tour_Body" xml:space="preserve">
+    <value>Runs a page's tour again whenever you want it.</value>
+    <comment>Feature tour, Help: a Take the tour button.</comment>
+  </data>
+  <data name="Tour_Options_Search_Title" xml:space="preserve">
+    <value>Find a setting</value>
+    <comment>Feature tour, Options: the search box: step title.</comment>
+  </data>
+  <data name="Tour_Options_Search_Body" xml:space="preserve">
+    <value>Type a word and only the settings that mention it stay. Esc clears it.</value>
+    <comment>Feature tour, Options: the search box.</comment>
+  </data>
+  <data name="Tour_Options_Folder_Title" xml:space="preserve">
+    <value>Your SPT folder</value>
+    <comment>Feature tour, Options: the SPT install folder setting: step title.</comment>
+  </data>
+  <data name="Tour_Options_Folder_Body" xml:space="preserve">
+    <value>The game folder with EscapeFromTarkov.exe in it. Everything the app installs goes here.</value>
+    <comment>Feature tour, Options: the SPT install folder setting.</comment>
+  </data>
+  <data name="Tour_Options_Tours_Title" xml:space="preserve">
+    <value>Feature tours</value>
+    <comment>Feature tour, Options: the Feature tours setting: step title.</comment>
+  </data>
+  <data name="Tour_Options_Tours_Body" xml:space="preserve">
+    <value>Switch tours off here, or show them all again.</value>
+    <comment>Feature tour, Options: the Feature tours setting.</comment>
   </data>
 </root>

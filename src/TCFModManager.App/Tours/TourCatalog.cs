@@ -50,6 +50,71 @@ internal static class TourCatalog
             new("configs.form", () => Strings.Tour_Configs_Form_Title, () => Strings.Tour_Configs_Form_Body),
         ]),
 
+        new("server", typeof(ServerPage),
+        [
+            new("server.server", () => Strings.Tour_Profile_Server_Title, () => Strings.Tour_Profile_Server_Body),
+            new("server.headless", () => Strings.Tour_Server_Headless_Title, () => Strings.Tour_Server_Headless_Body),
+            new("server.tools", () => Strings.Tour_Server_Tools_Title, () => Strings.Tour_Server_Tools_Body),
+        ]),
+
+        new("dependencies", typeof(DependenciesPage),
+        [
+            new("dependencies.conflicts", () => Strings.Tour_Dependencies_Conflicts_Title, () => Strings.Tour_Dependencies_Conflicts_Body),
+            new("dependencies.versions", () => Strings.Tour_Dependencies_Versions_Title, () => Strings.Tour_Dependencies_Versions_Body),
+            new("dependencies.tree", () => Strings.Tour_Dependencies_Tree_Title, () => Strings.Tour_Dependencies_Tree_Body),
+            new("dependencies.refresh", () => Strings.Tour_Dependencies_Refresh_Title, () => Strings.Tour_Dependencies_Refresh_Body),
+        ]),
+
+        new("diagnose", typeof(DiagnosePage),
+        [
+            new("diagnose.findings", () => Strings.Tour_Diagnose_Findings_Title, () => Strings.Tour_Diagnose_Findings_Body),
+            new("diagnose.copy", () => Strings.Tour_Diagnose_Copy_Title, () => Strings.Tour_Diagnose_Copy_Body),
+            new("diagnose.refresh", () => Strings.Tour_Diagnose_Refresh_Title, () => Strings.Tour_Diagnose_Refresh_Body),
+        ]),
+
+        new("footprint", typeof(FootprintPage),
+        [
+            new("footprint.rescan", () => Strings.Tour_Footprint_Rescan_Title, () => Strings.Tour_Footprint_Rescan_Body),
+            new("footprint.rows", () => Strings.Tour_Footprint_Rows_Title, () => Strings.Tour_Footprint_Rows_Body),
+            new("footprint.reads", () => Strings.Tour_Footprint_Reads_Title, () => Strings.Tour_Footprint_Reads_Body),
+        ]),
+
+        new("servermap", typeof(ServerMapPage),
+        [
+            new("servermap.connection", () => Strings.Tour_ServerMap_Connection_Title, () => Strings.Tour_ServerMap_Connection_Body),
+            new("servermap.list", () => Strings.Tour_ServerMap_List_Title, () => Strings.Tour_ServerMap_List_Body),
+            new("servermap.machines", () => Strings.Tour_ServerMap_Machines_Title, () => Strings.Tour_ServerMap_Machines_Body),
+            new("servermap.owners", () => Strings.Tour_ServerMap_Owners_Title, () => Strings.Tour_ServerMap_Owners_Body),
+        ]),
+
+        new("downloads", typeof(DownloadsPage),
+        [
+            new("downloads.queue", () => Strings.Tour_Downloads_Queue_Title, () => Strings.Tour_Downloads_Queue_Body),
+            new("downloads.pause", () => Strings.Tour_Downloads_Pause_Title, () => Strings.Tour_Downloads_Pause_Body),
+            new("downloads.clear", () => Strings.Tour_Downloads_Clear_Title, () => Strings.Tour_Downloads_Clear_Body),
+        ]),
+
+        new("appupdate", typeof(AppUpdatePage),
+        [
+            new("appupdate.version", () => Strings.Tour_AppUpdate_Version_Title, () => Strings.Tour_AppUpdate_Version_Body),
+            new("appupdate.check", () => Strings.Tour_AppUpdate_Check_Title, () => Strings.Tour_AppUpdate_Check_Body),
+            new("appupdate.servermap", () => Strings.Tour_AppUpdate_ServerMap_Title, () => Strings.Tour_AppUpdate_ServerMap_Body),
+        ]),
+
+        new("help", typeof(HelpPage),
+        [
+            new("help.search", () => Strings.Tour_Help_Search_Title, () => Strings.Tour_Help_Search_Body),
+            new("help.guide", () => Strings.Tour_Help_Guide_Title, () => Strings.Tour_Help_Guide_Body),
+            new("help.tour", () => Strings.Tour_Help_Tour_Title, () => Strings.Tour_Help_Tour_Body),
+        ]),
+
+        new("options", typeof(OptionsPage),
+        [
+            new("options.search", () => Strings.Tour_Options_Search_Title, () => Strings.Tour_Options_Search_Body),
+            new("options.folder", () => Strings.Tour_Options_Folder_Title, () => Strings.Tour_Options_Folder_Body),
+            new("options.tours", () => Strings.Tour_Options_Tours_Title, () => Strings.Tour_Options_Tours_Body),
+        ]),
+
         new("whatsnew-1.31.0-browse", typeof(BrowsePage),
         [
             new("browse.search", () => Strings.Tour_New131_Search_Title, () => Strings.Tour_New131_Search_Body),

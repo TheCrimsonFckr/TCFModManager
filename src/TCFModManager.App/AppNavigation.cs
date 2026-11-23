@@ -68,6 +68,8 @@ internal static class AppNavigation
         _navigation.Transition = Motion.Enabled ? _transition : Transition.None;
     }
 
+    public static Type? CurrentPage => _currentPage;
+
     //
     // The "?" in the title bar and F1: Help, at the section for the page that was showing. From
     // Help itself there is nowhere better to go, so it stays put.

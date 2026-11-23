@@ -26,12 +26,14 @@
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
                 <ui:Button
                     Margin="0,0,8,0"
+                    behaviors:TourTarget.Key="diagnose.copy"
                     Content="{loc:Str Diagnose_CopyReport}"
                     Icon="{ui:SymbolIcon Copy24}"
                     ToolTip="{loc:Str Diagnose_CopyReportToolTip}"
                     Command="{Binding CopyReportCommand}"
                     IsEnabled="{Binding IsNotBusy}" />
                 <ui:Button
+                    behaviors:TourTarget.Key="diagnose.refresh"
                     Content="{loc:Str Diagnose_Refresh}"
                     behaviors:PageKeys.Role="Refresh"
                     Icon="{ui:SymbolIcon ArrowSync24}"
@@ -56,6 +58,7 @@
         </StackPanel>
 
         <ScrollViewer
+            behaviors:TourTarget.Key="diagnose.findings"
             x:Name="FindingsScrollViewer"
             Grid.Row="2"
             FocusVisualStyle="{x:Null}"

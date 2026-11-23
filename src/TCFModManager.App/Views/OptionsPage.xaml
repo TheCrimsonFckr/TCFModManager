@@ -89,6 +89,7 @@
             expander, which it opens while the search shows it (code-behind).
         -->
         <ui:TextBox
+            behaviors:TourTarget.Key="options.search"
             x:Name="SettingsSearch"
             Margin="0,4,0,0"
             PlaceholderText="{loc:Str Options_SearchPlaceholder}"
@@ -111,6 +112,7 @@
 
         <ui:CardControl
             Style="{StaticResource SettingRow}"
+            behaviors:TourTarget.Key="options.folder"
             Icon="{ui:SymbolIcon Folder24}">
             <ui:CardControl.Header>
                 <StackPanel>
@@ -213,6 +215,7 @@
 
         <ui:CardControl
             Style="{StaticResource SettingRow}"
+            behaviors:TourTarget.Key="options.tours"
             Icon="{ui:SymbolIcon Lightbulb24}">
             <ui:CardControl.Header>
                 <StackPanel>

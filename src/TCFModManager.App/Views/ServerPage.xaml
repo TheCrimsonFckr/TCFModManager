@@ -4,14 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:play="clr-namespace:TCFModManager.App.Views.Play"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{loc:Str Nav_Server}">
     <StackPanel x:Name="Root" Margin="16,16,16,0">
 
-        <play:ServerCard />
+        <play:ServerCard behaviors:TourTarget.Key="server.server" />
 
-        <play:ModToolsCard />
+        <play:ModToolsCard behaviors:TourTarget.Key="server.tools" />
 
-        <play:HeadlessCard />
+        <play:HeadlessCard behaviors:TourTarget.Key="server.headless" />
 
         <play:MessageCard />
 

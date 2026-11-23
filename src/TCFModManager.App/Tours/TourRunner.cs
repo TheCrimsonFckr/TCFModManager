@@ -98,7 +98,8 @@ internal static class TourRunner
         if (TourCatalog.ById(id) is not { } tour) return;
 
         _requested = tour.Id;
-        AppNavigation.Navigate(tour.Page);
+        if (AppNavigation.CurrentPage == tour.Page) PageShown(tour.Page);
+        else AppNavigation.Navigate(tour.Page);
     }
 
     public static void Close()

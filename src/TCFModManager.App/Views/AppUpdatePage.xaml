@@ -34,6 +34,7 @@
             <ui:Card Padding="16" Margin="0,16,0,0">
                 <StackPanel>
                     <TextBlock
+                        behaviors:TourTarget.Key="appupdate.version"
                         Text="{loc:Str AppUpdate_VersionHeader}"
                         FontWeight="SemiBold"
                         Margin="0,0,0,8" />
@@ -53,6 +54,7 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                         <ui:Button
+                            behaviors:TourTarget.Key="appupdate.check"
                             Content="{loc:Str AppUpdate_CheckNow}"
                             Icon="{ui:SymbolIcon ArrowSync24}"
                             Command="{Binding CheckForUpdatesCommand}" />
@@ -95,6 +97,7 @@
                 Visibility="{Binding ShowServerMapMod, Converter={StaticResource BoolToVis}}">
                 <StackPanel>
                     <TextBlock
+                        behaviors:TourTarget.Key="appupdate.servermap"
                         Text="{loc:Str AppUpdate_ServerMapHeader}"
                         FontWeight="SemiBold"
                         Margin="0,0,0,8" />

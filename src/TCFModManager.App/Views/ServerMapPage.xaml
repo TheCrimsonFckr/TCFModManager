@@ -7,6 +7,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:app="clr-namespace:TCFModManager.App"
+    xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     Title="{loc:Str Nav_ServerMap}">
     <Page.Resources>
         <controls:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -46,6 +47,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                     <ui:Button
+                        behaviors:TourTarget.Key="servermap.connection"
                         Content="{loc:Str ServerMap_Reconnect}"
                         Icon="{ui:SymbolIcon Connected20}"
                         Command="{Binding ConnectCommand}" />
@@ -95,6 +97,7 @@
                         VerticalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        behaviors:TourTarget.Key="servermap.list"
                         Text="{loc:Str ServerMap_PublishedListHeader}" />
                 </StackPanel>
 
@@ -186,6 +189,7 @@
                             VerticalAlignment="Center"
                             FontWeight="SemiBold"
                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            behaviors:TourTarget.Key="servermap.machines"
                             Text="{loc:Str ServerMap_MachinesHeader}" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -379,6 +383,7 @@
                         VerticalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                        behaviors:TourTarget.Key="servermap.owners"
                         Text="{loc:Str ServerMap_OwnersHeader}" />
                 </StackPanel>
                 <TextBlock
