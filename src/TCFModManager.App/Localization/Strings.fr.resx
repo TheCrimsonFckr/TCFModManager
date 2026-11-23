@@ -10976,4 +10976,49 @@ Les détails sont dans le journal :
   <data name="Tour_Options_Tours_Body" xml:space="preserve">
     <value>Désactivez les visites ici, ou revoyez-les toutes.</value>
   </data>
+  <data name="Installed_WaitingNoteFormat" xml:space="preserve">
+    <value>{0} est sortie - proposée à partir du {1:ddd d MMM}</value>
+  </data>
+  <data name="Installed_UpdateAnywayFormat" xml:space="preserve">
+    <value>Mettre à jour vers {0} quand même</value>
+  </data>
+  <data name="Installed_DontWaitForThisMod" xml:space="preserve">
+    <value>Ne pas attendre pour les mises à jour de ce mod</value>
+  </data>
+  <data name="Installed_WaitForThisMod" xml:space="preserve">
+    <value>Attendre de nouveau pour les mises à jour de ce mod</value>
+  </data>
+  <data name="Installed_DontWaitDoneFormat" xml:space="preserve">
+    <value>Les mises à jour de {0} sont proposées tout de suite.</value>
+  </data>
+  <data name="Installed_WaitAgainDoneFormat" xml:space="preserve">
+    <value>Les mises à jour de {0} attendent de nouveau comme les autres.</value>
+  </data>
+  <data name="ModUpdate_WaitingNoteFormat" xml:space="preserve">
+    <value>Cette version est encore dans votre délai d'attente - elle serait proposée à partir du {0:ddd d MMM}. Mettre à jour l'installe maintenant.</value>
+  </data>
+  <data name="Options_UpdateWaitHeader" xml:space="preserve">
+    <value>Attendre avant de proposer une mise à jour</value>
+  </data>
+  <data name="Options_UpdateWaitHint" xml:space="preserve">
+    <value>Les mods reçoivent souvent un correctif quelques heures après une sortie. En attendant quelques jours, vous évitez en général la version cassée.</value>
+  </data>
+  <data name="Options_UpdateWaitDescription" xml:space="preserve">
+    <value>Une version est proposée comme mise à jour une fois sortie depuis ce délai. D'ici là, la version la plus récente assez ancienne est proposée, s'il y en a une. Les installations depuis Parcourir, les listes de mods et les dépendances ne sont pas retardées.</value>
+  </data>
+  <data name="Options_UpdateWaitOff" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
+  <data name="Options_UpdateWaitOneDay" xml:space="preserve">
+    <value>1 jour</value>
+  </data>
+  <data name="Options_UpdateWaitTwoDays" xml:space="preserve">
+    <value>2 jours</value>
+  </data>
+  <data name="Options_UpdateWaitThreeDays" xml:space="preserve">
+    <value>3 jours</value>
+  </data>
+  <data name="Options_UpdateWaitSevenDays" xml:space="preserve">
+    <value>7 jours</value>
+  </data>
 </root>

@@ -94,6 +94,13 @@
                 Foreground="{DynamicResource SystemFillColorCautionBrush}"
                 Text="{Binding HeldBackNote}"
                 Visibility="{Binding HeldBackNote, Converter={StaticResource NullToCollapsed}}" />
+
+            <TextBlock
+                Margin="0,4,0,0"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Text="{Binding WaitingNote}"
+                Visibility="{Binding WaitingNote, Converter={StaticResource NullToCollapsed}}" />
         </StackPanel>
 
         <!-- "View mod page" shows when a catalog match exists. Which of Update / Downgrade /

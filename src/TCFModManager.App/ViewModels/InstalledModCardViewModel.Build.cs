@@ -241,6 +241,31 @@ public sealed partial class InstalledModCardViewModel
             addonUpdate = false;
         }
 
+        string? addonUpdateVersion = null;
+        string? waitingVersion = null;
+        DateTimeOffset? waitingUntil = null;
+        var waitDays = AppServices.UpdateWait.DaysFor(true, record.ModId);
+        var now = DateTimeOffset.Now;
+        if (addonUpdate == true && latest?.Version is { } latestVersion && UpdateWait.IsWaiting(latest.PublishedAt, waitDays, now))
+        {
+            waitingVersion = latestVersion;
+            waitingUntil = UpdateWait.OfferedFrom(latest.PublishedAt, waitDays);
+
+            var older = UpdateWait.NewestOldEnough(
+                versions.Where(v => AddonFit.Accepts(v.ModVersionConstraint, parentVersion, installedSptVersion)),
+                v => v.Version, v => v.PublishedAt, installedVersion, latestVersion, waitDays, now);
+
+            if (older?.Version is { } olderVersion
+                && !(AppServices.SkippedUpdates.For(true, record.ModId) is { } skippedOlder && SkippedUpdates.Covers(skippedOlder, olderVersion)))
+            {
+                addonUpdateVersion = olderVersion;
+            }
+            else
+            {
+                addonUpdate = false;
+            }
+        }
+
         (string Key, object?[] Values)? detail = null;
         if (latest is null && versions.Count > 0)
         {
@@ -284,7 +309,10 @@ public sealed partial class InstalledModCardViewModel
             AuthorId = addon?.Owner?.Id,
             ContainsAds = addon?.ContainsAds == true,
             UpdateAvailable = addonUpdate,
+            UpdateVersion = addonUpdateVersion,
             SkippedVersion = skippedVersion,
+            WaitingVersion = waitingVersion,
+            WaitingUntil = waitingUntil,
             ClientFolderPath = client?.FolderPath,
             ServerFolderPath = server?.FolderPath,
             ClientFolderName = client?.Name,
@@ -465,6 +493,34 @@ public sealed partial class InstalledModCardViewModel
             updateVersion = null;
         }
 
+        string? waitingVersion = null;
+        DateTimeOffset? waitingUntil = null;
+        var waitDays = AppServices.UpdateWait.DaysFor(false, match?.Id);
+        var now = DateTimeOffset.Now;
+        if (updateVersion is not null && match?.Versions is { } allVersions
+            && allVersions.FirstOrDefault(v => string.Equals(v.Version, updateVersion, StringComparison.OrdinalIgnoreCase)) is { } offered
+            && UpdateWait.IsWaiting(offered.PublishedAt, waitDays, now))
+        {
+            waitingVersion = updateVersion;
+            waitingUntil = UpdateWait.OfferedFrom(offered.PublishedAt, waitDays);
+
+            var older = UpdateWait.NewestOldEnough(
+                allVersions.Where(v => string.IsNullOrWhiteSpace(installedSptVersion)
+                    || SptVersionMatcher.IsSatisfiedBy(v.SptVersionConstraint, installedSptVersion) == true),
+                v => v.Version, v => v.PublishedAt, installedVersion, updateVersion, waitDays, now);
+
+            if (older?.Version is { } olderVersion
+                && !(AppServices.SkippedUpdates.For(false, match.Id) is { } skippedOlder && SkippedUpdates.Covers(skippedOlder, olderVersion)))
+            {
+                updateVersion = olderVersion;
+            }
+            else
+            {
+                updateAvailable = false;
+                updateVersion = null;
+            }
+        }
+
         //
         // OPEN-13: the installed version against this SPT - sp-mod's own answer first, then the catalog
         // release's range, then a 4.x server mod's declared range. Not judged when the version is a
@@ -508,6 +564,8 @@ public sealed partial class InstalledModCardViewModel
             UpdateVersion = updateVersion,
             HeldBack = heldBack,
             SkippedVersion = skippedVersion,
+            WaitingVersion = waitingVersion,
+            WaitingUntil = waitingUntil,
             LatestUpdatedAt = match?.UpdatedAt,
             MatchedModName = match?.Name,
             DeclaredName = match is null ? server?.DeclaredName ?? plugin?.DeclaredName : null,

@@ -220,6 +220,8 @@ public partial class InstalledPage : Page
             if (mod.CanQuickUpdate) Add(mod.QuickUpdateToolTip, "ArrowDownload24", ViewModel.UpdateOneCommand, mod);
             if (InstalledViewModel.SkipMenuLabel(mod) is { } skip) Add(skip, "ArrowForward24", ViewModel.SkipUpdateCommand, mod);
             if (mod.SkippedVersion is not null) Add(Strings.Installed_StopSkipping, "ArrowReset24", ViewModel.StopSkippingCommand, mod);
+            if (mod.WaitingVersion is { } waiting) Add(LocalizationService.Text(Strings.Installed_UpdateAnywayFormat, waiting), "ClockArrowDownload24", ViewModel.UpdateAnywayCommand, mod);
+            if (InstalledViewModel.WaitMenuLabel(mod) is { } wait) Add(wait, "TimerOff24", ViewModel.ToggleUpdateWaitCommand, mod);
             if (InstalledViewModel.GoBackMenuLabel(mod) is { } goBack) Add(goBack, "History24", ViewModel.GoBackCommand, mod);
             Add(mod.DisableToggleTooltip, mod.DisableToggleGlyph, ViewModel.ToggleDisableCommand, mod);
             Add(mod.PinLabel, mod.PinGlyph, ViewModel.TogglePinCommand, mod);

@@ -271,6 +271,12 @@ public sealed class AppSettings
     // OPEN-52 N1: updates the user chose to skip, "mod:<id>" or "addon:<id>" to the version skipped.
     public Dictionary<string, string> SkippedUpdates { get; set; } = [];
 
+    // OPEN-64: days a version must have been out before it is offered as an update (0 = off), and the
+    // "mod:<id>" / "addon:<id>" keys offered straight away regardless.
+    public int UpdateWaitDays { get; set; }
+
+    public List<string> NoUpdateWait { get; set; } = [];
+
     //
     // Server Map. Always present in settings.json so the shape is obvious to anyone hand-editing
     // it, even on an install that never turns the page on.

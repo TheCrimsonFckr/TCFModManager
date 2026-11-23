@@ -47,6 +47,9 @@ internal static class AppServices
     // Updates the user skipped (OPEN-52 N1). Before anything that builds Installed cards.
     public static SkippedUpdateStore SkippedUpdates { get; } = new();
 
+    // OPEN-64: how long to wait before offering an update. Before anything that builds Installed cards.
+    public static UpdateWaitStore UpdateWait { get; } = new();
+
     public static CardLayoutStore CardLayouts { get; } = new();
 
     // Copies of the SPT profiles, taken before the app changes the install (OPEN-12 F4).

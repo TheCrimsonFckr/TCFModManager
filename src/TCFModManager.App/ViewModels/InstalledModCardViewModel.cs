@@ -121,7 +121,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public string? HeldBackNote => HeldBack is { } held ? HeldBackUpdates.Describe(held) : null;
 
     // OPEN-58 D4: sp-mod holds this mod's update back and nothing is offered in its place.
-    public bool IsHeldBack => HeldBack is not null && UpdateAvailable != true && SkippedVersion is null;
+    public bool IsHeldBack => HeldBack is not null && UpdateAvailable != true && SkippedVersion is null && WaitingVersion is null;
 
     // OPEN-58: the other mods this one's update has to go with.
     public IReadOnlyList<HeldBackPartner> UpdatesTogetherWith =>
@@ -131,6 +131,15 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public string? SkippedVersion { get; init; }
 
     public string? SkippedNote => SkippedVersion is { } skipped ? Text(Strings.Installed_SkippedNoteFormat, skipped) : null;
+
+    // OPEN-64: a newer version that hasn't been out long enough to be offered yet, and when it will be.
+    public string? WaitingVersion { get; init; }
+
+    public DateTimeOffset? WaitingUntil { get; init; }
+
+    public string? WaitingNote => WaitingVersion is { } waiting && WaitingUntil is { } until
+        ? Text(Strings.Installed_WaitingNoteFormat, waiting, until.LocalDateTime)
+        : null;
 
     //
     // OPEN-13: whether the installed version is made for the installed SPT, and from where that is

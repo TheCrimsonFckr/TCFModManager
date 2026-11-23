@@ -185,6 +185,13 @@ public partial class InstalledViewModel : LocalizedViewModel
             await ScanCommand.ExecuteAsync(null);
         };
 
+        // OPEN-64: the update wait or a mod's exception from it changed.
+        AppServices.UpdateWait.Changed += async (_, _) =>
+        {
+            if (!_hasScanned || ScanCommand.IsRunning) return;
+            await ScanCommand.ExecuteAsync(null);
+        };
+
         // Last, so every filter the dropdown labels read is in place.
         FilterPins = new PinnedFilterSections<InstalledFilterSection>(
             "Installed", settings, x => x.InstalledPinnedFilters, (x, v) => x.InstalledPinnedFilters = v, this, PinnedLabel, PinnedShown);

@@ -11399,4 +11399,49 @@
   <data name="Tour_Options_Tours_Body" xml:space="preserve">
     <value>Здесь можно отключить туры или показать их все снова.</value>
   </data>
+  <data name="Installed_WaitingNoteFormat" xml:space="preserve">
+    <value>Вышла {0} - будет предложена с {1:ddd d MMM}</value>
+  </data>
+  <data name="Installed_UpdateAnywayFormat" xml:space="preserve">
+    <value>Всё равно обновить до {0}</value>
+  </data>
+  <data name="Installed_DontWaitForThisMod" xml:space="preserve">
+    <value>Не ждать обновлений этого мода</value>
+  </data>
+  <data name="Installed_WaitForThisMod" xml:space="preserve">
+    <value>Снова ждать обновлений этого мода</value>
+  </data>
+  <data name="Installed_DontWaitDoneFormat" xml:space="preserve">
+    <value>Обновления {0} предлагаются сразу.</value>
+  </data>
+  <data name="Installed_WaitAgainDoneFormat" xml:space="preserve">
+    <value>Обновления {0} снова ждут, как и остальные.</value>
+  </data>
+  <data name="ModUpdate_WaitingNoteFormat" xml:space="preserve">
+    <value>Эта версия ещё в периоде ожидания - она была бы предложена с {0:ddd d MMM}. «Обновить» установит её сейчас.</value>
+  </data>
+  <data name="Options_UpdateWaitHeader" xml:space="preserve">
+    <value>Ждать, прежде чем предлагать обновление</value>
+  </data>
+  <data name="Options_UpdateWaitHint" xml:space="preserve">
+    <value>Моды часто исправляют через несколько часов после выхода. Подождав пару дней, вы обычно пропустите сломанную версию.</value>
+  </data>
+  <data name="Options_UpdateWaitDescription" xml:space="preserve">
+    <value>Версия предлагается как обновление, когда с её выхода прошло столько времени. До тех пор предлагается самая новая достаточно старая версия, если она есть. Установки из обзора, списки модов и зависимости не ждут.</value>
+  </data>
+  <data name="Options_UpdateWaitOff" xml:space="preserve">
+    <value>Выкл.</value>
+  </data>
+  <data name="Options_UpdateWaitOneDay" xml:space="preserve">
+    <value>1 день</value>
+  </data>
+  <data name="Options_UpdateWaitTwoDays" xml:space="preserve">
+    <value>2 дня</value>
+  </data>
+  <data name="Options_UpdateWaitThreeDays" xml:space="preserve">
+    <value>3 дня</value>
+  </data>
+  <data name="Options_UpdateWaitSevenDays" xml:space="preserve">
+    <value>7 дней</value>
+  </data>
 </root>

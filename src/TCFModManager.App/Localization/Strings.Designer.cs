@@ -3666,4 +3666,19 @@ internal static class Strings
     internal static string Tour_Options_Folder_Body => LocalizationService.Get("Tour_Options_Folder_Body");
     internal static string Tour_Options_Tours_Title => LocalizationService.Get("Tour_Options_Tours_Title");
     internal static string Tour_Options_Tours_Body => LocalizationService.Get("Tour_Options_Tours_Body");
+    internal static string Installed_WaitingNoteFormat => LocalizationService.Get("Installed_WaitingNoteFormat");
+    internal static string Installed_UpdateAnywayFormat => LocalizationService.Get("Installed_UpdateAnywayFormat");
+    internal static string Installed_DontWaitForThisMod => LocalizationService.Get("Installed_DontWaitForThisMod");
+    internal static string Installed_WaitForThisMod => LocalizationService.Get("Installed_WaitForThisMod");
+    internal static string Installed_DontWaitDoneFormat => LocalizationService.Get("Installed_DontWaitDoneFormat");
+    internal static string Installed_WaitAgainDoneFormat => LocalizationService.Get("Installed_WaitAgainDoneFormat");
+    internal static string ModUpdate_WaitingNoteFormat => LocalizationService.Get("ModUpdate_WaitingNoteFormat");
+    internal static string Options_UpdateWaitHeader => LocalizationService.Get("Options_UpdateWaitHeader");
+    internal static string Options_UpdateWaitHint => LocalizationService.Get("Options_UpdateWaitHint");
+    internal static string Options_UpdateWaitDescription => LocalizationService.Get("Options_UpdateWaitDescription");
+    internal static string Options_UpdateWaitOff => LocalizationService.Get("Options_UpdateWaitOff");
+    internal static string Options_UpdateWaitOneDay => LocalizationService.Get("Options_UpdateWaitOneDay");
+    internal static string Options_UpdateWaitTwoDays => LocalizationService.Get("Options_UpdateWaitTwoDays");
+    internal static string Options_UpdateWaitThreeDays => LocalizationService.Get("Options_UpdateWaitThreeDays");
+    internal static string Options_UpdateWaitSevenDays => LocalizationService.Get("Options_UpdateWaitSevenDays");
 }

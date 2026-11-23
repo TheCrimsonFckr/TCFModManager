@@ -29,4 +29,22 @@ public partial class InstalledViewModel
         await ScanAsync();
         StatusMessage = Text(Strings.Installed_StoppedSkippingFormat, mod.DisplayTitle);
     }
+
+    // OPEN-64 Q5: offer this mod's updates straight away, or wait for them again.
+    public static string? WaitMenuLabel(InstalledModCardViewModel mod) =>
+        mod.ModId is not { } id || AppServices.UpdateWait.Days == 0
+            ? null
+            : AppServices.UpdateWait.IsExempt(mod.IsAddon, id)
+                ? Strings.Installed_WaitForThisMod
+                : Strings.Installed_DontWaitForThisMod;
+
+    [RelayCommand]
+    private void ToggleUpdateWait(InstalledModCardViewModel? mod)
+    {
+        if (mod?.ModId is not { } id) return;
+
+        var exempt = !AppServices.UpdateWait.IsExempt(mod.IsAddon, id);
+        AppServices.UpdateWait.SetExempt(mod.IsAddon, id, exempt, mod.Name);
+        StatusMessage = Text(exempt ? Strings.Installed_DontWaitDoneFormat : Strings.Installed_WaitAgainDoneFormat, mod.DisplayTitle);
+    }
 }

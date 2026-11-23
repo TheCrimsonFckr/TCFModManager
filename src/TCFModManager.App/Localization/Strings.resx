@@ -13437,4 +13437,64 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Switch tours off here, or show them all again.</value>
     <comment>Feature tour, Options: the Feature tours setting.</comment>
   </data>
+  <data name="Installed_WaitingNoteFormat" xml:space="preserve">
+    <value>{0} is out - offered from {1:ddd d MMM}</value>
+    <comment>OPEN-64: note on an Installed card while a newer version waits. {0} version, {1} the date it will be offered - keep the :ddd d MMM.</comment>
+  </data>
+  <data name="Installed_UpdateAnywayFormat" xml:space="preserve">
+    <value>Update to {0} anyway</value>
+    <comment>OPEN-64: right-click menu item on an Installed card. {0} the waiting version.</comment>
+  </data>
+  <data name="Installed_DontWaitForThisMod" xml:space="preserve">
+    <value>Don't wait for this mod's updates</value>
+    <comment>OPEN-64: right-click menu item - this mod's updates are offered straight away.</comment>
+  </data>
+  <data name="Installed_WaitForThisMod" xml:space="preserve">
+    <value>Wait for this mod's updates again</value>
+    <comment>OPEN-64: right-click menu item - undoes Don't wait for this mod's updates.</comment>
+  </data>
+  <data name="Installed_DontWaitDoneFormat" xml:space="preserve">
+    <value>{0}'s updates are offered straight away.</value>
+    <comment>OPEN-64: status line. {0} mod name.</comment>
+  </data>
+  <data name="Installed_WaitAgainDoneFormat" xml:space="preserve">
+    <value>{0}'s updates wait like the rest again.</value>
+    <comment>OPEN-64: status line. {0} mod name.</comment>
+  </data>
+  <data name="ModUpdate_WaitingNoteFormat" xml:space="preserve">
+    <value>This version is inside your update wait - it would be offered from {0:ddd d MMM}. Update installs it now.</value>
+    <comment>OPEN-64: note in Details and versions when the selected version is still inside the update wait. {0} the date - keep the :ddd d MMM.</comment>
+  </data>
+  <data name="Options_UpdateWaitHeader" xml:space="preserve">
+    <value>Wait before offering an update</value>
+    <comment>OPEN-64: Options, title of the update wait setting.</comment>
+  </data>
+  <data name="Options_UpdateWaitHint" xml:space="preserve">
+    <value>Mods often get a fix within hours of a release. Wait a few days and you usually skip the broken one.</value>
+    <comment>OPEN-64: Options, hint under the update wait setting.</comment>
+  </data>
+  <data name="Options_UpdateWaitDescription" xml:space="preserve">
+    <value>A version is offered as an update once it has been out this long. Until then the newest version old enough is offered, if there is one. Browse installs, mod lists and dependencies aren't held up.</value>
+    <comment>OPEN-64: Options, tooltip on the update wait setting.</comment>
+  </data>
+  <data name="Options_UpdateWaitOff" xml:space="preserve">
+    <value>Off</value>
+    <comment>OPEN-64: update wait choice.</comment>
+  </data>
+  <data name="Options_UpdateWaitOneDay" xml:space="preserve">
+    <value>1 day</value>
+    <comment>OPEN-64: update wait choice.</comment>
+  </data>
+  <data name="Options_UpdateWaitTwoDays" xml:space="preserve">
+    <value>2 days</value>
+    <comment>OPEN-64: update wait choice.</comment>
+  </data>
+  <data name="Options_UpdateWaitThreeDays" xml:space="preserve">
+    <value>3 days</value>
+    <comment>OPEN-64: update wait choice.</comment>
+  </data>
+  <data name="Options_UpdateWaitSevenDays" xml:space="preserve">
+    <value>7 days</value>
+    <comment>OPEN-64: update wait choice.</comment>
+  </data>
 </root>

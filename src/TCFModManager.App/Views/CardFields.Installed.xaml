@@ -531,6 +531,12 @@
                 Visibility="{Binding SkippedNote, Converter={StaticResource CardNullToCollapsed}}" />
 
             <TextBlock
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap"
+                Text="{Binding WaitingNote}"
+                Visibility="{Binding WaitingNote, Converter={StaticResource CardNullToCollapsed}}" />
+
+            <TextBlock
                 Foreground="{DynamicResource SystemFillColorCautionBrush}"
                 TextWrapping="Wrap"
                 Text="{Binding SptNote}"

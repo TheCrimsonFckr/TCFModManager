@@ -252,7 +252,7 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
         OnPropertyChanged(nameof(HiddenVersionsNotice));
 
         // Below a release sp-mod holds back, the card's own target - the newest that breaks nothing.
-        SelectedVersion = (_mod.HeldBack is not null && _mod.UpdateVersion is { } target
+        SelectedVersion = ((_mod.HeldBack is not null || _mod.WaitingVersion is not null) && _mod.UpdateVersion is { } target
                 ? Versions.FirstOrDefault(v => string.Equals(v.Raw.Version, target, StringComparison.OrdinalIgnoreCase))
                 : null)
             ?? Versions.FirstOrDefault(v => v.IsCompatible == true)
@@ -269,12 +269,20 @@ public partial class ModUpdateDialogViewModel : LocalizedViewModel
     [NotifyPropertyChangedFor(nameof(ShowRedownloadButton))]
     [NotifyPropertyChangedFor(nameof(ShowAlternateButton))]
     [NotifyPropertyChangedFor(nameof(HeldBackNote))]
+    [NotifyPropertyChangedFor(nameof(WaitingNote))]
     private ModVersionRowViewModel? _selectedVersion;
 
     // OPEN-12 F11: the selected release is the one sp-mod holds back - installing it is allowed, with this said.
     public string? HeldBackNote =>
         _mod.HeldBack is { } held && SelectedVersion is { } selected && held.Held.Holds(selected.Raw.Version)
             ? HeldBackUpdates.Describe(held)
+            : null;
+
+    // OPEN-64: the selected release is still inside the update wait - installing it is allowed, with this said.
+    public string? WaitingNote =>
+        _mod.WaitingVersion is { } waiting && _mod.WaitingUntil is { } until && SelectedVersion is { } selected
+        && string.Equals(selected.Raw.Version, waiting, StringComparison.OrdinalIgnoreCase)
+            ? LocalizationService.Text(Strings.ModUpdate_WaitingNoteFormat, until.LocalDateTime)
             : null;
 
     [ObservableProperty]

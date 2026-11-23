@@ -36,6 +36,11 @@ public partial class InstalledViewModel
     private Task UpdateOneAsync(InstalledModCardViewModel? mod) =>
         mod is null ? Task.CompletedTask : UpdateCardsAsync([mod]);
 
+    // OPEN-64: the version still inside its wait, installed now.
+    [RelayCommand]
+    private Task UpdateAnywayAsync(InstalledModCardViewModel? mod) =>
+        mod?.WaitingVersion is null ? Task.CompletedTask : UpdateCardsAsync([mod], anyway: true);
+
     private sealed record UpdateTarget(
         InstalledModCardViewModel Card,
         InstallTarget Target,
@@ -45,7 +50,7 @@ public partial class InstalledViewModel
         long? TotalBytes = null,
         int? QueueBehindModId = null);
 
-    private async Task UpdateCardsAsync(List<InstalledModCardViewModel> selected)
+    private async Task UpdateCardsAsync(List<InstalledModCardViewModel> selected, bool anyway = false)
     {
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(installPath))
@@ -54,7 +59,9 @@ public partial class InstalledViewModel
             return;
         }
 
-        var targets = selected.Where(IsUpdatable).ToList();
+        var targets = anyway
+            ? selected.Where(c => c is { WaitingVersion: not null, ModId: not null }).ToList()
+            : selected.Where(IsUpdatable).ToList();
 
         if (targets.Count == 0)
         {
@@ -62,7 +69,7 @@ public partial class InstalledViewModel
             return;
         }
 
-        var partners = PartnersOf(targets);
+        var partners = anyway ? new List<InstalledModCardViewModel>() : PartnersOf(targets);
         targets.AddRange(partners);
 
         // Resolved against the cached catalog before anything is asked, so a mod the catalog can no
@@ -77,7 +84,9 @@ public partial class InstalledViewModel
             // breaks nothing (OPEN-12 F11).
             var version = match is null
                 ? null
-                : card.UpdateVersion ?? ModCardViewModel.PickDisplayVersion(match, AppServices.SptEnvironment.InstalledVersion)?.Version;
+                : anyway
+                    ? card.WaitingVersion
+                    : card.UpdateVersion ?? ModCardViewModel.PickDisplayVersion(match, AppServices.SptEnvironment.InstalledVersion)?.Version;
 
             if (match is null || version is null) unmatched.Add(card.DisplayTitle);
             else resolved.Add((card, match, version));
@@ -139,7 +148,7 @@ public partial class InstalledViewModel
             var version = withMod
                 ? NewestAddonUpdate(addon, card.InstalledVersion, modTargets[card.ParentModId!.Value])
                 : addon?.Versions?.FirstOrDefault(v => string.Equals(
-                    v.Version, card.UpdateVersion ?? card.LatestPublishedVersion, StringComparison.OrdinalIgnoreCase));
+                    v.Version, anyway ? card.WaitingVersion : card.UpdateVersion ?? card.LatestPublishedVersion, StringComparison.OrdinalIgnoreCase));
 
             if (addon is null || (version is null && !withMod) || version is { Link: null })
             {

@@ -381,6 +381,7 @@ public partial class OptionsViewModel : LocalizedViewModel
         _directLaunch = settings.DirectLaunch;
         _minimizeWhilePlaying = settings.MinimizeWhilePlaying;
         _showFeatureTours = settings.ShowFeatureTours;
+        _selectedUpdateWait = UpdateWaitOptions.FirstOrDefault(o => o.Days == AppServices.UpdateWait.Days) ?? UpdateWaitOptions[0];
 
         _selectedInstallMode = InstallModeOptions.FirstOrDefault(o => o.Value == settings.Monitor.InstallMode)
             ?? InstallModeOptions[0];

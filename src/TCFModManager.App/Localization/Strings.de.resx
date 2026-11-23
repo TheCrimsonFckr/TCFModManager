@@ -10976,4 +10976,49 @@ Die Details stehen im Log:
   <data name="Tour_Options_Tours_Body" xml:space="preserve">
     <value>Schalte die Touren hier aus, oder zeige sie alle erneut.</value>
   </data>
+  <data name="Installed_WaitingNoteFormat" xml:space="preserve">
+    <value>{0} ist erschienen - angeboten ab {1:ddd d MMM}</value>
+  </data>
+  <data name="Installed_UpdateAnywayFormat" xml:space="preserve">
+    <value>Trotzdem auf {0} aktualisieren</value>
+  </data>
+  <data name="Installed_DontWaitForThisMod" xml:space="preserve">
+    <value>Bei diesem Mod nicht auf Updates warten</value>
+  </data>
+  <data name="Installed_WaitForThisMod" xml:space="preserve">
+    <value>Bei diesem Mod wieder auf Updates warten</value>
+  </data>
+  <data name="Installed_DontWaitDoneFormat" xml:space="preserve">
+    <value>Updates von {0} werden sofort angeboten.</value>
+  </data>
+  <data name="Installed_WaitAgainDoneFormat" xml:space="preserve">
+    <value>Updates von {0} warten wieder wie die anderen.</value>
+  </data>
+  <data name="ModUpdate_WaitingNoteFormat" xml:space="preserve">
+    <value>Diese Version ist noch in deiner Update-Wartezeit - sie würde ab {0:ddd d MMM} angeboten. Aktualisieren installiert sie jetzt.</value>
+  </data>
+  <data name="Options_UpdateWaitHeader" xml:space="preserve">
+    <value>Warten, bevor ein Update angeboten wird</value>
+  </data>
+  <data name="Options_UpdateWaitHint" xml:space="preserve">
+    <value>Mods bekommen oft wenige Stunden nach einem Release einen Fix. Wartest du ein paar Tage, überspringst du meist die fehlerhafte Version.</value>
+  </data>
+  <data name="Options_UpdateWaitDescription" xml:space="preserve">
+    <value>Eine Version wird als Update angeboten, sobald sie so lange erschienen ist. Bis dahin wird die neueste Version angeboten, die alt genug ist, falls es eine gibt. Installationen beim Durchsuchen, Modlisten und Abhängigkeiten warten nicht.</value>
+  </data>
+  <data name="Options_UpdateWaitOff" xml:space="preserve">
+    <value>Aus</value>
+  </data>
+  <data name="Options_UpdateWaitOneDay" xml:space="preserve">
+    <value>1 Tag</value>
+  </data>
+  <data name="Options_UpdateWaitTwoDays" xml:space="preserve">
+    <value>2 Tage</value>
+  </data>
+  <data name="Options_UpdateWaitThreeDays" xml:space="preserve">
+    <value>3 Tage</value>
+  </data>
+  <data name="Options_UpdateWaitSevenDays" xml:space="preserve">
+    <value>7 Tage</value>
+  </data>
 </root>
