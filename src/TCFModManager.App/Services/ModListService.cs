@@ -934,13 +934,13 @@ public sealed class ModListService
     {
         if (!isAddon)
         {
-            var mods = await AppServices.SpModApi.GetModVersionsAsync(
-                id, new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct);
+            var mods = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetModVersionsAsync(
+                id, new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct), "ModListService", ct);
             return [.. mods.Data.Select(v => (v, (string?)null))];
         }
 
-        var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
-            id, new AddonVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct);
+        var addons = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetAddonVersionsAsync(
+            id, new AddonVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct), "ModListService", ct);
         return [.. addons.Data.Select(v => (AsModVersion(v), v.ModVersionConstraint))];
     }
 
@@ -953,13 +953,13 @@ public sealed class ModListService
     {
         if (!isAddon)
         {
-            var mods = await AppServices.SpModApi.GetModVersionsAsync(
-                id, new ModVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct);
+            var mods = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetModVersionsAsync(
+                id, new ModVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct), "ModListService", ct);
             return (NewestFittingVersion.ForSpt(mods.Data, sptVersion), mods.Data.Count > 0);
         }
 
-        var addons = await AppServices.SpModApi.GetAddonVersionsAsync(
-            id, new AddonVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct);
+        var addons = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetAddonVersionsAsync(
+            id, new AddonVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct), "ModListService", ct);
         return (NewestFittingVersion.ForParent(addons.Data, parentVersion, sptVersion) is { } fit ? AsModVersion(fit) : null, addons.Data.Count > 0);
     }
 

@@ -41,12 +41,6 @@ public sealed class SpModListApi(SpModApiClient api) : ISpModListApi
     // sp-mod's page size cap.
     private const int VersionBatch = 50;
 
-    private const int MaxRetries = 3;
-
-    // sp-mod's Retry-After is honoured up to this; the window's Cancel is the way out of a long one.
-    private static readonly TimeSpan MaxWait = TimeSpan.FromSeconds(90);
-    private static readonly TimeSpan DefaultWait = TimeSpan.FromSeconds(20);
-
     public async Task<IReadOnlyDictionary<int, IReadOnlyList<SpModCandidateVersion>>> ModVersionsAsync(
         IReadOnlyList<int> modIds, CancellationToken ct)
     {
@@ -114,24 +108,8 @@ public sealed class SpModListApi(SpModApiClient api) : ISpModListApi
     public Task<Dictionary<string, List<DependencyNode>>> AddonDependenciesAsync(string pairs, string sptVersion, CancellationToken ct) =>
         Retrying(() => api.GetAddonDependenciesAsync(pairs, sptVersion, ct), ct);
 
-    private static async Task<T> Retrying<T>(Func<Task<T>> call, CancellationToken ct)
-    {
-        for (var attempt = 0; ; attempt++)
-        {
-            try
-            {
-                return await call().ConfigureAwait(false);
-            }
-            catch (SpModApiRateLimitedException ex) when (attempt < MaxRetries)
-            {
-                var wait = ex.RetryAfter is { } after && after > TimeSpan.Zero
-                    ? (after < MaxWait ? after : MaxWait)
-                    : DefaultWait;
-                AppLog.Warn("SpModListResolver", $"rate limited by sp-mod, waiting {wait.TotalSeconds:0}s");
-                await Task.Delay(wait, ct).ConfigureAwait(false);
-            }
-        }
-    }
+    private static Task<T> Retrying<T>(Func<Task<T>> call, CancellationToken ct) =>
+        SpModRateLimit.RetryingAsync(call, "SpModListResolver", ct);
 }
 
 public enum SpModResolveFailure
