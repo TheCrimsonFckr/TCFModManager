@@ -1,3 +1,4 @@
+using System.Net;
 using TCFModManager.Core.Models;
 using TCFModManager.Core.SpModApi;
 
@@ -36,7 +37,7 @@ public interface ISpModListApi
 // minute per address, and this shares that budget with everything else the app does. A 429 is
 // waited out and retried a couple of times rather than failing the whole read.
 //
-public sealed class SpModListApi(SpModApiClient api) : ISpModListApi
+public sealed class SpModListApi(SpModApiClient api, IProgress<TimeSpan>? waiting = null) : ISpModListApi, IModListVersionApi
 {
     // sp-mod's page size cap.
     private const int VersionBatch = 50;
@@ -108,8 +109,93 @@ public sealed class SpModListApi(SpModApiClient api) : ISpModListApi
     public Task<Dictionary<string, List<DependencyNode>>> AddonDependenciesAsync(string pairs, string sptVersion, CancellationToken ct) =>
         Retrying(() => api.GetAddonDependenciesAsync(pairs, sptVersion, ct), ct);
 
-    private static Task<T> Retrying<T>(Func<Task<T>> call, CancellationToken ct) =>
-        SpModRateLimit.RetryingAsync(call, "SpModListResolver", ct);
+    public async Task<IReadOnlyDictionary<int, IReadOnlyList<ModVersion>>> RecentModVersionsAsync(
+        IReadOnlyList<int> modIds, CancellationToken ct)
+    {
+        var result = new Dictionary<int, IReadOnlyList<ModVersion>>();
+
+        foreach (var batch in modIds.Distinct().Chunk(VersionBatch))
+        {
+            var page = await Retrying(() => api.GetModReleasesAsync(new ModsQuery
+            {
+                FilterId = string.Join(",", batch),
+                FilterIncludeLegacy = true,
+                Include = "versions",
+                PerPage = VersionBatch,
+            }, ct), ct).ConfigureAwait(false);
+
+            foreach (var mod in page.Data)
+                result[mod.Id] = [.. (mod.Versions ?? []).Where(v => !string.IsNullOrWhiteSpace(v.Version))];
+        }
+
+        return result;
+    }
+
+    public async Task<IReadOnlyDictionary<int, IReadOnlyList<AddonVersion>>> RecentAddonVersionsAsync(
+        IReadOnlyList<int> addonIds, CancellationToken ct)
+    {
+        var result = new Dictionary<int, IReadOnlyList<AddonVersion>>();
+
+        foreach (var batch in addonIds.Distinct().Chunk(VersionBatch))
+        {
+            var page = await Retrying(() => api.GetAddonReleasesAsync(new AddonsQuery
+            {
+                FilterId = string.Join(",", batch),
+                Include = "versions",
+                PerPage = VersionBatch,
+            }, ct), ct).ConfigureAwait(false);
+
+            foreach (var addon in page.Data)
+                result[addon.Id] = [.. (addon.Versions ?? []).Where(v => !string.IsNullOrWhiteSpace(v.Version))];
+        }
+
+        return result;
+    }
+
+    public async Task<IReadOnlyList<ModVersion>> MatchingModVersionsAsync(int modId, string version, CancellationToken ct)
+    {
+        try
+        {
+            var page = await Retrying(() => api.GetModVersionsAsync(
+                modId.ToString(), new ModVersionsQuery { FilterVersion = version, PerPage = 5 }, ct), ct).ConfigureAwait(false);
+            return page.Data;
+        }
+        catch (SpModApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+        {
+            return [];
+        }
+    }
+
+    public async Task<IReadOnlyList<AddonVersion>> MatchingAddonVersionsAsync(int addonId, string version, CancellationToken ct)
+    {
+        try
+        {
+            var page = await Retrying(() => api.GetAddonVersionsAsync(
+                addonId.ToString(), new AddonVersionsQuery { FilterVersion = version, PerPage = 5 }, ct), ct).ConfigureAwait(false);
+            return page.Data;
+        }
+        catch (SpModApiException ex) when (ex.StatusCode == HttpStatusCode.BadRequest)
+        {
+            return [];
+        }
+    }
+
+    public async Task<IReadOnlyList<ModVersion>> NewestModVersionsAsync(int modId, CancellationToken ct)
+    {
+        var page = await Retrying(() => api.GetModVersionsAsync(
+            modId.ToString(), new ModVersionsQuery { Sort = "-version", PerPage = VersionBatch }, ct), ct).ConfigureAwait(false);
+        return page.Data;
+    }
+
+    public async Task<IReadOnlyList<AddonVersion>> NewestAddonVersionsAsync(int addonId, CancellationToken ct)
+    {
+        var page = await Retrying(() => api.GetAddonVersionsAsync(
+            addonId.ToString(), new AddonVersionsQuery { Sort = "-version", PerPage = VersionBatch }, ct), ct).ConfigureAwait(false);
+        return page.Data;
+    }
+
+    private Task<T> Retrying<T>(Func<Task<T>> call, CancellationToken ct) =>
+        SpModRateLimit.RetryingAsync(call, "SpModListResolver", ct, waiting);
 }
 
 public enum SpModResolveFailure

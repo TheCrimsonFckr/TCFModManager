@@ -2406,6 +2406,8 @@ internal static class Strings
     internal static string ModLists_ApplyBlockedGame => LocalizationService.Get("ModLists_ApplyBlockedGame");
     internal static string ModLists_ApplyBlockedServer => LocalizationService.Get("ModLists_ApplyBlockedServer");
     internal static string ModLists_InstallsWaitForSpt => LocalizationService.Get("ModLists_InstallsWaitForSpt");
+    internal static string ModLists_CheckingVersionsFormat => LocalizationService.Get("ModLists_CheckingVersionsFormat");
+    internal static string ModLists_SpModWaitFormat => LocalizationService.Get("ModLists_SpModWaitFormat");
     internal static string ModLists_ApplyBlockedBoth => LocalizationService.Get("ModLists_ApplyBlockedBoth");
     internal static string ModLists_EntrySptBadgeFormat => LocalizationService.Get("ModLists_EntrySptBadgeFormat");
     internal static string ModLists_OpenEntryPageToolTip => LocalizationService.Get("ModLists_OpenEntryPageToolTip");

@@ -8718,6 +8718,14 @@ See Dependencies and Conflicts.</value>
     <value>SPT is running from this install, so the installs wait on the Downloads page until it closes.</value>
     <comment>OPEN-67 Q4: Mod lists status line when a list that installs or updates is applied while SPT runs from the install.</comment>
   </data>
+  <data name="ModLists_CheckingVersionsFormat" xml:space="preserve">
+    <value>Checking versions with sp-mod ({0} of {1})</value>
+    <comment>OPEN-69 Q4: Mod lists status line while applying a list checks its versions with sp-mod. {0} is how many are done, {1} how many there are.</comment>
+  </data>
+  <data name="ModLists_SpModWaitFormat" xml:space="preserve">
+    <value>sp-mod asked us to slow down - carrying on in {0}</value>
+    <comment>OPEN-69 Q4: Mod lists status line while sp-mod has asked for a pause (429) during that check; it carries on by itself. {0} is a short time, as Downloads_TimeSecondsFormat (40s).</comment>
+  </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Close the game and stop the SPT server to apply this list. Mods can't be changed while either is running - Apply comes back as soon as both are closed.</value>
     <comment>Mod lists page, warning while a previewed plan can't be applied because both the game and the SPT server are running.</comment>

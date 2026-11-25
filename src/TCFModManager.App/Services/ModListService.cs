@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Windows;
 using TCFModManager.App.Localization;
@@ -52,6 +51,9 @@ public sealed record ModListDependencyCheck(
 
     public IReadOnlyList<ModListDependencyPick> Picks => Ticked.Select(o => o.Pick).ToList();
 }
+
+// OPEN-69 Q4: how far checking a list's versions with sp-mod has got, or how long sp-mod asked to wait.
+public sealed record ModListCheckProgress(int Done, int Total, TimeSpan? Wait = null);
 
 //
 // Monitor mode's say in a list apply (§9, R6): whether its installs and updates are saved for the
@@ -456,7 +458,8 @@ public sealed class ModListService
         ModListPreview preview,
         ModListPrompts? prompts = null,
         bool takeSnapshot = true,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        IProgress<ModListCheckProgress>? checking = null)
     {
         prompts ??= ModListPrompts.Reject;
 
@@ -467,7 +470,7 @@ public sealed class ModListService
         var result = await ModListApplier.ApplyAsync(
             preview.Plan,
             preview.Install.Candidates,
-            (fetches, token) => FetchAsync(preview.List, preview.Install, fetches, prompts, mode, token),
+            (fetches, token) => FetchAsync(preview.List, preview.Install, fetches, prompts, mode, checking, token),
             new ModListApplyOptions
             {
                 // Named after the list being applied, not "Before X" - the snapshot is only ever
@@ -558,7 +561,7 @@ public sealed class ModListService
             preview.Plan,
             preview.Install.Candidates,
             (fetches, token) => FetchAsync(
-                snapshot, preview.Install, fetches, prompts ?? ModListPrompts.Reject, ModListDownloadMode.For(snapshot), token),
+                snapshot, preview.Install, fetches, prompts ?? ModListPrompts.Reject, ModListDownloadMode.For(snapshot), null, token),
             new ModListApplyOptions
             {
                 SptVersion = preview.Install.SptVersion,
@@ -593,9 +596,10 @@ public sealed class ModListService
         IReadOnlyList<ModListAction> fetches,
         ModListPrompts prompts,
         ModListDownloadMode mode,
+        IProgress<ModListCheckProgress>? checking,
         CancellationToken ct)
     {
-        var resolution = await ResolveAsync(list, fetches, install.Candidates, ct);
+        var resolution = await ResolveAsync(list, fetches, install.Candidates, checking, ct);
 
         var accepted = prompts.ApproveVersionChanges(resolution.Changes);
         var acceptedActions = accepted.Select(c => c.Action).ToHashSet();
@@ -712,279 +716,42 @@ public sealed class ModListService
 
     //
     // Works out the exact version behind each fetch, and separates the ones the list can't have as
-    // written. A pinned version that is gone becomes a question, never a silent substitution - the
-    // list named a specific build, and quietly installing a different one is what desyncs a group.
+    // written. A pinned version that is gone becomes a question, never a silent substitution.
     //
     private static async Task<ModListResolution> ResolveAsync(
         ModList list,
         IReadOnlyList<ModListAction> fetches,
         IReadOnlyList<ModListCandidate> installed,
+        IProgress<ModListCheckProgress>? checking,
         CancellationToken ct)
     {
-        var catalog = AppServices.ModCache.AllMods
-            .GroupBy(m => m.Id)
-            .ToDictionary(g => g.Key, g => g.First());
-
-        //
-        // Which parent mods an addon in this batch can rely on: everything already installed, plus
-        // everything this same apply is about to install. An addon whose parent is in neither is
-        // refused here rather than downloaded - it would install files nothing loads, and the list
-        // would look applied when it wasn't.
-        //
-        var parents = installed
-            .Where(c => c is { IsAddon: false, ModId: not null })
-            .Select(c => c.ModId!.Value)
-            .ToHashSet();
-
-        foreach (var action in fetches.Where(a => a is { IsAddon: false, ModId: not null }))
-            parents.Add(action.ModId!.Value);
-
-        // OPEN-44 R10: a parent the list names, at whatever scope, is the operator's placement - an
-        // addon the list scopes to this machine installs here without it (Q7).
-        var placed = list.Entries
-            .Where(e => e is { IsAddon: false, ModId: not null })
-            .Select(e => e.ModId!.Value)
-            .ToHashSet();
-
-        //
-        // The version each parent will be at once this apply is done - the one the list names when it
-        // fetches the parent, otherwise the one installed - so an addon is picked to fit it. A parent
-        // fetched with no version named is not known yet; its addons take their newest.
-        //
-        var parentVersions = installed
-            .Where(c => c is { IsAddon: false, ModId: not null })
-            .GroupBy(c => c.ModId!.Value)
-            .ToDictionary(g => g.Key, g => g.First().Version);
-
-        foreach (var action in fetches.Where(a => a is { IsAddon: false, ModId: not null }))
-            parentVersions[action.ModId!.Value] = action.TargetVersion;
-
-        var sptVersion = AppServices.SptEnvironment.InstalledVersion;
-
-        var ready = new List<ModListDownload>();
-        var changes = new List<ModListVersionChange>();
-        var unavailable = new List<ModListFetchFailure>();
-
-        foreach (var action in fetches)
+        var context = new ModListVersionContext
         {
-            if (action.ModId is not { } modId)
-            {
-                unavailable.Add(new ModListFetchFailure(action.Name, Strings.ModList_ReasonNoListing));
-                continue;
-            }
+            Installed = installed,
+            ListEntries = list.Entries,
+            Mods = AppServices.ModCache.AllMods.GroupBy(m => m.Id).ToDictionary(g => g.Key, g => g.First()),
+            Addons = AppServices.Addons.AllAddons.GroupBy(a => a.Id).ToDictionary(g => g.Key, g => g.First()),
+            SptVersion = AppServices.SptEnvironment.InstalledVersion,
+        };
 
-            InstallTarget target;
-            string? parentVersion = null;
+        var waiting = checking is null ? null : new Relay<TimeSpan>(wait => checking.Report(new ModListCheckProgress(0, 0, wait)));
+        var progress = checking is null ? null : new Relay<SpModResolveProgress>(p => checking.Report(new ModListCheckProgress(p.Done, p.Total)));
 
-            if (action.IsAddon)
-            {
-                if (AppServices.Addons.ById(modId) is not { } addon)
-                {
-                    unavailable.Add(new ModListFetchFailure(
-                        action.Name, Strings.ModList_ReasonNoAddonListing));
-                    continue;
-                }
+        var resolved = await ModListVersionResolver.ResolveAsync(
+            fetches, context, new SpModListApi(AppServices.SpModApi, waiting), progress, ct);
 
-                if (addon.ModId is { } parentId && !parents.Contains(parentId) && !placed.Contains(parentId))
-                {
-                    var parentName = catalog.GetValueOrDefault(parentId)?.Name
-                        ?? Text(Strings.ModList_UnnamedModFormat, parentId);
-
-                    unavailable.Add(new ModListFetchFailure(
-                        action.Name,
-                        Text(Strings.ModList_ReasonOrphanedAddonFormat, parentName)));
-                    continue;
-                }
-
-                target = InstallTarget.For(addon);
-                parentVersion = addon.ModId is { } parent ? parentVersions.GetValueOrDefault(parent) : null;
-            }
-            else
-            {
-                if (!catalog.TryGetValue(modId, out var mod))
-                {
-                    unavailable.Add(new ModListFetchFailure(action.Name, Strings.ModList_ReasonNoListing));
-                    continue;
-                }
-
-                target = InstallTarget.For(mod);
-            }
-
-            var id = modId.ToString();
-            var wanted = action.TargetVersion?.Trim();
-
-            //
-            // Per entry, not per apply.
-            //
-            // Every call below asks sp-mod.com about ONE mod, and a list is as long as the operator
-            // made it - 76 entries in the case that found this. Letting one refused or unanswered
-            // question escape the loop throws away the other 75 and reports the whole apply as
-            // broken, which is both wrong and unactionable: the user cannot tell which entry did it.
-            // `unavailable` is the channel that already exists for "this one can't be had, and here
-            // is why", so that is where these go.
-            //
-            // Cancellation is not caught - a user who cancelled meant the whole thing.
-            //
-            try
-            {
-                // A list entry with no version string at all is the one case where newest is the
-                // only thing it can mean, so it needs no asking.
-                if (string.IsNullOrWhiteSpace(wanted))
-                {
-                    var (newest, anyPublished) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
-
-                    if (newest is not null)
-                        ready.Add(new ModListDownload(action, target, newest, IsSubstitute: false));
-                    else
-                        unavailable.Add(new ModListFetchFailure(
-                            action.Name, anyPublished ? NoFitReason(action.IsAddon, sptVersion, parentVersion) : Strings.ModList_ReasonNoVersions));
-
-                    continue;
-                }
-
-                var published = await VersionsAsync(id, action.IsAddon, wanted, ct);
-
-                var exact = published.FirstOrDefault(v => action.VersionId is not null && v.Version.Id == action.VersionId);
-                if (exact.Version is null)
-                    exact = published.FirstOrDefault(v => string.Equals(v.Version.Version?.Trim(), wanted, StringComparison.OrdinalIgnoreCase));
-
-                //
-                // OPEN-31 F2: an addon pinned at a version its parent - at the version this apply
-                // leaves it - doesn't accept is offered the newest one that does, the same way a
-                // version that's gone is.
-                //
-                if (exact.Version is not null && action.IsAddon && !string.IsNullOrWhiteSpace(parentVersion)
-                    && AddonFit.Check(exact.ParentConstraint, parentVersion, sptVersion) == false)
-                {
-                    if (action.Entry?.FitOverride == true)
-                    {
-                        ready.Add(new ModListDownload(action, target with { FitOverride = parentVersion }, exact.Version, IsSubstitute: false));
-                        continue;
-                    }
-
-                    var (fits, _) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
-                    var parentName = AppServices.Addons.ById(modId)?.ModId is { } pid
-                        ? catalog.GetValueOrDefault(pid)?.Name
-                        : null;
-
-                    if (fits is null)
-                        unavailable.Add(new ModListFetchFailure(action.Name, NoFitReason(true, sptVersion, parentVersion)));
-                    else
-                        changes.Add(new ModListVersionChange(action, target, wanted, fits, parentName ?? Strings.Addon_ParentFallback, parentVersion));
-
-                    continue;
-                }
-
-                if (exact.Version is not null)
-                {
-                    ready.Add(new ModListDownload(action, target, exact.Version, IsSubstitute: false));
-                    continue;
-                }
-
-                var (replacement, _) = await NewestAsync(id, action.IsAddon, sptVersion, parentVersion, ct);
-
-                if (replacement is null)
-                    unavailable.Add(new ModListFetchFailure(
-                        action.Name, Text(Strings.ModList_ReasonVersionGoneFormat, wanted)));
-                else
-                    changes.Add(new ModListVersionChange(action, target, wanted, replacement));
-            }
-            catch (Exception ex) when (ex is SpModApiException or HttpRequestException or TaskCanceledException
-                                       && !ct.IsCancellationRequested)
-            {
-                unavailable.Add(new ModListFetchFailure(
-                    action.Name, Text(Strings.ModList_ReasonApiFailedFormat, ex.Message)));
-            }
-        }
-
-        return new ModListResolution(ready, changes, unavailable);
+        return new ModListResolution(
+            [.. resolved.Ready.Select(r => new ModListDownload(r.Action, r.Target, r.Version, IsSubstitute: false))],
+            [.. resolved.Offers.Select(o => o.DoesNotFitParent
+                ? new ModListVersionChange(o.Action, o.Target, o.Wanted, o.Available, o.ParentName ?? Strings.Addon_ParentFallback, o.ParentVersion)
+                : new ModListVersionChange(o.Action, o.Target, o.Wanted, o.Available))],
+            [.. resolved.Unavailable.Select(u => new ModListFetchFailure(u.Action.Name, ModListProblems.Reason(u)))]);
     }
 
-    //
-    // The published versions matching a wanted version string. Addons are asked live like mods
-    // rather than read from their cache: the cache only carries each addon's six most recent
-    // versions, and a list can pin one older than that.
-    //
-    // A version string the API's own semver parser refuses. Not an error to report: the question
-    // "which published versions match this?" has an answer, and the answer is none.
-    //
-    // sp-mod.com parses filter[version] as a semver constraint and returns 400 for anything it does
-    // not recognise - "2.0.0-BE" and "1.0.0-nope" are refused where "1.0.0-beta" is not. Mod authors
-    // do not consult that parser before naming a build, so a list captured from a real install can
-    // carry one, and treating it as a failure would strand the entry with a message about the API
-    // instead of offering the substitution that is actually available.
-    private static bool IsUnmatchableFilter(SpModApiException ex) =>
-        ex.StatusCode == HttpStatusCode.BadRequest;
-
-    private static async Task<IReadOnlyList<(ModVersion Version, string? ParentConstraint)>> VersionsAsync(
-        string id, bool isAddon, string wanted, CancellationToken ct)
+    private sealed class Relay<T>(Action<T> report) : IProgress<T>
     {
-        try
-        {
-            return await PublishedAsync(id, isAddon, wanted, ct);
-        }
-        catch (SpModApiException ex) when (IsUnmatchableFilter(ex))
-        {
-            return [];
-        }
+        public void Report(T value) => report(value);
     }
-
-    private static async Task<IReadOnlyList<(ModVersion Version, string? ParentConstraint)>> PublishedAsync(
-        string id, bool isAddon, string wanted, CancellationToken ct)
-    {
-        if (!isAddon)
-        {
-            var mods = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetModVersionsAsync(
-                id, new ModVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct), "ModListService", ct);
-            return [.. mods.Data.Select(v => (v, (string?)null))];
-        }
-
-        var addons = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetAddonVersionsAsync(
-            id, new AddonVersionsQuery { FilterVersion = wanted, PerPage = 5 }, ct), "ModListService", ct);
-        return [.. addons.Data.Select(v => (AsModVersion(v), v.ModVersionConstraint))];
-    }
-
-    //
-    // The newest version that fits: for a mod, this install's SPT; for an addon, the version its
-    // parent will be at. AnyPublished tells "nothing fits" from "nothing published at all".
-    //
-    private static async Task<(ModVersion? Version, bool AnyPublished)> NewestAsync(
-        string id, bool isAddon, string? sptVersion, string? parentVersion, CancellationToken ct)
-    {
-        if (!isAddon)
-        {
-            var mods = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetModVersionsAsync(
-                id, new ModVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct), "ModListService", ct);
-            return (NewestFittingVersion.ForSpt(mods.Data, sptVersion), mods.Data.Count > 0);
-        }
-
-        var addons = await SpModRateLimit.RetryingAsync(() => AppServices.SpModApi.GetAddonVersionsAsync(
-            id, new AddonVersionsQuery { Sort = "-version", PerPage = NewestLookupSize }, ct), "ModListService", ct);
-        return (NewestFittingVersion.ForParent(addons.Data, parentVersion, sptVersion) is { } fit ? AsModVersion(fit) : null, addons.Data.Count > 0);
-    }
-
-    // Enough of the newest versions to reach back past a run of releases for a newer SPT.
-    private const int NewestLookupSize = 50;
-
-    private static string NoFitReason(bool isAddon, string? sptVersion, string? parentVersion) =>
-        isAddon
-            ? Text(Strings.ModList_ReasonNoVersionForParentFormat, parentVersion)
-            : Text(Strings.ModList_ReasonNoVersionForSptFormat, sptVersion);
-
-    //
-    // An addon version carries everything the download pipeline reads. ModVersionConstraint is
-    // dropped deliberately: it decides which version to take, and by here that is already decided.
-    //
-    private static ModVersion AsModVersion(AddonVersion version) => new()
-    {
-        Id = version.Id,
-        Version = version.Version,
-        Description = version.Description,
-        Link = version.Link,
-        ContentLength = version.ContentLength,
-        Downloads = version.Downloads,
-        PublishedAt = version.PublishedAt,
-    };
 
     //
     // Completes once the queue has finished with this item, whatever the outcome.

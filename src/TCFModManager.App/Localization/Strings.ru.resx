@@ -7264,6 +7264,12 @@
   <data name="ModLists_InstallsWaitForSpt" xml:space="preserve">
     <value>SPT запущен из этой установки, поэтому установки ждут на странице загрузок, пока он не закроется.</value>
   </data>
+  <data name="ModLists_CheckingVersionsFormat" xml:space="preserve">
+    <value>Проверка версий на sp-mod ({0} из {1})</value>
+  </data>
+  <data name="ModLists_SpModWaitFormat" xml:space="preserve">
+    <value>sp-mod просит подождать - продолжим через {0}</value>
+  </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Закройте игру и остановите сервер SPT, чтобы применить этот список. Пока хоть что-то из них запущено, моды изменить нельзя - кнопка «Применить» станет доступна, как только оба будут закрыты.</value>
   </data>

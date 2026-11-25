@@ -76,7 +76,9 @@ public partial class ModListsViewModel
 
         await RunAsync(async () =>
         {
-            var result = await _service.ApplyAsync(preview, ModListPrompts.Default);
+            var shown = StatusMessage;
+            var checking = new Progress<ModListCheckProgress>(p => StatusMessage = CheckStatus(p, shown));
+            var result = await _service.ApplyAsync(preview, ModListPrompts.Default, checking: checking);
 
             // SPT started between the last check and the click: nothing was changed, so the plan
             // stays up with Apply greyed out until it is closed again.
@@ -162,6 +164,13 @@ public partial class ModListsViewModel
 
         ReportProblemWindow.Open(ProblemFacts.Context(ProblemSource.ModList, shown: StatusMessage, listResult: result));
     }
+
+    private static string CheckStatus(ModListCheckProgress progress, string shown) =>
+        progress.Wait is { } wait
+            ? Text(Strings.ModLists_SpModWaitFormat, Text(Strings.Downloads_TimeSecondsFormat, Math.Ceiling(wait.TotalSeconds)))
+            : progress.Done < progress.Total
+                ? Text(Strings.ModLists_CheckingVersionsFormat, progress.Done, progress.Total)
+                : shown;
 
     private static string Completed(ModListApplyResult result, ModListDownloadMode mode)
     {

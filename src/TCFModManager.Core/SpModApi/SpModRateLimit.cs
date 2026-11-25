@@ -14,7 +14,8 @@ public static class SpModRateLimit
     private static readonly TimeSpan MaxWait = TimeSpan.FromSeconds(90);
     private static readonly TimeSpan DefaultWait = TimeSpan.FromSeconds(20);
 
-    public static async Task<T> RetryingAsync<T>(Func<Task<T>> call, string source, CancellationToken ct)
+    public static async Task<T> RetryingAsync<T>(
+        Func<Task<T>> call, string source, CancellationToken ct, IProgress<TimeSpan>? waiting = null)
     {
         for (var attempt = 0; ; attempt++)
         {
@@ -28,6 +29,7 @@ public static class SpModRateLimit
                     ? (after < MaxWait ? after : MaxWait)
                     : DefaultWait;
                 AppLog.Warn(source, $"rate limited by sp-mod, waiting {wait.TotalSeconds:0}s");
+                waiting?.Report(wait);
                 await Task.Delay(wait, ct).ConfigureAwait(false);
             }
         }

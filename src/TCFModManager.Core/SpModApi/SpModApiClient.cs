@@ -38,6 +38,9 @@ public sealed class SpModApiClient : IDisposable
     public Task<PagedResult<Mod>> GetModsAsync(ModsQuery? query = null, CancellationToken ct = default) =>
         GetPagedAsync<Mod>("/api/v0/mods", query, ct);
 
+    public Task<PagedResult<ModReleases>> GetModReleasesAsync(ModsQuery query, CancellationToken ct = default) =>
+        GetPagedAsync<ModReleases>("/api/v0/mods", query, ct);
+
     public async Task<Mod> GetModAsync(string modId, string? fields = null, string? include = null, CancellationToken ct = default)
     {
         var query = new QueryParametersShim(fields, include);
@@ -83,6 +86,9 @@ public sealed class SpModApiClient : IDisposable
 
     public Task<PagedResult<Addon>> GetAddonsAsync(AddonsQuery? query = null, CancellationToken ct = default) =>
         GetPagedAsync<Addon>("/api/v0/addons", query, ct);
+
+    public Task<PagedResult<AddonReleases>> GetAddonReleasesAsync(AddonsQuery query, CancellationToken ct = default) =>
+        GetPagedAsync<AddonReleases>("/api/v0/addons", query, ct);
 
     public Task<Addon> GetAddonAsync(string addonId, string? fields = null, string? include = null, CancellationToken ct = default) =>
         GetSingleRequiredAsync<Addon>($"/api/v0/addon/{Uri.EscapeDataString(addonId)}", new QueryParametersShim(fields, include), ct);

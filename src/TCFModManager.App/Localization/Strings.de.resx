@@ -6925,6 +6925,12 @@ Siehe Abhängigkeiten und Konflikte.</value>
   <data name="ModLists_InstallsWaitForSpt" xml:space="preserve">
     <value>SPT läuft aus dieser Installation, daher warten die Installationen auf der Downloads-Seite, bis es geschlossen ist.</value>
   </data>
+  <data name="ModLists_CheckingVersionsFormat" xml:space="preserve">
+    <value>Versionen werden bei sp-mod geprüft ({0} von {1})</value>
+  </data>
+  <data name="ModLists_SpModWaitFormat" xml:space="preserve">
+    <value>sp-mod bittet um eine Pause - es geht in {0} weiter</value>
+  </data>
   <data name="ModLists_ApplyBlockedBoth" xml:space="preserve">
     <value>Schließe das Spiel und stoppe den SPT-Server, um diese Liste anzuwenden. Solange eines davon läuft, können keine Mods geändert werden - Anwenden ist wieder verfügbar, sobald beide geschlossen sind.</value>
   </data>

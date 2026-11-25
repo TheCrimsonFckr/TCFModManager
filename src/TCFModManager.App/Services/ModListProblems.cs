@@ -32,4 +32,22 @@ public static class ModListProblems
 
         _ => Strings.ModListApply_Stopped,
     };
+
+    public static string Reason(ModListUnavailable unavailable) => unavailable.Reason switch
+    {
+        ModListUnavailableReason.NoAddonListing => Strings.ModList_ReasonNoAddonListing,
+
+        ModListUnavailableReason.OrphanedAddon => Text(
+            Strings.ModList_ReasonOrphanedAddonFormat,
+            unavailable.ParentName ?? Text(Strings.ModList_UnnamedModFormat, unavailable.ParentId)),
+
+        ModListUnavailableReason.NoVersions => Strings.ModList_ReasonNoVersions,
+        ModListUnavailableReason.NoVersionForSpt => Text(Strings.ModList_ReasonNoVersionForSptFormat, unavailable.Version),
+        ModListUnavailableReason.NoVersionForParent => Text(Strings.ModList_ReasonNoVersionForParentFormat, unavailable.Version),
+        ModListUnavailableReason.VersionGone => Text(Strings.ModList_ReasonVersionGoneFormat, unavailable.Version),
+        ModListUnavailableReason.SpModFailed => Text(Strings.ModList_ReasonApiFailedFormat, unavailable.Detail),
+        _ => Strings.ModList_ReasonNoListing,
+    };
+
+    private static string Text(string format, params object?[] values) => LocalizationService.Text(format, values);
 }
