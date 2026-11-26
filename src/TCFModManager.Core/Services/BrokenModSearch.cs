@@ -163,14 +163,27 @@ public static class BrokenModSearch
         return changed;
     }
 
-    // About how long is left, from the average start so far. Null until two starts are done.
-    public static TimeSpan? TimeLeft(IReadOnlyList<TimeSpan> finished, int triesLeft, TimeSpan intoCurrent)
+    // About how long is left. One start done: each start takes as long as the first full one. More:
+    // a fixed part plus a part per mod on, fitted to every start so far, for the mods on now.
+    public static TimeSpan? TimeLeft(IReadOnlyList<(int ModsOn, TimeSpan Took)> finished, int modsOnNow, int triesLeft, TimeSpan intoCurrent)
     {
-        if (finished.Count < 2 || triesLeft <= 0) return null;
+        if (finished.Count == 0 || triesLeft <= 0) return null;
 
-        var average = TimeSpan.FromTicks((long)finished.Average(t => t.Ticks));
-        var left = average * triesLeft - intoCurrent;
+        var each = TimeSpan.FromSeconds(StartSeconds(finished, modsOnNow));
+        var left = each * triesLeft - intoCurrent;
         return left > TimeSpan.Zero ? left : TimeSpan.Zero;
+    }
+
+    private static double StartSeconds(IReadOnlyList<(int ModsOn, TimeSpan Took)> finished, int modsOn)
+    {
+        var meanMods = finished.Average(f => (double)f.ModsOn);
+        var meanSeconds = finished.Average(f => f.Took.TotalSeconds);
+        var spread = finished.Sum(f => (f.ModsOn - meanMods) * (f.ModsOn - meanMods));
+        if (spread == 0) return meanSeconds;
+
+        var perMod = Math.Max(0d, finished.Sum(f => (f.ModsOn - meanMods) * (f.Took.TotalSeconds - meanSeconds)) / spread);
+        var fixedPart = Math.Max(0d, meanSeconds - perMod * meanMods);
+        return fixedPart + perMod * modsOn;
     }
 
     // The install's enabled server mods, each after what it needs; a mod installed twice is left out.

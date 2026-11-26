@@ -13808,7 +13808,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Under a result, once the found mod was turned off. {0}: the mod, or the two.</comment>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
-    <value>{0} so far.</value>
+    <value>Elapsed: {0}</value>
     <comment>Progress line, after the start count. {0}: a duration, as Search_DurationMinutesFormat.</comment>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">

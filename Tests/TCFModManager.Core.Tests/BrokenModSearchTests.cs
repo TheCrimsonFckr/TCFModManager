@@ -323,20 +323,28 @@ public class BrokenModSearchTests : IDisposable
     }
 
     [Fact]
-    public void Time_left_is_the_average_start_times_the_starts_left()
+    public void Time_left_starts_from_the_first_full_start_and_follows_each_batch()
     {
         TimeSpan S(double seconds) => TimeSpan.FromSeconds(seconds);
 
-        // Not before two are done.
-        Assert.Null(BrokenModSearch.TimeLeft([], 8, S(5)));
-        Assert.Null(BrokenModSearch.TimeLeft([S(60)], 7, S(5)));
+        // Nothing to go on before the first start.
+        Assert.Null(BrokenModSearch.TimeLeft([], 40, 8, S(5)));
 
-        // 60 s and 10 s: 35 s each, five left, ten seconds into this one.
-        Assert.Equal(S(165), BrokenModSearch.TimeLeft([S(60), S(10)], 5, S(10)));
+        // The first full start: 60 s each, eight left, five seconds into this one.
+        Assert.Equal(S(475), BrokenModSearch.TimeLeft([(40, S(60))], 0, 8, S(5)));
+
+        // 40 on took 60 s, none on took 20 s: 20 s plus 1 s a mod, so 40 s with 20 on.
+        Assert.Equal(S(190), BrokenModSearch.TimeLeft([(40, S(60)), (0, S(20))], 20, 5, S(10)));
+
+        // A third batch on the same line changes nothing.
+        Assert.Equal(S(120), BrokenModSearch.TimeLeft([(40, S(60)), (0, S(20)), (20, S(40))], 10, 4, S(0)));
+
+        // The same mods on each time: their average.
+        Assert.Equal(S(80), BrokenModSearch.TimeLeft([(10, S(30)), (10, S(50))], 10, 2, S(0)));
 
         // Never less than nothing, and nothing to say once none are left.
-        Assert.Equal(TimeSpan.Zero, BrokenModSearch.TimeLeft([S(10), S(10)], 1, S(40)));
-        Assert.Null(BrokenModSearch.TimeLeft([S(10), S(10)], 0, S(0)));
+        Assert.Equal(TimeSpan.Zero, BrokenModSearch.TimeLeft([(10, S(10))], 10, 1, S(40)));
+        Assert.Null(BrokenModSearch.TimeLeft([(10, S(10))], 10, 0, S(0)));
     }
 
     private sealed class Collect(List<BrokenModProgress> into) : IProgress<BrokenModProgress>

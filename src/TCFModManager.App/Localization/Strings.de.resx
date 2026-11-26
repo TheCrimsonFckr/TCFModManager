@@ -11255,7 +11255,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Jetzt aus: {0}. Starte den Server, um zu sehen, ob er hochfährt.</value>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
-    <value>Bisher {0}.</value>
+    <value>Verstrichen: {0}</value>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">
     <value>Noch etwa {0} Min.</value>

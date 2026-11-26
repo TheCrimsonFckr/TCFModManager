@@ -93,7 +93,10 @@
 
                                                 <StackPanel Margin="28,10,0,0" Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}">
                             <ProgressBar Height="4" Minimum="0" Maximum="100" Value="{Binding Progress}" />
-                            <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="{Binding ProgressText}" />
+                            <DockPanel Margin="0,6,0,0">
+                                <TextBlock Margin="12,0,0,0" DockPanel.Dock="Right" Text="{Binding ElapsedText}" />
+                                <TextBlock TextWrapping="Wrap" Text="{Binding ProgressText}" />
+                            </DockPanel>
                         </StackPanel>
 
                         <TextBlock

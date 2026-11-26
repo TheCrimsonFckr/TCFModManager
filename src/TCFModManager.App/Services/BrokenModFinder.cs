@@ -64,7 +64,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private CancellationTokenSource? _cancel;
 
     private readonly System.Diagnostics.Stopwatch _clock = new();
-    private readonly List<TimeSpan> _starts = [];
+    private readonly List<(int ModsOn, TimeSpan Took)> _starts = [];
     private readonly System.Windows.Threading.DispatcherTimer _tick = new() { Interval = TimeSpan.FromSeconds(1) };
     private BrokenModProgress? _now;
     private TimeSpan _nowBegan;
@@ -73,7 +73,11 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
     public BrokenModFinder()
     {
-        _tick.Tick += (_, _) => SayProgress();
+        _tick.Tick += (_, _) =>
+        {
+            ElapsedText = T(Strings.Search_ElapsedFormat, Duration(_clock.Elapsed));
+            SayProgress();
+        };
         LoadResult();
     }
 
@@ -89,6 +93,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
     [ObservableProperty]
     private string? _progressText;
+
+    [ObservableProperty]
+    private string? _elapsedText;
 
     [ObservableProperty]
     private double _progress;
@@ -184,6 +191,8 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         _clock.Restart();
         _starts.Clear();
         _now = null;
+        ElapsedText = T(Strings.Search_ElapsedFormat, Duration(TimeSpan.Zero));
+        _tick.Start();
         Progress = 0;
         ProgressText = Strings.Search_Preparing;
 
@@ -224,7 +233,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                 {
                     if (!_tick.IsEnabled && _now is not null) return;
 
-                    if (_now is not null) _starts.Add(_clock.Elapsed - _nowBegan);
+                    if (_now is { } was) _starts.Add((was.ModsOn, _clock.Elapsed - _nowBegan));
                     _now = p;
                     _nowBegan = _clock.Elapsed;
                     _tick.Start();
@@ -284,6 +293,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         IsStopping = false;
         IsRunning = false;
         ProgressText = null;
+        ElapsedText = null;
 
         if (problem is not null)
         {
@@ -328,10 +338,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     {
         if (_now is not { } p || IsStopping || !_tick.IsEnabled) return;
 
-        var left = BrokenModSearch.TimeLeft(_starts, p.About - p.Try + 1, _clock.Elapsed - _nowBegan);
+        var left = BrokenModSearch.TimeLeft(_starts, p.ModsOn, p.About - p.Try + 1, _clock.Elapsed - _nowBegan);
         ProgressText = Sentences(
             T(Strings.Search_ProgressFormat, p.Try, p.About, p.ModsOn, p.Mods),
-            T(Strings.Search_ElapsedFormat, Duration(_clock.Elapsed)),
             left is not { } time ? null
                 : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute
                 : T(Strings.Search_LeftMinutesFormat, (int)Math.Ceiling(time.TotalMinutes)));

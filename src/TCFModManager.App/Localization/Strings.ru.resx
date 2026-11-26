@@ -11678,7 +11678,7 @@
     <value>Теперь выключено: {0}. Запустить сервер, чтобы проверить, что он поднимается.</value>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
-    <value>Прошло {0}.</value>
+    <value>Прошло: {0}</value>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">
     <value>Осталось около {0} мин.</value>

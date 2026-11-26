@@ -11255,7 +11255,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Ora disattivato: {0}. Avvia il server per vedere se parte.</value>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
-    <value>Finora {0}.</value>
+    <value>Trascorso: {0}</value>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">
     <value>Circa {0} min rimanenti.</value>

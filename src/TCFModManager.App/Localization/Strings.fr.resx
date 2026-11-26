@@ -11255,7 +11255,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Désactivé : {0}. Démarrer le serveur pour vérifier qu'il se lance.</value>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
-    <value>Temps écoulé : {0}.</value>
+    <value>Temps écoulé : {0}</value>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">
     <value>Environ {0} min restantes.</value>
