@@ -112,6 +112,9 @@ internal static class AppServices
     // Whether the Server page's cards are on the Profile page (OPEN-42) - see ServerPageGateViewModel.
     public static ServerPageGateViewModel ServerPageGate { get; } = new();
 
+    // The Web pages page (OPEN-70) - see WebPagesViewModel.
+    public static WebPagesViewModel WebPages { get; } = new();
+
     // The crash bar at the top of the window (OPEN-54 N30) - see CrashWatcher.
     public static CrashBarViewModel CrashBar { get; } = new();
 

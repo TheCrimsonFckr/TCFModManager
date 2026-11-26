@@ -250,6 +250,10 @@ public partial class OptionsViewModel : LocalizedViewModel
     [ObservableProperty]
     private bool _showModFootprintPage;
 
+    // OPEN-70: whether the Web pages page shows while the server runs.
+    [ObservableProperty]
+    private bool _showWebPagesPage;
+
     // Same arrangement as ModPageGate: one description of the setting, shared with the nav item.
     public FootprintGateViewModel FootprintGate => AppServices.FootprintGate;
 
@@ -375,6 +379,7 @@ public partial class OptionsViewModel : LocalizedViewModel
         var settings = _settings.Load();
         _skipModPageConfirmation = settings.SkipModPageConfirmation;
         _showModFootprintPage = settings.ShowModFootprintPage;
+        _showWebPagesPage = settings.ShowWebPagesPage;
         _startLauncherAfterServer = settings.StartLauncherAfterServer;
         _hideServerWindow = settings.HideServerWindow;
         _showServerOnProfile = settings.ShowServerOnProfile;
@@ -507,6 +512,19 @@ public partial class OptionsViewModel : LocalizedViewModel
         AppServices.FootprintGate.Refresh();
 
         AppLog.Info("Footprint", value ? "page shown" : "page hidden");
+    }
+
+    partial void OnShowWebPagesPageChanged(bool value)
+    {
+        if (!_loaded) return;
+
+        var settings = _settings.Load();
+        settings.ShowWebPagesPage = value;
+        _settings.Save(settings);
+
+        AppServices.WebPages.RefreshSetting();
+
+        AppLog.Info("WebPages", value ? "page shown" : "page hidden");
     }
 
     // Whether Start server also opens the launcher once the server is up - see AppSettings.

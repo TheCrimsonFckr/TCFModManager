@@ -87,6 +87,14 @@ internal static class TourCatalog
             new("servermap.owners", () => Strings.Tour_ServerMap_Owners_Title, () => Strings.Tour_ServerMap_Owners_Body),
         ]),
 
+        new("webpages", typeof(WebPagesPage),
+        [
+            new("webpages.rows", () => Strings.Tour_WebPages_Rows_Title, () => Strings.Tour_WebPages_Rows_Body),
+            new("webpages.intro", () => Strings.Tour_WebPages_Intro_Title, () => Strings.Tour_WebPages_Intro_Body),
+            new("webpages.rescan", () => Strings.Tour_WebPages_Rescan_Title, () => Strings.Tour_WebPages_Rescan_Body),
+        ],
+        () => AppServices.WebPages.HasRows),
+
         new("downloads", typeof(DownloadsPage),
         [
             new("downloads.queue", () => Strings.Tour_Downloads_Queue_Title, () => Strings.Tour_Downloads_Queue_Body),

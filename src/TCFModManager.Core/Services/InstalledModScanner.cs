@@ -372,6 +372,8 @@ public static partial class InstalledModScanner
                 FileVersion = fileVersion,
                 DeclaredName = declared?.Name,
                 SptVersion = declared?.SptVersion,
+                HomePage = declared?.HomePage,
+                HomePageDescription = declared?.HomePageDescription,
                 Guid = declared?.Guid,
                 Guids = declared?.Guid is { } guid ? [guid] : [],
                 Author = author,

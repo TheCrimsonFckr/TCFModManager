@@ -642,6 +642,23 @@ internal static class HelpCatalog
                 .WithPage(typeof(ModListsPage)),
         ]),
 
+        // OPEN-70.
+        new("webpages", () => Strings.Nav_WebPages, SymbolRegular.Globe24, typeof(WebPagesPage),
+        [
+            Topic("webpages.open", () => Strings.Help_WebPages_Open_Title,
+                Step(() => Strings.Help_WebPages_Open_Step1, () => Strings.Nav_WebPages),
+                Step(() => Strings.Help_WebPages_Open_Step2, () => Strings.WebPages_Open, () => Strings.WebPages_CopyAddress))
+                .WithNote(() => Strings.Help_WebPages_Open_Note)
+                .WithKeywords(() => Strings.Help_WebPages_Open_Keywords),
+
+            Topic("webpages.hide", () => Strings.Help_WebPages_Hide_Title,
+                Step(() => Strings.Help_WebPages_Hide_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_SectionPages,
+                    () => Strings.Options_WebPagesHeader))
+                .WithKeywords(() => Strings.Help_WebPages_Hide_Keywords)
+                .WithPage(typeof(OptionsPage)),
+        ]),
+
         new("downloads", () => Strings.Nav_Downloads, SymbolRegular.ArrowDownload24, typeof(DownloadsPage),
         [
             Topic("downloads.watch", () => Strings.Help_Downloads_Watch_Title,

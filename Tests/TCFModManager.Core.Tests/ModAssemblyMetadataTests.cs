@@ -192,6 +192,59 @@ public sealed class ModAssemblyMetadataTests : IDisposable
     }
 
     [Fact]
+    public void ReadServer_HomePage()
+    {
+        var dll = new ModMetadataFixture(Kind.Spt41)
+            .Constructor(il => il
+                .SetString("ModGuid", "com.example.web")
+                .SetString("HomePage", "/gravity/")
+                .SetString("HomePageDescription", "Configure bot spawns and gear"))
+            .Write(_dir);
+
+        var metadata = ModAssemblyMetadata.ReadServer(dll);
+
+        Assert.NotNull(metadata);
+        Assert.Equal("/gravity/", metadata.HomePage);
+        Assert.Equal("Configure bot spawns and gear", metadata.HomePageDescription);
+    }
+
+    [Fact]
+    public void ReadServer_HomePageFromGetter()
+    {
+        var dll = new ModMetadataFixture(Kind.Spt41)
+            .Constructor(il => il.SetString("ModGuid", "com.example.getterweb"))
+            .Getter("HomePage", il => il.Str("/kappa"))
+            .Write(_dir);
+
+        var metadata = ModAssemblyMetadata.ReadServer(dll);
+
+        Assert.NotNull(metadata);
+        Assert.Equal("/kappa", metadata.HomePage);
+        Assert.Null(metadata.HomePageDescription);
+    }
+
+    [Theory]
+    [InlineData("gravity")]
+    [InlineData("https://example.com/gravity")]
+    [InlineData("   ")]
+    public void ReadServer_HomePageNotAPath_IsIgnored(string homePage)
+    {
+        var dll = new ModMetadataFixture(Kind.Spt41)
+            .Constructor(il => il
+                .SetString("ModGuid", "com.example.notapath")
+                .SetString("HomePage", homePage)
+                .SetString("HomePageDescription", "Ignored with it"))
+            .Write(_dir);
+
+        var metadata = ModAssemblyMetadata.ReadServer(dll);
+
+        Assert.NotNull(metadata);
+        Assert.Equal("com.example.notapath", metadata.Guid);
+        Assert.Null(metadata.HomePage);
+        Assert.Null(metadata.HomePageDescription);
+    }
+
+    [Fact]
     public void ReadServer_NoMetadataType_IsNull()
     {
         var dll = new ModMetadataFixture(Kind.Plain)

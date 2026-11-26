@@ -282,6 +282,14 @@
                     TargetPageType="{x:Type views:ServerMapPage}"
                     DataContext="{x:Static app:AppServices.ServerMap}"
                     Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
+                <!-- OPEN-70: only while this PC's server runs and a server mod declares a page. -->
+                <ui:NavigationViewItem
+                    Content="{loc:Str Nav_WebPages}"
+                    Icon="{ui:SymbolIcon Globe24}"
+                    NavigationCacheMode="Required"
+                    TargetPageType="{x:Type views:WebPagesPage}"
+                    DataContext="{x:Static app:AppServices.WebPages}"
+                    Visibility="{Binding IsNavShown, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Downloads}"
                     Icon="{ui:SymbolIcon ArrowDownload24}"

@@ -58,6 +58,11 @@ public sealed class InstalledMod
     // SPT 4.x server mods only: the SPT range the mod says it was built for, e.g. "~4.0.0".
     public string? SptVersion { get; init; }
 
+    // SPT 4.1 server mods only: the web page the mod serves on the server, e.g. "/gravity/".
+    public string? HomePage { get; init; }
+
+    public string? HomePageDescription { get; init; }
+
     //
     // The GUID that stands for this mod's identity - the first [BepInPlugin] GUID found in a client
     // mod's folder, or an SPT 4.x server mod's declared ModGuid. Null for an SPT 3.x server mod, and

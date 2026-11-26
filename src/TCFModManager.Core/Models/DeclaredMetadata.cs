@@ -22,6 +22,11 @@ public sealed record DeclaredMetadata
     // Server mods only: the SPT range the mod says it was built for, e.g. "~4.0.0".
     public string? SptVersion { get; init; }
 
+    // SPT 4.1 server mods only: the web page the mod serves on the server, e.g. "/gravity/".
+    public string? HomePage { get; init; }
+
+    public string? HomePageDescription { get; init; }
+
     public IReadOnlyList<ModDependencyRef> Dependencies { get; init; } = [];
 
     public bool IsEmpty => Guid is null && Name is null && Author is null && Version is null

@@ -208,6 +208,8 @@ public static class ModAssemblyMetadata
                 .ToList()
             : [];
 
+        var homePage = NullIfBlank(values.GetValueOrDefault("HomePage") as string) is { } page && page.StartsWith('/') ? page : null;
+
         return new DeclaredMetadata
         {
             Guid = NullIfBlank(values.GetValueOrDefault("ModGuid") as string),
@@ -216,6 +218,8 @@ public static class ModAssemblyMetadata
             Version = NullIfBlank((values.GetValueOrDefault("Version") as VersionValue)?.Text),
             SptVersion = NullIfBlank((values.GetValueOrDefault("SptVersion") as RangeValue)?.Text),
             Dependencies = dependencies,
+            HomePage = homePage,
+            HomePageDescription = homePage is null ? null : NullIfBlank(values.GetValueOrDefault("HomePageDescription") as string),
         };
     }
 

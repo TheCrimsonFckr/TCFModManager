@@ -13505,4 +13505,112 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>7 days</value>
     <comment>OPEN-64: update wait choice.</comment>
   </data>
+  <data name="Nav_WebPages" xml:space="preserve">
+    <value>Web pages</value>
+    <comment>OPEN-70: sidebar item. A list of the web pages server mods serve.</comment>
+  </data>
+  <data name="WebPages_SptPanel" xml:space="preserve">
+    <value>SPT web panel</value>
+    <comment>OPEN-70: the first row - SPT's own web panel, at the server's root address.</comment>
+  </data>
+  <data name="WebPages_SptPanelDescription" xml:space="preserve">
+    <value>SPT's own pages: the database, server configs, profiles and web sign-ins.</value>
+    <comment>OPEN-70: under SPT web panel.</comment>
+  </data>
+  <data name="WebPages_Intro" xml:space="preserve">
+    <value>Pages your server mods serve in the browser. They open at this PC's own server address, so they work here while this PC's server is running.</value>
+    <comment>OPEN-70: the card at the top of the Web pages page.</comment>
+  </data>
+  <data name="WebPages_Empty" xml:space="preserve">
+    <value>No server mod on this install has a web page.</value>
+    <comment>OPEN-70: shown when no installed server mod declares a web page.</comment>
+  </data>
+  <data name="WebPages_ServerNotRunning" xml:space="preserve">
+    <value>The server isn't running, so these pages can't be opened.</value>
+    <comment>OPEN-70: beside Rescan when the server stopped while the page is open.</comment>
+  </data>
+  <data name="WebPages_Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>OPEN-70: button on each row - opens the page in the default browser.</comment>
+  </data>
+  <data name="WebPages_OpenToolTip" xml:space="preserve">
+    <value>Opens the page in your default browser.</value>
+    <comment>OPEN-70: on the Open button.</comment>
+  </data>
+  <data name="WebPages_CopyAddress" xml:space="preserve">
+    <value>Copy address</value>
+    <comment>OPEN-70: button on each row - copies the page's address.</comment>
+  </data>
+  <data name="Options_WebPagesHeader" xml:space="preserve">
+    <value>Web pages page</value>
+    <comment>OPEN-70: Options switch title, under Pages.</comment>
+  </data>
+  <data name="Options_WebPagesHint" xml:space="preserve">
+    <value>Your server mods' web pages, while the server is running.</value>
+    <comment>OPEN-70: under the Options switch title.</comment>
+  </data>
+  <data name="Options_WebPagesToolTip" xml:space="preserve">
+    <value>Adds a page listing the web pages your server mods serve, while this PC's server is running.</value>
+    <comment>OPEN-70: on the Web pages switch.</comment>
+  </data>
+  <data name="Options_WebPagesDescription" xml:space="preserve">
+    <value>Some server mods have a page you open in a browser - settings, a live map, a quest tracker. With this on, a Web pages page appears in the sidebar while this PC's server is running and at least one installed server mod has one. On by default.</value>
+    <comment>OPEN-70: tooltip on the whole Web pages setting row.</comment>
+  </data>
+  <data name="Help_WebPages_Open_Title" xml:space="preserve">
+    <value>Open a server mod's web page</value>
+    <comment>OPEN-70: how-to title.</comment>
+  </data>
+  <data name="Help_WebPages_Open_Step1" xml:space="preserve">
+    <value>Start the server. {0} appears in the sidebar when a server mod has a web page.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_WebPages_Open_Step2" xml:space="preserve">
+    <value>Press {0} to open a page in your browser, or {1} to copy its address.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_WebPages_Open_Note" xml:space="preserve">
+    <value>The first time, your browser warns about the server's certificate - SPT makes its own. Pages open at this PC's own address, which by default needs no SPT web login.</value>
+    <comment>OPEN-70: note under the how-to.</comment>
+  </data>
+  <data name="Help_WebPages_Open_Keywords" xml:space="preserve">
+    <value>web page, browser, web ui, web interface, config page, live map, home page, address, url</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Help_WebPages_Hide_Title" xml:space="preserve">
+    <value>Hide the Web pages page</value>
+    <comment>OPEN-70: how-to title.</comment>
+  </data>
+  <data name="Help_WebPages_Hide_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, switch off {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_WebPages_Hide_Keywords" xml:space="preserve">
+    <value>web pages, hide, turn off, sidebar</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
+  <data name="Tour_WebPages_Rows_Title" xml:space="preserve">
+    <value>Your server mods' pages</value>
+    <comment>Feature tour, Web pages: the list of pages: step title.</comment>
+  </data>
+  <data name="Tour_WebPages_Rows_Body" xml:space="preserve">
+    <value>Every server mod that serves a web page is listed here. Open shows it in your browser, Copy address puts its link on the clipboard.</value>
+    <comment>Feature tour, Web pages: the list of pages.</comment>
+  </data>
+  <data name="Tour_WebPages_Intro_Title" xml:space="preserve">
+    <value>Only on this PC</value>
+    <comment>Feature tour, Web pages: the card at the top: step title.</comment>
+  </data>
+  <data name="Tour_WebPages_Intro_Body" xml:space="preserve">
+    <value>Pages open at this PC's own server address, so they work while this PC's server is running.</value>
+    <comment>Feature tour, Web pages: the card at the top.</comment>
+  </data>
+  <data name="Tour_WebPages_Rescan_Title" xml:space="preserve">
+    <value>Installed something new?</value>
+    <comment>Feature tour, Web pages: the Rescan button: step title.</comment>
+  </data>
+  <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
+    <value>Rescan reads your server mods again. A mod installed while the server runs serves its page after the server restarts.</value>
+    <comment>Feature tour, Web pages: the Rescan button.</comment>
+  </data>
 </root>

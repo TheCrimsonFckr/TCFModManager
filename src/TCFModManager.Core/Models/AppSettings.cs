@@ -209,6 +209,9 @@ public sealed class AppSettings
     //
     public bool ShowModFootprintPage { get; set; }
 
+    // OPEN-70: whether the Web pages page appears in the sidebar while the server runs.
+    public bool ShowWebPagesPage { get; set; } = true;
+
     //
     // Whether the Installed page tags each mod with the mod lists it belongs to. On by default -
     // the badges are the point of having lists visible at all - but an install with several lists

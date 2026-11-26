@@ -783,6 +783,21 @@
                 IsChecked="{Binding ServerMap.IsPageEnabled}" />
         </ui:CardControl>
 
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Globe24}"
+            ToolTip="{loc:Str Options_WebPagesDescription}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_WebPagesHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_WebPagesHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_WebPagesToolTip}"
+                IsChecked="{Binding ShowWebPagesPage}" />
+        </ui:CardControl>
+
         <ui:CardExpander
             Style="{StaticResource SettingExpander}"
             Icon="{ui:SymbolIcon Filter24}">
