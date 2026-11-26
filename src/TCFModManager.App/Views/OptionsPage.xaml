@@ -798,103 +798,90 @@
                 IsChecked="{Binding ShowWebPagesPage}" />
         </ui:CardControl>
 
-        <ui:CardExpander
-            Style="{StaticResource SettingExpander}"
-            Icon="{ui:SymbolIcon Navigation24}">
-            <ui:CardExpander.Header>
+        <!-- OPEN-72: sidebar items that can be hidden. -->
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon AppsList24}">
+            <ui:CardControl.Header>
                 <StackPanel>
-                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_SidebarHeader}" />
-                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarHint}" />
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Nav_ModLists}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarModListsHint}" />
                 </StackPanel>
-            </ui:CardExpander.Header>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
+                IsChecked="{Binding NavItems.ShowModLists}" />
+        </ui:CardControl>
 
-            <StackPanel>
-                <Border Style="{StaticResource FirstSubSetting}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource SettingTitle}" VerticalAlignment="Center" Text="{loc:Str Nav_ModLists}" />
-                        <tcf:SettingSwitch
-                            Grid.Column="1"
-                            Margin="14,0,0,0"
-                            ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
-                            IsChecked="{Binding NavItems.ShowModLists}" />
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource SubSetting}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource SettingTitle}" VerticalAlignment="Center" Text="{loc:Str Nav_Configs}" />
-                        <tcf:SettingSwitch
-                            Grid.Column="1"
-                            Margin="14,0,0,0"
-                            ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
-                            IsChecked="{Binding NavItems.ShowConfigs}" />
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource SubSetting}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource SettingTitle}" VerticalAlignment="Center" Text="{loc:Str Nav_Dependencies}" />
-                        <tcf:SettingSwitch
-                            Grid.Column="1"
-                            Margin="14,0,0,0"
-                            ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
-                            IsChecked="{Binding NavItems.ShowDependencies}" />
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource SubSetting}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource SettingTitle}" VerticalAlignment="Center" Text="{loc:Str Nav_Diagnose}" />
-                        <tcf:SettingSwitch
-                            Grid.Column="1"
-                            Margin="14,0,0,0"
-                            ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
-                            IsChecked="{Binding NavItems.ShowDiagnose}" />
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource SubSetting}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource SettingTitle}" VerticalAlignment="Center" Text="{loc:Str QuickPlay_Title}" />
-                        <tcf:SettingSwitch
-                            Grid.Column="1"
-                            Margin="14,0,0,0"
-                            ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
-                            IsChecked="{Binding NavItems.ShowQuickPlay}" />
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource SubSetting}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource SettingTitle}" VerticalAlignment="Center" Text="{loc:Str Options_SidebarBackForward}" />
-                        <tcf:SettingSwitch
-                            Grid.Column="1"
-                            Margin="14,0,0,0"
-                            ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
-                            IsChecked="{Binding NavItems.ShowBackForward}" />
-                    </Grid>
-                </Border>
-            </StackPanel>
-        </ui:CardExpander>
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon EditSettings24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Nav_Configs}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarConfigsHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
+                IsChecked="{Binding NavItems.ShowConfigs}" />
+        </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Branch24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Nav_Dependencies}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarDependenciesHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
+                IsChecked="{Binding NavItems.ShowDependencies}" />
+        </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon DocumentSearch24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Nav_Diagnose}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarDiagnoseHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
+                IsChecked="{Binding NavItems.ShowDiagnose}" />
+        </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon Play24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str QuickPlay_Title}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarQuickPlayHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
+                IsChecked="{Binding NavItems.ShowQuickPlay}" />
+        </ui:CardControl>
+
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            Icon="{ui:SymbolIcon ArrowLeft24}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_SidebarBackForward}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SidebarBackForwardHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <tcf:SettingSwitch
+                ToolTip="{loc:Str Options_SidebarSwitchToolTip}"
+                IsChecked="{Binding NavItems.ShowBackForward}" />
+        </ui:CardControl>
 
         <ui:CardExpander
             Style="{StaticResource SettingExpander}"

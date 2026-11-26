@@ -11108,12 +11108,6 @@ I dettagli sono nel log:
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
     <value>Ripeti scansione rilegge le tue mod del server. Una mod installata con il server in esecuzione offre la sua interfaccia web dopo il riavvio del server.</value>
   </data>
-  <data name="Options_SidebarHeader" xml:space="preserve">
-    <value>Barra laterale</value>
-  </data>
-  <data name="Options_SidebarHint" xml:space="preserve">
-    <value>Nascondi le pagine e i pulsanti che non usi.</value>
-  </data>
   <data name="Options_SidebarBackForward" xml:space="preserve">
     <value>Indietro e Avanti</value>
   </data>
@@ -11124,15 +11118,33 @@ I dettagli sono nel log:
     <value>Nascondere le pagine che non usi</value>
   </data>
   <data name="Help_Options_Sidebar_Step1" xml:space="preserve">
-    <value>In {0}, sotto {1}, apri {2}.</value>
+    <value>In {0}, sotto {1}, disattiva ogni pagina o pulsante che non vuoi nella barra laterale.</value>
   </data>
   <data name="Help_Options_Sidebar_Step2" xml:space="preserve">
-    <value>Disattiva ogni pagina o pulsante che non vuoi nella barra laterale. Riattivalo per farlo tornare.</value>
+    <value>Riattivalo per farlo tornare.</value>
   </data>
   <data name="Help_Options_Sidebar_Note" xml:space="preserve">
     <value>Una pagina nascosta si apre comunque quando qualcosa vi rimanda, come la barra degli arresti che apre Diagnostica log.</value>
   </data>
   <data name="Help_Options_Sidebar_Keywords" xml:space="preserve">
     <value>nascondere pagine, barra laterale, menu, riordinare, indietro, avanti, gioco rapido</value>
+  </data>
+  <data name="Options_SidebarModListsHint" xml:space="preserve">
+    <value>Salva, condividi e applica set di mod.</value>
+  </data>
+  <data name="Options_SidebarConfigsHint" xml:space="preserve">
+    <value>Modifica le impostazioni delle mod installate.</value>
+  </data>
+  <data name="Options_SidebarDependenciesHint" xml:space="preserve">
+    <value>Di cosa ha bisogno ogni mod e quali mod sono in conflitto.</value>
+  </data>
+  <data name="Options_SidebarDiagnoseHint" xml:space="preserve">
+    <value>Cosa segnalano come errore i log del server, di BepInEx e del gioco.</value>
+  </data>
+  <data name="Options_SidebarQuickPlayHint" xml:space="preserve">
+    <value>Avvia il server e il tuo ultimo profilo da qualsiasi pagina.</value>
+  </data>
+  <data name="Options_SidebarBackForwardHint" xml:space="preserve">
+    <value>Frecce in cima alla barra laterale per tornare alle pagine visitate.</value>
   </data>
 </root>

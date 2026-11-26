@@ -747,8 +747,7 @@ internal static class HelpCatalog
             // OPEN-72.
             Topic("options.sidebar", () => Strings.Help_Options_Sidebar_Title,
                 Step(() => Strings.Help_Options_Sidebar_Step1,
-                    () => Strings.Nav_Options, () => Strings.Options_SectionPages,
-                    () => Strings.Options_SidebarHeader),
+                    () => Strings.Nav_Options, () => Strings.Options_SectionPages),
                 Step(() => Strings.Help_Options_Sidebar_Step2))
                 .WithNote(() => Strings.Help_Options_Sidebar_Note)
                 .WithKeywords(() => Strings.Help_Options_Sidebar_Keywords)
