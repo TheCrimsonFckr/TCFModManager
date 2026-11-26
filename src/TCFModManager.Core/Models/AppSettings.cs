@@ -212,6 +212,9 @@ public sealed class AppSettings
     // OPEN-70: whether the Web pages page appears in the sidebar while the server runs.
     public bool ShowWebPagesPage { get; set; } = true;
 
+    // OPEN-72: sidebar items switched off in Options (NavItemsViewModel keys). Empty shows them all.
+    public List<string> HiddenNavItems { get; set; } = [];
+
     //
     // Whether the Installed page tags each mod with the mod lists it belongs to. On by default -
     // the badges are the point of having lists visible at all - but an install with several lists

@@ -11108,4 +11108,31 @@ I dettagli sono nel log:
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
     <value>Ripeti scansione rilegge le tue mod del server. Una mod installata con il server in esecuzione offre la sua interfaccia web dopo il riavvio del server.</value>
   </data>
+  <data name="Options_SidebarHeader" xml:space="preserve">
+    <value>Barra laterale</value>
+  </data>
+  <data name="Options_SidebarHint" xml:space="preserve">
+    <value>Nascondi le pagine e i pulsanti che non usi.</value>
+  </data>
+  <data name="Options_SidebarBackForward" xml:space="preserve">
+    <value>Indietro e Avanti</value>
+  </data>
+  <data name="Options_SidebarSwitchToolTip" xml:space="preserve">
+    <value>Mostra o nasconde questa voce nella barra laterale. Una pagina nascosta si apre comunque dai link che portano lì.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Title" xml:space="preserve">
+    <value>Nascondere le pagine che non usi</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step1" xml:space="preserve">
+    <value>In {0}, sotto {1}, apri {2}.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step2" xml:space="preserve">
+    <value>Disattiva ogni pagina o pulsante che non vuoi nella barra laterale. Riattivalo per farlo tornare.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Note" xml:space="preserve">
+    <value>Una pagina nascosta si apre comunque quando qualcosa vi rimanda, come la barra degli arresti che apre Diagnostica log.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Keywords" xml:space="preserve">
+    <value>nascondere pagine, barra laterale, menu, riordinare, indietro, avanti, gioco rapido</value>
+  </data>
 </root>

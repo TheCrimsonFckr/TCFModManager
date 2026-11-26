@@ -3710,4 +3710,13 @@ internal static class Strings
     internal static string Tour_WebPages_Intro_Body => LocalizationService.Get("Tour_WebPages_Intro_Body");
     internal static string Tour_WebPages_Rescan_Title => LocalizationService.Get("Tour_WebPages_Rescan_Title");
     internal static string Tour_WebPages_Rescan_Body => LocalizationService.Get("Tour_WebPages_Rescan_Body");
+    internal static string Options_SidebarHeader => LocalizationService.Get("Options_SidebarHeader");
+    internal static string Options_SidebarHint => LocalizationService.Get("Options_SidebarHint");
+    internal static string Options_SidebarBackForward => LocalizationService.Get("Options_SidebarBackForward");
+    internal static string Options_SidebarSwitchToolTip => LocalizationService.Get("Options_SidebarSwitchToolTip");
+    internal static string Help_Options_Sidebar_Title => LocalizationService.Get("Help_Options_Sidebar_Title");
+    internal static string Help_Options_Sidebar_Step1 => LocalizationService.Get("Help_Options_Sidebar_Step1");
+    internal static string Help_Options_Sidebar_Step2 => LocalizationService.Get("Help_Options_Sidebar_Step2");
+    internal static string Help_Options_Sidebar_Note => LocalizationService.Get("Help_Options_Sidebar_Note");
+    internal static string Help_Options_Sidebar_Keywords => LocalizationService.Get("Help_Options_Sidebar_Keywords");
 }

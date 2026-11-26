@@ -13613,4 +13613,40 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Rescan reads your server mods again. A mod installed while the server runs serves its web interface after the server restarts.</value>
     <comment>Feature tour, Web pages: the Rescan button.</comment>
   </data>
+  <data name="Options_SidebarHeader" xml:space="preserve">
+    <value>Sidebar</value>
+    <comment>OPEN-72: Options, Pages - expander holding a switch per sidebar item.</comment>
+  </data>
+  <data name="Options_SidebarHint" xml:space="preserve">
+    <value>Hide pages and buttons you don't use.</value>
+    <comment>OPEN-72: under Sidebar.</comment>
+  </data>
+  <data name="Options_SidebarBackForward" xml:space="preserve">
+    <value>Back and Forward</value>
+    <comment>OPEN-72: switch title for the sidebar's Back and Forward arrows (Nav_Back, Nav_Forward).</comment>
+  </data>
+  <data name="Options_SidebarSwitchToolTip" xml:space="preserve">
+    <value>Shows or hides this item in the sidebar. A hidden page still opens from links to it.</value>
+    <comment>OPEN-72: on each Sidebar switch.</comment>
+  </data>
+  <data name="Help_Options_Sidebar_Title" xml:space="preserve">
+    <value>Hide pages you don't use</value>
+    <comment>OPEN-72: how-to title.</comment>
+  </data>
+  <data name="Help_Options_Sidebar_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, open {2}.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
+  </data>
+  <data name="Help_Options_Sidebar_Step2" xml:space="preserve">
+    <value>Switch off each page or button you don't want in the sidebar. Switch it back on to bring it back.</value>
+    <comment>OPEN-72: how-to step.</comment>
+  </data>
+  <data name="Help_Options_Sidebar_Note" xml:space="preserve">
+    <value>A hidden page still opens when something links to it, such as the crash bar opening Diagnose logs.</value>
+    <comment>OPEN-72: note under the how-to.</comment>
+  </data>
+  <data name="Help_Options_Sidebar_Keywords" xml:space="preserve">
+    <value>hide pages, sidebar, menu, remove page, declutter, back, forward, quick play</value>
+    <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
+  </data>
 </root>

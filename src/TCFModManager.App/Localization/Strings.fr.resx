@@ -11108,4 +11108,31 @@ Les détails sont dans le journal :
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
     <value>Réanalyser relit vos mods serveur. Un mod installé pendant que le serveur tourne propose son interface web après le redémarrage du serveur.</value>
   </data>
+  <data name="Options_SidebarHeader" xml:space="preserve">
+    <value>Barre latérale</value>
+  </data>
+  <data name="Options_SidebarHint" xml:space="preserve">
+    <value>Masquez les pages et boutons que vous n'utilisez pas.</value>
+  </data>
+  <data name="Options_SidebarBackForward" xml:space="preserve">
+    <value>Précédent et Suivant</value>
+  </data>
+  <data name="Options_SidebarSwitchToolTip" xml:space="preserve">
+    <value>Affiche ou masque cet élément dans la barre latérale. Une page masquée s'ouvre toujours depuis les liens qui y mènent.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Title" xml:space="preserve">
+    <value>Masquer les pages que vous n'utilisez pas</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step1" xml:space="preserve">
+    <value>Dans {0}, sous {1}, ouvrez {2}.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step2" xml:space="preserve">
+    <value>Désactivez chaque page ou bouton dont vous ne voulez pas dans la barre latérale. Réactivez-le pour le faire revenir.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Note" xml:space="preserve">
+    <value>Une page masquée s'ouvre toujours quand quelque chose y renvoie, comme la barre de plantage qui ouvre Diagnostiquer les journaux.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Keywords" xml:space="preserve">
+    <value>masquer pages, barre latérale, menu, épurer, précédent, suivant, jeu rapide</value>
+  </data>
 </root>

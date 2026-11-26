@@ -257,6 +257,9 @@ public partial class OptionsViewModel : LocalizedViewModel
     // Same arrangement as ModPageGate: one description of the setting, shared with the nav item.
     public FootprintGateViewModel FootprintGate => AppServices.FootprintGate;
 
+    // OPEN-72: the sidebar items the Sidebar switches show or hide.
+    public NavItemsViewModel NavItems => AppServices.NavItems;
+
     //
     // How the window opens. Applied and saved the moment it changes, the same as the theme
     // dropdown - and applied to the window that is already open, so the setting does something now

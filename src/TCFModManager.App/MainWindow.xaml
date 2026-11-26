@@ -179,6 +179,7 @@
                     DataContext="{x:Static app:AppServices.History}"
                     Command="{Binding GoBackCommand}"
                     ToolTip="{loc:Str Nav_BackToolTip}"
+                    Visibility="{Binding ShowBackForward, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}"
                     ContextMenuOpening="HistoryItem_ContextMenuOpening">
                     <ui:NavigationViewItem.ContextMenu>
                         <ContextMenu />
@@ -191,12 +192,13 @@
                     DataContext="{x:Static app:AppServices.History}"
                     Command="{Binding GoForwardCommand}"
                     ToolTip="{loc:Str Nav_ForwardToolTip}"
+                    Visibility="{Binding ShowBackForward, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}"
                     ContextMenuOpening="HistoryItem_ContextMenuOpening">
                     <ui:NavigationViewItem.ContextMenu>
                         <ContextMenu />
                     </ui:NavigationViewItem.ContextMenu>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItemSeparator />
+                <ui:NavigationViewItemSeparator Visibility="{Binding ShowBackForward, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}" />
 
                 <!-- First of the pages: the last thing you do before playing, and the one item on
                      the list that is an action rather than a view of the install. -->
@@ -229,25 +231,29 @@
                     Content="{loc:Str Nav_ModLists}"
                     Icon="{ui:SymbolIcon AppsList24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:ModListsPage}" />
+                    TargetPageType="{x:Type views:ModListsPage}"
+                    Visibility="{Binding ShowModLists, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}" />
                 <!-- Sits next to Installed because it is about the mods already on disk, and before
                      Dependencies because it is the more everyday of the two. -->
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Configs}"
                     Icon="{ui:SymbolIcon EditSettings24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:ConfigsPage}" />
+                    TargetPageType="{x:Type views:ConfigsPage}"
+                    Visibility="{Binding ShowConfigs, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}" />
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Dependencies}"
                     Icon="{ui:SymbolIcon Branch24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:DependenciesPage}" />
+                    TargetPageType="{x:Type views:DependenciesPage}"
+                    Visibility="{Binding ShowDependencies, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}" />
                 <!-- OPEN-12 F8: what the server, BepInEx and game logs say went wrong, and with which mod. -->
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_Diagnose}"
                     Icon="{ui:SymbolIcon DocumentSearch24}"
                     NavigationCacheMode="Required"
-                    TargetPageType="{x:Type views:DiagnosePage}" />
+                    TargetPageType="{x:Type views:DiagnosePage}"
+                    Visibility="{Binding ShowDiagnose, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}" />
                 <!-- After Dependencies: both answer questions about the mods already on disk,
                      and this is the more occasional of the two.
 
@@ -304,7 +310,8 @@
                     behaviors:TourTarget.Key="profile.quickplay"
                     DataContext="{x:Static app:AppServices.Play}"
                     Command="{Binding QuickPlayCommand}"
-                    ToolTip="{Binding QuickPlayLine}">
+                    ToolTip="{Binding QuickPlayLine}"
+                    Visibility="{Binding ShowQuickPlay, Source={x:Static app:AppServices.NavItems}, Converter={StaticResource BoolToVis}}">
                     <StackPanel>
                         <TextBlock Text="{loc:Str QuickPlay_Title}" />
                         <TextBlock

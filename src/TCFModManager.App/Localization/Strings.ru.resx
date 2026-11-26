@@ -11531,4 +11531,31 @@
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
     <value>«Пересканировать» заново читает серверные моды. Мод, установленный при запущенном сервере, откроет свой веб-интерфейс после перезапуска сервера.</value>
   </data>
+  <data name="Options_SidebarHeader" xml:space="preserve">
+    <value>Боковая панель</value>
+  </data>
+  <data name="Options_SidebarHint" xml:space="preserve">
+    <value>Скройте страницы и кнопки, которыми вы не пользуетесь.</value>
+  </data>
+  <data name="Options_SidebarBackForward" xml:space="preserve">
+    <value>Назад и Вперёд</value>
+  </data>
+  <data name="Options_SidebarSwitchToolTip" xml:space="preserve">
+    <value>Показывает или скрывает этот пункт в боковой панели. Скрытая страница по-прежнему открывается по ссылкам на неё.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Title" xml:space="preserve">
+    <value>Скрыть страницы, которыми вы не пользуетесь</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step1" xml:space="preserve">
+    <value>В разделе {0}, в группе {1}, откройте {2}.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step2" xml:space="preserve">
+    <value>Выключите каждую страницу или кнопку, которые не нужны в боковой панели. Включите снова, чтобы вернуть.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Note" xml:space="preserve">
+    <value>Скрытая страница всё равно открывается, если на неё ведёт ссылка, например панель сбоев открывает «Диагностику журналов».</value>
+  </data>
+  <data name="Help_Options_Sidebar_Keywords" xml:space="preserve">
+    <value>скрыть страницы, боковая панель, меню, убрать, назад, вперёд, быстрая игра</value>
+  </data>
 </root>

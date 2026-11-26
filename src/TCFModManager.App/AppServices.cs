@@ -115,6 +115,9 @@ internal static class AppServices
     // The Web pages page (OPEN-70) - see WebPagesViewModel.
     public static WebPagesViewModel WebPages { get; } = new();
 
+    // Sidebar items switched off in Options (OPEN-72) - see NavItemsViewModel.
+    public static NavItemsViewModel NavItems { get; } = new();
+
     // The crash bar at the top of the window (OPEN-54 N30) - see CrashWatcher.
     public static CrashBarViewModel CrashBar { get; } = new();
 

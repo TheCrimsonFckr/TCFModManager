@@ -11108,4 +11108,31 @@ Die Details stehen im Log:
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
     <value>Neu einlesen liest deine Server-Mods erneut. Ein Mod, der bei laufendem Server installiert wurde, bietet seine Weboberfläche nach einem Neustart des Servers an.</value>
   </data>
+  <data name="Options_SidebarHeader" xml:space="preserve">
+    <value>Seitenleiste</value>
+  </data>
+  <data name="Options_SidebarHint" xml:space="preserve">
+    <value>Blende Seiten und Schaltflächen aus, die du nicht nutzt.</value>
+  </data>
+  <data name="Options_SidebarBackForward" xml:space="preserve">
+    <value>Zurück und Vor</value>
+  </data>
+  <data name="Options_SidebarSwitchToolTip" xml:space="preserve">
+    <value>Zeigt oder verbirgt diesen Eintrag in der Seitenleiste. Eine ausgeblendete Seite öffnet sich weiterhin über Links dorthin.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Title" xml:space="preserve">
+    <value>Seiten ausblenden, die du nicht nutzt</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step1" xml:space="preserve">
+    <value>Öffne in {0} unter {1} {2}.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Step2" xml:space="preserve">
+    <value>Schalte jede Seite oder Schaltfläche aus, die du nicht in der Seitenleiste willst. Wieder einschalten holt sie zurück.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Note" xml:space="preserve">
+    <value>Eine ausgeblendete Seite öffnet sich weiterhin, wenn etwas auf sie verweist, etwa die Absturzleiste mit „Logs diagnostizieren“.</value>
+  </data>
+  <data name="Help_Options_Sidebar_Keywords" xml:space="preserve">
+    <value>Seiten ausblenden, Seitenleiste, Menü, aufräumen, Zurück, Vor, Schnellstart</value>
+  </data>
 </root>
