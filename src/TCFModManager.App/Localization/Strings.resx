@@ -9948,7 +9948,7 @@ See Dependencies and Conflicts.</value>
     <comment>Sidebar entry and page title.</comment>
   </data>
   <data name="Diagnose_Description" xml:space="preserve">
-    <value>Reads the server's last run, the last game session's BepInEx log and the game's errors log, and says what is wrong and which mod it comes from.</value>
+    <value>Reads the server's last run and the game's last session, and says what's wrong and which mod caused it.</value>
     <comment>Under the page title.</comment>
   </data>
   <data name="Diagnose_CopyReport" xml:space="preserve">
@@ -9992,7 +9992,7 @@ See Dependencies and Conflicts.</value>
     <comment>Line about which logs were read.</comment>
   </data>
   <data name="Diagnose_BepInExFormat" xml:space="preserve">
-    <value>Game: BepInEx\LogOutput.log, from the last time the game started.</value>
+    <value>Game: BepInEx\LogOutput.log, from the last game start.</value>
     <comment>Line about which logs were read.</comment>
   </data>
   <data name="Diagnose_BepInExNone" xml:space="preserve">
@@ -10004,15 +10004,15 @@ See Dependencies and Conflicts.</value>
     <comment>{0} the folder name under Logs.</comment>
   </data>
   <data name="Diagnose_LauncherClears" xml:space="preserve">
-    <value>The SPT launcher deletes the game's Logs folder each time it starts the game, so only the last session's game logs are here.</value>
+    <value>The SPT launcher clears the game's Logs folder on each start, so only the last session is here.</value>
     <comment>Note.</comment>
   </data>
   <data name="Diagnose_OtherErrors_one" xml:space="preserve">
-    <value>{0} other error in the logs isn't one this page knows - it is in the copied report.</value>
+    <value>{0} other error isn't one this page knows - it's in the copied report.</value>
     <comment>Under the findings.</comment>
   </data>
   <data name="Diagnose_OtherErrors_other" xml:space="preserve">
-    <value>{0} other errors in the logs aren't ones this page knows - they are in the copied report.</value>
+    <value>{0} other errors aren't ones this page knows - they're in the copied report.</value>
     <comment>Under the findings.</comment>
   </data>
   <data name="Diagnose_ModFormat" xml:space="preserve">
@@ -13670,7 +13670,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Diagnose logs: the card's title, and the title of its dialogs.</comment>
   </data>
   <data name="Search_Description" xml:space="preserve">
-    <value>Starts the SPT server a few times, each time with some server mods off, to find the one that keeps it from starting or fills its log with errors. Every mod is turned back on afterwards. It tests the server only, not the game.</value>
+    <value>Starts the server a few times with some server mods off, to find the one that stops it starting or fills its log with errors. Every mod is turned back on after. Tests the server only, not the game.</value>
     <comment>Diagnose logs: what Find the broken mod does.</comment>
   </data>
   <data name="Search_Start" xml:space="preserve">
@@ -13708,7 +13708,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Progress line before the first start.</comment>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Start {0} of about {1}: {2} of {3} server mods on.</value>
+    <value>Start {0} of about {1} - {2} of {3} server mods on</value>
     <comment>Progress line. {0}: which start this is; {1}: about how many there will be; {2}: server mods on for it; {3}: server mods searched.</comment>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
@@ -13732,7 +13732,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Result title.</comment>
   </data>
   <data name="Search_NothingWrongBody" xml:space="preserve">
-    <value>The server starts and logs no errors with every mod on. If it is the game that fails, this search can't tell: it only tests the server.</value>
+    <value>The server starts with every mod on and logs no errors. This only tests the server, not the game.</value>
     <comment>Result text.</comment>
   </data>
   <data name="Search_NotTheModsTitle" xml:space="preserve">
@@ -13756,31 +13756,31 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Result title. {0}, {1}: the two mods.</comment>
   </data>
   <data name="Search_FoundDownFormat" xml:space="preserve">
-    <value>{0} is the mod that keeps the SPT server from starting. With it on, the server stops while it starts. With it off, the server starts.</value>
+    <value>{0} stops the SPT server starting. With it off, the server starts.</value>
     <comment>Result summary for one mod. {0}: the mod.</comment>
   </data>
   <data name="Search_FoundErrorsFormat" xml:space="preserve">
-    <value>{0} is the mod behind these errors. With it on, the server logs them. With it off, it doesn't.</value>
+    <value>{0} causes these errors. With it off, the server doesn't log them.</value>
     <comment>Result summary for one mod; the log lines follow. {0}: the mod.</comment>
   </data>
   <data name="Search_FoundPairDownFormat" xml:space="preserve">
-    <value>{0} and {1} don't work together. Each is fine without the other, but with both on the SPT server doesn't start.</value>
+    <value>{0} and {1} clash. Each works alone, but with both on the SPT server doesn't start.</value>
     <comment>Result summary for two mods. {0}, {1}: the mods.</comment>
   </data>
   <data name="Search_FoundPairErrorsFormat" xml:space="preserve">
-    <value>{0} and {1} don't work together. Each is fine without the other, but with both on the server logs these errors.</value>
+    <value>{0} and {1} clash. Each works alone, but with both on the server logs these errors.</value>
     <comment>Result summary for two mods; the log lines follow. {0}, {1}: the mods.</comment>
   </data>
   <data name="Search_WhatToDo" xml:space="preserve">
-    <value>What to do: turn it off, update it or remove it in Installed, then start the server again.</value>
+    <value>Turn it off, or update or remove it in Installed.</value>
     <comment>Under the summary for one mod: what to do next.</comment>
   </data>
   <data name="Search_WhatToDoPair" xml:space="preserve">
-    <value>What to do: turn one of them off in Installed, or look for an update to either, then start the server again.</value>
+    <value>Turn one of them off, or update either in Installed.</value>
     <comment>Under the summary for two mods: what to do next.</comment>
   </data>
   <data name="Search_SummaryFormat" xml:space="preserve">
-    <value>Searched {0} server mods with {1} starts of the server, in {2}.</value>
+    <value>Searched {0} server mods in {1} starts ({2}).</value>
     <comment>Note under a result. {0}: server mods searched; {1}: times the server was started; {2}: how long it took (Search_Duration...).</comment>
   </data>
   <data name="Search_DurationMinutesFormat" xml:space="preserve">
@@ -13792,7 +13792,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>How long a search took, under a minute. {0}: seconds.</comment>
   </data>
   <data name="Search_ProfilesPutBack" xml:space="preserve">
-    <value>The starts changed the profiles, so they were put back as they were.</value>
+    <value>The starts changed the profiles, so they were put back.</value>
     <comment>Note under a result.</comment>
   </data>
   <data name="Search_ShowModFormat" xml:space="preserve">
@@ -13804,7 +13804,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Button under a result: turns the found mod off. {0}: the mod.</comment>
   </data>
   <data name="Search_TurnedOffFormat" xml:space="preserve">
-    <value>Off now: {0}. Start the server to see that it comes up.</value>
+    <value>{0} is off. Start the server to check.</value>
     <comment>Under a result, once the found mod was turned off. {0}: the mod, or the two.</comment>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
@@ -13820,11 +13820,11 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Progress line: a rough guess at the time left.</comment>
   </data>
   <data name="Search_StoppedNarrowedFormat" xml:space="preserve">
-    <value>Before it stopped, it had narrowed it down to {0} of {1} server mods: {2}.</value>
+    <value>It had narrowed it to {0} of {1} server mods: {2}.</value>
     <comment>Status after Stop, after Search_Stopped. {0}: mods still suspected; {1}: mods searched; {2}: their names.</comment>
   </data>
   <data name="Search_StoppedNarrowedCountFormat" xml:space="preserve">
-    <value>Before it stopped, it had narrowed it down to {0} of {1} server mods.</value>
+    <value>It had narrowed it to {0} of {1} server mods.</value>
     <comment>Status after Stop, when the mods still suspected are too many to name. {0}: how many; {1}: mods searched.</comment>
   </data>
   <data name="Search_RecentFirstFormat" xml:space="preserve">
@@ -13836,7 +13836,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Button: clears the result.</comment>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
-    <value>A search was cut short. Server mods still off: {0}.</value>
+    <value>A search was cut short. Still off: {0}.</value>
     <comment>A search did not finish and left mods off. {0}: how many.</comment>
   </data>
   <data name="Search_TurnBackOn" xml:space="preserve">
@@ -13844,11 +13844,11 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Button: turns the mods an interrupted search left off back on.</comment>
   </data>
   <data name="Search_PutBackDoneFormat" xml:space="preserve">
-    <value>A search was cut short. The server mods it had turned off are back on ({0}).</value>
+    <value>A search was cut short. The mods it turned off are back on ({0}).</value>
     <comment>Said once the mods an interrupted search left off are back on. {0}: how many.</comment>
   </data>
   <data name="Search_StopServerFirst" xml:space="preserve">
-    <value>The SPT server is running, and the mods can't be turned back on until it stops.</value>
+    <value>Stop the SPT server first - the mods can't be turned back on while it runs.</value>
     <comment>Question: the server runs, so the mods can't be turned back on yet.</comment>
   </data>
   <data name="Search_StopServerAndTurnOn" xml:space="preserve">

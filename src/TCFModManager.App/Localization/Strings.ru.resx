@@ -8231,7 +8231,7 @@
     <value>Диагностика журналов</value>
   </data>
   <data name="Diagnose_Description" xml:space="preserve">
-    <value>Читает последний запуск сервера, журнал BepInEx последней игровой сессии и журнал ошибок игры и говорит, что не так и из-за какого мода.</value>
+    <value>Читает последний запуск сервера и последнюю игровую сессию и говорит, что не так и какой мод виноват.</value>
   </data>
   <data name="Diagnose_CopyReport" xml:space="preserve">
     <value>Скопировать отчёт для помощи</value>
@@ -8279,13 +8279,13 @@
     <value>Ошибки игры: {0}.</value>
   </data>
   <data name="Diagnose_LauncherClears" xml:space="preserve">
-    <value>Лаунчер SPT удаляет папку Logs игры при каждом запуске, поэтому здесь только журналы последней сессии.</value>
+    <value>Лаунчер SPT очищает папку Logs игры при каждом запуске, поэтому здесь только последняя сессия.</value>
   </data>
   <data name="Diagnose_OtherErrors_one" xml:space="preserve">
-    <value>Ещё {0} ошибка в журналах этой странице неизвестна - она есть в скопированном отчёте.</value>
+    <value>Ещё {0} ошибка этой странице неизвестна - она есть в скопированном отчёте.</value>
   </data>
   <data name="Diagnose_OtherErrors_other" xml:space="preserve">
-    <value>Ещё ошибок в журналах, неизвестных этой странице: {0} - они есть в скопированном отчёте.</value>
+    <value>Ещё ошибок, неизвестных этой странице: {0} - они есть в скопированном отчёте.</value>
   </data>
   <data name="Diagnose_OtherErrors_few" xml:space="preserve">
     <value>Ещё {0} ошибки в журналах этой странице неизвестны - они есть в скопированном отчёте.</value>
@@ -11574,7 +11574,7 @@
     <value>Найти сломанный мод</value>
   </data>
   <data name="Search_Description" xml:space="preserve">
-    <value>Запускает сервер SPT несколько раз, каждый раз с частью серверных модов выключенной, чтобы найти мод, который не даёт серверу запуститься или заполняет лог ошибками. После этого все моды снова включаются. Проверяется только сервер, не игра.</value>
+    <value>Несколько раз запускает сервер с частью серверных модов выключенной, чтобы найти мод, который не даёт ему запуститься или заполняет лог ошибками. Потом все моды снова включаются. Проверяется только сервер, не игра.</value>
   </data>
   <data name="Search_Start" xml:space="preserve">
     <value>Начать поиск</value>
@@ -11603,7 +11603,7 @@
     <value>Подготовка…</value>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Запуск {0} из примерно {1}: включено {2} из {3} серверных модов.</value>
+    <value>Запуск {0} из примерно {1} - включено {2} из {3} серверных модов</value>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Все моды снова включаются…</value>
@@ -11621,7 +11621,7 @@
     <value>С сервером всё в порядке</value>
   </data>
   <data name="Search_NothingWrongBody" xml:space="preserve">
-    <value>Сервер запускается и не пишет ошибок со всеми включёнными модами. Если не работает игра, этот поиск этого не увидит: он проверяет только сервер.</value>
+    <value>Сервер запускается со всеми модами и не пишет ошибок. Проверяется только сервер, не игра.</value>
   </data>
   <data name="Search_NotTheModsTitle" xml:space="preserve">
     <value>Дело не в серверных модах</value>
@@ -11639,25 +11639,25 @@
     <value>Найдено: {0} и {1}</value>
   </data>
   <data name="Search_FoundDownFormat" xml:space="preserve">
-    <value>{0} - мод, который не даёт серверу SPT запуститься. Когда он включён, сервер останавливается при запуске. Когда выключен, сервер запускается.</value>
+    <value>{0} не даёт серверу SPT запуститься. Без него сервер запускается.</value>
   </data>
   <data name="Search_FoundErrorsFormat" xml:space="preserve">
-    <value>{0} - мод, из-за которого появляются эти ошибки. Когда он включён, сервер их пишет. Когда выключен - нет.</value>
+    <value>{0} вызывает эти ошибки. Без него сервер их не пишет.</value>
   </data>
   <data name="Search_FoundPairDownFormat" xml:space="preserve">
-    <value>{0} и {1} не работают вместе. Каждый работает без другого, но когда включены оба, сервер SPT не запускается.</value>
+    <value>{0} и {1} конфликтуют. Каждый работает отдельно, но с обоими сервер SPT не запускается.</value>
   </data>
   <data name="Search_FoundPairErrorsFormat" xml:space="preserve">
-    <value>{0} и {1} не работают вместе. Каждый работает без другого, но когда включены оба, сервер пишет эти ошибки.</value>
+    <value>{0} и {1} конфликтуют. Каждый работает отдельно, но с обоими сервер пишет эти ошибки.</value>
   </data>
   <data name="Search_WhatToDo" xml:space="preserve">
-    <value>Что делать: выключить, обновить или удалить его в разделе «Установленные», затем снова запустить сервер.</value>
+    <value>Выключите его или обновите либо удалите в разделе «Установленные».</value>
   </data>
   <data name="Search_WhatToDoPair" xml:space="preserve">
-    <value>Что делать: выключить один из них в разделе «Установленные» или поискать обновление для любого из них, затем снова запустить сервер.</value>
+    <value>Выключите один из них или обновите любой в разделе «Установленные».</value>
   </data>
   <data name="Search_SummaryFormat" xml:space="preserve">
-    <value>Проверено серверных модов: {0}, запусков сервера: {1}, время: {2}.</value>
+    <value>Проверено серверных модов: {0}, запусков: {1} ({2}).</value>
   </data>
   <data name="Search_DurationMinutesFormat" xml:space="preserve">
     <value>{0} мин {1} с</value>
@@ -11666,7 +11666,7 @@
     <value>{0} с</value>
   </data>
   <data name="Search_ProfilesPutBack" xml:space="preserve">
-    <value>Запуски изменили профили, поэтому они возвращены в прежнее состояние.</value>
+    <value>Запуски изменили профили, поэтому они возвращены как были.</value>
   </data>
   <data name="Search_ShowModFormat" xml:space="preserve">
     <value>Показать {0}</value>
@@ -11675,7 +11675,7 @@
     <value>Выключить {0}</value>
   </data>
   <data name="Search_TurnedOffFormat" xml:space="preserve">
-    <value>Теперь выключено: {0}. Запустить сервер, чтобы проверить, что он поднимается.</value>
+    <value>{0} выключен. Запустите сервер, чтобы проверить.</value>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
     <value>Прошло: {0}</value>
@@ -11687,10 +11687,10 @@
     <value>Осталось меньше минуты</value>
   </data>
   <data name="Search_StoppedNarrowedFormat" xml:space="preserve">
-    <value>До остановки поиск сузился до {0} из {1} серверных модов: {2}.</value>
+    <value>Поиск сузился до {0} из {1} серверных модов: {2}.</value>
   </data>
   <data name="Search_StoppedNarrowedCountFormat" xml:space="preserve">
-    <value>До остановки поиск сузился до {0} из {1} серверных модов.</value>
+    <value>Поиск сузился до {0} из {1} серверных модов.</value>
   </data>
   <data name="Search_RecentFirstFormat" xml:space="preserve">
     <value>Серверные моды, изменённые с последнего запуска сервера, проверены первыми: {0}.</value>
@@ -11699,16 +11699,16 @@
     <value>Готово</value>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
-    <value>Поиск был прерван. Серверных модов ещё выключено: {0}.</value>
+    <value>Поиск был прерван. Ещё выключены: {0}.</value>
   </data>
   <data name="Search_TurnBackOn" xml:space="preserve">
     <value>Включить снова</value>
   </data>
   <data name="Search_PutBackDoneFormat" xml:space="preserve">
-    <value>Поиск был прерван. Выключенные им серверные моды снова включены ({0}).</value>
+    <value>Поиск был прерван. Выключенные им моды снова включены ({0}).</value>
   </data>
   <data name="Search_StopServerFirst" xml:space="preserve">
-    <value>Сервер SPT запущен, и моды нельзя включить, пока он не остановлен.</value>
+    <value>Сначала остановите сервер SPT: пока он работает, моды нельзя включить.</value>
   </data>
   <data name="Search_StopServerAndTurnOn" xml:space="preserve">
     <value>Остановить сервер и включить</value>

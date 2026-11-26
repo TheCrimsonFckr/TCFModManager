@@ -7886,7 +7886,7 @@ Siehe Abhängigkeiten und Konflikte.</value>
     <value>Logs diagnostizieren</value>
   </data>
   <data name="Diagnose_Description" xml:space="preserve">
-    <value>Liest den letzten Lauf des Servers, das BepInEx-Log der letzten Spielsitzung und das Fehler-Log des Spiels und sagt, was falsch ist und von welchem Mod es kommt.</value>
+    <value>Liest den letzten Serverlauf und die letzte Spielsitzung und sagt, was falsch ist und welche Mod es verursacht.</value>
   </data>
   <data name="Diagnose_CopyReport" xml:space="preserve">
     <value>Bericht für Hilfe kopieren</value>
@@ -7928,13 +7928,13 @@ Siehe Abhängigkeiten und Konflikte.</value>
     <value>Spielfehler: {0}.</value>
   </data>
   <data name="Diagnose_LauncherClears" xml:space="preserve">
-    <value>Der SPT-Launcher löscht bei jedem Spielstart den Logs-Ordner des Spiels, daher sind hier nur die Spiel-Logs der letzten Sitzung.</value>
+    <value>Der SPT-Launcher leert den Logs-Ordner des Spiels bei jedem Start, daher ist hier nur die letzte Sitzung.</value>
   </data>
   <data name="Diagnose_OtherErrors_one" xml:space="preserve">
-    <value>{0} weiterer Fehler in den Logs ist dieser Seite unbekannt - er steht im kopierten Bericht.</value>
+    <value>{0} weiterer Fehler ist dieser Seite unbekannt - er steht im kopierten Bericht.</value>
   </data>
   <data name="Diagnose_OtherErrors_other" xml:space="preserve">
-    <value>{0} weitere Fehler in den Logs sind dieser Seite unbekannt - sie stehen im kopierten Bericht.</value>
+    <value>{0} weitere Fehler sind dieser Seite unbekannt - sie stehen im kopierten Bericht.</value>
   </data>
   <data name="Diagnose_ModFormat" xml:space="preserve">
     <value>Mod: {0}</value>
@@ -11151,7 +11151,7 @@ Die Details stehen im Log:
     <value>Die kaputte Mod finden</value>
   </data>
   <data name="Search_Description" xml:space="preserve">
-    <value>Startet den SPT-Server einige Male, jedes Mal mit einigen Server-Mods aus, um die Mod zu finden, die den Start verhindert oder das Log mit Fehlern füllt. Danach sind alle Mods wieder an. Getestet wird nur der Server, nicht das Spiel.</value>
+    <value>Startet den Server einige Male mit einigen Server-Mods aus, um die zu finden, die den Start verhindert oder das Log mit Fehlern füllt. Danach sind alle Mods wieder an. Testet nur den Server, nicht das Spiel.</value>
   </data>
   <data name="Search_Start" xml:space="preserve">
     <value>Suche starten</value>
@@ -11180,7 +11180,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Vorbereitung…</value>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Start {0} von etwa {1}: {2} von {3} Server-Mods an.</value>
+    <value>Start {0} von etwa {1} - {2} von {3} Server-Mods an</value>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Alle Mods werden wieder eingeschaltet…</value>
@@ -11198,7 +11198,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Mit dem Server ist alles in Ordnung</value>
   </data>
   <data name="Search_NothingWrongBody" xml:space="preserve">
-    <value>Der Server startet mit allen Mods und loggt keine Fehler. Wenn das Spiel das Problem ist, kann diese Suche das nicht erkennen: Sie testet nur den Server.</value>
+    <value>Der Server startet mit allen Mods und loggt keine Fehler. Getestet wird nur der Server, nicht das Spiel.</value>
   </data>
   <data name="Search_NotTheModsTitle" xml:space="preserve">
     <value>Es liegt an keiner der Server-Mods</value>
@@ -11216,25 +11216,25 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Gefunden: {0} und {1}</value>
   </data>
   <data name="Search_FoundDownFormat" xml:space="preserve">
-    <value>{0} ist die Mod, die den Start des SPT-Servers verhindert. Ist sie an, bricht der Server beim Start ab. Ist sie aus, startet er.</value>
+    <value>{0} verhindert den Start des SPT-Servers. Ist sie aus, startet der Server.</value>
   </data>
   <data name="Search_FoundErrorsFormat" xml:space="preserve">
-    <value>{0} ist die Mod hinter diesen Fehlern. Ist sie an, loggt der Server sie. Ist sie aus, nicht.</value>
+    <value>{0} verursacht diese Fehler. Ist sie aus, loggt der Server sie nicht.</value>
   </data>
   <data name="Search_FoundPairDownFormat" xml:space="preserve">
-    <value>{0} und {1} vertragen sich nicht. Jede funktioniert ohne die andere, aber wenn beide an sind, startet der SPT-Server nicht.</value>
+    <value>{0} und {1} vertragen sich nicht. Jede läuft allein, aber mit beiden an startet der SPT-Server nicht.</value>
   </data>
   <data name="Search_FoundPairErrorsFormat" xml:space="preserve">
-    <value>{0} und {1} vertragen sich nicht. Jede funktioniert ohne die andere, aber wenn beide an sind, loggt der Server diese Fehler.</value>
+    <value>{0} und {1} vertragen sich nicht. Jede läuft allein, aber mit beiden an loggt der Server diese Fehler.</value>
   </data>
   <data name="Search_WhatToDo" xml:space="preserve">
-    <value>Was tun: Unter „Installiert“ ausschalten, aktualisieren oder entfernen, dann den Server neu starten.</value>
+    <value>Schalte sie aus, oder aktualisiere bzw. entferne sie unter „Installiert“.</value>
   </data>
   <data name="Search_WhatToDoPair" xml:space="preserve">
-    <value>Was tun: Unter „Installiert“ eine der beiden ausschalten oder nach einem Update für eine der beiden suchen, dann den Server neu starten.</value>
+    <value>Schalte eine der beiden aus, oder aktualisiere eine unter „Installiert“.</value>
   </data>
   <data name="Search_SummaryFormat" xml:space="preserve">
-    <value>{0} Server-Mods mit {1} Serverstarts durchsucht, in {2}.</value>
+    <value>{0} Server-Mods in {1} Starts durchsucht ({2}).</value>
   </data>
   <data name="Search_DurationMinutesFormat" xml:space="preserve">
     <value>{0} Min. {1} Sek.</value>
@@ -11252,7 +11252,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>{0} ausschalten</value>
   </data>
   <data name="Search_TurnedOffFormat" xml:space="preserve">
-    <value>Jetzt aus: {0}. Starte den Server, um zu sehen, ob er hochfährt.</value>
+    <value>{0} ist aus. Starte den Server, um es zu prüfen.</value>
   </data>
   <data name="Search_ElapsedFormat" xml:space="preserve">
     <value>Verstrichen: {0}</value>
@@ -11264,10 +11264,10 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Noch weniger als eine Minute</value>
   </data>
   <data name="Search_StoppedNarrowedFormat" xml:space="preserve">
-    <value>Vor dem Stopp war die Suche auf {0} von {1} Server-Mods eingegrenzt: {2}.</value>
+    <value>Eingegrenzt auf {0} von {1} Server-Mods: {2}.</value>
   </data>
   <data name="Search_StoppedNarrowedCountFormat" xml:space="preserve">
-    <value>Vor dem Stopp war die Suche auf {0} von {1} Server-Mods eingegrenzt.</value>
+    <value>Eingegrenzt auf {0} von {1} Server-Mods.</value>
   </data>
   <data name="Search_RecentFirstFormat" xml:space="preserve">
     <value>Seit dem letzten Serverstart geänderte Server-Mods wurden zuerst geprüft: {0}.</value>
@@ -11276,16 +11276,16 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Fertig</value>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
-    <value>Eine Suche wurde abgebrochen. Noch ausgeschaltete Server-Mods: {0}.</value>
+    <value>Eine Suche wurde abgebrochen. Noch aus: {0}.</value>
   </data>
   <data name="Search_TurnBackOn" xml:space="preserve">
     <value>Wieder einschalten</value>
   </data>
   <data name="Search_PutBackDoneFormat" xml:space="preserve">
-    <value>Eine Suche wurde abgebrochen. Die dabei ausgeschalteten Server-Mods sind wieder an ({0}).</value>
+    <value>Eine Suche wurde abgebrochen. Die dabei ausgeschalteten Mods sind wieder an ({0}).</value>
   </data>
   <data name="Search_StopServerFirst" xml:space="preserve">
-    <value>Der SPT-Server läuft, und die Mods können erst wieder eingeschaltet werden, wenn er gestoppt ist.</value>
+    <value>Stoppe zuerst den SPT-Server - solange er läuft, können die Mods nicht wieder eingeschaltet werden.</value>
   </data>
   <data name="Search_StopServerAndTurnOn" xml:space="preserve">
     <value>Server stoppen und einschalten</value>
