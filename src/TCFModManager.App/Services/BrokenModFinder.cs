@@ -45,11 +45,15 @@ public sealed partial class FoundMod(string name, string title, string? path) : 
     [NotifyPropertyChangedFor(nameof(CanTurnOff))]
     private bool _isOff = IsTurnedOff(path);
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanTurnOff))]
+    private bool _isTurningOff;
+
     private static bool IsTurnedOff(string? path) =>
         path is not null && !Directory.Exists(path) && !File.Exists(path)
         && DisabledModPaths.Counterpart(path) is { } off && (Directory.Exists(off) || File.Exists(off));
 
-    public bool CanTurnOff => Path is not null && !IsOff;
+    public bool CanTurnOff => Path is not null && !IsOff && !IsTurningOff;
 }
 
 //
@@ -381,7 +385,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     [RelayCommand]
     private async Task TurnOffModAsync(FoundMod? mod)
     {
-        if (IsRunning || mod is not { Path: { } path, IsOff: false }) return;
+        if (IsRunning || mod is not { Path: { } path, IsOff: false, IsTurningOff: false }) return;
 
         var install = AppServices.SptEnvironment.InstallPath;
         if (string.IsNullOrWhiteSpace(install))
@@ -392,6 +396,19 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
         if (!await SptInUsePrompt.ClearAsync(install, ModInstallAction.Disable)) return;
 
+        mod.IsTurningOff = true;
+        try
+        {
+            await TurnOffAsync(mod, path, install);
+        }
+        finally
+        {
+            mod.IsTurningOff = false;
+        }
+    }
+
+    private async Task TurnOffAsync(FoundMod mod, string path, string install)
+    {
         var scanned = await Task.Run(() => InstalledScan.Run(install));
         var target = scanned.FirstOrDefault(m => !m.IsDisabled && string.Equals(m.FolderPath, path, StringComparison.OrdinalIgnoreCase));
         if (target is null)
