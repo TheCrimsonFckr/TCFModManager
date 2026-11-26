@@ -11273,7 +11273,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Les mods serveur modifiés depuis le dernier démarrage du serveur ont été essayés en premier : {0}.</value>
   </data>
   <data name="Search_Dismiss" xml:space="preserve">
-    <value>Terminé</value>
+    <value>Ignorer</value>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
     <value>Une recherche a été interrompue. Encore désactivés : {0}.</value>

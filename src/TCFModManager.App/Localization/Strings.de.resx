@@ -11273,7 +11273,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Seit dem letzten Serverstart geänderte Server-Mods wurden zuerst geprüft: {0}.</value>
   </data>
   <data name="Search_Dismiss" xml:space="preserve">
-    <value>Fertig</value>
+    <value>Ignorieren</value>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
     <value>Eine Suche wurde abgebrochen. Noch aus: {0}.</value>

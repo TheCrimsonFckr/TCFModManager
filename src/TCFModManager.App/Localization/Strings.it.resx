@@ -11273,7 +11273,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>I mod server modificati dall'ultimo avvio del server sono stati provati per primi: {0}.</value>
   </data>
   <data name="Search_Dismiss" xml:space="preserve">
-    <value>Fatto</value>
+    <value>Ignora</value>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
     <value>Una ricerca è stata interrotta. Ancora disattivati: {0}.</value>

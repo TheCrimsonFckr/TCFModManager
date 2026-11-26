@@ -13832,8 +13832,8 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Note under a result, when the mods changed since the server last came up were tried first and the fault was among them. {0}: how many.</comment>
   </data>
   <data name="Search_Dismiss" xml:space="preserve">
-    <value>Done</value>
-    <comment>Button: clears the result.</comment>
+    <value>Ignore</value>
+    <comment>Tooltip on the X in the corner of the result: sets the result aside without acting on it.</comment>
   </data>
   <data name="Search_InterruptedFormat" xml:space="preserve">
     <value>A search was cut short. Still off: {0}.</value>

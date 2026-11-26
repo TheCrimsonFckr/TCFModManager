@@ -149,8 +149,21 @@
                             BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
                             Background="{DynamicResource ControlFillColorInputActiveBrush}"
                             Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibility}}">
+                        <Grid>
+                        <ui:Button
+                            Margin="0,-6,-8,0"
+                            Padding="6"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Panel.ZIndex="1"
+                            Appearance="Transparent"
+                            Icon="{ui:SymbolIcon Dismiss24}"
+                            ToolTip="{loc:Str Search_Dismiss}"
+                            AutomationProperties.Name="{loc:Str Search_Dismiss}"
+                            Command="{Binding DismissCommand}" />
                         <StackPanel>
                             <TextBlock
+                                Margin="0,0,36,0"
                                 FontSize="20"
                                 FontWeight="SemiBold"
                                 TextWrapping="Wrap"
@@ -205,13 +218,6 @@
                                     Text="{Binding ResultDone}" />
                             </DockPanel>
                             <DockPanel Margin="0,8,0,0">
-                                <ui:Button
-                                    Margin="12,0,0,4"
-                                    DockPanel.Dock="Right"
-                                    VerticalAlignment="Top"
-                                    Appearance="Transparent"
-                                    Content="{loc:Str Search_Dismiss}"
-                                    Command="{Binding DismissCommand}" />
                                 <ItemsControl Focusable="False" ItemsSource="{Binding Found}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -248,6 +254,7 @@
                                 </ItemsControl>
                             </DockPanel>
                         </StackPanel>
+                        </Grid>
                         </Border>
                     </StackPanel>
                 </ui:Card>
