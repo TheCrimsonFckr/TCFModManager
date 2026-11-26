@@ -26,7 +26,10 @@ public sealed record BrokenModResult(
     int Tries,
     int RecentTried = 0);
 
-public sealed record BrokenModProgress(int Try, int About, int ModsOn, int Mods, IReadOnlyList<int>? Suspects = null);
+public sealed record BrokenModProgress(int Try, int About, int ModsOn, int Mods, IReadOnlyList<int>? Suspects = null)
+{
+    public IReadOnlyList<int> On { get; init; } = [];
+}
 
 //
 // OPEN-54 N27: Find the broken mod, for the SPT server. Tries every server mod on (what is wrong),
@@ -51,7 +54,7 @@ public static class BrokenModSearch
         {
             ct.ThrowIfCancellationRequested();
             tries++;
-            progress?.Report(new BrokenModProgress(tries, tries + left, on.Count, mods, suspects));
+            progress?.Report(new BrokenModProgress(tries, tries + left, on.Count, mods, suspects) { On = on });
             return await tryWith(on, errors, ct).ConfigureAwait(false);
         }
 
@@ -161,6 +164,33 @@ public static class BrokenModSearch
         }
 
         return changed;
+    }
+
+    // About how long is left from each mod's share of the first full start (ModLoadShares): a start
+    // takes that start's time less the shares of the mods off, scaled by how far the guesses for the
+    // starts so far were out. With no shares to go on, the count-based TimeLeft below.
+    public static TimeSpan? TimeLeft(
+        IReadOnlyList<(IReadOnlyList<int> On, TimeSpan Took)> finished,
+        IReadOnlyList<TimeSpan>? shares,
+        IReadOnlyList<int> onNow,
+        int triesLeft,
+        TimeSpan intoCurrent)
+    {
+        if (finished.Count == 0 || triesLeft <= 0) return null;
+
+        if (shares is null || !shares.Any(s => s > TimeSpan.Zero))
+            return TimeLeft([.. finished.Select(f => (f.On.Count, f.Took))], onNow.Count, triesLeft, intoCurrent);
+
+        double Shares(IEnumerable<int> on) => on.Where(i => i >= 0 && i < shares.Count).Sum(i => shares[i].TotalSeconds);
+
+        var fixedPart = Math.Max(0d, finished[0].Took.TotalSeconds - shares.Sum(s => s.TotalSeconds));
+        double Guess(IEnumerable<int> on) => fixedPart + Shares(on);
+
+        var guessed = finished.Sum(f => Guess(f.On));
+        var scale = guessed > 0 ? finished.Sum(f => f.Took.TotalSeconds) / guessed : 1d;
+
+        var left = TimeSpan.FromSeconds(scale * Guess(onNow)) * triesLeft - intoCurrent;
+        return left > TimeSpan.Zero ? left : TimeSpan.Zero;
     }
 
     // About how long is left. One start done: each start takes as long as the first full one. More:

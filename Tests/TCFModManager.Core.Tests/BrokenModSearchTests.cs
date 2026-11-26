@@ -322,6 +322,53 @@ public class BrokenModSearchTests : IDisposable
         Assert.Equal(at.AddHours(1), new ServerUpLog(file).Last(@"D:\Other"));
     }
 
+    // As on G: 2026-11-26, cut down: DWV and SVM write after their own work, SPT's lines are its own.
+    [Fact]
+    public void Each_gap_in_the_log_goes_to_the_mod_that_wrote_the_next_line()
+    {
+        var t = new DateTime(2026, 11, 26, 16, 14, 30);
+        LogEntry Line(double seconds, string source, string message = "x") =>
+            new(LogKind.Server, "spt.log", 1, t.AddSeconds(seconds), "Information", source, message, []);
+
+        var lines = new[]
+        {
+            Line(0, "SPTarkov.Server.Program"),
+            Line(2, "SPTarkov.Server.Modding.ModValidator"),
+            Line(8, "ServerValueModifier.SVM"),
+            Line(16, "DefinitiveWeaponVariants.DefinitiveWeaponVariants"),
+            Line(17, "Unknown.Thing"),
+            Line(20, "SPTarkov.Server.Core.Services.Hosted.SPTStartupHostedService", "Started webserver at https://0.0.0.0:6969"),
+            Line(30, "DefinitiveWeaponVariants.DefinitiveWeaponVariants"),
+        };
+        int? ModOf(string source) => source.StartsWith("ServerValueModifier") ? 0 : source.StartsWith("DefinitiveWeaponVariants") ? 1 : null;
+
+        var shares = ModLoadShares.From(lines, ModOf, 3);
+
+        Assert.Equal(TimeSpan.FromSeconds(6), shares[0]);
+        Assert.Equal(TimeSpan.FromSeconds(8), shares[1]);
+        Assert.Equal(TimeSpan.Zero, shares[2]);
+        Assert.All(ModLoadShares.From(null, ModOf, 3), s => Assert.Equal(TimeSpan.Zero, s));
+    }
+
+    [Fact]
+    public void Time_left_takes_the_shares_of_the_mods_off_from_the_first_full_start()
+    {
+        TimeSpan S(double seconds) => TimeSpan.FromSeconds(seconds);
+        IReadOnlyList<TimeSpan> shares = [S(20), S(10), S(5), S(5)];
+        IReadOnlyList<int> all = [0, 1, 2, 3];
+
+        // 60 s with all on: 20 s fixed. Mod 0 off: 40 s each, three left, five seconds in.
+        Assert.Equal(S(115), BrokenModSearch.TimeLeft([(all, S(60))], shares, [1, 2, 3], 3, S(5)));
+
+        // The all-off start took 30 s against a guess of 20 s: (60 + 30) / (60 + 20) = 9/8 from then on.
+        Assert.Equal(S(45 * 2), BrokenModSearch.TimeLeft([(all, S(60)), ([], S(30))], shares, [1, 2, 3], 2, S(0)));
+
+        // No shares to go on: the count-based estimate.
+        Assert.Equal(S(475), BrokenModSearch.TimeLeft([(all, S(60))], [], [0, 1], 8, S(5)));
+        Assert.Null(BrokenModSearch.TimeLeft([], shares, all, 8, S(0)));
+        Assert.Null(BrokenModSearch.TimeLeft([(all, S(60))], shares, all, 0, S(0)));
+    }
+
     [Fact]
     public void Time_left_starts_from_the_first_full_start_and_follows_each_batch()
     {

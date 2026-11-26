@@ -68,7 +68,8 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private CancellationTokenSource? _cancel;
 
     private readonly System.Diagnostics.Stopwatch _clock = new();
-    private readonly List<(int ModsOn, TimeSpan Took)> _starts = [];
+    private readonly List<(IReadOnlyList<int> On, TimeSpan Took)> _starts = [];
+    private TimeSpan[]? _shares;
     private readonly System.Windows.Threading.DispatcherTimer _tick = new() { Interval = TimeSpan.FromSeconds(1) };
     private BrokenModProgress? _now;
     private TimeSpan _nowBegan;
@@ -174,7 +175,12 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             return;
         }
 
-        var (mods, needs) = await Task.Run(() => BrokenModSearch.Suspects(InstalledScan.Run(install)));
+        var (scanned, mods, needs) = await Task.Run(() =>
+        {
+            var scan = InstalledScan.Run(install);
+            var (suspects, needed) = BrokenModSearch.Suspects(scan);
+            return (scan, suspects, needed);
+        });
         if (mods.Count == 0)
         {
             StatusMessage = Strings.Search_NoServerMods;
@@ -197,6 +203,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         IsRunning = true;
         _clock.Restart();
         _starts.Clear();
+        _shares = null;
         _now = null;
         ElapsedText = T(Strings.Search_ElapsedFormat, Duration(TimeSpan.Zero));
         _tick.Start();
@@ -240,7 +247,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                 {
                     if (!_tick.IsEnabled && _now is not null) return;
 
-                    if (_now is { } was) _starts.Add((was.ModsOn, _clock.Elapsed - _nowBegan));
+                    if (_now is { } was) _starts.Add((was.On, _clock.Elapsed - _nowBegan));
                     _now = p;
                     _nowBegan = _clock.Elapsed;
                     _tick.Start();
@@ -254,6 +261,11 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                     : null);
                 if (recent is not null) AppLog.Info("Search", $"{recent.Count} mod(s) changed since the server was last up");
 
+                var locator = await Task.Run(() => LogModLocator.Build(scanned, install));
+                var indexOf = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                for (var i = 0; i < session.Mods.Count; i++) indexOf.TryAdd(session.Mods[i], i);
+                int? ModOf(string source) => locator.ByCode(source) is { } mod && indexOf.TryGetValue(mod.FolderPath, out var i) ? i : null;
+
                 result = await Task.Run(() => BrokenModSearch.RunAsync(mods.Count, needs, async (on, errors, ct) =>
                 {
                     var wanted = on.Select(i => session.Mods[i]).ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -261,6 +273,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                     if (moved.Failed.Count > 0) throw new SearchFailed(Failures(moved.Failed));
 
                     var outcome = await ServerTrial.RunAsync(install, ct, settle: errors).ConfigureAwait(false);
+                    if (_shares is null && on.Count == mods.Count) _shares = Shares(outcome, ModOf, mods);
                     AppLog.Info("Search", $"{on.Count} on: {(outcome.Started ? "started" : outcome.TimedOut ? "timed out" : "did not start")}, {outcome.Errors.Count} error(s)");
                     return outcome;
                 }, progress, cancel.Token, recent));
@@ -343,11 +356,20 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             : T(Strings.Search_StoppedNarrowedCountFormat, names.Count, mods.Count);
     }
 
+    private static TimeSpan[] Shares(ServerTrialOutcome outcome, Func<string, int?> modOf, IReadOnlyList<InstalledMod> mods)
+    {
+        var shares = ModLoadShares.From(outcome.Lines, modOf, mods.Count);
+        AppLog.Info("Search", "load shares: " + string.Join(", ", shares
+            .Select((took, i) => (took, i)).Where(s => s.took > TimeSpan.Zero).OrderByDescending(s => s.took).Take(8)
+            .Select(s => $"{TitleOf(mods[s.i])} {s.took.TotalSeconds:0.0}s")));
+        return shares;
+    }
+
     private void SayProgress()
     {
         if (_now is not { } p || IsStopping || !_tick.IsEnabled) return;
 
-        var left = BrokenModSearch.TimeLeft(_starts, p.ModsOn, p.About - p.Try + 1, _clock.Elapsed - _nowBegan);
+        var left = BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.About - p.Try + 1, _clock.Elapsed - _nowBegan);
         ProgressText = T(Strings.Search_ProgressFormat, p.Try, p.About, p.ModsOn, p.Mods);
         LeftText = left is not { } time ? null
             : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace TCFModManager.Core.Services;
 
-public sealed record ServerTrialOutcome(bool Started, bool TimedOut, IReadOnlyList<LogEntry> Errors);
+public sealed record ServerTrialOutcome(bool Started, bool TimedOut, IReadOnlyList<LogEntry> Errors, IReadOnlyList<LogEntry>? Lines = null);
 
 public enum ServerTrialProblem
 {
@@ -87,7 +87,8 @@ public static partial class ServerTrial
             await StopAsync(installPath).ConfigureAwait(false);
         }
 
-        return new ServerTrialOutcome(started, timedOut, ErrorsSince(installPath, before));
+        var lines = LinesSince(installPath, before);
+        return new ServerTrialOutcome(started, timedOut, [.. lines.Where(e => e.IsError)], lines);
     }
 
     public static async Task StopAsync(string installPath)
@@ -123,9 +124,12 @@ public static partial class ServerTrial
         return lengths;
     }
 
-    public static IReadOnlyList<LogEntry> ErrorsSince(string installPath, IReadOnlyDictionary<string, long> before)
+    public static IReadOnlyList<LogEntry> ErrorsSince(string installPath, IReadOnlyDictionary<string, long> before) =>
+        [.. LinesSince(installPath, before).Where(e => e.IsError)];
+
+    public static IReadOnlyList<LogEntry> LinesSince(string installPath, IReadOnlyDictionary<string, long> before)
     {
-        var errors = new List<LogEntry>();
+        var lines = new List<LogEntry>();
 
         foreach (var file in LogFilesOf(installPath).OrderBy(f => f.LastWriteTimeUtc))
         {
@@ -133,10 +137,10 @@ public static partial class ServerTrial
             if (file.Length < from) from = 0;
             if (file.Length == from) continue;
 
-            errors.AddRange(LogEntries.Parse(LogKind.Server, file.FullName, ReadFrom(file.FullName, from)).Where(e => e.IsError));
+            lines.AddRange(LogEntries.Parse(LogKind.Server, file.FullName, ReadFrom(file.FullName, from)));
         }
 
-        return errors;
+        return lines;
     }
 
     //
