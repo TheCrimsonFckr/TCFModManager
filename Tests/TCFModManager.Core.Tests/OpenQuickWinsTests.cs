@@ -136,7 +136,7 @@ public class OpenQuickWinsTests
         var folder = Directory.CreateTempSubdirectory("tcfmm-notes-");
         try
         {
-            var store = new ModNoteStore(Path.Combine(folder.FullName, "mod_notes.json"));
+            var store = new ModNoteStore(Path.Combine(folder.FullName, "modNotes.json"));
             store.Set("SAIN", "  needs a config change ");
             Assert.Equal("needs a config change", store.For("sain"));
 

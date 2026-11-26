@@ -27,7 +27,7 @@ public class EmptyFoldersTests : IDisposable
         Directory.CreateDirectory(Path.Combine(_install, "SPT_Runtime"));
         File.WriteAllText(Path.Combine(_install, "EscapeFromTarkov.exe"), "game");
         File.WriteAllText(Path.Combine(_install, "SPT_Runtime", "SPT.Server.exe"), "server");
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
     }
 
     public void Dispose()

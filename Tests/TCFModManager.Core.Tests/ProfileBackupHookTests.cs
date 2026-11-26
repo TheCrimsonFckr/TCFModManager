@@ -25,7 +25,7 @@ public class ProfileBackupHookTests : IDisposable
         Write("EscapeFromTarkov.exe", "game");
         Write("SPT/SPT.Server.exe", "server");
         Write("SPT/user/profiles/abc.json", "{}");
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
         _backups = new ProfileBackups(Path.Combine(_root, "profile-backups"), keep: 5);
     }
 

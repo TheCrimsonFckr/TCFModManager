@@ -136,24 +136,24 @@ public class ResilienceRecordTests : IDisposable
     public void Manifest_ADamagedFileIsKept_AndTheNextSaveCantLoseIt()
     {
         const string damaged = "{ \"Mods\": [ { \"ModId\": 1, \"Name\": \"cut off";
-        File.WriteAllText(P("installed-mods.json"), damaged);
-        var service = new ModInstallManifestService(P("installed-mods.json"));
+        File.WriteAllText(P("installedMods.json"), damaged);
+        var service = new ModInstallManifestService(P("installedMods.json"));
 
         Assert.Empty(service.Load().Mods);
         service.Save(new ModInstallManifest());
 
-        var copy = Assert.Single(Directory.GetFiles(_root, "installed-mods.json.damaged-*"));
+        var copy = Assert.Single(Directory.GetFiles(_root, "installedMods.json.damaged-*"));
         Assert.Equal(damaged, File.ReadAllText(copy));
     }
 
     [Fact]
     public void ModLists_ADamagedFileIsKept()
     {
-        File.WriteAllText(P("mod_lists.json"), "{ \"Lists\": [ oops");
+        File.WriteAllText(P("modLists.json"), "{ \"Lists\": [ oops");
 
-        new ModListStore(P("mod_lists.json")).Load();
+        new ModListStore(P("modLists.json")).Load();
 
-        Assert.Single(Directory.GetFiles(_root, "mod_lists.json.damaged-*"));
+        Assert.Single(Directory.GetFiles(_root, "modLists.json.damaged-*"));
     }
 
     [Fact]
@@ -169,26 +169,26 @@ public class ResilienceRecordTests : IDisposable
     [Fact]
     public void Manifest_AFileThatCannotBeReadThrowsRatherThanReadingAsEmpty()
     {
-        var service = new ModInstallManifestService(P("installed-mods.json"));
+        var service = new ModInstallManifestService(P("installedMods.json"));
         service.Save(new ModInstallManifest { Mods = [Record(1)] });
 
-        using (new FileStream(P("installed-mods.json"), FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        using (new FileStream(P("installedMods.json"), FileMode.Open, FileAccess.ReadWrite, FileShare.None))
         {
             Assert.ThrowsAny<IOException>(() => service.Load());
         }
 
         Assert.Single(service.Load().Mods);
-        Assert.Empty(Directory.GetFiles(_root, "installed-mods.json.damaged-*"));
+        Assert.Empty(Directory.GetFiles(_root, "installedMods.json.damaged-*"));
     }
 
     [Fact]
     public void Manifest_SavesKeepABackupOfTheLastGoodFile()
     {
-        var service = new ModInstallManifestService(P("installed-mods.json"));
+        var service = new ModInstallManifestService(P("installedMods.json"));
         service.Save(new ModInstallManifest { Mods = [Record(1)] });
         service.Save(new ModInstallManifest { Mods = [Record(1), Record(2)] });
 
-        var backup = Assert.Single(Directory.GetFiles(SafeFile.BackupFolderFor(P("installed-mods.json"))));
+        var backup = Assert.Single(Directory.GetFiles(SafeFile.BackupFolderFor(P("installedMods.json"))));
         Assert.Contains("\"ModId\": 1", File.ReadAllText(backup));
         Assert.DoesNotContain("\"ModId\": 2", File.ReadAllText(backup));
     }
@@ -198,7 +198,7 @@ public class ResilienceRecordTests : IDisposable
     [Fact]
     public void Record_NewFieldsRoundTrip()
     {
-        var service = new ModInstallManifestService(P("installed-mods.json"));
+        var service = new ModInstallManifestService(P("installedMods.json"));
         var record = new InstalledModRecord
         {
             ModId = 7,
@@ -222,12 +222,12 @@ public class ResilienceRecordTests : IDisposable
     [Fact]
     public void Record_AFileWrittenBeforeTheNewFieldsStillLoads()
     {
-        File.WriteAllText(P("installed-mods.json"), """
+        File.WriteAllText(P("installedMods.json"), """
             { "Mods": [ { "ModId": 3, "Name": "Old", "Version": "1.0", "InstalledAt": "2026-08-01T00:00:00+00:00",
                           "Files": [ "BepInEx/plugins/Old/o.dll" ] } ] }
             """);
 
-        var loaded = Assert.Single(new ModInstallManifestService(P("installed-mods.json")).Load().Mods);
+        var loaded = Assert.Single(new ModInstallManifestService(P("installedMods.json")).Load().Mods);
 
         Assert.Empty(loaded.Fingerprints);
         Assert.Null(loaded.InstallPath);
@@ -238,7 +238,7 @@ public class ResilienceRecordTests : IDisposable
     [Fact]
     public void SetManualVersion_KeepsFingerprintsStampAndOriginals()
     {
-        var service = new ModInstallManifestService(P("installed-mods.json"));
+        var service = new ModInstallManifestService(P("installedMods.json"));
         service.Save(new ModInstallManifest
         {
             Mods =

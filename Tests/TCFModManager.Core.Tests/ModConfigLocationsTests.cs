@@ -19,7 +19,7 @@ public class ModConfigLocationsTests : IDisposable
     {
         _root = Path.Combine(Path.GetTempPath(), "TCFModManagerLocations_" + Guid.NewGuid());
         Directory.CreateDirectory(_root);
-        _store = new ModConfigOptionsStore(Path.Combine(_root, "mod_configs.json"));
+        _store = new ModConfigOptionsStore(Path.Combine(_root, "modConfigs.json"));
     }
 
     public void Dispose()

@@ -15,7 +15,7 @@ public class ModFootprintStoreTests : IDisposable
     {
         _directory = Path.Combine(Path.GetTempPath(), "TCFModManagerFootprintStoreTests_" + Guid.NewGuid());
         Directory.CreateDirectory(_directory);
-        _filePath = Path.Combine(_directory, "mod_footprints.json");
+        _filePath = Path.Combine(_directory, "modFootprints.json");
         _store = new ModFootprintStore(_filePath);
     }
 

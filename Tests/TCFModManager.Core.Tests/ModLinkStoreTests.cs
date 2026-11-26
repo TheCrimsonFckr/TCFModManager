@@ -12,7 +12,7 @@ public sealed class ModLinkStoreTests : IDisposable
 
     public void Dispose() => Directory.Delete(_dir, recursive: true);
 
-    private ModLinkStore Store() => new(Path.Combine(_dir, "mod-links.json"));
+    private ModLinkStore Store() => new(Path.Combine(_dir, "modLinks.json"));
 
     [Fact]
     public void A_link_is_kept_by_folder_name_whatever_its_case()

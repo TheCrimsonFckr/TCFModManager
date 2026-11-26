@@ -15,7 +15,7 @@ public class ConfigUpdateLogTests : IDisposable
     {
         _directory = Path.Combine(Path.GetTempPath(), "TCFModManagerConfigLog_" + Guid.NewGuid());
         Directory.CreateDirectory(_directory);
-        _log = new ConfigUpdateLog(Path.Combine(_directory, "config_updates.json"));
+        _log = new ConfigUpdateLog(Path.Combine(_directory, "configUpdates.json"));
     }
 
     public void Dispose()

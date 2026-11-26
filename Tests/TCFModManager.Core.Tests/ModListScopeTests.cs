@@ -226,7 +226,7 @@ public class ModListScopeTests
     // It lives on ModListData as a pointer rather than on the list, so this is now structural: there
     // is no field for a share file to carry. Asserted anyway, because the first version DID put it
     // on the list and the [JsonIgnore] that kept it out of this file is exactly what kept it out of
-    // mod_lists.json too - see ModListStoreTests.SetPublished_SurvivesAReload.
+    // modLists.json too - see ModListStoreTests.SetPublished_SurvivesAReload.
     //
     [Fact]
     public void WhichListIsPublishedDoesNotTravel()

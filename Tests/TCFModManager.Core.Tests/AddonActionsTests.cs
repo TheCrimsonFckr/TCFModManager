@@ -30,7 +30,7 @@ public class AddonActionsTests : IDisposable
         _off = Path.Combine(_install, "BepInEx", "plugins.disabled", Folder);
         Directory.CreateDirectory(_install);
         File.WriteAllText(Path.Combine(_install, "EscapeFromTarkov.exe"), "game");
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
 
         new ModMetadataFixture(Kind.Plain).Constructor(_ => { })
             .Plugin(CamoGuid, "WeaponCamoAndStickers", "1.19.0")

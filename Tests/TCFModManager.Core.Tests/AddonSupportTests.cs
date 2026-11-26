@@ -9,7 +9,7 @@ namespace TCFModManager.Core.Tests;
 // 
 // The addon-specific halves of install support. The one that matters most is identity: sp-mod.com
 // numbers addons in their own sequence, so addon 116 and mod 116 are unrelated objects that would
-// otherwise share a row in installed-mods.json.
+// otherwise share a row in installedMods.json.
 // 
 public class AddonSupportTests
 {
@@ -184,7 +184,7 @@ public class AddonManifestFileTests
     [Fact]
     public void SetManualVersion_KeepsAModAndAnAddonWithTheSameIdApart()
     {
-        var manifestPath = Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
+        var manifestPath = Path.Combine(AppPaths.DataDirectory, "installedMods.json");
         var backup = File.Exists(manifestPath) ? File.ReadAllText(manifestPath) : null;
 
         try
@@ -217,7 +217,7 @@ public class AddonManifestFileTests
     [Fact]
     public void AddonCacheStore_RoundTripsTheCatalog()
     {
-        var cachePath = Path.Combine(AppPaths.DataDirectory, "addon_cache.json");
+        var cachePath = Path.Combine(AppPaths.DataDirectory, "addonCache.json");
         var backup = File.Exists(cachePath) ? File.ReadAllText(cachePath) : null;
 
         try
@@ -261,7 +261,7 @@ public class AddonManifestFileTests
     [Fact]
     public void AddonCacheStore_TreatsACorruptFileAsNoCache()
     {
-        var cachePath = Path.Combine(AppPaths.DataDirectory, "addon_cache.json");
+        var cachePath = Path.Combine(AppPaths.DataDirectory, "addonCache.json");
         var backup = File.Exists(cachePath) ? File.ReadAllText(cachePath) : null;
 
         try

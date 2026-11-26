@@ -28,8 +28,8 @@ public class ConfigCarryOverTests : IDisposable
         _archiveRoot = Path.Combine(_root, "LegacyConfigs");
         Directory.CreateDirectory(_install);
 
-        _baselines = new ConfigBaselineStore(Path.Combine(_root, "ConfigBaselines"));
-        _options = new ModConfigOptionsStore(Path.Combine(_root, "mod_configs.json"));
+        _baselines = new ConfigBaselineStore(Path.Combine(_root, "configBaselines"));
+        _options = new ModConfigOptionsStore(Path.Combine(_root, "modConfigs.json"));
         _carry = new ConfigCarryOver(_baselines, _archiveRoot, _options);
     }
 

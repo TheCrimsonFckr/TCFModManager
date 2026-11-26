@@ -42,7 +42,7 @@ public class InstallFromDownloadedArchiveTests : IDisposable
 
         var service = new ModInstallService(
             new ModDownloadService(new HttpClient(new NoDownloads())),
-            new ModInstallManifestService(Path.Combine(_root, "installed-mods.json")));
+            new ModInstallManifestService(Path.Combine(_root, "installedMods.json")));
 
         // No link at all: a downloaded archive needs none.
         var result = await service.InstallAsync(
@@ -62,7 +62,7 @@ public class InstallFromDownloadedArchiveTests : IDisposable
         var archive = Path.Combine(_root, "addon.bin");
         File.WriteAllBytes(archive, ArchiveFileTests.Zip(("BepInEx/plugins/Mod/addon.dll", "the addon")));
 
-        var manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        var manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
         var service = new ModInstallService(new ModDownloadService(new HttpClient(new NoDownloads())), manifest);
         var addon = new InstallTarget(_id, true, "Addon", null, null, null);
 
@@ -79,7 +79,7 @@ public class InstallFromDownloadedArchiveTests : IDisposable
         var archive = Path.Combine(_root, "mod.bin");
         File.WriteAllBytes(archive, ArchiveFileTests.Zip(("BepInEx/plugins/Mod/mod.dll", "the mod")));
 
-        var manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        var manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
         var service = new ModInstallService(new ModDownloadService(new HttpClient(new NoDownloads())), manifest);
 
         await service.InstallAsync(

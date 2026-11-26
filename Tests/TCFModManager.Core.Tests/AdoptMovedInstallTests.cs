@@ -35,7 +35,7 @@ public class AdoptMovedInstallTests : IDisposable
         Directory.CreateDirectory(Path.Combine(install, "BepInEx", "plugins", "Sense"));
         File.WriteAllText(Path.Combine(install, "BepInEx", "plugins", "Sense", "Sense.dll"), "x");
 
-        var service = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        var service = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
         service.Save(new ModInstallManifest
         {
             Mods =

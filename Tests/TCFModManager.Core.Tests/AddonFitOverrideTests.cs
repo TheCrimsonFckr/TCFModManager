@@ -17,7 +17,7 @@ public sealed class AddonFitOverrideTests : IDisposable
     public AddonFitOverrideTests()
     {
         Directory.CreateDirectory(_root);
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
         _manifest.Save(new ModInstallManifest
         {
             Mods =

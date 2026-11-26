@@ -228,7 +228,7 @@ public class AddonSharesTests : IDisposable
     [Fact]
     public void FillAddonSlugs_FillsOnlyAddonRecordsWithoutOne_AndSavesOnce()
     {
-        var path = Path.Combine(_installRoot, "installed-mods.json");
+        var path = Path.Combine(_installRoot, "installedMods.json");
         var service = new ModInstallManifestService(path);
         var stale = PrideRecord([]);
         stale.Slug = null;

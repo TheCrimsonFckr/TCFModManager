@@ -310,7 +310,7 @@ public class BrokenModSearchTests : IDisposable
     [Fact]
     public void When_a_server_was_last_up_is_kept_by_install()
     {
-        var file = Path.Combine(_dir, "server_last_up.json");
+        var file = Path.Combine(_dir, "serverLastUp.json");
         var at = new DateTimeOffset(2026, 11, 11, 20, 0, 0, TimeSpan.Zero);
 
         Assert.Null(new ServerUpLog(file).Last(@"C:\SPT"));
@@ -419,7 +419,7 @@ public class BrokenModSearchTests : IDisposable
             Logs = new() { [Path.Combine(install, "user", "logs", "spt", "spt.log")] = 1234 },
         };
 
-        var store = new BrokenModSessionStore(Path.Combine(_dir, "broken_mod_search.json"));
+        var store = new BrokenModSessionStore(Path.Combine(_dir, "brokenModSearch.json"));
         store.Save(session);
 
         var outcome = BrokenModSessionStore.Set(session, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { session.Mods[1] });
@@ -431,7 +431,7 @@ public class BrokenModSearchTests : IDisposable
         Assert.Equal(2, BrokenModSessionStore.TurnedOff(session));
 
         // As the next start of the app finds it.
-        var found = new BrokenModSessionStore(Path.Combine(_dir, "broken_mod_search.json")).Load()!;
+        var found = new BrokenModSessionStore(Path.Combine(_dir, "brokenModSearch.json")).Load()!;
         Assert.Equal(session.Mods, found.Mods);
         Assert.Equal(session.Logs, found.Logs);
 

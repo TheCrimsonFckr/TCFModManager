@@ -14,7 +14,7 @@ public class ModListStoreTests : IDisposable
     {
         _directory = Path.Combine(Path.GetTempPath(), "TCFModManagerModListTests_" + Guid.NewGuid());
         Directory.CreateDirectory(_directory);
-        _store = new ModListStore(Path.Combine(_directory, "mod_lists.json"));
+        _store = new ModListStore(Path.Combine(_directory, "modLists.json"));
     }
 
     public void Dispose()
@@ -167,7 +167,7 @@ public class ModListStoreTests : IDisposable
     //
     // THE BUG THIS EXISTS FOR: the published mark was a [JsonIgnore]'d flag on ModList, and the
     // share file and this store serialise the SAME objects - so the attribute that correctly kept
-    // the mark out of an exported list also kept it out of mod_lists.json. Publish set it, saved
+    // the mark out of an exported list also kept it out of modLists.json. Publish set it, saved
     // nothing, and the page reloaded a moment later with no mark: the "Serving" badge never
     // appeared and the app forgot which list it served the instant it was told.
     //

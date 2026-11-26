@@ -36,7 +36,7 @@ public class ResilienceGuardTests : IDisposable
 
     private ModInstallService Service() => new(
         new ModDownloadService(),
-        new ModInstallManifestService(Path.Combine(_root, "installed-mods.json")),
+        new ModInstallManifestService(Path.Combine(_root, "installedMods.json")),
         removedMods: new RemovedMods(() => RemovedModsRetention.UntilCleared));
 
     private string Dir(string relative)
@@ -386,7 +386,7 @@ public class ResilienceGuardTests : IDisposable
             ],
         };
 
-        var manifestPath = Path.Combine(_root, "installed-mods.json");
+        var manifestPath = Path.Combine(_root, "installedMods.json");
         var manifest = new ModInstallManifestService(manifestPath);
         manifest.Save(new ModInstallManifest { Mods = [record] });
 

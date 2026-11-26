@@ -260,7 +260,7 @@ public class SharedFolderActionsTests : IDisposable
 
     private ModInstallService Service() => new(
         new ModDownloadService(new HttpClient(new NoNetwork())),
-        new ModInstallManifestService(Path.Combine(_root, "installed-mods.json")),
+        new ModInstallManifestService(Path.Combine(_root, "installedMods.json")),
         removedMods: new RemovedMods(() => RemovedModsRetention.UntilCleared));
 
     private static List<string> Names(string dir) =>

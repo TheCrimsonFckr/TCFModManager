@@ -20,7 +20,7 @@ public sealed class RememberedDownloadsTests : IDisposable
     [Fact]
     public void TheStore_KeepsEverythingAcrossARestart()
     {
-        var path = Path.Combine(_root, "download-queue.json");
+        var path = Path.Combine(_root, "downloadQueue.json");
         var saved = new RememberedDownload
         {
             Target = new InstallTarget(12, true, "Some Addon", "com.x.addon", "thumb.png", "https://sp-mod.com/addon/12", "some-addon", "2.0.4"),
@@ -49,7 +49,7 @@ public sealed class RememberedDownloadsTests : IDisposable
     [Fact]
     public void Clear_LeavesNothingToBringBack()
     {
-        var store = new RememberedDownloadStore(Path.Combine(_root, "download-queue.json"));
+        var store = new RememberedDownloadStore(Path.Combine(_root, "downloadQueue.json"));
         store.Save([new RememberedDownload { Target = new InstallTarget(1, false, "A", null, null, null), VersionLabel = "1.0.0", InstallPath = _root }]);
 
         store.Clear();

@@ -115,7 +115,7 @@ public class UpdateNotificationStoreTests : IDisposable
     public UpdateNotificationStoreTests()
     {
         Directory.CreateDirectory(_directory);
-        _store = new UpdateNotificationStore(Path.Combine(_directory, "update_notifications.json"));
+        _store = new UpdateNotificationStore(Path.Combine(_directory, "updateNotifications.json"));
     }
 
     public void Dispose()
@@ -149,7 +149,7 @@ public class UpdateNotificationStoreTests : IDisposable
     [Fact]
     public void ACorruptFileReadsAsNotYetBaselined()
     {
-        File.WriteAllText(Path.Combine(_directory, "update_notifications.json"), "{ nope");
+        File.WriteAllText(Path.Combine(_directory, "updateNotifications.json"), "{ nope");
 
         var state = _store.Load();
 

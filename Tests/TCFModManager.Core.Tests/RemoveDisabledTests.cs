@@ -24,7 +24,7 @@ public class RemoveDisabledTests : IDisposable
         _install = Path.Combine(_root, "install");
         Write("EscapeFromTarkov.exe", "game");
         Write("SPT/SPT.Server.exe", "server");
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
     }
 
     public void Dispose()

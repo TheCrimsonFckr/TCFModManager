@@ -466,7 +466,7 @@ public class ConfirmDownloadTests : IDisposable
     public ConfirmDownloadTests()
     {
         Directory.CreateDirectory(_directory);
-        _manifest = new ModInstallManifestService(Path.Combine(_directory, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_directory, "installedMods.json"));
     }
 
     public void Dispose()

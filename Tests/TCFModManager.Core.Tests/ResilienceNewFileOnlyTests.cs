@@ -28,7 +28,7 @@ public class ResilienceNewFileOnlyTests : IDisposable
         Write("EscapeFromTarkov.exe", "game");
         Write(Managed + "Assembly-CSharp.dll", "the game's own");
         Write("SPT/SPT.Server.exe", "server");
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
     }
 
     public void Dispose()

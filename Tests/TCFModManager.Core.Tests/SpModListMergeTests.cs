@@ -16,7 +16,7 @@ public class SpModListMergeTests : IDisposable
     {
         _directory = Path.Combine(Path.GetTempPath(), "TCFModManagerSpModMergeTests_" + Guid.NewGuid());
         Directory.CreateDirectory(_directory);
-        _store = new ModListStore(Path.Combine(_directory, "mod_lists.json"));
+        _store = new ModListStore(Path.Combine(_directory, "modLists.json"));
     }
 
     public void Dispose()

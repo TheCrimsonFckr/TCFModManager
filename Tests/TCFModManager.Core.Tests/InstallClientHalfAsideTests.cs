@@ -23,7 +23,7 @@ public class InstallClientHalfAsideTests : IDisposable
         File.WriteAllText(Path.Combine(_install, "EscapeFromTarkov.exe"), "game");
         File.WriteAllText(Path.Combine(_install, "SPT", "SPT.Server.exe"), "server");
 
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
         _service = new ModInstallService(new ModDownloadService(new HttpClient(new NoDownloads())), _manifest);
     }
 

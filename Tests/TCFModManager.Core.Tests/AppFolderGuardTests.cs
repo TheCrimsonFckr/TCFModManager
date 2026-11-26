@@ -25,7 +25,7 @@ public class AppFolderGuardTests : IDisposable
         _install = Path.Combine(_root, "install");
         Write("EscapeFromTarkov.exe", "game");
         Write("SPT/SPT.Server.exe", "server");
-        _manifest = new ModInstallManifestService(Path.Combine(_root, "installed-mods.json"));
+        _manifest = new ModInstallManifestService(Path.Combine(_root, "installedMods.json"));
     }
 
     public void Dispose()
@@ -95,9 +95,10 @@ public class AppFolderGuardTests : IDisposable
     [Theory]
     [InlineData("TCFModManager.exe")]
     [InlineData("TCFModManager.pdb")]
-    [InlineData("Data/installed-mods.json")]
-    [InlineData("Staging/a.zip")]
+    [InlineData("data/installedMods.json")]
+    [InlineData("staging/a.zip")]
     [InlineData(".tcfmm-update/payload/TCFModManager.exe")]
+    [InlineData(".tcfmmUpdate/payload/TCFModManager.exe")]
     [InlineData("LegacyConfigs/x.json")]
     [InlineData("verbose")]
     public void AppInTheInstallRoot_StillClaimsItsOwnItems(string relative)
