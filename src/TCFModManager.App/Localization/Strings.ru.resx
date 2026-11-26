@@ -656,7 +656,7 @@
     <value>Несохранённые изменения</value>
   </data>
   <data name="Configs_DisclaimerMessage" xml:space="preserve">
-    <value>Изменение конфигурации мода может сломать мод или вашу игру. Исправлять это - не обязанность автора мода, поэтому меняйте только те настройки, которые понимаете, и упоминайте об этом при сообщении об ошибке, если вы правили конфигурацию. Каждый файл копируется в Data\config-backups перед сохранением.</value>
+    <value>Изменение конфигурации мода может сломать мод или вашу игру. Исправлять это - не обязанность автора мода, поэтому меняйте только те настройки, которые понимаете, и упоминайте об этом при сообщении об ошибке, если вы правили конфигурацию. Каждый файл копируется в data\configBackups перед сохранением.</value>
   </data>
   <data name="Configs_DisclaimerTitle" xml:space="preserve">
     <value>Редактируйте на своё усмотрение</value>
@@ -815,7 +815,7 @@
     <value>При обновлении этого мода:</value>
   </data>
   <data name="Configs_UpdatePolicyToolTip" xml:space="preserve">
-    <value>Применяется ко всем файлам конфигурации этого мода и запоминается в Data\mod_configs.json.</value>
+    <value>Применяется ко всем файлам конфигурации этого мода и запоминается в data\modConfigs.json.</value>
   </data>
   <data name="Configs_UserDataAddedFormat" xml:space="preserve">
     <value>{0} не будет затронута обновлениями и будет сохранена, если вы удалите {1}.</value>
@@ -875,7 +875,7 @@
     <value>Обновление до {0} заменило этот файл настройками по умолчанию этой версии.</value>
   </data>
   <data name="ConfigUpdate_NoteReplacedWhereFormat" xml:space="preserve">
-    <value>Обновление до {0} заменило этот файл настройками по умолчанию этой версии - ваша копия лежит в Data\LegacyConfigs\{1}.</value>
+    <value>Обновление до {0} заменило этот файл настройками по умолчанию этой версии - ваша копия лежит в data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_NoteUnchangedFormat" xml:space="preserve">
     <value>Обновление до {0} оставило этот файл без изменений.</value>
@@ -893,7 +893,7 @@
     <value>Используется файл из новой версии, а изменённые вами настройки переносятся в него. Настройка, добавленная обновлением, приходит со значением по умолчанию; удалённая - отмечается и отбрасывается.</value>
   </data>
   <data name="ConfigUpdate_PolicyTakeNew" xml:space="preserve">
-    <value>Побеждает файл из новой версии. Ваша копия сохраняется в Data\LegacyConfigs, чтобы вы могли вернуть значения вручную.</value>
+    <value>Побеждает файл из новой версии. Ваша копия сохраняется в data\legacyConfigs, чтобы вы могли вернуть значения вручную.</value>
   </data>
   <data name="ConfigUpdate_ReasonNoBaseline" xml:space="preserve">
     <value>Приложению пока не с чем было его сравнить; следующее обновление сможет перенести ваши изменения.</value>
@@ -911,13 +911,13 @@
     <value>{0} ваших файлов конфигурации больше не входят в состав мода.</value>
   </data>
   <data name="ConfigUpdate_RemovedManyWhereFormat" xml:space="preserve">
-    <value>{0} ваших файлов конфигурации больше не входят в состав мода - ваши копии лежат в Data\LegacyConfigs\{1}.</value>
+    <value>{0} ваших файлов конфигурации больше не входят в состав мода - ваши копии лежат в data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_RemovedNamedFormat" xml:space="preserve">
     <value>Ваш файл {0} больше не входит в состав мода.</value>
   </data>
   <data name="ConfigUpdate_RemovedOneWhereFormat" xml:space="preserve">
-    <value>Ваш файл {0} больше не входит в состав мода - ваша копия лежит в Data\LegacyConfigs\{1}.</value>
+    <value>Ваш файл {0} больше не входит в состав мода - ваша копия лежит в data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_ReplacedCountFormat" xml:space="preserve">
     <value>{0} ваших файлов конфигурации заменены настройками по умолчанию этой версии.</value>
@@ -926,13 +926,13 @@
     <value>Приложение не запомнило, что поставлялось с прошлой версией, поэтому не смогло отличить ваши изменения от изменений мода.</value>
   </data>
   <data name="ConfigUpdate_ReplacedManyWhereFormat" xml:space="preserve">
-    <value>{0} ваших файлов конфигурации заменены настройками по умолчанию этой версии - ваши копии лежат в Data\LegacyConfigs\{1}.</value>
+    <value>{0} ваших файлов конфигурации заменены настройками по умолчанию этой версии - ваши копии лежат в data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_ReplacedNamedFormat" xml:space="preserve">
     <value>Ваш файл {0} заменён настройками по умолчанию этой версии.</value>
   </data>
   <data name="ConfigUpdate_ReplacedOneWhereFormat" xml:space="preserve">
-    <value>Ваш файл {0} заменён настройками по умолчанию этой версии - ваша копия лежит в Data\LegacyConfigs\{1}.</value>
+    <value>Ваш файл {0} заменён настройками по умолчанию этой версии - ваша копия лежит в data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_VersionRangeFormat" xml:space="preserve">
     <value>{0} - {1}</value>
@@ -944,7 +944,7 @@
     <value>файл не похож на манифест установки модов.</value>
   </data>
   <data name="DataFiles_ListHeader" xml:space="preserve">
-    <value>Файлы Data\</value>
+    <value>Файлы data\</value>
   </data>
   <data name="DataFiles_MissingFormat" xml:space="preserve">
     <value>{0} ещё не существует - файл создаётся при первой записи приложением.</value>
@@ -3560,10 +3560,10 @@
     <value>Ваши файлы конфигурации этого мода останутся ровно такими, как есть.</value>
   </data>
   <data name="ModUpdate_ConfigMerge" xml:space="preserve">
-    <value>Изменённые вами настройки будут перенесены в файлы конфигурации новой версии, а ваши текущие копии сохранятся в Data\LegacyConfigs.</value>
+    <value>Изменённые вами настройки будут перенесены в файлы конфигурации новой версии, а ваши текущие копии сохранятся в data\legacyConfigs.</value>
   </data>
   <data name="ModUpdate_ConfigTakeNew" xml:space="preserve">
-    <value>Файлы конфигурации этого мода будут заменены файлами новой версии - ваши копии сохранятся в Data\LegacyConfigs.</value>
+    <value>Файлы конфигурации этого мода будут заменены файлами новой версии - ваши копии сохранятся в data\legacyConfigs.</value>
   </data>
   <data name="ModUpdate_ConfirmAsInstalled" xml:space="preserve">
     <value>Подтвердить как установленную</value>
@@ -3773,7 +3773,7 @@
     <value>Файлы данных...</value>
   </data>
   <data name="Options_DataFilesDescription" xml:space="preserve">
-    <value>Просмотр или ручная правка JSON-файлов, которые приложение хранит в Data\, включая installed-mods.json - полезно, когда средств управления версиями на странице Установленные не хватает.</value>
+    <value>Просмотр или ручная правка JSON-файлов, которые приложение хранит в data\, включая installedMods.json - полезно, когда средств управления версиями на странице Установленные не хватает.</value>
   </data>
   <data name="Options_DataFilesHeader" xml:space="preserve">
     <value>Файлы данных</value>
@@ -5011,7 +5011,7 @@
     <value>Не проверено - The Forge попросил сделать паузу. Попробуйте через минуту.</value>
   </data>
   <data name="Options_UpdateCheckFailed" xml:space="preserve">
-    <value>Проверка не удалась. Подробности - в журнале в Data\logs.</value>
+    <value>Проверка не удалась. Подробности - в журнале в data\logs.</value>
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
@@ -5134,7 +5134,7 @@
     <value>Ничего не задано - считается игроком</value>
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
-    <value>Просмотр и ручное редактирование JSON-файлов в Data\.</value>
+    <value>Просмотр и ручное редактирование JSON-файлов в data\.</value>
   </data>
   <data name="ServerMap_MachinesHeader" xml:space="preserve">
     <value>Машины на этом сервере</value>
@@ -5869,7 +5869,7 @@
     <value>Нажмите {0}. Перезаписываются только изменённые строки.</value>
   </data>
   <data name="Help_Configs_Edit_Note" xml:space="preserve">
-    <value>При каждом сохранении копия старого файла кладётся в Data\config-backups. {0} отменяет несохранённые изменения.</value>
+    <value>При каждом сохранении копия старого файла кладётся в data\configBackups. {0} отменяет несохранённые изменения.</value>
   </data>
   <data name="Help_Configs_Policy_Title" xml:space="preserve">
     <value>Выбрать, что станет с моими настройками при обновлении мода</value>
@@ -5893,7 +5893,7 @@
     <value>Нажмите {0}, затем {1}.</value>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Это касается файлов .cfg. В JSON серверного мода значения по умолчанию не записаны: откройте рядом файл с пометкой {0}, если мод его поставляет, и перенесите значение. При каждом сохранении предыдущий файл также кладётся в Data\config-backups в папке приложения.</value>
+    <value>Это касается файлов .cfg. В JSON серверного мода значения по умолчанию не записаны: откройте рядом файл с пометкой {0}, если мод его поставляет, и перенесите значение. При каждом сохранении предыдущий файл также кладётся в data\configBackups в папке приложения.</value>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Найти настройки, оставшиеся от удалённого мода</value>
@@ -6340,7 +6340,7 @@
     <value>Если приложение лежит в Program Files, перенесите его туда, где у вас есть права на запись, проверьте свободное место на диске и попробуйте снова на странице {0}.</value>
   </data>
   <data name="Help_Problems_AppUpdate_Note" xml:space="preserve">
-    <value>Что помешало, написано в журнале в Data\logs.</value>
+    <value>Что помешало, написано в журнале в data\logs.</value>
   </data>
   <data name="Help_Problems_Report_Title" xml:space="preserve">
     <value>Сообщить о проблеме</value>
@@ -6349,7 +6349,7 @@
     <value>Нажмите {0} вверху этой страницы. Откроется вкладка обращений на странице этого приложения на sp-mod.com.</value>
   </data>
   <data name="Help_Problems_Report_Step2" xml:space="preserve">
-    <value>Опишите, что вы делали и что произошло, и приложите сегодняшний журнал из Data\logs - файл, названный tcfmm- и датой.</value>
+    <value>Опишите, что вы делали и что произошло, и приложите сегодняшний журнал из data\logs - файл, названный tcfmm- и датой.</value>
   </data>
   <data name="Help_Problems_Report_Step3" xml:space="preserve">
     <value>Для подробностей положите рядом с TCFModManager.exe пустой файл с именем verbose без расширения, повторите действия и пришлите новый журнал.</value>

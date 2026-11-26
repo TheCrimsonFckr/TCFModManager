@@ -63,7 +63,7 @@ public static class ModConfigFiles
     //   <mod>/config/settings.json  - anything JSON inside a folder the mod calls "config"
     //   <mod>/config.json           - a conventionally-named file sitting at the mod's root
     //
-    // Plus whatever the mod's own entry in mod_configs.json says, which is the only way a mod that
+    // Plus whatever the mod's own entry in modConfigs.json says, which is the only way a mod that
     // matches no convention is ever recognised - and the only way something that only looks like a
     // config is ever ruled out. Passing no options answers on the conventions alone.
     //

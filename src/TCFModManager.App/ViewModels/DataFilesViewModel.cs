@@ -10,7 +10,7 @@ namespace TCFModManager.App.ViewModels;
 
 //
 // Backs DataFilesWindow - a raw view/edit window over the JSON files this app keeps under Data\,
-// for when the built-in pages don't cover what someone needs to fix by hand (e.g. installed-mods.json
+// for when the built-in pages don't cover what someone needs to fix by hand (e.g. installedMods.json
 // after the Installed page's own "manage version" controls aren't enough). Every save is validated as
 // JSON first and backed up to "<file>.bak", so a bad edit can't silently corrupt what the app reads
 // on next launch.
@@ -22,10 +22,10 @@ public partial class DataFilesViewModel : LocalizedViewModel
     // after these, alphabetically.
     private static readonly string[] KnownFiles =
     [
-        "installed-mods.json",
+        "installedMods.json",
         "settings.json",
-        "dependency_flags.json",
-        "mod_cache.json",
+        "dependencyFlags.json",
+        "modCache.json",
     ];
 
     public List<string> Files { get; }
@@ -114,7 +114,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
 
     private bool CanSave() => SelectedFile is not null && Text.Length > 0;
 
-    // Validates Text as JSON (and, for installed-mods.json, as a well-formed manifest) before
+    // Validates Text as JSON (and, for installedMods.json, as a well-formed manifest) before
     // writing anything. A file that already exists is copied to "<file>.bak" first, overwriting any
     // previous backup, so one bad hand-edit is always recoverable.
     [RelayCommand(CanExecute = nameof(CanSave))]
@@ -146,7 +146,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
         }
     }
 
-    // Plain JSON validity for any file; installed-mods.json additionally has to deserialize as a
+    // Plain JSON validity for any file; installedMods.json additionally has to deserialize as a
     // ModInstallManifest, since that's the shape the rest of the app actually reads.
     private static bool TryValidate(string file, string text, out string error)
     {
@@ -154,7 +154,7 @@ public partial class DataFilesViewModel : LocalizedViewModel
         {
             using var document = JsonDocument.Parse(text);
 
-            if (string.Equals(file, "installed-mods.json", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(file, "installedMods.json", StringComparison.OrdinalIgnoreCase))
             {
                 var manifest = JsonSerializer.Deserialize<ModInstallManifest>(text);
                 if (manifest is null)

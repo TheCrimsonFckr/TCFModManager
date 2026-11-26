@@ -648,7 +648,7 @@ public partial class OptionsViewModel : LocalizedViewModel
 
         AppLog.Info("Updates", value ? "notifications switched on" : "notifications switched off");
 
-        // Off keeps update_notifications.json, so switching back on doesn't announce the same
+        // Off keeps updateNotifications.json, so switching back on doesn't announce the same
         // versions again (§8). On takes a fresh baseline (D6).
         if (value) AppServices.UpdateWatcher.SwitchedOn();
         else AppServices.UpdateWatcher.Stop();

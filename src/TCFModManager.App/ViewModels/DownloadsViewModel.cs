@@ -33,7 +33,7 @@ public partial class DownloadsViewModel : LocalizedViewModel
     [ObservableProperty]
     private string _version = string.Empty;
 
-    // Defaults to AppPaths.StagingDirectory, a "Staging" folder next to the exe.
+    // Defaults to AppPaths.StagingDirectory, a "staging" folder next to the exe.
     [ObservableProperty]
     private string _destinationFolder = AppPaths.StagingDirectory;
 

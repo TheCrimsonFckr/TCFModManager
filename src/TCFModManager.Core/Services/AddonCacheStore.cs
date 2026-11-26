@@ -13,7 +13,7 @@ public sealed class AddonCacheStore
     private const int SchemaVersion = 1;
 
     private readonly JsonFile<CachedAddons> _file =
-        new(Path.Combine(AppPaths.DataDirectory, "addon_cache.json"), JsonFileOptions.Indented, preserveDamaged: false);
+        new(Path.Combine(AppPaths.DataDirectory, "addonCache.json"), JsonFileOptions.Indented, preserveDamaged: false);
 
     public sealed class CachedAddons
     {

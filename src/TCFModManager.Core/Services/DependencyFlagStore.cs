@@ -11,7 +11,7 @@ public sealed class DependencyFlagStore
     private const int SchemaVersion = 1;
 
     private readonly JsonFile<CachedFlags> _file =
-        new(Path.Combine(AppPaths.DataDirectory, "dependency_flags.json"), preserveDamaged: false);
+        new(Path.Combine(AppPaths.DataDirectory, "dependencyFlags.json"), preserveDamaged: false);
 
     // One mod's cached answer. CheckedAt is compared against the mod's own UpdatedAt to
     // decide whether the answer still holds.

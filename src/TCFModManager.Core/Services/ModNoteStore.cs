@@ -6,7 +6,7 @@ public sealed class ModNoteStore
 
     public ModNoteStore(string? path = null)
     {
-        _file = new(path ?? Path.Combine(AppPaths.DataDirectory, "mod_notes.json"), JsonFileOptions.Indented, keepBackups: true);
+        _file = new(path ?? Path.Combine(AppPaths.DataDirectory, "modNotes.json"), JsonFileOptions.Indented, keepBackups: true);
     }
 
     public IReadOnlyDictionary<string, string> Load() =>

@@ -5,7 +5,7 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.Core.Services;
 
 //
-// Loads/saves ModListData as JSON under <app folder>\Data\mod_lists.json - every mod list this
+// Loads/saves ModListData as JSON under <app folder>\Data\modLists.json - every mod list this
 // install holds and which one is currently applied.
 //
 // Nothing here touches the game folder. A list is a description of a set of mods; turning one into
@@ -31,7 +31,7 @@ public sealed class ModListStore
 
     public ModListStore(string? filePath = null) =>
         _file = new JsonFile<ModListData>(
-            filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_lists.json"), Options, keepBackups: true);
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "modLists.json"), Options, keepBackups: true);
 
     public string FilePath => _file.FilePath;
 

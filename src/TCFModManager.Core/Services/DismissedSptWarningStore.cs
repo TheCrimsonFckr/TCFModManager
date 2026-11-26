@@ -11,7 +11,7 @@ public sealed class DismissedSptWarningStore
 
     private readonly JsonFile<Stored> _file;
 
-    public DismissedSptWarningStore() : this(Path.Combine(AppPaths.DataDirectory, "dismissed_spt_warnings.json")) { }
+    public DismissedSptWarningStore() : this(Path.Combine(AppPaths.DataDirectory, "dismissedSptWarnings.json")) { }
 
     public DismissedSptWarningStore(string filePath) => _file = new JsonFile<Stored>(filePath);
 

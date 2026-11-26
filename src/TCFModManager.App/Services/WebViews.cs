@@ -42,7 +42,7 @@ public static class WebViews
     private static Task<CoreWebView2Environment> EnvironmentAsync() =>
         _environment ??= CoreWebView2Environment.CreateAsync(
             browserExecutableFolder: null,
-            userDataFolder: Path.Combine(AppPaths.DataDirectory, "WebView2"));
+            userDataFolder: Path.Combine(AppPaths.DataDirectory, "webView2"));
 
     /// <summary>Starts <paramref name="view"/> on the shared environment. False when it could not
     /// start, in which case the caller falls back to the browser.</summary>

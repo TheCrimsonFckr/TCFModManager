@@ -119,7 +119,7 @@ public static class UpdateAnnouncer
 }
 
 //
-// Loads/saves UpdateNotificationState as <app folder>\Data\update_notifications.json. A corrupt
+// Loads/saves UpdateNotificationState as <app folder>\Data\updateNotifications.json. A corrupt
 // file reads as a fresh state with the baseline not yet taken, so the worst it costs is one silent
 // check - never a burst of repeats.
 //
@@ -129,7 +129,7 @@ public sealed class UpdateNotificationStore
 
     public UpdateNotificationStore(string? filePath = null) =>
         _file = new JsonFile<UpdateNotificationState>(
-            filePath ?? Path.Combine(AppPaths.DataDirectory, "update_notifications.json"), JsonFileOptions.Indented);
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "updateNotifications.json"), JsonFileOptions.Indented);
 
     public UpdateNotificationState Load()
     {

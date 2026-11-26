@@ -5,7 +5,7 @@ namespace TCFModManager.Core.Services;
 public sealed class RememberedDownloadStore(string? path = null)
 {
     private readonly JsonFile<List<RememberedDownload>> _file =
-        new(path ?? Path.Combine(AppPaths.DataDirectory, "download-queue.json"), JsonFileOptions.Indented);
+        new(path ?? Path.Combine(AppPaths.DataDirectory, "downloadQueue.json"), JsonFileOptions.Indented);
 
     public IReadOnlyList<RememberedDownload> Load()
     {

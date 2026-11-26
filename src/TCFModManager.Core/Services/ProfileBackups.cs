@@ -49,7 +49,7 @@ public sealed class ProfileBackups(string? root = null, int keep = 10)
     // OPEN-54 N27: before Find the broken mod turns server mods off.
     public const string BeforeSearch = "search";
 
-    public string Root { get; } = root ?? System.IO.Path.Combine(AppPaths.DataDirectory, "ProfileBackups");
+    public string Root { get; } = root ?? System.IO.Path.Combine(AppPaths.DataDirectory, "profileBackups");
 
     public int Keep { get; } = Math.Max(1, keep);
 

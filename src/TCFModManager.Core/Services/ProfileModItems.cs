@@ -27,7 +27,7 @@ public sealed record ProfileLoss(string ProfileName, string ModName, int Items, 
 // have is a mod's; the mod is the one whose files carry that id (JSON, or UTF-16 in a DLL). Only
 // server mods are searched, and an id still in a mod that stays isn't counted. An id a mod makes up
 // while it runs is never found (OPEN-51 R4). Only reads, and only this install's own profiles (Q3).
-// Which ids each file carries is kept in Data\profile-mod-ids.json by file size and time (Q2).
+// Which ids each file carries is kept in Data\profileModIds.json by file size and time (Q2).
 //
 public static class ProfileModItems
 {
@@ -51,7 +51,7 @@ public static class ProfileModItems
         [property: JsonPropertyName("i")] List<string> Ids);
 
     private static readonly JsonFile<Dictionary<string, CachedFile>> CacheFile =
-        new(Path.Combine(AppPaths.DataDirectory, "profile-mod-ids.json"));
+        new(Path.Combine(AppPaths.DataDirectory, "profileModIds.json"));
 
     private static Dictionary<string, (DateTime Written, long Length, HashSet<string> Ids)> FileIds
     {

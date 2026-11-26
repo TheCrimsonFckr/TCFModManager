@@ -5,7 +5,7 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.Core.Services;
 
 //
-// The last few updates' config reports, in Data\config_updates.json.
+// The last few updates' config reports, in Data\configUpdates.json.
 //
 // Kept because the moment an update finishes is not always the moment somebody reads about it - the
 // Configs page can say what the last update did to the file being looked at, days later. Newest
@@ -22,7 +22,7 @@ public sealed class ConfigUpdateLog(string? filePath = null)
     };
 
     private readonly JsonFile<ConfigUpdateHistory> _file =
-        new(filePath ?? Path.Combine(AppPaths.DataDirectory, "config_updates.json"), Options, keepBackups: true);
+        new(filePath ?? Path.Combine(AppPaths.DataDirectory, "configUpdates.json"), Options, keepBackups: true);
 
     public string FilePath => _file.FilePath;
 

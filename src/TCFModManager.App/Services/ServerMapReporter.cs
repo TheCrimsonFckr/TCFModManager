@@ -293,7 +293,7 @@ internal sealed class ServerMapReporter
                 }
             }
 
-            var manifest = Path.Combine(AppPaths.DataDirectory, "installed-mods.json");
+            var manifest = Path.Combine(AppPaths.DataDirectory, "installedMods.json");
             parts.Add(File.Exists(manifest) ? File.GetLastWriteTimeUtc(manifest).Ticks.ToString() : "-");
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)

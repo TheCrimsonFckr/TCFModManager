@@ -17,7 +17,7 @@ public sealed class ModCacheStore
     private const int SchemaVersion = 2;
 
     private readonly JsonFile<CachedCatalog> _file =
-        new(Path.Combine(AppPaths.DataDirectory, "mod_cache.json"), preserveDamaged: false);
+        new(Path.Combine(AppPaths.DataDirectory, "modCache.json"), preserveDamaged: false);
 
     public sealed class CachedCatalog
     {

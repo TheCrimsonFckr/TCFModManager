@@ -29,8 +29,8 @@ internal static class InstallFingerprint
 {
     private static readonly HashSet<string> IgnoredDataFiles = new(StringComparer.OrdinalIgnoreCase)
     {
-        "mod_groups.json",
-        "mod_footprints.json",
+        "modGroups.json",
+        "modFootprints.json",
     };
 
     private static readonly EnumerationOptions Recursive = new()

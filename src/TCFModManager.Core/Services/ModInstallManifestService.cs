@@ -3,7 +3,7 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.Core.Services;
 
 // 
-// Loads/saves the ModInstallManifest as JSON under &lt;app folder&gt;\Data\installed-mods.json.
+// Loads/saves the ModInstallManifest as JSON under &lt;app folder&gt;\Data\installedMods.json.
 // A corrupt or hand-edited manifest falls back to an empty one rather than blocking the app.
 // 
 public sealed class ModInstallManifestService
@@ -12,7 +12,7 @@ public sealed class ModInstallManifestService
 
     public ModInstallManifestService(string? filePath = null) =>
         _file = new JsonFile<ModInstallManifest>(
-            filePath ?? Path.Combine(AppPaths.DataDirectory, "installed-mods.json"), JsonFileOptions.Indented, keepBackups: true);
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "installedMods.json"), JsonFileOptions.Indented, keepBackups: true);
 
     // Where the manifest lives - the install journal keeps its notes beside it (InstallJournal.Beside).
     public string FilePath => _file.FilePath;

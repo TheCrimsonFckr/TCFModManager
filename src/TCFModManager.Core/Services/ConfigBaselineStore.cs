@@ -13,7 +13,7 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class ConfigBaselineStore(string? root = null)
 {
-    public string Root { get; } = root ?? Path.Combine(AppPaths.DataDirectory, "ConfigBaselines");
+    public string Root { get; } = root ?? Path.Combine(AppPaths.DataDirectory, "configBaselines");
 
     // Copies the named files, as they sit in the install right now, into the version's baseline.
     // Best-effort: a file that can't be copied just has no baseline, which the merge treats as "not

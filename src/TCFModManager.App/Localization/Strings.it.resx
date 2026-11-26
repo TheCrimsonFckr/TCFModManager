@@ -650,7 +650,7 @@
     <value>Modifiche non salvate</value>
   </data>
   <data name="Configs_DisclaimerMessage" xml:space="preserve">
-    <value>Cambiare la configurazione di un mod può rompere il mod, o il tuo gioco. Non spetta all'autore del mod rimediare, quindi cambia solo le impostazioni che capisci - e dillo quando segnali un bug se hai modificato una configurazione. Ogni file viene copiato in Data\config-backups prima di essere salvato.</value>
+    <value>Cambiare la configurazione di un mod può rompere il mod, o il tuo gioco. Non spetta all'autore del mod rimediare, quindi cambia solo le impostazioni che capisci - e dillo quando segnali un bug se hai modificato una configurazione. Ogni file viene copiato in data\configBackups prima di essere salvato.</value>
   </data>
   <data name="Configs_DisclaimerTitle" xml:space="preserve">
     <value>Modifica a tua discrezione</value>
@@ -803,7 +803,7 @@
     <value>Quando questo mod si aggiorna:</value>
   </data>
   <data name="Configs_UpdatePolicyToolTip" xml:space="preserve">
-    <value>Vale per ogni file di configurazione di questo mod e viene ricordato in Data\mod_configs.json.</value>
+    <value>Vale per ogni file di configurazione di questo mod e viene ricordato in data\modConfigs.json.</value>
   </data>
   <data name="Configs_UserDataAddedFormat" xml:space="preserve">
     <value>{0} non verrà toccata dagli aggiornamenti e verrà messa in salvo se rimuovi {1}.</value>
@@ -860,7 +860,7 @@
     <value>L'aggiornamento a {0} ha sostituito questo file con i valori predefiniti della versione.</value>
   </data>
   <data name="ConfigUpdate_NoteReplacedWhereFormat" xml:space="preserve">
-    <value>L'aggiornamento a {0} ha sostituito questo file con i valori predefiniti della versione - la tua copia è in Data\LegacyConfigs\{1}.</value>
+    <value>L'aggiornamento a {0} ha sostituito questo file con i valori predefiniti della versione - la tua copia è in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_NoteUnchangedFormat" xml:space="preserve">
     <value>L'aggiornamento a {0} ha lasciato questo file invariato.</value>
@@ -878,7 +878,7 @@
     <value>Viene usato il file della nuova versione, con dentro le impostazioni che hai cambiato. Un'impostazione aggiunta dall'aggiornamento arriva con il suo valore predefinito; una che l'aggiornamento toglie viene segnalata e scartata.</value>
   </data>
   <data name="ConfigUpdate_PolicyTakeNew" xml:space="preserve">
-    <value>Vince il file della nuova versione. La tua copia viene conservata in Data\LegacyConfigs, così puoi rimettere i valori a mano.</value>
+    <value>Vince il file della nuova versione. La tua copia viene conservata in data\legacyConfigs, così puoi rimettere i valori a mano.</value>
   </data>
   <data name="ConfigUpdate_ReasonNoBaseline" xml:space="preserve">
     <value>L'app non aveva ancora nulla con cui confrontarlo; il prossimo aggiornamento potrà riportare le tue modifiche.</value>
@@ -896,13 +896,13 @@
     <value>{0} dei tuoi file di configurazione non fanno più parte del mod.</value>
   </data>
   <data name="ConfigUpdate_RemovedManyWhereFormat" xml:space="preserve">
-    <value>{0} dei tuoi file di configurazione non fanno più parte del mod - la tua copia è in Data\LegacyConfigs\{1}.</value>
+    <value>{0} dei tuoi file di configurazione non fanno più parte del mod - la tua copia è in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_RemovedNamedFormat" xml:space="preserve">
     <value>Il tuo {0} non fa più parte del mod.</value>
   </data>
   <data name="ConfigUpdate_RemovedOneWhereFormat" xml:space="preserve">
-    <value>Il tuo {0} non fa più parte del mod - la tua copia è in Data\LegacyConfigs\{1}.</value>
+    <value>Il tuo {0} non fa più parte del mod - la tua copia è in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_ReplacedCountFormat" xml:space="preserve">
     <value>{0} dei tuoi file di configurazione sono stati sostituiti con i valori predefiniti di questa versione.</value>
@@ -911,13 +911,13 @@
     <value>L'app non aveva registrato che cosa conteneva l'ultima versione, quindi non ha potuto distinguere le tue modifiche da quelle del mod.</value>
   </data>
   <data name="ConfigUpdate_ReplacedManyWhereFormat" xml:space="preserve">
-    <value>{0} dei tuoi file di configurazione sono stati sostituiti con i valori predefiniti di questa versione - la tua copia è in Data\LegacyConfigs\{1}.</value>
+    <value>{0} dei tuoi file di configurazione sono stati sostituiti con i valori predefiniti di questa versione - la tua copia è in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_ReplacedNamedFormat" xml:space="preserve">
     <value>Il tuo {0} è stato sostituito con i valori predefiniti di questa versione.</value>
   </data>
   <data name="ConfigUpdate_ReplacedOneWhereFormat" xml:space="preserve">
-    <value>Il tuo {0} è stato sostituito con i valori predefiniti di questa versione - la tua copia è in Data\LegacyConfigs\{1}.</value>
+    <value>Il tuo {0} è stato sostituito con i valori predefiniti di questa versione - la tua copia è in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_VersionRangeFormat" xml:space="preserve">
     <value>{0} → {1}</value>
@@ -929,7 +929,7 @@
     <value>il file non sembra un manifest di installazione dei mod.</value>
   </data>
   <data name="DataFiles_ListHeader" xml:space="preserve">
-    <value>File di Data\</value>
+    <value>File di data\</value>
   </data>
   <data name="DataFiles_MissingFormat" xml:space="preserve">
     <value>{0} non esiste ancora - viene creato la prima volta che l'app lo scrive.</value>
@@ -3392,10 +3392,10 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>I file di configurazione di questo mod resteranno esattamente come sono.</value>
   </data>
   <data name="ModUpdate_ConfigMerge" xml:space="preserve">
-    <value>Le impostazioni che hai cambiato saranno riportate nei file di configurazione della nuova versione, e le tue copie attuali conservate in Data\LegacyConfigs.</value>
+    <value>Le impostazioni che hai cambiato saranno riportate nei file di configurazione della nuova versione, e le tue copie attuali conservate in data\legacyConfigs.</value>
   </data>
   <data name="ModUpdate_ConfigTakeNew" xml:space="preserve">
-    <value>I file di configurazione di questo mod saranno sostituiti da quelli della nuova versione - le tue copie vengono conservate in Data\LegacyConfigs.</value>
+    <value>I file di configurazione di questo mod saranno sostituiti da quelli della nuova versione - le tue copie vengono conservate in data\legacyConfigs.</value>
   </data>
   <data name="ModUpdate_ConfirmAsInstalled" xml:space="preserve">
     <value>Conferma come installata</value>
@@ -3602,7 +3602,7 @@ Una lista mod registra quali mod installare e attivare. Applicarne una scarica d
     <value>File di dati...</value>
   </data>
   <data name="Options_DataFilesDescription" xml:space="preserve">
-    <value>Visualizza o modifica a mano i file JSON che questa app tiene in Data\, compreso installed-mods.json - utile quando i controlli delle versioni della pagina Installati non bastano.</value>
+    <value>Visualizza o modifica a mano i file JSON che questa app tiene in data\, compreso installedMods.json - utile quando i controlli delle versioni della pagina Installati non bastano.</value>
   </data>
   <data name="Options_DataFilesHeader" xml:space="preserve">
     <value>File di dati</value>
@@ -4795,7 +4795,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Non controllato - The Forge ha chiesto una pausa. Riprova tra un minuto.</value>
   </data>
   <data name="Options_UpdateCheckFailed" xml:space="preserve">
-    <value>Il controllo non è riuscito. Il log in Data\logs ha i dettagli.</value>
+    <value>Il controllo non è riuscito. Il log in data\logs ha i dettagli.</value>
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
@@ -4918,7 +4918,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Nulla impostato - trattato come giocatore</value>
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
-    <value>Visualizza o modifica a mano i file JSON in Data\.</value>
+    <value>Visualizza o modifica a mano i file JSON in data\.</value>
   </data>
   <data name="ServerMap_MachinesHeader" xml:space="preserve">
     <value>Macchine su questo server</value>
@@ -5587,7 +5587,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Premi {0}. Vengono riscritte solo le righe che hai cambiato.</value>
   </data>
   <data name="Help_Configs_Edit_Note" xml:space="preserve">
-    <value>Ogni salvataggio tiene una copia del vecchio file in Data\config-backups. {0} scarta le modifiche non salvate.</value>
+    <value>Ogni salvataggio tiene una copia del vecchio file in data\configBackups. {0} scarta le modifiche non salvate.</value>
   </data>
   <data name="Help_Configs_Policy_Title" xml:space="preserve">
     <value>Scegliere cosa succede alle mie impostazioni quando un mod si aggiorna</value>
@@ -5611,7 +5611,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Premi {0}, poi {1}.</value>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>Vale per i file .cfg. Il JSON di un mod server non registra valori predefiniti: apri il file contrassegnato {0} accanto, se il mod ne fornisce uno, e copia il valore. Ogni salvataggio tiene anche il file precedente in Data\config-backups, nella cartella di questa app.</value>
+    <value>Vale per i file .cfg. Il JSON di un mod server non registra valori predefiniti: apri il file contrassegnato {0} accanto, se il mod ne fornisce uno, e copia il valore. Ogni salvataggio tiene anche il file precedente in data\configBackups, nella cartella di questa app.</value>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Trovare le impostazioni lasciate da un mod rimosso</value>
@@ -6058,7 +6058,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Se l'app è in Programmi, spostala in una cartella dove puoi scrivere, controlla lo spazio libero sul disco e riprova in {0}.</value>
   </data>
   <data name="Help_Problems_AppUpdate_Note" xml:space="preserve">
-    <value>Il log in Data\logs dice cosa l'ha fermato.</value>
+    <value>Il log in data\logs dice cosa l'ha fermato.</value>
   </data>
   <data name="Help_Problems_Report_Title" xml:space="preserve">
     <value>Segnalare un problema</value>
@@ -6067,7 +6067,7 @@ Succede legittimamente se il server è stato ricostruito o se lo raggiungi attra
     <value>Premi {0} in cima a questa pagina. Apre la scheda delle segnalazioni sulla pagina sp-mod.com di questa app.</value>
   </data>
   <data name="Help_Problems_Report_Step2" xml:space="preserve">
-    <value>Scrivi cosa hai fatto e cosa è successo, e allega il log di oggi da Data\logs - il file che si chiama tcfmm- seguito dalla data.</value>
+    <value>Scrivi cosa hai fatto e cosa è successo, e allega il log di oggi da data\logs - il file che si chiama tcfmm- seguito dalla data.</value>
   </data>
   <data name="Help_Problems_Report_Step3" xml:space="preserve">
     <value>Per più dettagli, metti un file vuoto chiamato verbose, senza estensione, accanto a TCFModManager.exe, rifallo e invia il nuovo log.</value>

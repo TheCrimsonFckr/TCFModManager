@@ -105,7 +105,11 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
 
     // Hidden, and a sibling of Data\/Staging\ rather than a temp folder, so the swap never has to
     // cross a volume boundary and the whole app folder stays self-contained.
-    public static string UpdateDirectory { get; } = Path.Combine(AppContext.BaseDirectory, ".tcfmm-update");
+    public static string UpdateDirectory { get; } = Path.Combine(AppContext.BaseDirectory, ".tcfmmUpdate");
+
+    // TEMPORARY, ADDED IN v1.32.0 - DELETE WHEN THE APP LEAVES BETA. OPEN-74: where a build before
+    // v1.32.0 updates from, so the update that brings this build in still leaves its log there.
+    private static string PreV132UpdateDirectory => Path.Combine(AppContext.BaseDirectory, ".tcfmm-update");
 
     private static string AppDirectory => AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
 
@@ -120,11 +124,17 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
     //
     public static void SweepAfterStartup()
     {
+        Sweep(UpdateDirectory);
+        Sweep(PreV132UpdateDirectory);
+    }
+
+    private static void Sweep(string updateDirectory)
+    {
         try
         {
-            if (!Directory.Exists(UpdateDirectory)) return;
+            if (!Directory.Exists(updateDirectory)) return;
 
-            var scriptLog = Path.Combine(UpdateDirectory, LogName);
+            var scriptLog = Path.Combine(updateDirectory, LogName);
             if (File.Exists(scriptLog))
             {
                 foreach (var line in File.ReadAllLines(scriptLog))
@@ -134,19 +144,21 @@ public sealed class AppUpdateInstaller(ModDownloadService downloads)
                 File.Delete(scriptLog);
             }
 
-            if (Directory.Exists(PayloadDirectory)) Directory.Delete(PayloadDirectory, recursive: true);
-            if (Directory.Exists(ReplacedDirectory)) Directory.Delete(ReplacedDirectory, recursive: true);
-            foreach (var zip in Directory.EnumerateFiles(UpdateDirectory, "*.zip")) File.Delete(zip);
+            var payload = Path.Combine(updateDirectory, PayloadFolderName);
+            var replaced = Path.Combine(updateDirectory, ReplacedFolderName);
+            if (Directory.Exists(payload)) Directory.Delete(payload, recursive: true);
+            if (Directory.Exists(replaced)) Directory.Delete(replaced, recursive: true);
+            foreach (var zip in Directory.EnumerateFiles(updateDirectory, "*.zip")) File.Delete(zip);
 
             // The script itself is usually still locked by the PowerShell process that relaunched
             // this app, so this only succeeds from the launch after that - which is fine, there's
             // nothing left in here worth the noise of retrying.
-            if (Directory.EnumerateFileSystemEntries(UpdateDirectory).Any()) return;
-            Directory.Delete(UpdateDirectory);
+            if (Directory.EnumerateFileSystemEntries(updateDirectory).Any()) return;
+            Directory.Delete(updateDirectory);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            AppLog.Debug("AppUpdate", $"couldn't fully sweep {UpdateDirectory}: {ex.Message}");
+            AppLog.Debug("AppUpdate", $"couldn't fully sweep {updateDirectory}: {ex.Message}");
         }
     }
 

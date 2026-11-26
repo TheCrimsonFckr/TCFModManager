@@ -876,8 +876,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Data files</value>
   </data>
   <data name="Options_DataFilesDescription" xml:space="preserve">
-    <value>View or hand-edit the JSON files this app keeps under Data\, including installed-mods.json - useful when the Installed page's own version controls aren't enough.</value>
-    <comment>Data\ and installed-mods.json are a folder and a file name - leave both exactly as they are.</comment>
+    <value>View or hand-edit the JSON files this app keeps under data\, including installedMods.json - useful when the Installed page's own version controls aren't enough.</value>
+    <comment>data\ and installedMods.json are a folder and a file name - leave both exactly as they are.</comment>
   </data>
   <data name="Options_DataFiles" xml:space="preserve">
     <value>Data files...</value>
@@ -1076,8 +1076,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <comment>Label to the left of a dropdown.</comment>
   </data>
   <data name="Configs_UpdatePolicyToolTip" xml:space="preserve">
-    <value>Applies to every config file of this mod, and is remembered in Data\mod_configs.json.</value>
-    <comment>Data\mod_configs.json is a file name - leave it exactly as it is.</comment>
+    <value>Applies to every config file of this mod, and is remembered in data\modConfigs.json.</value>
+    <comment>data\modConfigs.json is a file name - leave it exactly as it is.</comment>
   </data>
   <data name="Configs_StopTreatingToolTip" xml:space="preserve">
     <value>Stop treating it this way</value>
@@ -1420,8 +1420,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <comment>Window title and the title bar of the data files window.</comment>
   </data>
   <data name="DataFiles_ListHeader" xml:space="preserve">
-    <value>Data\ files</value>
-    <comment>The files inside the app's Data\ folder. Data\ is a folder name and stays exactly as it is.</comment>
+    <value>data\ files</value>
+    <comment>The files inside the app's data\ folder. data\ is a folder name and stays exactly as it is.</comment>
   </data>
   <data name="DataFiles_Reload" xml:space="preserve">
     <value>Reload</value>
@@ -1441,8 +1441,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <comment>Title of a warning banner on the Configs page.</comment>
   </data>
   <data name="Configs_DisclaimerMessage" xml:space="preserve">
-    <value>Changing a mod's configuration can break the mod, or your game. That is not the mod author's responsibility to put right, so only change settings you understand - and say so when reporting a bug if you have edited a config. Every file is copied into Data\config-backups before it is saved.</value>
-    <comment>Data\config-backups is a folder name and stays exactly as it is.</comment>
+    <value>Changing a mod's configuration can break the mod, or your game. That is not the mod author's responsibility to put right, so only change settings you understand - and say so when reporting a bug if you have edited a config. Every file is copied into data\configBackups before it is saved.</value>
+    <comment>data\configBackups is a folder name and stays exactly as it is.</comment>
   </data>
   <data name="Play_RoleNoticeTitle" xml:space="preserve">
     <value>Tell the app what this machine is</value>
@@ -1772,14 +1772,14 @@ A mod list records which mods to install and enable. Applying one downloads what
     <comment>{0} is a file name.</comment>
   </data>
   <data name="ConfigUpdate_ReplacedOneWhereFormat" xml:space="preserve">
-    <value>Your {0} was replaced by this version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
-    <comment>{0} is a file name, {1} a folder name. Data\LegacyConfigs\ is a path and stays as it is.</comment>
+    <value>Your {0} was replaced by this version's defaults - your copy is in data\legacyConfigs\{1}.</value>
+    <comment>{0} is a file name, {1} a folder name. data\legacyConfigs\ is a path and stays as it is.</comment>
   </data>
   <data name="ConfigUpdate_ReplacedCountFormat" xml:space="preserve">
     <value>{0} of your config files were replaced by this version's defaults.</value>
   </data>
   <data name="ConfigUpdate_ReplacedManyWhereFormat" xml:space="preserve">
-    <value>{0} of your config files were replaced by this version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
+    <value>{0} of your config files were replaced by this version's defaults - your copy is in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_ReplacedFirstTime" xml:space="preserve">
     <value>The app hadn't recorded what the last version shipped, so it couldn't tell your changes from the mod's.</value>
@@ -1790,13 +1790,13 @@ A mod list records which mods to install and enable. Applying one downloads what
     <comment>{0} is a file name.</comment>
   </data>
   <data name="ConfigUpdate_RemovedOneWhereFormat" xml:space="preserve">
-    <value>Your {0} is no longer part of the mod - your copy is in Data\LegacyConfigs\{1}.</value>
+    <value>Your {0} is no longer part of the mod - your copy is in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_RemovedCountFormat" xml:space="preserve">
     <value>{0} of your config files are no longer part of the mod.</value>
   </data>
   <data name="ConfigUpdate_RemovedManyWhereFormat" xml:space="preserve">
-    <value>{0} of your config files are no longer part of the mod - your copy is in Data\LegacyConfigs\{1}.</value>
+    <value>{0} of your config files are no longer part of the mod - your copy is in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_VersionRangeFormat" xml:space="preserve">
     <value>{0} to {1}</value>
@@ -1825,7 +1825,7 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Updating to {0} replaced this file with the version's defaults.</value>
   </data>
   <data name="ConfigUpdate_NoteReplacedWhereFormat" xml:space="preserve">
-    <value>Updating to {0} replaced this file with the version's defaults - your copy is in Data\LegacyConfigs\{1}.</value>
+    <value>Updating to {0} replaced this file with the version's defaults - your copy is in data\legacyConfigs\{1}.</value>
   </data>
   <data name="ConfigUpdate_ReasonNoBaseline" xml:space="preserve">
     <value>The app had nothing to compare it against yet; the next update can carry your changes.</value>
@@ -1863,8 +1863,8 @@ A mod list records which mods to install and enable. Applying one downloads what
     <value>Your file is left exactly as it is. A setting the new version adds will be missing from it, which some mods handle and some don't.</value>
   </data>
   <data name="ConfigUpdate_PolicyTakeNew" xml:space="preserve">
-    <value>The new version's file wins. Your copy is kept in Data\LegacyConfigs so you can put values back by hand.</value>
-    <comment>Data\LegacyConfigs is a folder name and stays as it is.</comment>
+    <value>The new version's file wins. Your copy is kept in data\legacyConfigs so you can put values back by hand.</value>
+    <comment>data\legacyConfigs is a folder name and stays as it is.</comment>
   </data>
   <data name="ConfigUpdate_PolicyMerge" xml:space="preserve">
     <value>The new version's file is used, with the settings you changed carried into it. A setting the update adds arrives at its default; one it removes is reported and dropped.</value>
@@ -4180,12 +4180,12 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <comment>Shown before an update, when this mod's config policy is ConfigPolicy_KeepMine.</comment>
   </data>
   <data name="ModUpdate_ConfigTakeNew" xml:space="preserve">
-    <value>This mod's config files will be replaced by the new version's - your copies are kept in Data\LegacyConfigs.</value>
-    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_TakeNew. Data\LegacyConfigs is a folder path and stays as it is.</comment>
+    <value>This mod's config files will be replaced by the new version's - your copies are kept in data\legacyConfigs.</value>
+    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_TakeNew. data\legacyConfigs is a folder path and stays as it is.</comment>
   </data>
   <data name="ModUpdate_ConfigMerge" xml:space="preserve">
-    <value>Settings you changed will be carried into the new version's config files, and your current copies kept in Data\LegacyConfigs.</value>
-    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_Merge. Data\LegacyConfigs is a folder path and stays as it is.</comment>
+    <value>Settings you changed will be carried into the new version's config files, and your current copies kept in data\legacyConfigs.</value>
+    <comment>Shown before an update, when this mod's config policy is ConfigPolicy_Merge. data\legacyConfigs is a folder path and stays as it is.</comment>
   </data>
   <data name="ModUpdate_DisabledNoticeFormat" xml:space="preserve">
     <value>{0} is disabled. It stays disabled after this.</value>
@@ -6021,7 +6021,7 @@ The details are in the log:
     <value>Not checked - The Forge asked for a pause. Try again in a minute.</value>
   </data>
   <data name="Options_UpdateCheckFailed" xml:space="preserve">
-    <value>The check failed. The log in Data\logs has the details.</value>
+    <value>The check failed. The log in data\logs has the details.</value>
   </data>
   <data name="Options_UpdateCheckTimeFormat" xml:space="preserve">
     <value>{0} ({1:t})</value>
@@ -6153,7 +6153,7 @@ The details are in the log:
     <value>Nothing set - treated as a player</value>
   </data>
   <data name="Options_DataFilesHint" xml:space="preserve">
-    <value>View or hand-edit the JSON files under Data\.</value>
+    <value>View or hand-edit the JSON files under data\.</value>
   </data>
   <data name="ServerMap_MachinesHeader" xml:space="preserve">
     <value>Machines on this server</value>
@@ -6964,8 +6964,8 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Configs_Edit_Note" xml:space="preserve">
-    <value>Every save keeps a copy of the old file in Data\config-backups. {0} throws away changes you haven't saved.</value>
-    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. Data\config-backups is a literal folder name.</comment>
+    <value>Every save keeps a copy of the old file in data\configBackups. {0} throws away changes you haven't saved.</value>
+    <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it. data\configBackups is a literal folder name.</comment>
   </data>
   <data name="Help_Configs_Policy_Title" xml:space="preserve">
     <value>Choose what happens to my settings when a mod updates</value>
@@ -6995,8 +6995,8 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Configs_Original_Note" xml:space="preserve">
-    <value>That covers .cfg files. A server mod's JSON records no defaults: open the file marked {0} beside it, if the mod ships one, and copy the value across. Every save also keeps the previous file in Data\config-backups, in this app's folder.</value>
-    <comment>Data\config-backups is a literal folder name.</comment>
+    <value>That covers .cfg files. A server mod's JSON records no defaults: open the file marked {0} beside it, if the mod ships one, and copy the value across. Every save also keeps the previous file in data\configBackups, in this app's folder.</value>
+    <comment>data\configBackups is a literal folder name.</comment>
   </data>
   <data name="Help_Configs_Leftover_Title" xml:space="preserve">
     <value>Find settings left behind by a removed mod</value>
@@ -7566,8 +7566,8 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Problems_AppUpdate_Note" xml:space="preserve">
-    <value>The log in Data\logs says what stopped it.</value>
-    <comment>Data\logs is a literal folder name.</comment>
+    <value>The log in data\logs says what stopped it.</value>
+    <comment>data\logs is a literal folder name.</comment>
   </data>
   <data name="Help_Problems_Report_Title" xml:space="preserve">
     <value>Report a problem</value>
@@ -7578,8 +7578,8 @@ The details are in the log:
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Problems_Report_Step2" xml:space="preserve">
-    <value>Say what you did and what happened, and attach today's log from Data\logs - the file named tcfmm- and the date.</value>
-    <comment>Data\logs and tcfmm- are literal.</comment>
+    <value>Say what you did and what happened, and attach today's log from data\logs - the file named tcfmm- and the date.</value>
+    <comment>data\logs and tcfmm- are literal.</comment>
   </data>
   <data name="Help_Problems_Report_Step3" xml:space="preserve">
     <value>For more detail, put an empty file named verbose, with no extension, next to TCFModManager.exe, do it again and send the new log.</value>

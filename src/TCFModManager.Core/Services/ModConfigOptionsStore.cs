@@ -17,7 +17,7 @@ public enum ModConfigPolicy
 }
 
 //
-// Per-mod config settings, in Data\mod_configs.json, keyed by the mod's folder name lowercased - the
+// Per-mod config settings, in Data\modConfigs.json, keyed by the mod's folder name lowercased - the
 // same key rule as ModGroupStore, with the same accepted tradeoff that renaming the folder loses the
 // entry.
 //
@@ -34,7 +34,7 @@ public sealed class ModConfigOptionsStore(string? filePath = null)
     };
 
     private readonly JsonFile<Dictionary<string, ModConfigOptions>> _file =
-        new(filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_configs.json"), Options, keepBackups: true);
+        new(filePath ?? Path.Combine(AppPaths.DataDirectory, "modConfigs.json"), Options, keepBackups: true);
 
     public string FilePath => _file.FilePath;
 

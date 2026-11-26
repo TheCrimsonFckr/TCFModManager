@@ -78,7 +78,7 @@ public static class LogFiles
     {
         var key = Path.TrimEndingDirectorySeparator(Path.GetFullPath(gameRoot)).ToLowerInvariant();
         var hash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(key)))[..12];
-        return Path.Combine(AppPaths.DataDirectory, "GameLogs", hash);
+        return Path.Combine(AppPaths.DataDirectory, "gameLogs", hash);
     }
 
     private static string? Newest(string folder, string pattern, Func<string, bool>? skip = null)

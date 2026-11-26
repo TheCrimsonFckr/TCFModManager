@@ -8,7 +8,7 @@ public sealed class HeadlessAdviceDismissals
 
     private readonly JsonFile<Stored> _file;
 
-    public HeadlessAdviceDismissals() : this(Path.Combine(AppPaths.DataDirectory, "headless_advice_kept.json")) { }
+    public HeadlessAdviceDismissals() : this(Path.Combine(AppPaths.DataDirectory, "headlessAdviceKept.json")) { }
 
     public HeadlessAdviceDismissals(string filePath) => _file = new JsonFile<Stored>(filePath);
 

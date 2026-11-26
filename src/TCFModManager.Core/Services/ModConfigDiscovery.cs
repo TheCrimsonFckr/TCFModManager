@@ -36,7 +36,7 @@ public static class ModConfigDiscovery
     // ones - a disabled server mod's FolderPath already points into user\mods.disabled, so its
     // config is found there with no special casing.</param>
     //
-    // <param name="options">Per-mod entries from mod_configs.json - the extra settings files a mod
+    // <param name="options">Per-mod entries from modConfigs.json - the extra settings files a mod
     // keeps somewhere unconventional, and the data sitting in a folder called "config" that is not a
     // config at all. Read once by the caller; omitted, the conventions answer alone.</param>
     //

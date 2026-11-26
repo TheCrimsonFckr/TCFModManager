@@ -316,7 +316,7 @@ public sealed class ModListData
     // A pointer here rather than a flag on ModList, which is where it started and where it did not
     // work. A share file and this store are serialised by different code but from the SAME objects,
     // so the [JsonIgnore] that correctly kept the mark out of an exported list ALSO kept it out of
-    // mod_lists.json - the mark was set, saved into nothing, and gone by the next read. The badge
+    // modLists.json - the mark was set, saved into nothing, and gone by the next read. The badge
     // never appeared and the app forgot which list it served the instant it was told.
     //
     // As a pointer it cannot repeat that: it is not on ModList at all, so no share file can carry

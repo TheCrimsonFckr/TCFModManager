@@ -15,7 +15,7 @@ public sealed class BrokenModSession
 }
 
 //
-// OPEN-54 N27: Data\broken_mod_search.json - written before the first mod is turned off, deleted once
+// OPEN-54 N27: Data\brokenModSearch.json - written before the first mod is turned off, deleted once
 // they are all back on, so a search cut short is put right at the next start.
 //
 public sealed class BrokenModSessionStore
@@ -24,7 +24,7 @@ public sealed class BrokenModSessionStore
 
     private readonly string _filePath;
 
-    public BrokenModSessionStore() : this(Path.Combine(AppPaths.DataDirectory, "broken_mod_search.json"))
+    public BrokenModSessionStore() : this(Path.Combine(AppPaths.DataDirectory, "brokenModSearch.json"))
     {
     }
 
@@ -44,7 +44,7 @@ public sealed class BrokenModSessionStore
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException or NotSupportedException)
         {
-            AppLog.Warn("Search", $"broken_mod_search.json couldn't be read: {ex.Message}");
+            AppLog.Warn("Search", $"brokenModSearch.json couldn't be read: {ex.Message}");
             return null;
         }
     }
@@ -57,7 +57,7 @@ public sealed class BrokenModSessionStore
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            AppLog.Warn("Search", $"broken_mod_search.json couldn't be deleted: {ex.Message}");
+            AppLog.Warn("Search", $"brokenModSearch.json couldn't be deleted: {ex.Message}");
         }
     }
 

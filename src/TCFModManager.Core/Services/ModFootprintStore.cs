@@ -19,7 +19,7 @@ public sealed class ModFootprintStore
 
     public ModFootprintStore(string? filePath = null) =>
         _file = new JsonFile<CachedFootprints>(
-            filePath ?? Path.Combine(AppPaths.DataDirectory, "mod_footprints.json"), preserveDamaged: false);
+            filePath ?? Path.Combine(AppPaths.DataDirectory, "modFootprints.json"), preserveDamaged: false);
 
     private sealed class CachedFootprints
     {

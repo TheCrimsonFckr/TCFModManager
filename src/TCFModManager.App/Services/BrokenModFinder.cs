@@ -13,7 +13,7 @@ using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.Services;
 
-// OPEN-54 N27: how the last search ended, kept in Data\broken_mod_result.json until Done clears it.
+// OPEN-54 N27: how the last search ended, kept in Data\brokenModResult.json until Done clears it.
 public sealed class SavedSearchResult
 {
     public string Title { get; set; } = "";
@@ -69,7 +69,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private BrokenModProgress? _now;
     private TimeSpan _nowBegan;
 
-    private static string ResultFile => Path.Combine(AppPaths.DataDirectory, "broken_mod_result.json");
+    private static string ResultFile => Path.Combine(AppPaths.DataDirectory, "brokenModResult.json");
 
     public BrokenModFinder()
     {

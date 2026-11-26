@@ -11,7 +11,7 @@ public sealed class AcceptedWarningStore
 
     private readonly JsonFile<Stored> _file;
 
-    public AcceptedWarningStore() : this(Path.Combine(AppPaths.DataDirectory, "accepted_dependency_warnings.json")) { }
+    public AcceptedWarningStore() : this(Path.Combine(AppPaths.DataDirectory, "acceptedDependencyWarnings.json")) { }
 
     public AcceptedWarningStore(string filePath) => _file = new JsonFile<Stored>(filePath);
 

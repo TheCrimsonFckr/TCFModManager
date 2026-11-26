@@ -44,6 +44,11 @@ public partial class App : Application
             return;
         }
 
+        // TEMPORARY, ADDED IN v1.32.0 - DELETE WHEN THE APP LEAVES BETA, along with DataFolderMigration.
+        // Gives an older build's folders and files their camelCase names (OPEN-74) before anything
+        // reads them.
+        DataFolderMigration.Run();
+
         AppLog.Start($"{AppVersion.Current}, SPT install: {AppServices.SptEnvironment.InstallPath ?? "(not set)"}");
 
         // Before the theme and before any string is read, so the first frame is drawn in the right

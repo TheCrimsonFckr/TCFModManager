@@ -17,7 +17,7 @@ public sealed class SptReleaseCatalog(SpModApiClient api)
     private static readonly TimeSpan MaxAge = TimeSpan.FromDays(1);
 
     private readonly JsonFile<CachedReleases> _file =
-        new(Path.Combine(AppPaths.DataDirectory, "spt_versions.json"), preserveDamaged: false);
+        new(Path.Combine(AppPaths.DataDirectory, "sptVersions.json"), preserveDamaged: false);
 
     private List<SptRelease> _releases = [];
 

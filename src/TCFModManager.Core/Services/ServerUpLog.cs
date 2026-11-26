@@ -3,14 +3,14 @@ using System.Text.Json;
 namespace TCFModManager.Core.Services;
 
 //
-// OPEN-54 N27: Data\server_last_up.json - when each install's server was last seen up, so a search
+// OPEN-54 N27: Data\serverLastUp.json - when each install's server was last seen up, so a search
 // can try the mods changed since then first.
 //
 public sealed class ServerUpLog
 {
     private readonly string _filePath;
 
-    public ServerUpLog() : this(Path.Combine(AppPaths.DataDirectory, "server_last_up.json"))
+    public ServerUpLog() : this(Path.Combine(AppPaths.DataDirectory, "serverLastUp.json"))
     {
     }
 
@@ -29,7 +29,7 @@ public sealed class ServerUpLog
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            AppLog.Debug("Search", $"server_last_up.json couldn't be written: {ex.Message}");
+            AppLog.Debug("Search", $"serverLastUp.json couldn't be written: {ex.Message}");
         }
     }
 
@@ -43,7 +43,7 @@ public sealed class ServerUpLog
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException or NotSupportedException)
         {
-            AppLog.Debug("Search", $"server_last_up.json couldn't be read: {ex.Message}");
+            AppLog.Debug("Search", $"serverLastUp.json couldn't be read: {ex.Message}");
         }
 
         return new Dictionary<string, DateTimeOffset>(StringComparer.OrdinalIgnoreCase);

@@ -5,7 +5,7 @@ namespace TCFModManager.Core.Models;
 //
 // A mod archive saved for the user to install by hand (Monitor mode), and what it would place.
 //
-// Kept apart from installed-mods.json on purpose: that file is a record of what is on disk, and a
+// Kept apart from installedMods.json on purpose: that file is a record of what is on disk, and a
 // downloaded archive is not an install. A download only reaches the manifest once a scan finds it
 // installed and the user confirms it.
 //

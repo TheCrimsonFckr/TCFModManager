@@ -3,7 +3,7 @@ using TCFModManager.Core.Models;
 namespace TCFModManager.Core.Services;
 
 //
-// Loads/saves ModGroupData as JSON under <app folder>\Data\mod_groups.json - the Mod Groups
+// Loads/saves ModGroupData as JSON under <app folder>\Data\modGroups.json - the Mod Groups
 // window's separators and which installed mod (by name) sits in which one. Purely organizational;
 // nothing here is read by the Installed page or by installing/removing mods. A corrupt or
 // hand-edited file falls back to an empty set rather than blocking the window from opening.
@@ -11,7 +11,7 @@ namespace TCFModManager.Core.Services;
 public sealed class ModGroupStore
 {
     private readonly JsonFile<ModGroupData> _file =
-        new(Path.Combine(AppPaths.DataDirectory, "mod_groups.json"), JsonFileOptions.Indented, keepBackups: true);
+        new(Path.Combine(AppPaths.DataDirectory, "modGroups.json"), JsonFileOptions.Indented, keepBackups: true);
 
     public ModGroupData Load() => _file.Read() ?? new ModGroupData();
 

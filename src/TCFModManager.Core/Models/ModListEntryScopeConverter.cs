@@ -8,7 +8,7 @@ namespace TCFModManager.Core.Models;
 //
 // It was a plain enum - Both = 0, Client = 1, Server = 2 - written as a name by the store's
 // JsonStringEnumConverter and by ModListFile. It is now a flag set, and "Both" is not a member any
-// more. Every list already exported and every mod_lists.json already on disk says "Both", so
+// more. Every list already exported and every modLists.json already on disk says "Both", so
 // reading that has to keep working forever: this is not a format anyone can migrate centrally,
 // because the files are on other people's machines and inside servers' config folders.
 //

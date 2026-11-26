@@ -5,7 +5,7 @@ namespace TCFModManager.Core.Services;
 //
 // One installed mod as the Installed page sees it, reduced to what a list entry needs.
 //
-// The Installed cards are the source, not Data\installed-mods.json: the manifest only holds mods
+// The Installed cards are the source, not Data\installedMods.json: the manifest only holds mods
 // this app installed or the user confirmed by hand, which on a real install is a small fraction of
 // what's there. The cards cover everything the scanner found and carry the catalog match where the
 // matcher could make one.

@@ -293,9 +293,10 @@ public static class InstallPathGuard
         "TCFModManager.exe",
         "TCFModManager.pdb",
         "TCFModManager.Core.pdb",
-        "Data",
-        "Staging",
+        "data",
+        "staging",
         "LegacyConfigs",
+        ".tcfmmUpdate",
         ".tcfmm-update",
         "verbose",
     ];

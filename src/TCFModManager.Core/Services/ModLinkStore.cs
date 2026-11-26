@@ -26,7 +26,7 @@ public sealed record ModLinks
 }
 
 //
-// Data\mod-links.json: what the user tied to sp-mod by hand - a folder name to its mod or addon, and
+// Data\modLinks.json: what the user tied to sp-mod by hand - a folder name to its mod or addon, and
 // an addon's files inside its parent's folder. Only for what no install record names: a record is the
 // authority, so a link a record covers is dropped.
 //
@@ -37,7 +37,7 @@ public sealed class ModLinkStore
 
     public ModLinkStore(string? path = null)
     {
-        _file = new(path ?? Path.Combine(AppPaths.DataDirectory, "mod-links.json"), JsonFileOptions.Indented, keepBackups: true);
+        _file = new(path ?? Path.Combine(AppPaths.DataDirectory, "modLinks.json"), JsonFileOptions.Indented, keepBackups: true);
     }
 
     public ModLinks Load()

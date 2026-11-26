@@ -421,7 +421,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     // page's "manage version" controls) rather than from an app install or the files on disk.
     public bool IsManualOverride { get; init; }
 
-    // Tied to its sp-mod page by hand (Data\mod-links.json) rather than by an install record.
+    // Tied to its sp-mod page by hand (Data\modLinks.json) rather than by an install record.
     public bool IsLinked { get; set; }
 
     //

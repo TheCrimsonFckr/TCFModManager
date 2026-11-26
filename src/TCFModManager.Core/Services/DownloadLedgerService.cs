@@ -4,7 +4,7 @@ namespace TCFModManager.Core.Services;
 
 //
 // Loads/saves the DownloadLedger under <app folder>\Data\downloads.json, the same way
-// ModInstallManifestService handles installed-mods.json. A corrupt file falls back to an empty
+// ModInstallManifestService handles installedMods.json. A corrupt file falls back to an empty
 // ledger: the archives are still in the user's folder, and the worst case is a hand install that
 // goes unconfirmed until the mod is downloaded again.
 //

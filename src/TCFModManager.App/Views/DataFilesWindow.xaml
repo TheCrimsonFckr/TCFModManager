@@ -15,7 +15,7 @@
     TextOptions.TextFormattingMode="Display"
     TextOptions.TextRenderingMode="ClearType">
     <!--
-        Raw view/edit window over the JSON files this app keeps under Data\ (installed-mods.json,
+        Raw view/edit window over the JSON files this app keeps under Data\ (installedMods.json,
         settings.json, etc.) - for hand-fixing something the built-in pages don't cover. Every save
         is validated as JSON first and the previous version is kept as "<file>.bak".
     -->

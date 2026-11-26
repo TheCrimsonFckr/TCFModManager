@@ -16,7 +16,7 @@ namespace TCFModManager.Core.Services;
 //
 // The note is written once, after the originals are kept and before anything in the install is
 // removed or placed, and deleted once a record for the install is saved. It lives beside the manifest
-// (Data\install-journal\), not in the work folder, which can fall back to %TEMP% and is swept after
+// (Data\installJournal\), not in the work folder, which can fall back to %TEMP% and is swept after
 // six hours.
 //
 // Recovery rolls forward, never back (Chris, 2026-10-06) - the same outcome as a failure InstallAsync
@@ -37,7 +37,7 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class InstallJournal
 {
-    public const string FolderName = "install-journal";
+    public const string FolderName = "installJournal";
 
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 

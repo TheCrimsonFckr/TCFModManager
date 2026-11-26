@@ -54,9 +54,9 @@ public static class ModConfigStore
     // hidden the way ".tcfmm-work" and ".tcfmm-duplicates" are - those exist to stay out of SPT's
     // way, whereas the whole point of a backup is being able to find it.
     //
-    public const string BackupFolderName = "config-backups";
+    public const string BackupFolderName = "configBackups";
 
-    // Where the backups actually go: "<app>\Data\config-backups".
+    // Where the backups actually go: "<app>\Data\configBackups".
     public static string BackupDirectory => Path.Combine(AppPaths.DataDirectory, BackupFolderName);
 
     // How that folder is named to the user - short enough for a status line.
