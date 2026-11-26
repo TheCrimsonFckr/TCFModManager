@@ -29,6 +29,9 @@ public sealed record BrokenModResult(
 public sealed record BrokenModProgress(int Try, int About, int ModsOn, int Mods, IReadOnlyList<int>? Suspects = null)
 {
     public IReadOnlyList<int> On { get; init; } = [];
+
+    /// <summary>About which mods the starts after this one will have on (ModBisect.Ahead).</summary>
+    public IReadOnlyList<IReadOnlyList<int>> Ahead { get; init; } = [];
 }
 
 //
@@ -50,18 +53,21 @@ public static class BrokenModSearch
 
         var tries = 0;
 
-        async Task<ServerTrialOutcome> Try(IReadOnlyList<int> on, int left, bool errors, IReadOnlyList<int>? suspects = null)
+        async Task<ServerTrialOutcome> Try(IReadOnlyList<int> on, IReadOnlyList<IReadOnlyList<int>> ahead, bool errors, IReadOnlyList<int>? suspects = null)
         {
             ct.ThrowIfCancellationRequested();
             tries++;
-            progress?.Report(new BrokenModProgress(tries, tries + left, on.Count, mods, suspects) { On = on });
+            progress?.Report(new BrokenModProgress(tries, tries + ahead.Count, on.Count, mods, suspects) { On = on, Ahead = ahead });
             return await tryWith(on, errors, ct).ConfigureAwait(false);
         }
 
         var all = Enumerable.Range(0, mods).ToList();
         var search = new ModBisect(mods, needs);
 
-        var first = await Try(all, 1 + search.TriesLeft, errors: true).ConfigureAwait(false);
+        static IReadOnlyList<IReadOnlyList<int>> From(ModBisect bisect, Func<IReadOnlyList<int>, IReadOnlyList<int>> map) =>
+            bisect.Next is { } next ? [map(next), .. bisect.Ahead.Select(map)] : [];
+
+        var first = await Try(all, [[], .. From(search, s => s)], errors: true).ConfigureAwait(false);
         if (first.Started && first.Errors.Count == 0)
             return new BrokenModResult(BrokenModVerdict.NothingWrong, null, null, null, [], tries);
 
@@ -69,7 +75,7 @@ public static class BrokenModSearch
 
         var errorsMatter = symptom == BrokenModSymptom.ServerLogsErrors;
 
-        var none = await Try([], search.TriesLeft, errorsMatter).ConfigureAwait(false);
+        var none = await Try([], From(search, s => s), errorsMatter).ConfigureAwait(false);
         var theirs = first.Errors.Select(ServerTrial.Signature)
             .Except(none.Errors.Select(ServerTrial.Signature), StringComparer.Ordinal)
             .ToHashSet(StringComparer.Ordinal);
@@ -96,7 +102,7 @@ public static class BrokenModSearch
             var others = all.Except(changed).ToList();
             var narrow = new ModBisect(changed.Count, i => needs(changed[i]).Select(n => changed.IndexOf(n)).Where(n => n >= 0));
 
-            var without = await Try(others, 1 + narrow.TriesLeft, errorsMatter).ConfigureAwait(false);
+            var without = await Try(others, From(narrow, s => [.. others.Concat(s.Select(i => changed[i])).Order()]), errorsMatter).ConfigureAwait(false);
             if (!Fails(without))
             {
                 among = changed;
@@ -106,13 +112,14 @@ public static class BrokenModSearch
         }
 
         int Mod(int number) => among is null ? number : among[number];
+        IReadOnlyList<int> On(IReadOnlyList<int> next) => among is null ? next : [.. rest.Concat(next.Select(Mod)).Order()];
 
         while (search.Next is { } next)
         {
-            IReadOnlyList<int> on = among is null ? next : [.. rest.Concat(next.Select(Mod)).Order()];
+            var on = On(next);
             IReadOnlyList<int> suspects = [.. search.Suspects.Select(Mod)];
 
-            var outcome = await Try(on, search.TriesLeft - 1, errorsMatter, suspects).ConfigureAwait(false);
+            var outcome = await Try(on, [.. search.Ahead.Select(On)], errorsMatter, suspects).ConfigureAwait(false);
             var failed = Fails(outcome);
 
             if (failed && on.Count <= fewest)
@@ -166,42 +173,39 @@ public static class BrokenModSearch
         return changed;
     }
 
-    // About how long is left from each mod's share of the first full start (ModLoadShares): a start
-    // takes that start's time less the shares of the mods off, scaled by how far the guesses for the
-    // starts so far were out. With no shares to go on, the count-based TimeLeft below.
+    // About how long is left: this start and each one expected after it (ModBisect.Ahead), each
+    // guessed from the mods' shares of the first full start (ModLoadShares) - that start's time less
+    // the shares of the mods off - and scaled by how far the guesses for the starts so far were out.
+    // With no shares to go on, each is a fixed part plus a part per mod on, fitted to the starts so far.
     public static TimeSpan? TimeLeft(
         IReadOnlyList<(IReadOnlyList<int> On, TimeSpan Took)> finished,
         IReadOnlyList<TimeSpan>? shares,
         IReadOnlyList<int> onNow,
-        int triesLeft,
+        IReadOnlyList<IReadOnlyList<int>> ahead,
         TimeSpan intoCurrent)
     {
-        if (finished.Count == 0 || triesLeft <= 0) return null;
+        if (finished.Count == 0) return null;
 
-        if (shares is null || !shares.Any(s => s > TimeSpan.Zero))
-            return TimeLeft([.. finished.Select(f => (f.On.Count, f.Took))], onNow.Count, triesLeft, intoCurrent);
+        Func<IReadOnlyList<int>, double> each;
+        if (shares is { Count: > 0 } && shares.Any(s => s > TimeSpan.Zero))
+        {
+            double Shares(IEnumerable<int> on) => on.Where(i => i >= 0 && i < shares.Count).Sum(i => shares[i].TotalSeconds);
 
-        double Shares(IEnumerable<int> on) => on.Where(i => i >= 0 && i < shares.Count).Sum(i => shares[i].TotalSeconds);
+            var fixedPart = Math.Max(0d, finished[0].Took.TotalSeconds - shares.Sum(s => s.TotalSeconds));
+            double Guess(IEnumerable<int> on) => fixedPart + Shares(on);
 
-        var fixedPart = Math.Max(0d, finished[0].Took.TotalSeconds - shares.Sum(s => s.TotalSeconds));
-        double Guess(IEnumerable<int> on) => fixedPart + Shares(on);
+            var guessed = finished.Sum(f => Guess(f.On));
+            var scale = guessed > 0 ? finished.Sum(f => f.Took.TotalSeconds) / guessed : 1d;
+            each = on => scale * Guess(on);
+        }
+        else
+        {
+            var points = finished.Select(f => (f.On.Count, f.Took)).ToList();
+            each = on => StartSeconds(points, on.Count);
+        }
 
-        var guessed = finished.Sum(f => Guess(f.On));
-        var scale = guessed > 0 ? finished.Sum(f => f.Took.TotalSeconds) / guessed : 1d;
-
-        var left = TimeSpan.FromSeconds(scale * Guess(onNow)) * triesLeft - intoCurrent;
-        return left > TimeSpan.Zero ? left : TimeSpan.Zero;
-    }
-
-    // About how long is left. One start done: each start takes as long as the first full one. More:
-    // a fixed part plus a part per mod on, fitted to every start so far, for the mods on now.
-    public static TimeSpan? TimeLeft(IReadOnlyList<(int ModsOn, TimeSpan Took)> finished, int modsOnNow, int triesLeft, TimeSpan intoCurrent)
-    {
-        if (finished.Count == 0 || triesLeft <= 0) return null;
-
-        var each = TimeSpan.FromSeconds(StartSeconds(finished, modsOnNow));
-        var left = each * triesLeft - intoCurrent;
-        return left > TimeSpan.Zero ? left : TimeSpan.Zero;
+        var seconds = Math.Max(0d, each(onNow) - intoCurrent.TotalSeconds) + ahead.Sum(each);
+        return TimeSpan.FromSeconds(seconds);
     }
 
     private static double StartSeconds(IReadOnlyList<(int ModsOn, TimeSpan Took)> finished, int modsOn)

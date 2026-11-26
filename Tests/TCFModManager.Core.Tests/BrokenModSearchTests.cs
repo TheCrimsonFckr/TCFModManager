@@ -351,47 +351,58 @@ public class BrokenModSearchTests : IDisposable
     }
 
     [Fact]
-    public void Time_left_takes_the_shares_of_the_mods_off_from_the_first_full_start()
+    public void Time_left_adds_up_this_start_and_each_one_expected_after_it()
     {
         TimeSpan S(double seconds) => TimeSpan.FromSeconds(seconds);
         IReadOnlyList<TimeSpan> shares = [S(20), S(10), S(5), S(5)];
         IReadOnlyList<int> all = [0, 1, 2, 3];
+        IReadOnlyList<int> withoutFirst = [1, 2, 3];
 
-        // 60 s with all on: 20 s fixed. Mod 0 off: 40 s each, three left, five seconds in.
-        Assert.Equal(S(115), BrokenModSearch.TimeLeft([(all, S(60))], shares, [1, 2, 3], 3, S(5)));
+        // 60 s with all on: 20 s fixed. Mod 0 off: 40 s a start, this one five seconds in, two to come.
+        Assert.Equal(S(115), BrokenModSearch.TimeLeft([(all, S(60))], shares, withoutFirst, [withoutFirst, withoutFirst], S(5)));
+
+        // Starts ahead with fewer mods on are guessed shorter: 40 now, then 20 with none and 40 with mod 0.
+        Assert.Equal(S(100), BrokenModSearch.TimeLeft([(all, S(60))], shares, withoutFirst, [[], [0]], S(0)));
 
         // The all-off start took 30 s against a guess of 20 s: (60 + 30) / (60 + 20) = 9/8 from then on.
-        Assert.Equal(S(45 * 2), BrokenModSearch.TimeLeft([(all, S(60)), ([], S(30))], shares, [1, 2, 3], 2, S(0)));
+        Assert.Equal(S(90), BrokenModSearch.TimeLeft([(all, S(60)), ([], S(30))], shares, withoutFirst, [withoutFirst], S(0)));
 
-        // No shares to go on: the count-based estimate.
-        Assert.Equal(S(475), BrokenModSearch.TimeLeft([(all, S(60))], [], [0, 1], 8, S(5)));
-        Assert.Null(BrokenModSearch.TimeLeft([], shares, all, 8, S(0)));
-        Assert.Null(BrokenModSearch.TimeLeft([(all, S(60))], shares, all, 0, S(0)));
+        // A start running past its guess counts as done, not less than nothing.
+        Assert.Equal(TimeSpan.Zero, BrokenModSearch.TimeLeft([(all, S(60))], shares, [], [], S(30)));
+        Assert.Null(BrokenModSearch.TimeLeft([], shares, all, [], S(0)));
     }
 
     [Fact]
-    public void Time_left_starts_from_the_first_full_start_and_follows_each_batch()
+    public void Time_left_with_no_shares_fits_a_fixed_part_and_a_part_per_mod()
     {
         TimeSpan S(double seconds) => TimeSpan.FromSeconds(seconds);
+        IReadOnlyList<int> Mods(int count) => [.. Enumerable.Range(0, count)];
 
-        // Nothing to go on before the first start.
-        Assert.Null(BrokenModSearch.TimeLeft([], 40, 8, S(5)));
-
-        // The first full start: 60 s each, eight left, five seconds into this one.
-        Assert.Equal(S(475), BrokenModSearch.TimeLeft([(40, S(60))], 0, 8, S(5)));
+        // One start to go on: 60 s each, this one five seconds in, seven to come.
+        Assert.Equal(S(475), BrokenModSearch.TimeLeft([(Mods(4), S(60))], [], Mods(2), [.. Enumerable.Repeat(Mods(2), 7)], S(5)));
 
         // 40 on took 60 s, none on took 20 s: 20 s plus 1 s a mod, so 40 s with 20 on.
-        Assert.Equal(S(190), BrokenModSearch.TimeLeft([(40, S(60)), (0, S(20))], 20, 5, S(10)));
+        Assert.Equal(S(190), BrokenModSearch.TimeLeft([(Mods(40), S(60)), ([], S(20))], null, Mods(20), [.. Enumerable.Repeat(Mods(20), 4)], S(10)));
+    }
 
-        // A third batch on the same line changes nothing.
-        Assert.Equal(S(120), BrokenModSearch.TimeLeft([(40, S(60)), (0, S(20)), (20, S(40))], 10, 4, S(0)));
+    [Fact]
+    public void The_halving_says_which_mods_its_later_tries_will_have_on()
+    {
+        var search = new ModBisect(8);
 
-        // The same mods on each time: their average.
-        Assert.Equal(S(80), BrokenModSearch.TimeLeft([(10, S(30)), (10, S(50))], 10, 2, S(0)));
+        // First half on, two more halvings like it, then the culprit alone with next to nothing on.
+        Assert.Equal([0, 1, 2, 3], search.Next);
+        Assert.Equal(3, search.Ahead.Count);
+        Assert.Equal([0, 1, 2, 3], search.Ahead[0]);
+        Assert.Empty(search.Ahead[^1]);
 
-        // Never less than nothing, and nothing to say once none are left.
-        Assert.Equal(TimeSpan.Zero, BrokenModSearch.TimeLeft([(10, S(10))], 10, 1, S(40)));
-        Assert.Null(BrokenModSearch.TimeLeft([(10, S(10))], 10, 0, S(0)));
+        while (search.Next is { } next)
+        {
+            Assert.Equal(search.TriesLeft - 1, search.Ahead.Count);
+            search.Report(next.Contains(5));
+        }
+
+        Assert.Empty(search.Ahead);
     }
 
     private sealed class Collect(List<BrokenModProgress> into) : IProgress<BrokenModProgress>

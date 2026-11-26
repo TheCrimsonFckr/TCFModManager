@@ -68,6 +68,25 @@ public sealed class ModBisect
         _ => 0,
     };
 
+    /// <summary>About which mods the tries after <see cref="Next"/> will have on, one list per try as
+    /// many as <see cref="TriesLeft"/> counts after it: the halving goes on from about where it is,
+    /// and the try with the first mod alone has next to nothing on.</summary>
+    public IReadOnlyList<IReadOnlyList<int>> Ahead
+    {
+        get
+        {
+            if (_next is null) return [];
+
+            var after = Math.Max(0, TriesLeft - 1);
+            return _phase switch
+            {
+                Phase.Run => [.. Enumerable.Repeat<IReadOnlyList<int>>(_next, Math.Max(0, after - 1)), .. after > 0 ? new IReadOnlyList<int>[] { [] } : []],
+                Phase.Partner => [.. Enumerable.Repeat<IReadOnlyList<int>>(_next, after)],
+                _ => [],
+            };
+        }
+    }
+
     /// <summary>What the try with <see cref="Next"/> on showed.</summary>
     public void Report(bool failed)
     {

@@ -256,6 +256,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                     _nowBegan = _clock.Elapsed;
                     _tick.Start();
 
+                    if (BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.Ahead, TimeSpan.Zero) is { } guess)
+                        AppLog.Info("Search", $"start {p.Try} of about {p.About}: {p.ModsOn} on, about {guess.TotalSeconds:0}s left");
+
                     Progress = 100.0 * (p.Try - 1) / Math.Max(p.About, p.Try);
                     SayProgress();
                 });
@@ -373,7 +376,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     {
         if (_now is not { } p || IsStopping || !_tick.IsEnabled) return;
 
-        var left = BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.About - p.Try + 1, _clock.Elapsed - _nowBegan);
+        var left = BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.Ahead, _clock.Elapsed - _nowBegan);
         ProgressText = T(Strings.Search_ProgressFormat, p.Try, p.About, p.ModsOn, p.Mods);
         LeftText = left is not { } time ? null
             : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute
