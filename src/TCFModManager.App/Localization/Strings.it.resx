@@ -11333,7 +11333,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Quando indica un mod, premi {0}, poi {1} per controllare che il server si avvii.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Viene testato solo il server, non il gioco, e i tuoi profili vengono copiati prima. Viene proposta anche quando il server si ferma prima di essere pronto.</value>
+    <value>Viene testato solo il server, non il gioco, e i tuoi profili vengono copiati prima. Viene proposta anche quando il server si ferma prima di essere pronto. In «Diagnostica log» compare solo se l'ultima esecuzione del server ha registrato un problema.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>mod responsabile, mod problematico, server non parte, crash server, quale mod, trovare mod, errori</value>

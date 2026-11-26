@@ -11333,7 +11333,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Nennt sie eine Mod, drücke {0} und dann {1}, um zu prüfen, ob der Server startet.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Getestet wird nur der Server, nicht das Spiel, und deine Profile werden vorher kopiert. Angeboten wird sie auch, wenn der Server stoppt, bevor er bereit ist.</value>
+    <value>Getestet wird nur der Server, nicht das Spiel, und deine Profile werden vorher kopiert. Angeboten wird sie auch, wenn der Server stoppt, bevor er bereit ist. Unter „Logs diagnostizieren“ erscheint sie nur, wenn der letzte Serverlauf ein Problem geloggt hat.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>verursachende Mod, Problem-Mod, Server startet nicht, Serverabsturz, welche Mod, Mod finden, Fehler</value>

@@ -74,6 +74,19 @@
             <StackPanel>
                 <!-- OPEN-54 N27: Find the broken mod - see BrokenModFinder. -->
                 <ui:Card Margin="0,0,0,12" Padding="16,12" behaviors:TourTarget.Key="diagnose.search" DataContext="{Binding Search}">
+                    <ui:Card.Style>
+                        <Style TargetType="ui:Card" BasedOn="{StaticResource {x:Type ui:Card}}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding DataContext.ServerHasProblems, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:Card.Style>
                     <StackPanel>
                         <DockPanel>
                             <ui:SymbolIcon Margin="0,0,10,0" VerticalAlignment="Center" FontSize="18" Symbol="Search24" />

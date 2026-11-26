@@ -174,6 +174,10 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
     [ObservableProperty]
     private string? _otherErrorsText;
 
+    // The server's last run logged a problem, so the search card is worth showing.
+    [ObservableProperty]
+    private bool _serverHasProblems;
+
     private LogDiagnosis? _last;
 
     [RelayCommand]
@@ -237,6 +241,8 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
             : null;
         LauncherNote = files.LauncherClearsGameLogs ? Strings.Diagnose_LauncherClears : null;
         OtherErrorsText = diagnosis.OtherErrors > 0 ? Strings.Diagnose_OtherErrors(diagnosis.OtherErrors, diagnosis.OtherErrors) : null;
+        ServerHasProblems = diagnosis.Findings.Any(f => f.Sample.Log == LogKind.Server)
+            || diagnosis.Unexplained.Any(e => e.Log == LogKind.Server);
     }
 
     [RelayCommand]

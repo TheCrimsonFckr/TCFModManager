@@ -89,7 +89,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     public event EventHandler? Ended;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsIdle), nameof(CanStart))]
+    [NotifyPropertyChangedFor(nameof(IsIdle), nameof(CanStart), nameof(IsActive))]
     private bool _isRunning;
 
     [ObservableProperty]
@@ -109,10 +109,11 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private double _progress;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsActive))]
     private string? _statusMessage;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasResult))]
+    [NotifyPropertyChangedFor(nameof(HasResult), nameof(IsActive))]
     private string? _resultTitle;
 
     [ObservableProperty]
@@ -138,10 +139,13 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     public bool HasResult => ResultTitle is not null;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsInterrupted), nameof(CanStart))]
+    [NotifyPropertyChangedFor(nameof(IsInterrupted), nameof(CanStart), nameof(IsActive))]
     private string? _interruptedText;
 
     public bool IsInterrupted => InterruptedText is not null;
+
+    // Running, or with something to say: the Diagnose card shows whatever the logs hold.
+    public bool IsActive => IsRunning || HasResult || IsInterrupted || StatusMessage is not null;
 
     public bool IsIdle => !IsRunning;
 

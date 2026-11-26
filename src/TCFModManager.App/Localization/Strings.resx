@@ -13912,7 +13912,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>It tests the server only, not the game, and your profiles are copied first. It is also offered when the server stops before it is ready.</value>
+    <value>It tests the server only, not the game, and your profiles are copied first. It is also offered when the server stops before it is ready. It only shows on Diagnose logs when the server's last run logged a problem.</value>
     <comment>OPEN-54 N27: note under the how-to.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">

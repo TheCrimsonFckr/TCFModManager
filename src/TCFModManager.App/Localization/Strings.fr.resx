@@ -11333,7 +11333,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Quand elle nomme un mod, appuyez sur {0}, puis sur {1} pour vérifier que le serveur démarre.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Seul le serveur est testé, pas le jeu, et vos profils sont copiés d'abord. La recherche est aussi proposée quand le serveur s'arrête avant d'être prêt.</value>
+    <value>Seul le serveur est testé, pas le jeu, et vos profils sont copiés d'abord. La recherche est aussi proposée quand le serveur s'arrête avant d'être prêt. Elle n'apparaît dans « Diagnostiquer les journaux » que si la dernière exécution du serveur a signalé un problème.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>mod en cause, mod problématique, serveur ne démarre pas, plantage serveur, quel mod, trouver mod, erreurs</value>
