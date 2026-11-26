@@ -13506,7 +13506,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>OPEN-64: update wait choice.</comment>
   </data>
   <data name="Nav_WebPages" xml:space="preserve">
-    <value>Web pages</value>
+    <value>Web interface pages</value>
     <comment>OPEN-70: sidebar item. A list of the web pages server mods serve.</comment>
   </data>
   <data name="WebPages_SptPanel" xml:space="preserve">
@@ -13522,7 +13522,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>OPEN-70: the card at the top of the Web pages page.</comment>
   </data>
   <data name="WebPages_Empty" xml:space="preserve">
-    <value>No server mod on this install has a web page.</value>
+    <value>No server mod on this install has a web interface.</value>
     <comment>OPEN-70: shown when no installed server mod declares a web page.</comment>
   </data>
   <data name="WebPages_ServerNotRunning" xml:space="preserve">
@@ -13542,27 +13542,27 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>OPEN-70: button on each row - copies the page's address.</comment>
   </data>
   <data name="Options_WebPagesHeader" xml:space="preserve">
-    <value>Web pages page</value>
+    <value>Web interface pages</value>
     <comment>OPEN-70: Options switch title, under Pages.</comment>
   </data>
   <data name="Options_WebPagesHint" xml:space="preserve">
-    <value>Your server mods' web pages, while the server is running.</value>
+    <value>Your server mods' web interfaces, while the server is running.</value>
     <comment>OPEN-70: under the Options switch title.</comment>
   </data>
   <data name="Options_WebPagesToolTip" xml:space="preserve">
-    <value>Adds a page listing the web pages your server mods serve, while this PC's server is running.</value>
+    <value>Adds a page listing the web interface pages your server mods serve, while this PC's server is running.</value>
     <comment>OPEN-70: on the Web pages switch.</comment>
   </data>
   <data name="Options_WebPagesDescription" xml:space="preserve">
-    <value>Some server mods have a page you open in a browser - settings, a live map, a quest tracker. With this on, a Web pages page appears in the sidebar while this PC's server is running and at least one installed server mod has one. On by default.</value>
+    <value>Some server mods have a web interface you open in a browser - settings, a live map, a quest tracker. With this on, Web interface pages appears in the sidebar while this PC's server is running and at least one installed server mod has one. On by default.</value>
     <comment>OPEN-70: tooltip on the whole Web pages setting row.</comment>
   </data>
   <data name="Help_WebPages_Open_Title" xml:space="preserve">
-    <value>Open a server mod's web page</value>
+    <value>Open a server mod's web interface</value>
     <comment>OPEN-70: how-to title.</comment>
   </data>
   <data name="Help_WebPages_Open_Step1" xml:space="preserve">
-    <value>Start the server. {0} appears in the sidebar when a server mod has a web page.</value>
+    <value>Start the server. {0} appears in the sidebar when a server mod has a web interface.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_WebPages_Open_Step2" xml:space="preserve">
@@ -13574,11 +13574,11 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>OPEN-70: note under the how-to.</comment>
   </data>
   <data name="Help_WebPages_Open_Keywords" xml:space="preserve">
-    <value>web page, browser, web ui, web interface, config page, live map, home page, address, url</value>
+    <value>web interface, web page, browser, web ui, config page, live map, home page, address, url</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Help_WebPages_Hide_Title" xml:space="preserve">
-    <value>Hide the Web pages page</value>
+    <value>Hide Web interface pages</value>
     <comment>OPEN-70: how-to title.</comment>
   </data>
   <data name="Help_WebPages_Hide_Step1" xml:space="preserve">
@@ -13586,15 +13586,15 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_WebPages_Hide_Keywords" xml:space="preserve">
-    <value>web pages, hide, turn off, sidebar</value>
+    <value>web interface pages, web pages, hide, turn off, sidebar</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Tour_WebPages_Rows_Title" xml:space="preserve">
-    <value>Your server mods' pages</value>
+    <value>Your server mods' web interfaces</value>
     <comment>Feature tour, Web pages: the list of pages: step title.</comment>
   </data>
   <data name="Tour_WebPages_Rows_Body" xml:space="preserve">
-    <value>Every server mod that serves a web page is listed here. Open shows it in your browser, Copy address puts its link on the clipboard.</value>
+    <value>Every server mod with a web interface is listed here. Open shows it in your browser, Copy address puts its link on the clipboard.</value>
     <comment>Feature tour, Web pages: the list of pages.</comment>
   </data>
   <data name="Tour_WebPages_Intro_Title" xml:space="preserve">
@@ -13610,7 +13610,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Feature tour, Web pages: the Rescan button: step title.</comment>
   </data>
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
-    <value>Rescan reads your server mods again. A mod installed while the server runs serves its page after the server restarts.</value>
+    <value>Rescan reads your server mods again. A mod installed while the server runs serves its web interface after the server restarts.</value>
     <comment>Feature tour, Web pages: the Rescan button.</comment>
   </data>
 </root>

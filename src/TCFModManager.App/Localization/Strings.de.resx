@@ -11028,7 +11028,7 @@ Die Details stehen im Log:
     <value>7 Tage</value>
   </data>
   <data name="Nav_WebPages" xml:space="preserve">
-    <value>Webseiten</value>
+    <value>Weboberflächen</value>
   </data>
   <data name="WebPages_SptPanel" xml:space="preserve">
     <value>SPT-Webpanel</value>
@@ -11040,7 +11040,7 @@ Die Details stehen im Log:
     <value>Seiten, die deine Server-Mods im Browser anbieten. Sie öffnen sich unter der Serveradresse dieses PCs und funktionieren hier, solange der Server dieses PCs läuft.</value>
   </data>
   <data name="WebPages_Empty" xml:space="preserve">
-    <value>Kein Server-Mod dieser Installation hat eine Webseite.</value>
+    <value>Kein Server-Mod dieser Installation hat eine Weboberfläche.</value>
   </data>
   <data name="WebPages_ServerNotRunning" xml:space="preserve">
     <value>Der Server läuft nicht, daher lassen sich diese Seiten nicht öffnen.</value>
@@ -11055,22 +11055,22 @@ Die Details stehen im Log:
     <value>Adresse kopieren</value>
   </data>
   <data name="Options_WebPagesHeader" xml:space="preserve">
-    <value>Seite „Webseiten“</value>
+    <value>Weboberflächen</value>
   </data>
   <data name="Options_WebPagesHint" xml:space="preserve">
-    <value>Die Webseiten deiner Server-Mods, solange der Server läuft.</value>
+    <value>Die Weboberflächen deiner Server-Mods, solange der Server läuft.</value>
   </data>
   <data name="Options_WebPagesToolTip" xml:space="preserve">
-    <value>Fügt eine Seite hinzu, die die Webseiten deiner Server-Mods auflistet, solange der Server dieses PCs läuft.</value>
+    <value>Fügt eine Seite hinzu, die die Weboberflächen deiner Server-Mods auflistet, solange der Server dieses PCs läuft.</value>
   </data>
   <data name="Options_WebPagesDescription" xml:space="preserve">
-    <value>Manche Server-Mods haben eine Seite, die du im Browser öffnest - Einstellungen, eine Live-Karte, ein Quest-Tracker. Ist das an, erscheint in der Seitenleiste eine Seite „Webseiten“, solange der Server dieses PCs läuft und mindestens ein installierter Server-Mod eine hat. Standardmäßig an.</value>
+    <value>Manche Server-Mods haben eine Weboberfläche, die du im Browser öffnest - Einstellungen, eine Live-Karte, ein Quest-Tracker. Ist das an, erscheinen „Weboberflächen“ in der Seitenleiste, solange der Server dieses PCs läuft und mindestens ein installierter Server-Mod eine hat. Standardmäßig an.</value>
   </data>
   <data name="Help_WebPages_Open_Title" xml:space="preserve">
-    <value>Die Webseite eines Server-Mods öffnen</value>
+    <value>Die Weboberfläche eines Server-Mods öffnen</value>
   </data>
   <data name="Help_WebPages_Open_Step1" xml:space="preserve">
-    <value>Starte den Server. {0} erscheint in der Seitenleiste, wenn ein Server-Mod eine Webseite hat.</value>
+    <value>Starte den Server. {0} erscheinen in der Seitenleiste, wenn ein Server-Mod eine Weboberfläche hat.</value>
   </data>
   <data name="Help_WebPages_Open_Step2" xml:space="preserve">
     <value>Drücke {0}, um eine Seite im Browser zu öffnen, oder {1}, um ihre Adresse zu kopieren.</value>
@@ -11079,22 +11079,22 @@ Die Details stehen im Log:
     <value>Beim ersten Mal warnt dein Browser vor dem Zertifikat des Servers - SPT erstellt sein eigenes. Die Seiten öffnen sich unter der Adresse dieses PCs, die standardmäßig keine SPT-Webanmeldung braucht.</value>
   </data>
   <data name="Help_WebPages_Open_Keywords" xml:space="preserve">
-    <value>Webseite, Browser, Weboberfläche, Web-UI, Konfigurationsseite, Live-Karte, Adresse, URL</value>
+    <value>Weboberfläche, Webseite, Browser, Web-UI, Konfigurationsseite, Live-Karte, Adresse, URL</value>
   </data>
   <data name="Help_WebPages_Hide_Title" xml:space="preserve">
-    <value>Die Seite „Webseiten“ ausblenden</value>
+    <value>Weboberflächen ausblenden</value>
   </data>
   <data name="Help_WebPages_Hide_Step1" xml:space="preserve">
     <value>Schalte in {0} unter {1} {2} aus.</value>
   </data>
   <data name="Help_WebPages_Hide_Keywords" xml:space="preserve">
-    <value>Webseiten, ausblenden, ausschalten, Seitenleiste</value>
+    <value>Weboberflächen, Webseiten, ausblenden, ausschalten, Seitenleiste</value>
   </data>
   <data name="Tour_WebPages_Rows_Title" xml:space="preserve">
-    <value>Die Seiten deiner Server-Mods</value>
+    <value>Die Weboberflächen deiner Server-Mods</value>
   </data>
   <data name="Tour_WebPages_Rows_Body" xml:space="preserve">
-    <value>Jeder Server-Mod mit einer Webseite steht hier. Öffnen zeigt sie im Browser, Adresse kopieren legt den Link in die Zwischenablage.</value>
+    <value>Jeder Server-Mod mit einer Weboberfläche steht hier. Öffnen zeigt sie im Browser, Adresse kopieren legt den Link in die Zwischenablage.</value>
   </data>
   <data name="Tour_WebPages_Intro_Title" xml:space="preserve">
     <value>Nur auf diesem PC</value>
@@ -11106,6 +11106,6 @@ Die Details stehen im Log:
     <value>Etwas Neues installiert?</value>
   </data>
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
-    <value>Neu einlesen liest deine Server-Mods erneut. Ein Mod, der bei laufendem Server installiert wurde, bietet seine Seite nach einem Neustart des Servers an.</value>
+    <value>Neu einlesen liest deine Server-Mods erneut. Ein Mod, der bei laufendem Server installiert wurde, bietet seine Weboberfläche nach einem Neustart des Servers an.</value>
   </data>
 </root>

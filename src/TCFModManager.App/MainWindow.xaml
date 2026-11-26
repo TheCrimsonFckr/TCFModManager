@@ -282,7 +282,7 @@
                     TargetPageType="{x:Type views:ServerMapPage}"
                     DataContext="{x:Static app:AppServices.ServerMap}"
                     Visibility="{Binding IsPageEnabled, Converter={StaticResource BoolToVis}}" />
-                <!-- OPEN-70: only while this PC's server runs and a server mod declares a page. -->
+                <!-- OPEN-70 Web interface pages: only while this PC's server runs and a server mod declares one. -->
                 <ui:NavigationViewItem
                     Content="{loc:Str Nav_WebPages}"
                     Icon="{ui:SymbolIcon Globe24}"

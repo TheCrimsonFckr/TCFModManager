@@ -11028,7 +11028,7 @@ I dettagli sono nel log:
     <value>7 giorni</value>
   </data>
   <data name="Nav_WebPages" xml:space="preserve">
-    <value>Pagine web</value>
+    <value>Pagine dell'interfaccia web</value>
   </data>
   <data name="WebPages_SptPanel" xml:space="preserve">
     <value>Pannello web di SPT</value>
@@ -11040,7 +11040,7 @@ I dettagli sono nel log:
     <value>Le pagine che le tue mod del server offrono nel browser. Si aprono all'indirizzo del server di questo PC e funzionano qui finché il server di questo PC è in esecuzione.</value>
   </data>
   <data name="WebPages_Empty" xml:space="preserve">
-    <value>Nessuna mod del server di questa installazione ha una pagina web.</value>
+    <value>Nessuna mod del server di questa installazione ha un'interfaccia web.</value>
   </data>
   <data name="WebPages_ServerNotRunning" xml:space="preserve">
     <value>Il server non è in esecuzione, quindi queste pagine non si possono aprire.</value>
@@ -11055,22 +11055,22 @@ I dettagli sono nel log:
     <value>Copia indirizzo</value>
   </data>
   <data name="Options_WebPagesHeader" xml:space="preserve">
-    <value>Pagina Pagine web</value>
+    <value>Pagine dell'interfaccia web</value>
   </data>
   <data name="Options_WebPagesHint" xml:space="preserve">
-    <value>Le pagine web delle tue mod del server, finché il server è in esecuzione.</value>
+    <value>Le interfacce web delle tue mod del server, finché il server è in esecuzione.</value>
   </data>
   <data name="Options_WebPagesToolTip" xml:space="preserve">
-    <value>Aggiunge una pagina con l'elenco delle pagine web delle tue mod del server, finché il server di questo PC è in esecuzione.</value>
+    <value>Aggiunge una pagina con l'elenco delle interfacce web delle tue mod del server, finché il server di questo PC è in esecuzione.</value>
   </data>
   <data name="Options_WebPagesDescription" xml:space="preserve">
-    <value>Alcune mod del server hanno una pagina da aprire nel browser - impostazioni, una mappa dal vivo, un tracker delle missioni. Con questa opzione, nella barra laterale compare la pagina Pagine web finché il server di questo PC è in esecuzione e almeno una mod del server installata ne ha una. Attiva per impostazione predefinita.</value>
+    <value>Alcune mod del server hanno un'interfaccia web da aprire nel browser - impostazioni, una mappa dal vivo, un tracker delle missioni. Con questa opzione, Pagine dell'interfaccia web compaiono nella barra laterale finché il server di questo PC è in esecuzione e almeno una mod del server installata ne ha una. Attiva per impostazione predefinita.</value>
   </data>
   <data name="Help_WebPages_Open_Title" xml:space="preserve">
-    <value>Aprire la pagina web di una mod del server</value>
+    <value>Aprire l'interfaccia web di una mod del server</value>
   </data>
   <data name="Help_WebPages_Open_Step1" xml:space="preserve">
-    <value>Avvia il server. {0} compare nella barra laterale quando una mod del server ha una pagina web.</value>
+    <value>Avvia il server. {0} compaiono nella barra laterale quando una mod del server ha un'interfaccia web.</value>
   </data>
   <data name="Help_WebPages_Open_Step2" xml:space="preserve">
     <value>Premi {0} per aprire una pagina nel browser, oppure {1} per copiarne l'indirizzo.</value>
@@ -11079,22 +11079,22 @@ I dettagli sono nel log:
     <value>La prima volta il browser avvisa del certificato del server - SPT ne crea uno proprio. Le pagine si aprono all'indirizzo di questo PC, che per impostazione predefinita non richiede l'accesso web di SPT.</value>
   </data>
   <data name="Help_WebPages_Open_Keywords" xml:space="preserve">
-    <value>pagina web, browser, interfaccia web, pagina di configurazione, mappa dal vivo, indirizzo, url</value>
+    <value>interfaccia web, pagina web, browser, pagina di configurazione, mappa dal vivo, indirizzo, url</value>
   </data>
   <data name="Help_WebPages_Hide_Title" xml:space="preserve">
-    <value>Nascondere la pagina Pagine web</value>
+    <value>Nascondere Pagine dell'interfaccia web</value>
   </data>
   <data name="Help_WebPages_Hide_Step1" xml:space="preserve">
     <value>In {0}, sotto {1}, disattiva {2}.</value>
   </data>
   <data name="Help_WebPages_Hide_Keywords" xml:space="preserve">
-    <value>pagine web, nascondere, disattivare, barra laterale</value>
+    <value>pagine dell'interfaccia web, pagine web, nascondere, disattivare, barra laterale</value>
   </data>
   <data name="Tour_WebPages_Rows_Title" xml:space="preserve">
-    <value>Le pagine delle tue mod del server</value>
+    <value>Le interfacce web delle tue mod del server</value>
   </data>
   <data name="Tour_WebPages_Rows_Body" xml:space="preserve">
-    <value>Qui compare ogni mod del server che offre una pagina web. Apri la mostra nel browser, Copia indirizzo mette il link negli appunti.</value>
+    <value>Qui compare ogni mod del server con un'interfaccia web. Apri la mostra nel browser, Copia indirizzo mette il link negli appunti.</value>
   </data>
   <data name="Tour_WebPages_Intro_Title" xml:space="preserve">
     <value>Solo su questo PC</value>
@@ -11106,6 +11106,6 @@ I dettagli sono nel log:
     <value>Hai installato qualcosa di nuovo?</value>
   </data>
   <data name="Tour_WebPages_Rescan_Body" xml:space="preserve">
-    <value>Ripeti scansione rilegge le tue mod del server. Una mod installata con il server in esecuzione offre la sua pagina dopo il riavvio del server.</value>
+    <value>Ripeti scansione rilegge le tue mod del server. Una mod installata con il server in esecuzione offre la sua interfaccia web dopo il riavvio del server.</value>
   </data>
 </root>
