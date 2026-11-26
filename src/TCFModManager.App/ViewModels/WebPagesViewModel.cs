@@ -62,7 +62,7 @@ public sealed partial class WebPagesViewModel : LocalizedViewModel
     private void OnPlayChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(PlayViewModel.IsServerRunning))
-            IsServerRunning = AppServices.Play.IsServerRunning;
+            IsServerRunning = AppServices.Play.IsServerRunning && !AppServices.BrokenModFinder.IsRunning;
     }
 
     partial void OnIsServerRunningChanged(bool value)

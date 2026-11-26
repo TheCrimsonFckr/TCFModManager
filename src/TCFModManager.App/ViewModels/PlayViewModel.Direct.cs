@@ -138,7 +138,7 @@ public partial class PlayViewModel
         ? LocalizationService.Text(IsRemotePlay ? Strings.Play_RemoteWipeArmedFormat : Strings.Play_WipeArmedFormat, p.Title)
         : null;
 
-    public bool CanPlay => IsDirectLaunchOn && !IsPlaying && SelectedProfile is not null && !IsGameRunning && Server?.Exists == true;
+    public bool CanPlay => IsDirectLaunchOn && !IsPlaying && SelectedProfile is not null && !IsGameRunning && Server?.Exists == true && !IsSearching;
 
     private CancellationTokenSource? _playCts;
     private bool _readingProfile;

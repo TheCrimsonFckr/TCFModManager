@@ -31,7 +31,7 @@ public partial class PlayViewModel
         : Strings.QuickPlay_ServerAndLauncher;
 
     public bool CanQuickPlay =>
-        Server?.Exists == true && !IsPlaying && !IsWaitingForServer && !IsGameRunning
+        Server?.Exists == true && !IsPlaying && !IsWaitingForServer && !IsGameRunning && !IsSearching
         && (QuickPlaysDirect || Client?.CanLaunch == true);
 
     // What a quick play is doing, for a button away from the Play card. Null when it is not running.

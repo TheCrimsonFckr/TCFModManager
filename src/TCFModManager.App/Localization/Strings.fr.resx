@@ -11147,4 +11147,201 @@ Les détails sont dans le journal :
   <data name="Options_SidebarBackForwardHint" xml:space="preserve">
     <value>Flèches en haut de la barre latérale pour revenir sur les pages visitées.</value>
   </data>
+  <data name="Search_Title" xml:space="preserve">
+    <value>Trouver le mod défectueux</value>
+  </data>
+  <data name="Search_Description" xml:space="preserve">
+    <value>Démarre le serveur SPT plusieurs fois, chaque fois avec certains mods serveur désactivés, pour trouver celui qui l'empêche de démarrer ou remplit son journal d'erreurs. Tous les mods sont réactivés ensuite. Seul le serveur est testé, pas le jeu.</value>
+  </data>
+  <data name="Search_Start" xml:space="preserve">
+    <value>Lancer la recherche</value>
+  </data>
+  <data name="Search_Stop" xml:space="preserve">
+    <value>Arrêter</value>
+  </data>
+  <data name="Search_Stopping" xml:space="preserve">
+    <value>Arrêt…</value>
+  </data>
+  <data name="Search_ConfirmFormat" xml:space="preserve">
+    <value>Mods serveur activés : {0}. Le serveur SPT sera démarré environ {1} fois, sans fenêtre, chaque fois avec certains d'entre eux désactivés, et son journal sera lu. Cela peut prendre plusieurs minutes.
+
+Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. Ne pas démarrer SPT ni modifier les mods avant la fin.</value>
+  </data>
+  <data name="Search_NoServerMods" xml:space="preserve">
+    <value>Aucun mod serveur n'est activé, il n'y a donc rien à chercher.</value>
+  </data>
+  <data name="Search_WaitForDownloads" xml:space="preserve">
+    <value>Attendre d'abord la fin des téléchargements.</value>
+  </data>
+  <data name="Search_BackupFailed" xml:space="preserve">
+    <value>Une copie des profils n'a pas pu être faite, la recherche n'a donc pas été lancée. Le journal de l'app indique pourquoi.</value>
+  </data>
+  <data name="Search_Preparing" xml:space="preserve">
+    <value>Préparation…</value>
+  </data>
+  <data name="Search_ProgressFormat" xml:space="preserve">
+    <value>Démarrage {0} sur environ {1} : {2} mods serveur activés sur {3}.</value>
+  </data>
+  <data name="Search_PuttingBack" xml:space="preserve">
+    <value>Réactivation de tous les mods…</value>
+  </data>
+  <data name="Search_Stopped" xml:space="preserve">
+    <value>Recherche arrêtée. Tous les mods sont réactivés.</value>
+  </data>
+  <data name="Search_AllBack" xml:space="preserve">
+    <value>Tous les mods sont réactivés, comme avant.</value>
+  </data>
+  <data name="Search_FailedFormat" xml:space="preserve">
+    <value>La recherche n'a pas pu se terminer : {0}</value>
+  </data>
+  <data name="Search_NothingWrongTitle" xml:space="preserve">
+    <value>Rien d'anormal sur le serveur</value>
+  </data>
+  <data name="Search_NothingWrongBody" xml:space="preserve">
+    <value>Le serveur démarre et ne journalise aucune erreur avec tous les mods activés. Si c'est le jeu qui échoue, cette recherche ne peut pas le voir : elle ne teste que le serveur.</value>
+  </data>
+  <data name="Search_NotTheModsTitle" xml:space="preserve">
+    <value>Ce n'est pas un des mods serveur</value>
+  </data>
+  <data name="Search_NotTheModsDownBody" xml:space="preserve">
+    <value>Le serveur ne démarre pas, même avec tous les mods serveur désactivés.</value>
+  </data>
+  <data name="Search_NotTheModsErrorsBody" xml:space="preserve">
+    <value>Le serveur journalise les mêmes erreurs avec tous les mods serveur désactivés.</value>
+  </data>
+  <data name="Search_FoundTitleFormat" xml:space="preserve">
+    <value>Trouvé : {0}</value>
+  </data>
+  <data name="Search_FoundPairTitleFormat" xml:space="preserve">
+    <value>Trouvé : {0} et {1}</value>
+  </data>
+  <data name="Search_FoundDownFormat" xml:space="preserve">
+    <value>{0} est le mod qui empêche le serveur SPT de démarrer. Activé, le serveur s'arrête pendant son démarrage. Désactivé, le serveur démarre.</value>
+  </data>
+  <data name="Search_FoundErrorsFormat" xml:space="preserve">
+    <value>{0} est le mod à l'origine de ces erreurs. Activé, le serveur les journalise. Désactivé, non.</value>
+  </data>
+  <data name="Search_FoundPairDownFormat" xml:space="preserve">
+    <value>{0} et {1} ne fonctionnent pas ensemble. Chacun fonctionne sans l'autre, mais avec les deux activés le serveur SPT ne démarre pas.</value>
+  </data>
+  <data name="Search_FoundPairErrorsFormat" xml:space="preserve">
+    <value>{0} et {1} ne fonctionnent pas ensemble. Chacun fonctionne sans l'autre, mais avec les deux activés le serveur journalise ces erreurs.</value>
+  </data>
+  <data name="Search_WhatToDo" xml:space="preserve">
+    <value>À faire : le désactiver, le mettre à jour ou le supprimer dans « Installés », puis redémarrer le serveur.</value>
+  </data>
+  <data name="Search_WhatToDoPair" xml:space="preserve">
+    <value>À faire : désactiver l'un des deux dans « Installés », ou chercher une mise à jour pour l'un ou l'autre, puis redémarrer le serveur.</value>
+  </data>
+  <data name="Search_SummaryFormat" xml:space="preserve">
+    <value>{0} mods serveur examinés en {1} démarrages du serveur, en {2}.</value>
+  </data>
+  <data name="Search_DurationMinutesFormat" xml:space="preserve">
+    <value>{0} min {1} s</value>
+  </data>
+  <data name="Search_DurationSecondsFormat" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Search_ProfilesPutBack" xml:space="preserve">
+    <value>Les démarrages ont modifié les profils, ils ont donc été remis comme avant.</value>
+  </data>
+  <data name="Search_ShowModFormat" xml:space="preserve">
+    <value>Afficher {0}</value>
+  </data>
+  <data name="Search_TurnOffFormat" xml:space="preserve">
+    <value>Désactiver {0}</value>
+  </data>
+  <data name="Search_TurnedOffFormat" xml:space="preserve">
+    <value>Désactivé : {0}. Démarrer le serveur pour vérifier qu'il se lance.</value>
+  </data>
+  <data name="Search_ElapsedFormat" xml:space="preserve">
+    <value>Temps écoulé : {0}.</value>
+  </data>
+  <data name="Search_LeftMinutesFormat" xml:space="preserve">
+    <value>Environ {0} min restantes.</value>
+  </data>
+  <data name="Search_LeftUnderMinute" xml:space="preserve">
+    <value>Moins d'une minute restante.</value>
+  </data>
+  <data name="Search_StoppedNarrowedFormat" xml:space="preserve">
+    <value>Avant l'arrêt, la recherche s'était réduite à {0} mods serveur sur {1} : {2}.</value>
+  </data>
+  <data name="Search_StoppedNarrowedCountFormat" xml:space="preserve">
+    <value>Avant l'arrêt, la recherche s'était réduite à {0} mods serveur sur {1}.</value>
+  </data>
+  <data name="Search_RecentFirstFormat" xml:space="preserve">
+    <value>Les mods serveur modifiés depuis le dernier démarrage du serveur ont été essayés en premier : {0}.</value>
+  </data>
+  <data name="Search_Dismiss" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="Search_InterruptedFormat" xml:space="preserve">
+    <value>Une recherche a été interrompue. Mods serveur encore désactivés : {0}.</value>
+  </data>
+  <data name="Search_TurnBackOn" xml:space="preserve">
+    <value>Les réactiver</value>
+  </data>
+  <data name="Search_PutBackDoneFormat" xml:space="preserve">
+    <value>Une recherche a été interrompue. Les mods serveur qu'elle avait désactivés sont réactivés ({0}).</value>
+  </data>
+  <data name="Search_StopServerFirst" xml:space="preserve">
+    <value>Le serveur SPT est en cours d'exécution, et les mods ne peuvent être réactivés qu'après son arrêt.</value>
+  </data>
+  <data name="Search_StopServerAndTurnOn" xml:space="preserve">
+    <value>Arrêter le serveur et les réactiver</value>
+  </data>
+  <data name="Search_ProblemAlreadyRunning" xml:space="preserve">
+    <value>Le serveur SPT est déjà en cours d'exécution.</value>
+  </data>
+  <data name="Search_ProblemPortTaken" xml:space="preserve">
+    <value>Autre chose utilise le port du serveur.</value>
+  </data>
+  <data name="Search_ProblemCouldNotStop" xml:space="preserve">
+    <value>Le serveur SPT n'a pas pu être arrêté.</value>
+  </data>
+  <data name="Search_ProblemCouldNotStartFormat" xml:space="preserve">
+    <value>Le serveur SPT n'a pas pu être démarré ({0}).</value>
+  </data>
+  <data name="Search_MoveFailedFormat" xml:space="preserve">
+    <value>{0} n'a pas pu être déplacé : {1}.</value>
+  </data>
+  <data name="Search_InterruptedWhere" xml:space="preserve">
+    <value>« Diagnostiquer les journaux » les réactive.</value>
+  </data>
+  <data name="Search_CloseAskLead" xml:space="preserve">
+    <value>« Trouver le mod défectueux » est encore en cours. L'arrêter et fermer ? La recherche s'arrête après le démarrage du serveur en cours et réactive d'abord chaque mod.</value>
+  </data>
+  <data name="Search_CloseAskStop" xml:space="preserve">
+    <value>Arrêter et fermer</value>
+  </data>
+  <data name="Search_PlayLocked" xml:space="preserve">
+    <value>« Trouver le mod défectueux » est en cours dans « Diagnostiquer les journaux ». Attendez la fin, ou arrêtez-la là-bas.</value>
+  </data>
+  <data name="Profiles_ReasonSearch" xml:space="preserve">
+    <value>Avant de chercher le mod défectueux</value>
+  </data>
+  <data name="Help_Diagnose_BrokenMod_Title" xml:space="preserve">
+    <value>Trouver le mod serveur qui casse le serveur</value>
+  </data>
+  <data name="Help_Diagnose_BrokenMod_Step1" xml:space="preserve">
+    <value>Fermez SPT, puis dans {0} appuyez sur {1}.</value>
+  </data>
+  <data name="Help_Diagnose_BrokenMod_Step2" xml:space="preserve">
+    <value>L'application démarre le serveur plusieurs fois sans fenêtre, à chaque fois avec certains mods serveur désactivés, jusqu'à ce qu'il n'en reste qu'un. Chaque mod est réactivé à la fin.</value>
+  </data>
+  <data name="Help_Diagnose_BrokenMod_Step3" xml:space="preserve">
+    <value>Quand elle nomme un mod, appuyez sur {0}, puis sur {1} pour vérifier que le serveur démarre.</value>
+  </data>
+  <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
+    <value>Seul le serveur est testé, pas le jeu, et vos profils sont copiés d'abord. La recherche est aussi proposée quand le serveur s'arrête avant d'être prêt.</value>
+  </data>
+  <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
+    <value>mod défectueux, serveur ne démarre pas, plantage serveur, quel mod, trouver mod, erreurs</value>
+  </data>
+  <data name="Tour_Diagnose_Search_Title" xml:space="preserve">
+    <value>Trouver le mod défectueux</value>
+  </data>
+  <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
+    <value>Quand le serveur ne démarre pas ou affiche des erreurs, ceci désactive et réactive les mods serveur par moitiés pour trouver le responsable, puis les réactive tous.</value>
+  </data>
 </root>

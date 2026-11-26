@@ -83,6 +83,12 @@ public static class CrashWatcher
         using (watched)
         {
             var process = watched.Process;
+            if (process.IsServer && AppServices.BrokenModFinder.IsRunning)
+            {
+                AppLog.Debug("Crash", $"server pid {process.Id} exited with {CrashSigns.Hex(exitCode)} during Find the broken mod - not judged");
+                return;
+            }
+
             var byApp = SptLaunchService.WasStoppedByApp(process.Id, process.StartedUtc);
 
             WatchedProcessKind kind;

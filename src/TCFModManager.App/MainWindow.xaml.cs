@@ -167,6 +167,9 @@ public partial class MainWindow : FluentWindow
             // Raises the crash bar when the server, the game or the headless crashes (OPEN-54 N30).
             Services.CrashWatcher.Start();
 
+            // Puts back the mods of a Find the broken mod search the last run didn't finish (OPEN-54 N27).
+            _ = AppServices.BrokenModFinder.RecoverAsync();
+
             // A server already up as the app opens - left running last time, perhaps with no window.
             _ = SayServerAlreadyRunningAsync();
         };
@@ -191,7 +194,7 @@ public partial class MainWindow : FluentWindow
         Closing += (_, e) =>
         {
             if (e.Cancel || AppTray.IsQuitting) return;
-            if (!UnsavedConfigEdits.AllowExit() || !ServerExitCheck.AllowExit()) e.Cancel = true;
+            if (!AppServices.BrokenModFinder.MayClose() || !UnsavedConfigEdits.AllowExit() || !ServerExitCheck.AllowExit()) e.Cancel = true;
         };
 
         IsVisibleChanged += (_, _) =>

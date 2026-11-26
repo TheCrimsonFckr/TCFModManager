@@ -236,6 +236,7 @@ public partial class PlayViewModel : LocalizedViewModel
         // The folder is set on the Options page, and this page has to notice when it changes
         // rather than showing what it found the first time it was opened.
         AppServices.SptEnvironment.PropertyChanged += OnEnvironmentChanged;
+        WatchSearch();
 
         Refresh();
     }
@@ -261,7 +262,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
     public string HeadlessPath => Headless?.ExePath ?? "";
 
-    public bool CanStartServer => Server?.CanLaunch == true;
+    public bool CanStartServer => Server?.CanLaunch == true && !IsSearching;
 
     public bool CanStartClient => Client?.CanLaunch == true;
 
@@ -446,6 +447,9 @@ public partial class PlayViewModel : LocalizedViewModel
 
     private async Task StartServerAndWaitAsync(AppSettings settings, bool openLauncher)
     {
+        OfferBrokenModSearch = false;
+        if (RefusedWhileSearching()) return;
+
         var ports = SptServerReadiness.PortsFor(Server?.ExePath);
         _portsBeforeStart = ports.Where(p => !SptServerReadiness.IsListening(new HashSet<int> { p })).ToHashSet();
 
@@ -517,6 +521,7 @@ public partial class PlayViewModel : LocalizedViewModel
 
             Refresh();
             var waitedOn = string.Join(", ", ports.Order());
+            if (up) new ServerUpLog().Note(installPath!, DateTimeOffset.Now);
 
             var headlessFailed = false;
             var headlessStarted = false;
@@ -547,6 +552,7 @@ public partial class PlayViewModel : LocalizedViewModel
                 HasError = true;
                 Message = openLauncher ? Strings.Play_ServerStoppedStarting : Strings.Play_ServerStoppedStartingOnly;
                 ShowServerLog = true;
+                OfferBrokenModSearch = true;
             }
             else if (openLauncher && Client?.IsRunning != true)
             {
@@ -579,6 +585,8 @@ public partial class PlayViewModel : LocalizedViewModel
 
     private void Start(SptLaunchTarget target, bool hidden = false)
     {
+        if (RefusedWhileSearching()) return;
+
         var installPath = AppServices.SptEnvironment.InstallPath;
         var spares = target == SptLaunchTarget.Client
             && GameCloser.SparesWindowless(new SettingsService().Load(), installPath);

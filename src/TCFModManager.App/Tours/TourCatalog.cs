@@ -67,6 +67,7 @@ internal static class TourCatalog
 
         new("diagnose", typeof(DiagnosePage),
         [
+            new("diagnose.search", () => Strings.Tour_Diagnose_Search_Title, () => Strings.Tour_Diagnose_Search_Body),
             new("diagnose.findings", () => Strings.Tour_Diagnose_Findings_Title, () => Strings.Tour_Diagnose_Findings_Body),
             new("diagnose.copy", () => Strings.Tour_Diagnose_Copy_Title, () => Strings.Tour_Diagnose_Copy_Body),
             new("diagnose.refresh", () => Strings.Tour_Diagnose_Refresh_Title, () => Strings.Tour_Diagnose_Refresh_Body),

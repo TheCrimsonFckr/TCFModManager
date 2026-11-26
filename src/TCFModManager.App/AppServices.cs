@@ -121,6 +121,9 @@ internal static class AppServices
     // The crash bar at the top of the window (OPEN-54 N30) - see CrashWatcher.
     public static CrashBarViewModel CrashBar { get; } = new();
 
+    // Find the broken mod (OPEN-54 N27) - see BrokenModFinder.
+    public static BrokenModFinder BrokenModFinder { get; } = new();
+
     // Back and Forward at the top of the sidebar (OPEN-56 N18) - see AppNavigation.
     public static NavigationHistoryViewModel History { get; } = new();
 

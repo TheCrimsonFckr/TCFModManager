@@ -64,6 +64,156 @@
             FocusVisualStyle="{x:Null}"
             VerticalScrollBarVisibility="Auto">
             <StackPanel>
+                <!-- OPEN-54 N27: Find the broken mod - see BrokenModFinder. -->
+                <ui:Card Margin="0,0,0,12" Padding="16,12" behaviors:TourTarget.Key="diagnose.search" DataContext="{Binding Search}">
+                    <StackPanel>
+                        <DockPanel>
+                            <ui:SymbolIcon Margin="0,0,10,0" VerticalAlignment="Center" FontSize="18" Symbol="Search24" />
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:Button
+                                    Appearance="Primary"
+                                    Content="{loc:Str Search_Start}"
+                                    Icon="{ui:SymbolIcon Play24}"
+                                    Command="{Binding StartCommand}"
+                                    Visibility="{Binding CanStart, Converter={StaticResource BoolToVisibility}}" />
+                                <ui:Button
+                                    Content="{loc:Str Search_Stop}"
+                                    Icon="{ui:SymbolIcon Dismiss24}"
+                                    Command="{Binding StopCommand}"
+                                    Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}" />
+                            </StackPanel>
+                            <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" TextWrapping="Wrap" Text="{loc:Str Search_Title}" />
+                        </DockPanel>
+
+                        <TextBlock
+                            Margin="28,4,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{loc:Str Search_Description}" />
+
+                                                <StackPanel Margin="28,10,0,0" Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}">
+                            <ProgressBar Height="4" Minimum="0" Maximum="100" Value="{Binding Progress}" />
+                            <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="{Binding ProgressText}" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Margin="28,8,0,0"
+                            TextWrapping="Wrap"
+                            Text="{Binding StatusMessage}"
+                            Visibility="{Binding StatusMessage, Converter={StaticResource NullToCollapsed}}" />
+
+                                                <StackPanel Margin="28,8,0,0" Visibility="{Binding IsInterrupted, Converter={StaticResource BoolToVisibility}}">
+                            <TextBlock
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                Text="{Binding InterruptedText}" />
+                            <ui:Button
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Left"
+                                Appearance="Primary"
+                                Content="{loc:Str Search_TurnBackOn}"
+                                Icon="{ui:SymbolIcon ArrowUndo24}"
+                                Command="{Binding TurnBackOnCommand}" />
+                        </StackPanel>
+
+                                                <Border
+                            Margin="28,12,0,0"
+                            Padding="14,12"
+                            CornerRadius="4"
+                            BorderThickness="3,0,0,0"
+                            BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                            Background="{DynamicResource ControlFillColorInputActiveBrush}"
+                            Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibility}}">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                Text="{Binding ResultTitle}" />
+                            <TextBlock
+                                Margin="0,6,0,0"
+                                FontSize="14"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding ResultBody}" />
+                            <TextBlock
+                                Margin="0,6,0,0"
+                                FontSize="14"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                Text="{Binding ResultNext}"
+                                Visibility="{Binding ResultNext, Converter={StaticResource NullToCollapsed}}" />
+                            <Border
+                                Margin="0,8,0,0"
+                                Padding="8,6"
+                                CornerRadius="3"
+                                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                Visibility="{Binding ResultLines, Converter={StaticResource NullToCollapsed}}">
+                                <TextBlock
+                                    FontFamily="Consolas"
+                                    FontSize="11"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding ResultLines}" />
+                            </Border>
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                FontSize="12"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                Text="{Binding ResultNote}" />
+                            <StackPanel Margin="0,8,0,0" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock
+                                    FontSize="14"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                    Text="{Binding ResultDone}" />
+                                <ui:Button
+                                    Margin="0,6,0,0"
+                                    Appearance="Primary"
+                                    Content="{loc:Str Play_StartServer}"
+                                    Icon="{ui:SymbolIcon Play24}"
+                                    Command="{Binding StartServerCommand}" />
+                            </StackPanel>
+                            <WrapPanel Margin="0,8,0,0">
+                                <ItemsControl Focusable="False" ItemsSource="{Binding Found}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:Button
+                                                    Margin="0,0,8,4"
+                                                    Appearance="Primary"
+                                                    Content="{Binding TurnOffText}"
+                                                    Icon="{ui:SymbolIcon Power24}"
+                                                    Visibility="{Binding CanTurnOff, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="{Binding DataContext.TurnOffModCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:Card}}}"
+                                                    CommandParameter="{Binding}" />
+                                                <ui:Button
+                                                    Margin="0,0,8,4"
+                                                    Content="{Binding ShowText}"
+                                                    Icon="{ui:SymbolIcon Apps24}"
+                                                    Command="{Binding DataContext.ShowModCommand, RelativeSource={RelativeSource AncestorType={x:Type ui:Card}}}"
+                                                    CommandParameter="{Binding}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <ui:Button
+                                    Appearance="Transparent"
+                                    Content="{loc:Str Search_Dismiss}"
+                                    Command="{Binding DismissCommand}" />
+                            </WrapPanel>
+                        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ui:Card>
+
                 <ItemsControl Focusable="False" ItemsSource="{Binding Findings}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -136,6 +286,14 @@
                                             Visibility="{Binding HasMod, Converter={StaticResource BoolToVisibility}}"
                                             Command="{Binding DataContext.OpenModFolderCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                                             CommandParameter="{Binding}" />
+                                        <ui:Button
+                                            Margin="0,0,8,0"
+                                            Appearance="Primary"
+                                            Content="{loc:Str Search_Title}"
+                                            Icon="{ui:SymbolIcon Search24}"
+                                            ToolTip="{loc:Str Search_Description}"
+                                            Visibility="{Binding OfferSearch, Converter={StaticResource BoolToVisibility}}"
+                                            Command="{Binding DataContext.FindBrokenModCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}" />
                                         <ui:Button
                                             Margin="0,0,8,0"
                                             Content="{loc:Str Diagnose_GoToPlay}"

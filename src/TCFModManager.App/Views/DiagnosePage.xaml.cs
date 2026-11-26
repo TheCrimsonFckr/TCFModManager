@@ -18,6 +18,7 @@ public partial class DiagnosePage : Page
 
         // The wheel scrolls the findings from anywhere on the page - see DependenciesPage.
         AddHandler(PreviewMouseWheelEvent, new MouseWheelEventHandler(Page_PreviewMouseWheel), true);
+        AppServices.BrokenModFinder.Ended += async (_, _) => await ViewModel.RefreshCommand.ExecuteAsync(null);
     }
 
     private async void DiagnosePage_Loaded(object sender, RoutedEventArgs e) =>

@@ -582,6 +582,14 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Diagnose_ProfileFix_Note)
                 .WithKeywords(() => Strings.Help_Diagnose_ProfileFix_Keywords),
 
+            // OPEN-54 N27.
+            Topic("diagnose.brokenmod", () => Strings.Help_Diagnose_BrokenMod_Title,
+                Step(() => Strings.Help_Diagnose_BrokenMod_Step1, () => Strings.Nav_Diagnose, () => Strings.Search_Start),
+                Step(() => Strings.Help_Diagnose_BrokenMod_Step2),
+                Step(() => Strings.Help_Diagnose_BrokenMod_Step3, () => Strings.Search_TurnOffFormat.Replace("{0}", "").Trim(), () => Strings.Play_StartServer))
+                .WithNote(() => Strings.Help_Diagnose_BrokenMod_Note)
+                .WithKeywords(() => Strings.Help_Diagnose_BrokenMod_Keywords),
+
             // OPEN-60 C6.
             Topic("diagnose.cleanprofiles", () => Strings.Help_Diagnose_CleanProfiles_Title,
                 Step(() => Strings.Help_Diagnose_CleanProfiles_Step1, () => Strings.Nav_Diagnose, () => Strings.Diagnose_CleanProfiles),

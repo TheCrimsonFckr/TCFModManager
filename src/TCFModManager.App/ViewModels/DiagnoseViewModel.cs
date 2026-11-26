@@ -76,6 +76,9 @@ public sealed class LogFindingRow
 
     public bool OfferProfileClean => IsAboutProfile || Finding.Kind == LogFindingKind.GameUnknownValue;
 
+    // OPEN-54 N27: Find the broken mod, offered on the server gave up card.
+    public bool OfferSearch => Finding.Kind == LogFindingKind.ServerStopped;
+
     private static string Arg(LogFinding f, int i) => i < f.Args.Count ? f.Args[i] : string.Empty;
 
     private static (string Title, string Body) Word(LogFinding f)
@@ -143,6 +146,9 @@ public sealed class LogFindingRow
 public sealed partial class DiagnoseViewModel : LocalizedViewModel
 {
     public ObservableCollection<LogFindingRow> Findings { get; } = [];
+
+    // OPEN-54 N27: the search card at the top of the page.
+    public Services.BrokenModFinder Search => AppServices.BrokenModFinder;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotBusy))]
@@ -252,6 +258,12 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
     {
         if (row is null) return;
         Start("notepad.exe", $"\"{row.Finding.Sample.File}\"");
+    }
+
+    [RelayCommand]
+    private void FindBrokenMod()
+    {
+        if (Search.StartCommand.CanExecute(null)) Search.StartCommand.Execute(null);
     }
 
     [RelayCommand]
