@@ -11148,7 +11148,7 @@ Die Details stehen im Log:
     <value>Pfeile oben in der Seitenleiste, um durch besuchte Seiten zurückzugehen.</value>
   </data>
   <data name="Search_Title" xml:space="preserve">
-    <value>Die kaputte Mod finden</value>
+    <value>Die verursachende Mod finden</value>
   </data>
   <data name="Search_Description" xml:space="preserve">
     <value>Startet den Server einige Male mit einigen Server-Mods aus, um die zu finden, die den Start verhindert oder das Log mit Fehlern füllt. Danach sind alle Mods wieder an. Testet nur den Server, nicht das Spiel.</value>
@@ -11309,19 +11309,19 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>„Logs diagnostizieren“ schaltet sie wieder ein.</value>
   </data>
   <data name="Search_CloseAskLead" xml:space="preserve">
-    <value>„Die kaputte Mod finden“ läuft noch. Stoppen und schließen? Die Suche endet nach dem laufenden Serverstart und schaltet vorher jede Mod wieder ein.</value>
+    <value>Die Suche nach der verursachenden Mod läuft noch. Stoppen und schließen? Die Suche endet nach dem laufenden Serverstart und schaltet vorher jede Mod wieder ein.</value>
   </data>
   <data name="Search_CloseAskStop" xml:space="preserve">
     <value>Stoppen und schließen</value>
   </data>
   <data name="Search_PlayLocked" xml:space="preserve">
-    <value>„Die kaputte Mod finden“ läuft unter „Logs diagnostizieren“. Warte, bis die Suche fertig ist, oder stoppe sie dort.</value>
+    <value>Die Suche nach der verursachenden Mod läuft unter „Logs diagnostizieren“. Warte, bis sie fertig ist, oder stoppe sie dort.</value>
   </data>
   <data name="Profiles_ReasonSearch" xml:space="preserve">
-    <value>Vor der Suche nach der kaputten Mod</value>
+    <value>Vor der Suche nach der verursachenden Mod</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Title" xml:space="preserve">
-    <value>Die Server-Mod finden, die den Server stört</value>
+    <value>Die Server-Mod hinter einem Serverproblem finden</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Step1" xml:space="preserve">
     <value>Schließe SPT und drücke dann unter {0} auf {1}.</value>
@@ -11336,10 +11336,10 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Getestet wird nur der Server, nicht das Spiel, und deine Profile werden vorher kopiert. Angeboten wird sie auch, wenn der Server stoppt, bevor er bereit ist.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
-    <value>kaputte Mod, Server startet nicht, Serverabsturz, welche Mod, Mod finden, Fehler</value>
+    <value>verursachende Mod, Problem-Mod, Server startet nicht, Serverabsturz, welche Mod, Mod finden, Fehler</value>
   </data>
   <data name="Tour_Diagnose_Search_Title" xml:space="preserve">
-    <value>Die kaputte Mod finden</value>
+    <value>Die verursachende Mod finden</value>
   </data>
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Startet der Server nicht oder meldet Fehler, schaltet dies Server-Mods hälftenweise aus und ein, um die Ursache zu finden, und schaltet danach alle wieder ein.</value>
@@ -11369,7 +11369,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Es gibt keine Logs zum Löschen.</value>
   </data>
   <data name="Diagnose_PurgeSearching" xml:space="preserve">
-    <value>Warte, bis „Die kaputte Mod finden“ fertig ist, oder stoppe es, bevor du die Logs löschst.</value>
+    <value>Warte, bis die Suche fertig ist, oder stoppe sie, bevor du die Logs löschst.</value>
   </data>
   <data name="Diagnose_Purging" xml:space="preserve">
     <value>Logs werden gelöscht...</value>

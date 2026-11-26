@@ -13666,16 +13666,16 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>OPEN-72: Options, Pages - under the Back and Forward switch.</comment>
   </data>
   <data name="Search_Title" xml:space="preserve">
-    <value>Find the broken mod</value>
+    <value>Find the mod causing it</value>
     <comment>Diagnose logs: the card's title, and the title of its dialogs.</comment>
   </data>
   <data name="Search_Description" xml:space="preserve">
     <value>Starts the server a few times with some server mods off, to find the one that stops it starting or fills its log with errors. Every mod is turned back on after. Tests the server only, not the game.</value>
-    <comment>Diagnose logs: what Find the broken mod does.</comment>
+    <comment>Diagnose logs: what Find the mod causing it does.</comment>
   </data>
   <data name="Search_Start" xml:space="preserve">
     <value>Start search</value>
-    <comment>Button: start a Find the broken mod search.</comment>
+    <comment>Button: start a Find the mod causing it search.</comment>
   </data>
   <data name="Search_Stop" xml:space="preserve">
     <value>Stop</value>
@@ -13880,7 +13880,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Where an interrupted search's mods are turned back on. {0} &gt; {1}: the menu path.</comment>
   </data>
   <data name="Search_CloseAskLead" xml:space="preserve">
-    <value>Find the broken mod is still running. Stop it and close? It stops after the current start of the server and turns every mod back on first.</value>
+    <value>The search for the mod causing it is still running. Stop it and close? It stops after the current start of the server and turns every mod back on first.</value>
     <comment>OPEN-54 N27: asked when the app is closed during a search.</comment>
   </data>
   <data name="Search_CloseAskStop" xml:space="preserve">
@@ -13888,15 +13888,15 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>OPEN-54 N27: button of that question.</comment>
   </data>
   <data name="Search_PlayLocked" xml:space="preserve">
-    <value>Find the broken mod is running on Diagnose logs. Wait for it to finish, or stop it there.</value>
+    <value>The search for the mod causing it is running on Diagnose logs. Wait for it to finish, or stop it there.</value>
     <comment>OPEN-54 N27: on Play when something is started during a search.</comment>
   </data>
   <data name="Profiles_ReasonSearch" xml:space="preserve">
-    <value>Before finding the broken mod</value>
-    <comment>OPEN-54 N27: why a profile copy was taken - before Find the broken mod.</comment>
+    <value>Before searching for the mod causing it</value>
+    <comment>OPEN-54 N27: why a profile copy was taken - before Find the mod causing it.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Title" xml:space="preserve">
-    <value>Find the server mod that breaks the server</value>
+    <value>Find the server mod causing a server problem</value>
     <comment>OPEN-54 N27: how-to title.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Step1" xml:space="preserve">
@@ -13916,16 +13916,16 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>OPEN-54 N27: note under the how-to.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
-    <value>broken mod, bisect, server won't start, server crash, which mod, find mod, errors</value>
+    <value>mod causing it, problem mod, bisect, server won't start, server crash, which mod, find mod, errors</value>
     <comment>Hidden search words for this how-to: other words people type when they mean it, comma separated. Never shown. Use the words speakers of your language would actually type - they needn't translate the English ones.</comment>
   </data>
   <data name="Tour_Diagnose_Search_Title" xml:space="preserve">
-    <value>Find the broken mod</value>
-    <comment>Feature tour, Diagnose logs: Find the broken mod: step title.</comment>
+    <value>Find the mod causing it</value>
+    <comment>Feature tour, Diagnose logs: Find the mod causing it: step title.</comment>
   </data>
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>When the server won't start or logs errors, this switches server mods off and on in halves to find the one behind it, then turns them all back on.</value>
-    <comment>Feature tour, Diagnose logs: Find the broken mod.</comment>
+    <comment>Feature tour, Diagnose logs: Find the mod causing it.</comment>
   </data>
   <data name="ModInstall_InUsePurgeLogsFormat" xml:space="preserve">
     <value>Close {0} before purging the logs - it's still writing to them.</value>
@@ -13960,7 +13960,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Status.</comment>
   </data>
   <data name="Diagnose_PurgeSearching" xml:space="preserve">
-    <value>Wait for Find the broken mod to finish, or stop it, before purging the logs.</value>
+    <value>Wait for the search to finish, or stop it, before purging the logs.</value>
     <comment>Status.</comment>
   </data>
   <data name="Diagnose_Purging" xml:space="preserve">

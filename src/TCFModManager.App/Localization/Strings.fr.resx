@@ -11148,7 +11148,7 @@ Les détails sont dans le journal :
     <value>Flèches en haut de la barre latérale pour revenir sur les pages visitées.</value>
   </data>
   <data name="Search_Title" xml:space="preserve">
-    <value>Trouver le mod défectueux</value>
+    <value>Trouver le mod en cause</value>
   </data>
   <data name="Search_Description" xml:space="preserve">
     <value>Démarre le serveur plusieurs fois avec certains mods serveur désactivés, pour trouver celui qui l'empêche de démarrer ou remplit son journal d'erreurs. Tous les mods sont réactivés ensuite. Teste uniquement le serveur, pas le jeu.</value>
@@ -11309,19 +11309,19 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>« Diagnostiquer les journaux » les réactive.</value>
   </data>
   <data name="Search_CloseAskLead" xml:space="preserve">
-    <value>« Trouver le mod défectueux » est encore en cours. L'arrêter et fermer ? La recherche s'arrête après le démarrage du serveur en cours et réactive d'abord chaque mod.</value>
+    <value>La recherche du mod en cause est encore en cours. L'arrêter et fermer ? La recherche s'arrête après le démarrage du serveur en cours et réactive d'abord chaque mod.</value>
   </data>
   <data name="Search_CloseAskStop" xml:space="preserve">
     <value>Arrêter et fermer</value>
   </data>
   <data name="Search_PlayLocked" xml:space="preserve">
-    <value>« Trouver le mod défectueux » est en cours dans « Diagnostiquer les journaux ». Attendez la fin, ou arrêtez-la là-bas.</value>
+    <value>La recherche du mod en cause est en cours dans « Diagnostiquer les journaux ». Attendez la fin, ou arrêtez-la là-bas.</value>
   </data>
   <data name="Profiles_ReasonSearch" xml:space="preserve">
-    <value>Avant de chercher le mod défectueux</value>
+    <value>Avant de chercher le mod en cause</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Title" xml:space="preserve">
-    <value>Trouver le mod serveur qui casse le serveur</value>
+    <value>Trouver le mod serveur à l'origine d'un problème du serveur</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Step1" xml:space="preserve">
     <value>Fermez SPT, puis dans {0} appuyez sur {1}.</value>
@@ -11336,10 +11336,10 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Seul le serveur est testé, pas le jeu, et vos profils sont copiés d'abord. La recherche est aussi proposée quand le serveur s'arrête avant d'être prêt.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
-    <value>mod défectueux, serveur ne démarre pas, plantage serveur, quel mod, trouver mod, erreurs</value>
+    <value>mod en cause, mod problématique, serveur ne démarre pas, plantage serveur, quel mod, trouver mod, erreurs</value>
   </data>
   <data name="Tour_Diagnose_Search_Title" xml:space="preserve">
-    <value>Trouver le mod défectueux</value>
+    <value>Trouver le mod en cause</value>
   </data>
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Quand le serveur ne démarre pas ou affiche des erreurs, ceci désactive et réactive les mods serveur par moitiés pour trouver le responsable, puis les réactive tous.</value>
@@ -11369,7 +11369,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Il n'y a aucun journal à purger.</value>
   </data>
   <data name="Diagnose_PurgeSearching" xml:space="preserve">
-    <value>Attendez la fin de « Trouver le mod défectueux », ou arrêtez-le, avant de purger les journaux.</value>
+    <value>Attendez la fin de la recherche, ou arrêtez-la, avant de purger les journaux.</value>
   </data>
   <data name="Diagnose_Purging" xml:space="preserve">
     <value>Purge des journaux...</value>

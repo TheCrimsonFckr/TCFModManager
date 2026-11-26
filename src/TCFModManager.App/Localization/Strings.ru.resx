@@ -11571,7 +11571,7 @@
     <value>Стрелки вверху боковой панели для перехода по открытым страницам.</value>
   </data>
   <data name="Search_Title" xml:space="preserve">
-    <value>Найти сломанный мод</value>
+    <value>Найти мод-виновник</value>
   </data>
   <data name="Search_Description" xml:space="preserve">
     <value>Несколько раз запускает сервер с частью серверных модов выключенной, чтобы найти мод, который не даёт ему запуститься или заполняет лог ошибками. Потом все моды снова включаются. Проверяется только сервер, не игра.</value>
@@ -11732,19 +11732,19 @@
     <value>«Диагностика журналов» включает их снова.</value>
   </data>
   <data name="Search_CloseAskLead" xml:space="preserve">
-    <value>«Найти сломанный мод» ещё работает. Остановить и закрыть? Поиск остановится после текущего запуска сервера и сначала снова включит все моды.</value>
+    <value>Поиск мода-виновника ещё идёт. Остановить и закрыть? Поиск остановится после текущего запуска сервера и сначала снова включит все моды.</value>
   </data>
   <data name="Search_CloseAskStop" xml:space="preserve">
     <value>Остановить и закрыть</value>
   </data>
   <data name="Search_PlayLocked" xml:space="preserve">
-    <value>«Найти сломанный мод» работает на странице «Диагностика журналов». Дождитесь окончания или остановите поиск там.</value>
+    <value>Поиск мода-виновника идёт на странице «Диагностика журналов». Дождитесь окончания или остановите поиск там.</value>
   </data>
   <data name="Profiles_ReasonSearch" xml:space="preserve">
-    <value>Перед поиском сломанного мода</value>
+    <value>Перед поиском мода-виновника</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Title" xml:space="preserve">
-    <value>Найти серверный мод, который ломает сервер</value>
+    <value>Найти серверный мод, из-за которого проблема с сервером</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Step1" xml:space="preserve">
     <value>Закройте SPT, затем в разделе {0} нажмите {1}.</value>
@@ -11759,10 +11759,10 @@
     <value>Проверяется только сервер, не игра, а профили сначала копируются. Поиск также предлагается, если сервер останавливается до готовности.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
-    <value>сломанный мод, сервер не запускается, вылет сервера, какой мод, найти мод, ошибки</value>
+    <value>мод-виновник, проблемный мод, сервер не запускается, вылет сервера, какой мод, найти мод, ошибки</value>
   </data>
   <data name="Tour_Diagnose_Search_Title" xml:space="preserve">
-    <value>Найти сломанный мод</value>
+    <value>Найти мод-виновник</value>
   </data>
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Если сервер не запускается или пишет ошибки, поиск выключает и включает серверные моды половинами, находит виновника и затем снова включает все.</value>
@@ -11792,7 +11792,7 @@
     <value>Нет логов для очистки.</value>
   </data>
   <data name="Diagnose_PurgeSearching" xml:space="preserve">
-    <value>Дождитесь окончания «Найти сломанный мод» или остановите его, прежде чем очищать логи.</value>
+    <value>Дождитесь окончания поиска или остановите его, прежде чем очищать логи.</value>
   </data>
   <data name="Diagnose_Purging" xml:space="preserve">
     <value>Очистка логов...</value>

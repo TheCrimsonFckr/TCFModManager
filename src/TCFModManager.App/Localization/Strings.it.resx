@@ -11148,7 +11148,7 @@ I dettagli sono nel log:
     <value>Frecce in cima alla barra laterale per tornare alle pagine visitate.</value>
   </data>
   <data name="Search_Title" xml:space="preserve">
-    <value>Trova il mod difettoso</value>
+    <value>Trova il mod responsabile</value>
   </data>
   <data name="Search_Description" xml:space="preserve">
     <value>Avvia il server alcune volte con alcuni mod server disattivati, per trovare quello che gli impedisce di avviarsi o riempie il log di errori. Alla fine tutti i mod vengono riattivati. Prova solo il server, non il gioco.</value>
@@ -11309,19 +11309,19 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>«Diagnostica log» li riattiva.</value>
   </data>
   <data name="Search_CloseAskLead" xml:space="preserve">
-    <value>«Trova il mod difettoso» è ancora in corso. Fermarla e chiudere? La ricerca si ferma dopo l'avvio del server in corso e prima riattiva ogni mod.</value>
+    <value>La ricerca del mod responsabile è ancora in corso. Fermarla e chiudere? La ricerca si ferma dopo l'avvio del server in corso e prima riattiva ogni mod.</value>
   </data>
   <data name="Search_CloseAskStop" xml:space="preserve">
     <value>Ferma e chiudi</value>
   </data>
   <data name="Search_PlayLocked" xml:space="preserve">
-    <value>«Trova il mod difettoso» è in corso in «Diagnostica log». Attendi che finisca, oppure fermala lì.</value>
+    <value>La ricerca del mod responsabile è in corso in «Diagnostica log». Attendi che finisca, oppure fermala lì.</value>
   </data>
   <data name="Profiles_ReasonSearch" xml:space="preserve">
-    <value>Prima di cercare il mod difettoso</value>
+    <value>Prima di cercare il mod responsabile</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Title" xml:space="preserve">
-    <value>Trovare il mod del server che rompe il server</value>
+    <value>Trovare il mod del server dietro un problema del server</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Step1" xml:space="preserve">
     <value>Chiudi SPT, poi in {0} premi {1}.</value>
@@ -11336,10 +11336,10 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Viene testato solo il server, non il gioco, e i tuoi profili vengono copiati prima. Viene proposta anche quando il server si ferma prima di essere pronto.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
-    <value>mod difettoso, server non parte, crash server, quale mod, trovare mod, errori</value>
+    <value>mod responsabile, mod problematico, server non parte, crash server, quale mod, trovare mod, errori</value>
   </data>
   <data name="Tour_Diagnose_Search_Title" xml:space="preserve">
-    <value>Trova il mod difettoso</value>
+    <value>Trova il mod responsabile</value>
   </data>
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Quando il server non parte o registra errori, questa funzione spegne e riaccende i mod del server a metà per trovare il colpevole, poi li riattiva tutti.</value>
@@ -11369,7 +11369,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Non ci sono log da eliminare.</value>
   </data>
   <data name="Diagnose_PurgeSearching" xml:space="preserve">
-    <value>Attendi che «Trova il mod difettoso» finisca, o fermalo, prima di eliminare i log.</value>
+    <value>Attendi che la ricerca finisca, o fermala, prima di eliminare i log.</value>
   </data>
   <data name="Diagnose_Purging" xml:space="preserve">
     <value>Eliminazione dei log...</value>
