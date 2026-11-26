@@ -98,6 +98,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private string? _elapsedText;
 
     [ObservableProperty]
+    private string? _leftText;
+
+    [ObservableProperty]
     private double _progress;
 
     [ObservableProperty]
@@ -283,6 +286,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
         _tick.Stop();
         ProgressText = Strings.Search_PuttingBack;
+        LeftText = null;
         Progress = 100;
 
         var back = await PutBackAsync(session, profiles == NoProfiles ? null : profiles, trimLogs: true);
@@ -294,6 +298,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         IsRunning = false;
         ProgressText = null;
         ElapsedText = null;
+        LeftText = null;
 
         if (problem is not null)
         {
@@ -339,11 +344,10 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         if (_now is not { } p || IsStopping || !_tick.IsEnabled) return;
 
         var left = BrokenModSearch.TimeLeft(_starts, p.ModsOn, p.About - p.Try + 1, _clock.Elapsed - _nowBegan);
-        ProgressText = Sentences(
-            T(Strings.Search_ProgressFormat, p.Try, p.About, p.ModsOn, p.Mods),
-            left is not { } time ? null
-                : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute
-                : T(Strings.Search_LeftMinutesFormat, (int)Math.Ceiling(time.TotalMinutes)));
+        ProgressText = T(Strings.Search_ProgressFormat, p.Try, p.About, p.ModsOn, p.Mods);
+        LeftText = left is not { } time ? null
+            : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute
+            : T(Strings.Search_LeftMinutesFormat, (int)Math.Ceiling(time.TotalMinutes));
     }
 
     private static string Duration(TimeSpan took) => took.TotalMinutes >= 1
@@ -361,6 +365,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
         IsStopping = true;
         ProgressText = Strings.Search_Stopping;
+        LeftText = null;
         _cancel?.Cancel();
     }
 

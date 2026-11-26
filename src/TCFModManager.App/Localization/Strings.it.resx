@@ -11258,10 +11258,10 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Trascorso: {0}</value>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">
-    <value>Circa {0} min rimanenti.</value>
+    <value>Circa {0} min rimanenti</value>
   </data>
   <data name="Search_LeftUnderMinute" xml:space="preserve">
-    <value>Meno di un minuto rimanente.</value>
+    <value>Meno di un minuto rimanente</value>
   </data>
   <data name="Search_StoppedNarrowedFormat" xml:space="preserve">
     <value>Prima di fermarsi, la ricerca si era ristretta a {0} mod server su {1}: {2}.</value>

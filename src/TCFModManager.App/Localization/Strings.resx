@@ -13812,11 +13812,11 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Progress line, after the start count. {0}: a duration, as Search_DurationMinutesFormat.</comment>
   </data>
   <data name="Search_LeftMinutesFormat" xml:space="preserve">
-    <value>About {0} min left.</value>
+    <value>About {0} min left</value>
     <comment>Progress line: a rough guess at the time left. {0}: minutes.</comment>
   </data>
   <data name="Search_LeftUnderMinute" xml:space="preserve">
-    <value>Less than a minute left.</value>
+    <value>Less than a minute left</value>
     <comment>Progress line: a rough guess at the time left.</comment>
   </data>
   <data name="Search_StoppedNarrowedFormat" xml:space="preserve">

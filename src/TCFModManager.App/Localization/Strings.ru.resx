@@ -11684,7 +11684,7 @@
     <value>Осталось около {0} мин.</value>
   </data>
   <data name="Search_LeftUnderMinute" xml:space="preserve">
-    <value>Осталось меньше минуты.</value>
+    <value>Осталось меньше минуты</value>
   </data>
   <data name="Search_StoppedNarrowedFormat" xml:space="preserve">
     <value>До остановки поиск сузился до {0} из {1} серверных модов: {2}.</value>

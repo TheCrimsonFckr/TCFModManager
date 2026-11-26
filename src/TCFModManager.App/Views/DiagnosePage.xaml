@@ -102,7 +102,8 @@
                                                 <StackPanel Margin="28,10,0,0" Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}">
                             <ProgressBar Height="4" Minimum="0" Maximum="100" Value="{Binding Progress}" />
                             <DockPanel Margin="0,6,0,0">
-                                <TextBlock Margin="12,0,0,0" DockPanel.Dock="Right" Text="{Binding ElapsedText}" />
+                                <TextBlock Margin="16,0,0,0" DockPanel.Dock="Right" Text="{Binding ElapsedText}" />
+                                <TextBlock Margin="16,0,0,0" DockPanel.Dock="Right" Text="{Binding LeftText}" Visibility="{Binding LeftText, Converter={StaticResource NullToCollapsed}}" />
                                 <TextBlock TextWrapping="Wrap" Text="{Binding ProgressText}" />
                             </DockPanel>
                         </StackPanel>
@@ -174,20 +175,30 @@
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{Binding ResultNote}" />
-                            <StackPanel Margin="0,8,0,0" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
-                                <TextBlock
-                                    FontSize="14"
-                                    TextWrapping="Wrap"
-                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                    Text="{Binding ResultDone}" />
+                            <DockPanel Margin="0,8,0,0" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
                                 <ui:Button
-                                    Margin="0,6,0,0"
+                                    Margin="12,0,0,0"
+                                    DockPanel.Dock="Right"
+                                    VerticalAlignment="Center"
                                     Appearance="Primary"
                                     Content="{loc:Str Play_StartServer}"
                                     Icon="{ui:SymbolIcon Play24}"
                                     Command="{Binding StartServerCommand}" />
-                            </StackPanel>
-                            <WrapPanel Margin="0,8,0,0">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                    Text="{Binding ResultDone}" />
+                            </DockPanel>
+                            <DockPanel Margin="0,8,0,0">
+                                <ui:Button
+                                    Margin="12,0,0,4"
+                                    DockPanel.Dock="Right"
+                                    VerticalAlignment="Top"
+                                    Appearance="Transparent"
+                                    Content="{loc:Str Search_Dismiss}"
+                                    Command="{Binding DismissCommand}" />
                                 <ItemsControl Focusable="False" ItemsSource="{Binding Found}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -215,11 +226,7 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <ui:Button
-                                    Appearance="Transparent"
-                                    Content="{loc:Str Search_Dismiss}"
-                                    Command="{Binding DismissCommand}" />
-                            </WrapPanel>
+                            </DockPanel>
                         </StackPanel>
                         </Border>
                     </StackPanel>
