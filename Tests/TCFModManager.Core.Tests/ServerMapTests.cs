@@ -939,7 +939,7 @@ public class ServerMapConfigFolderTests : IDisposable
         }
     }
 
-    private string Current() => Make("TCFModManager", "Data", "ServerMap");
+    private string Current() => Make("TCFModManager", "data", "ServerMap");
 
     private string Legacy() => Make("TCFModManager", "ServerMap", "config");
 
@@ -956,7 +956,7 @@ public class ServerMapConfigFolderTests : IDisposable
     public void PreferredIsUnderData()
     {
         Assert.Equal(
-            Path.Combine(_root, "TCFModManager", "Data", "ServerMap"),
+            Path.Combine(_root, "TCFModManager", "data", "ServerMap"),
             ServerMapConfigFolder.Preferred(_root));
     }
 
@@ -967,6 +967,17 @@ public class ServerMapConfigFolderTests : IDisposable
 
         Assert.True(ServerMapConfigFolder.TryFind(_root, out var found, appDirectory: Elsewhere()));
         Assert.Equal(expected, found);
+    }
+
+    // OPEN-74: an app from before v1.32.0 named it Data\, which a Linux file system tells apart.
+    [Fact]
+    public void FindsTheFolderAnOlderAppNamedData()
+    {
+        var expected = Make("TCFModManager", "Data", "ServerMap");
+
+        Assert.True(ServerMapConfigFolder.TryFind(_root, out var found, appDirectory: Elsewhere()));
+        Assert.Equal(expected, found);
+        Assert.Equal(expected, ServerMapConfigFolder.Preferred(_root));
     }
 
     //
@@ -1005,7 +1016,7 @@ public class ServerMapConfigFolderTests : IDisposable
 
         ServerMapConfigFolder.MigrateLegacyFolder(_root, appDirectory: Elsewhere());
 
-        var moved = Path.Combine(_root, "TCFModManager", "Data", "ServerMap");
+        var moved = Path.Combine(_root, "TCFModManager", "data", "ServerMap");
         Assert.Equal(Key, File.ReadAllText(Path.Combine(moved, "servermap-key.txt")));
         Assert.True(File.Exists(Path.Combine(moved, "published.tcfmodlist")));
 
@@ -1052,6 +1063,6 @@ public class ServerMapConfigFolderTests : IDisposable
     {
         ServerMapConfigFolder.MigrateLegacyFolder(_root, appDirectory: Elsewhere());
 
-        Assert.False(Directory.Exists(Path.Combine(_root, "TCFModManager", "Data", "ServerMap")));
+        Assert.False(Directory.Exists(Path.Combine(_root, "TCFModManager", "data", "ServerMap")));
     }
 }

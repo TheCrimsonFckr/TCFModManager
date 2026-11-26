@@ -17,7 +17,9 @@ namespace TCFModManager.Core.ServerMap;
 public static class ServerMapConfigFolder
 {
     //
-    // TCFModManager\Data\ServerMap\ - under Data\, with everything else the app keeps.
+    // TCFModManager\data\ServerMap\ - under data\, with everything else the app keeps. Each folder
+    // is matched without regard to case (OPEN-74): it was Data\ before v1.32.0, and a Linux file
+    // system tells the two apart.
     //
     // It used to be TCFModManager\ServerMap\config\, beside the payload, on the reasoning that a
     // payload folder is what an update replaces and the operator's list must not be collateral.
@@ -27,7 +29,7 @@ public static class ServerMapConfigFolder
     // which lays a new build over the old one specifically so Data\ and Staging\ survive, and by
     // anyone deploying by hand, who knows not to throw it away.
     //
-    private static readonly string[] Segments = ["TCFModManager", "Data", "ServerMap"];
+    private static readonly string[] Segments = ["TCFModManager", "data", "ServerMap"];
 
     // Where it lived before. Still read, so an install that has not been migrated yet keeps working
     // and the server does not mint a second key beside the one already handed out.
@@ -71,8 +73,35 @@ public static class ServerMapConfigFolder
     // Used by the migration below and by anything that has to WRITE: probing answers "where are the
     // files", which is not the same question once the answer is "nowhere yet".
     //
-    public static string Preferred(string parentOfTcfModManager) =>
-        Path.Combine([parentOfTcfModManager, .. Segments]);
+    public static string Preferred(string parentOfTcfModManager) => Resolve(parentOfTcfModManager, Segments);
+
+    // start\segments..., each folder as it is on disk: the exact name first, then one differing only
+    // in case, then the name itself when there is neither.
+    private static string Resolve(string start, string[] segments)
+    {
+        var path = start;
+        foreach (var segment in segments) path = OnDisk(path, segment);
+        return path;
+    }
+
+    private static string OnDisk(string parent, string name)
+    {
+        try
+        {
+            if (Directory.Exists(parent))
+            {
+                var names = Directory.EnumerateDirectories(parent).Select(Path.GetFileName).ToList();
+                var match = names.FirstOrDefault(n => string.Equals(n, name, StringComparison.Ordinal))
+                    ?? names.FirstOrDefault(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase));
+                if (match is not null) return Path.Combine(parent, match);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
+
+        return Path.Combine(parent, name);
+    }
 
     //
     // TEMPORARY, ADDED IN v1.12.0 - DELETE WHEN THE APP LEAVES BETA, along with LegacySegments and
@@ -154,7 +183,7 @@ public static class ServerMapConfigFolder
 
         while (current != null)
         {
-            var candidate = Path.Combine([current.FullName, .. segments]);
+            var candidate = Resolve(current.FullName, segments);
 
             if (Directory.Exists(candidate))
             {
