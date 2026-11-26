@@ -196,6 +196,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             {
                 Title = Strings.Search_Title,
                 Lead = T(Strings.Search_ConfirmFormat, mods.Count, about),
+                Warning = Strings.Search_Disclaimer,
                 First = Strings.Search_Start,
             }) != AskChoice.First)
         {

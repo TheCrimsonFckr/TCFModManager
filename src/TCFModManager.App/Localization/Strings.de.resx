@@ -11404,4 +11404,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
     <value>Verschiebt die Logs von Server, Spiel und BepInEx in den Papierkorb, damit das nächste Problem in sauberen Logs steht.</value>
   </data>
+  <data name="Search_Disclaimer" xml:space="preserve">
+    <value>Wenn hier ein Problem erscheint, heißt das nicht, dass diese Mod schuld ist. Sieh dir ihre sp-mod-Seite und den Discord an, bevor oder nachdem du sie entfernst.</value>
+  </data>
 </root>

@@ -11404,4 +11404,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
     <value>Sposta nel Cestino i log del server, del gioco e di BepInEx, così il prossimo problema parte da log puliti.</value>
   </data>
+  <data name="Search_Disclaimer" xml:space="preserve">
+    <value>Se qui compare un problema, non significa che la colpa sia di questo mod. Controlla la sua pagina su sp-mod e il Discord prima o dopo averlo rimosso.</value>
+  </data>
 </root>

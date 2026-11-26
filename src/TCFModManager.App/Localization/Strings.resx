@@ -14007,4 +14007,8 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <value>Sends the server, game and BepInEx logs to the Recycle Bin, so the next problem starts from clean logs.</value>
     <comment>Feature tour, Diagnose logs: Purge logs.</comment>
   </data>
+  <data name="Search_Disclaimer" xml:space="preserve">
+    <value>When a problem appears here, it does not mean that this mod is at fault. Check its sp-mod mod page and the Discord before or after removing it.</value>
+    <comment>Disclaimer under a Find the mod causing it result, and the warning in its start pop-up. sp-mod is the site's name - keep it as it is.</comment>
+  </data>
 </root>

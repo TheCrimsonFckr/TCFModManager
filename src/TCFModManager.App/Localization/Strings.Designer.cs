@@ -3808,4 +3808,5 @@ internal static class Strings
     internal static string Help_Diagnose_PurgeLogs_Keywords => LocalizationService.Get("Help_Diagnose_PurgeLogs_Keywords");
     internal static string Tour_Diagnose_Purge_Title => LocalizationService.Get("Tour_Diagnose_Purge_Title");
     internal static string Tour_Diagnose_Purge_Body => LocalizationService.Get("Tour_Diagnose_Purge_Body");
+    internal static string Search_Disclaimer => LocalizationService.Get("Search_Disclaimer");
 }

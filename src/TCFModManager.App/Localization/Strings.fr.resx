@@ -11404,4 +11404,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
   <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
     <value>Envoie les journaux du serveur, du jeu et de BepInEx à la Corbeille, pour que le prochain problème parte de journaux propres.</value>
   </data>
+  <data name="Search_Disclaimer" xml:space="preserve">
+    <value>Qu'un problème apparaisse ici ne veut pas dire que ce mod est en cause. Consultez sa page sp-mod et le Discord avant ou après l'avoir supprimé.</value>
+  </data>
 </root>

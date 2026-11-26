@@ -201,6 +201,19 @@
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Text="{Binding ResultNote}" />
+                            <DockPanel Margin="0,8,0,0">
+                                <ui:SymbolIcon
+                                    Margin="0,1,6,0"
+                                    VerticalAlignment="Top"
+                                    FontSize="14"
+                                    Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                    Symbol="Warning24" />
+                                <TextBlock
+                                    FontSize="12"
+                                    TextWrapping="Wrap"
+                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                    Text="{loc:Str Search_Disclaimer}" />
+                            </DockPanel>
                             <DockPanel Margin="0,8,0,0" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
                                 <ui:Button
                                     Margin="12,0,0,0"

@@ -11839,4 +11839,7 @@
   <data name="Diagnose_PurgedSomeLeft_many" xml:space="preserve">
     <value>{0} логов не удалось переместить в корзину: они ещё открыты.</value>
   </data>
+  <data name="Search_Disclaimer" xml:space="preserve">
+    <value>Если здесь появилась проблема, это не значит, что виноват этот мод. Посмотрите его страницу на sp-mod и Discord до или после удаления.</value>
+  </data>
 </root>
