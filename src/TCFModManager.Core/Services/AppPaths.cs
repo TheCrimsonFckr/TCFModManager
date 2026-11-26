@@ -6,13 +6,17 @@ namespace TCFModManager.Core.Services;
 // 
 public static class AppPaths
 {
-    private static readonly string DataDir = ResolveDirectory("Data");
-    private static readonly string StagingDir = Path.Combine(AppContext.BaseDirectory, "Staging");
+    private static readonly string DataDir = ResolveDirectory("data", "Data");
+    private static readonly string StagingDir = Path.Combine(AppContext.BaseDirectory, "staging");
+
+    // TEMPORARY, ADDED IN v1.32.0 - DELETE WHEN THE APP LEAVES BETA, with DataFolderMigration.
+    // What became of an older build's Data\ folder, for DataFolderMigration.Run to log.
+    internal static DataFolderMigration.Outcome DataRename { get; private set; }
 
     public static string DataDirectory => DataDir;
 
     // Default destination for manually-fetched mod archives (see
-    // DownloadsViewModel.DestinationFolder) - a "Staging" subfolder next to the exe. Can be
+    // DownloadsViewModel.DestinationFolder) - a "staging" subfolder next to the exe. Can be
     // overridden per-download via the Downloads page's Browse... button.
     public static string StagingDirectory => StagingDir;
 
@@ -23,10 +27,9 @@ public static class AppPaths
     //
     // Under Data\ rather than beside the exe, alongside the Configs page's own backups - both are
     // the app's copies of somebody's config files and there is no reason for them to live in
-    // different places. The folder keeps its name through the move, so an older install's copy is
-    // carried across by MigrateLegacyConfigsFolder below without anything being renamed.
+    // different places.
     //
-    public static string LegacyConfigsDirectory => Path.Combine(DataDir, "LegacyConfigs");
+    public static string LegacyConfigsDirectory => Path.Combine(DataDir, "legacyConfigs");
 
     // Where LegacyConfigsDirectory pointed before v1.5.0 - beside the exe rather than under Data\.
     private static string PreV150LegacyConfigsDirectory => Path.Combine(AppContext.BaseDirectory, "LegacyConfigs");
@@ -75,9 +78,10 @@ public static class AppPaths
         }
     }
 
-    private static string ResolveDirectory(string name)
+    private static string ResolveDirectory(string name, string oldName)
     {
         var dir = Path.Combine(AppContext.BaseDirectory, name);
+        DataRename = DataFolderMigration.Rename(AppContext.BaseDirectory, oldName, name);
         Directory.CreateDirectory(dir);
         return dir;
     }
