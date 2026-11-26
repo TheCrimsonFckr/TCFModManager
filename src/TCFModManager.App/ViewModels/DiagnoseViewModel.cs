@@ -357,6 +357,69 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
         }
     }
 
+    //
+    // OPEN-73: the server's, the game's and BepInEx's logs to the Recycle Bin, then read again.
+    //
+    [RelayCommand]
+    private async Task PurgeLogsAsync()
+    {
+        var installPath = AppServices.SptEnvironment.InstallPath;
+        if (string.IsNullOrWhiteSpace(installPath))
+        {
+            StatusMessage = AppMessages.NoSptInstallFolder;
+            return;
+        }
+
+        if (Search.IsRunning)
+        {
+            StatusMessage = Strings.Diagnose_PurgeSearching;
+            return;
+        }
+
+        if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.PurgeLogs)) return;
+
+        var plan = await Task.Run(() => LogPurge.Plan(installPath));
+        if (plan.IsEmpty)
+        {
+            StatusMessage = Strings.Diagnose_PurgeNothing;
+            return;
+        }
+
+        if (AskWindow.Show(new AskRequest
+            {
+                Title = Strings.Diagnose_PurgeAskTitle,
+                Lead = Strings.Diagnose_PurgeAskLead(plan.Files, plan.Files, DownloadQueueItemViewModel.Size(plan.Bytes)),
+                First = Strings.Diagnose_PurgeAskButton,
+                Default = AskChoice.Cancel,
+            }) != AskChoice.First)
+        {
+            return;
+        }
+
+        if (ModInstallService.RunningBlockers(installPath) is { Count: > 0 } started)
+        {
+            StatusMessage = ModInstallProblems.InstallInUse(started, ModInstallAction.PurgeLogs);
+            return;
+        }
+
+        IsBusy = true;
+        StatusMessage = Strings.Diagnose_Purging;
+        IReadOnlyList<string> left;
+        try
+        {
+            left = await Task.Run(() => RecycleBin.Send(plan.Paths));
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
+        AppLog.Info("Diagnose", $"purged {plan.Paths.Count - left.Count} of {plan.Paths.Count} log path(s), {plan.Files} file(s), {plan.Bytes} bytes");
+
+        await RefreshAsync();
+        StatusMessage = left.Count == 0 ? Strings.Diagnose_Purged : Strings.Diagnose_PurgedSomeLeft(left.Count, left.Count);
+    }
+
     private void Start(string program, string arguments)
     {
         try

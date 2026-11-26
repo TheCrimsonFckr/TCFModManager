@@ -11767,4 +11767,76 @@
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Если сервер не запускается или пишет ошибки, поиск выключает и включает серверные моды половинами, находит виновника и затем снова включает все.</value>
   </data>
+  <data name="ModInstall_InUsePurgeLogsFormat" xml:space="preserve">
+    <value>Закройте {0}, прежде чем очищать логи: он всё ещё пишет в них.</value>
+  </data>
+  <data name="Diagnose_PurgeLogs" xml:space="preserve">
+    <value>Очистить логи</value>
+  </data>
+  <data name="Diagnose_PurgeLogsToolTip" xml:space="preserve">
+    <value>Переместить логи сервера, игры и BepInEx в корзину</value>
+  </data>
+  <data name="Diagnose_PurgeAskTitle" xml:space="preserve">
+    <value>Очистить логи?</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_one" xml:space="preserve">
+    <value>{0} файл логов ({1}) будет перемещён в корзину: логи сервера, папки Logs игры и логи BepInEx. Лог лаунчера останется.</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_other" xml:space="preserve">
+    <value>Файлов логов: {0} ({1}). Они будут перемещены в корзину: логи сервера, папки Logs игры и логи BepInEx. Лог лаунчера останется.</value>
+  </data>
+  <data name="Diagnose_PurgeAskButton" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="Diagnose_PurgeNothing" xml:space="preserve">
+    <value>Нет логов для очистки.</value>
+  </data>
+  <data name="Diagnose_PurgeSearching" xml:space="preserve">
+    <value>Дождитесь окончания «Найти сломанный мод» или остановите его, прежде чем очищать логи.</value>
+  </data>
+  <data name="Diagnose_Purging" xml:space="preserve">
+    <value>Очистка логов...</value>
+  </data>
+  <data name="Diagnose_Purged" xml:space="preserve">
+    <value>Логи очищены: они в корзине.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_one" xml:space="preserve">
+    <value>{0} лог не удалось переместить в корзину: он ещё открыт.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_other" xml:space="preserve">
+    <value>Не удалось переместить в корзину логов: {0}. Они ещё открыты.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Title" xml:space="preserve">
+    <value>Очистка логов</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1}. Прежде чем что-то удалить, вы увидите, сколько файлов логов и их размер.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step2" xml:space="preserve">
+    <value>Нажмите {0}. Логи сервера, папки Logs игры и логи BepInEx перемещаются в корзину, и в новых логах будет только проблема, которую вы воспроизведёте.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Note" xml:space="preserve">
+    <value>Если сервер запущен, сначала предложат его остановить; игру закройте сами. Логи лаунчера, установщиков и патчера остаются.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Keywords" xml:space="preserve">
+    <value>очистить логи, удалить логи, старые логи, место на диске</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Title" xml:space="preserve">
+    <value>Очистка логов</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
+    <value>Перемещает логи сервера, игры и BepInEx в корзину, чтобы следующая проблема попала в чистые логи.</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_few" xml:space="preserve">
+    <value>{0} файла логов ({1}) будут перемещены в корзину: логи сервера, папки Logs игры и логи BepInEx. Лог лаунчера останется.</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_many" xml:space="preserve">
+    <value>{0} файлов логов ({1}) будут перемещены в корзину: логи сервера, папки Logs игры и логи BepInEx. Лог лаунчера останется.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_few" xml:space="preserve">
+    <value>{0} лога не удалось переместить в корзину: они ещё открыты.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_many" xml:space="preserve">
+    <value>{0} логов не удалось переместить в корзину: они ещё открыты.</value>
+  </data>
 </root>

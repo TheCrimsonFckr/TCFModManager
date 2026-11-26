@@ -11344,4 +11344,64 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Quando il server non parte o registra errori, questa funzione spegne e riaccende i mod del server a metà per trovare il colpevole, poi li riattiva tutti.</value>
   </data>
+  <data name="ModInstall_InUsePurgeLogsFormat" xml:space="preserve">
+    <value>Chiudi {0} prima di eliminare i log: ci sta ancora scrivendo.</value>
+  </data>
+  <data name="Diagnose_PurgeLogs" xml:space="preserve">
+    <value>Elimina log</value>
+  </data>
+  <data name="Diagnose_PurgeLogsToolTip" xml:space="preserve">
+    <value>Sposta nel Cestino i log del server, del gioco e di BepInEx</value>
+  </data>
+  <data name="Diagnose_PurgeAskTitle" xml:space="preserve">
+    <value>Eliminare i log?</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_one" xml:space="preserve">
+    <value>{0} file di log ({1}) va nel Cestino: i log del server, le cartelle Logs del gioco e i log di BepInEx. Il log del launcher resta.</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_other" xml:space="preserve">
+    <value>{0} file di log ({1}) vanno nel Cestino: i log del server, le cartelle Logs del gioco e i log di BepInEx. Il log del launcher resta.</value>
+  </data>
+  <data name="Diagnose_PurgeAskButton" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="Diagnose_PurgeNothing" xml:space="preserve">
+    <value>Non ci sono log da eliminare.</value>
+  </data>
+  <data name="Diagnose_PurgeSearching" xml:space="preserve">
+    <value>Attendi che «Trova il mod difettoso» finisca, o fermalo, prima di eliminare i log.</value>
+  </data>
+  <data name="Diagnose_Purging" xml:space="preserve">
+    <value>Eliminazione dei log...</value>
+  </data>
+  <data name="Diagnose_Purged" xml:space="preserve">
+    <value>Log eliminati: sono nel Cestino.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_one" xml:space="preserve">
+    <value>{0} log non è potuto andare nel Cestino: qualcosa lo tiene ancora aperto.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_other" xml:space="preserve">
+    <value>{0} log non sono potuti andare nel Cestino: qualcosa li tiene ancora aperti.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Title" xml:space="preserve">
+    <value>Eliminare i log</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step1" xml:space="preserve">
+    <value>In {0}, premi {1}. Prima che venga tolto qualcosa, vedi quanti file di log ci sono e quanto pesano.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step2" xml:space="preserve">
+    <value>Premi {0}. I log del server, le cartelle Logs del gioco e i log di BepInEx vanno nel Cestino, così il prossimo problema che riproduci è l'unica cosa che contengono.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Note" xml:space="preserve">
+    <value>Se il server è in esecuzione, ti viene proposto prima di fermarlo; il gioco chiudilo tu. I log del launcher, degli installer e del patcher restano.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Keywords" xml:space="preserve">
+    <value>elimina log, cancella log, svuota log, vecchi log, spazio</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Title" xml:space="preserve">
+    <value>Eliminare i log</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
+    <value>Sposta nel Cestino i log del server, del gioco e di BepInEx, così il prossimo problema parte da log puliti.</value>
+  </data>
 </root>

@@ -3788,4 +3788,24 @@ internal static class Strings
     internal static string Help_Diagnose_BrokenMod_Keywords => LocalizationService.Get("Help_Diagnose_BrokenMod_Keywords");
     internal static string Tour_Diagnose_Search_Title => LocalizationService.Get("Tour_Diagnose_Search_Title");
     internal static string Tour_Diagnose_Search_Body => LocalizationService.Get("Tour_Diagnose_Search_Body");
+    internal static string ModInstall_InUsePurgeLogsFormat => LocalizationService.Get("ModInstall_InUsePurgeLogsFormat");
+    internal static string Diagnose_PurgeLogs => LocalizationService.Get("Diagnose_PurgeLogs");
+    internal static string Diagnose_PurgeLogsToolTip => LocalizationService.Get("Diagnose_PurgeLogsToolTip");
+    internal static string Diagnose_PurgeAskTitle => LocalizationService.Get("Diagnose_PurgeAskTitle");
+    internal static string Diagnose_PurgeAskLead(int count, params object?[] values) =>
+        LocalizationService.Plural("Diagnose_PurgeAskLead", count, values);
+    internal static string Diagnose_PurgeAskButton => LocalizationService.Get("Diagnose_PurgeAskButton");
+    internal static string Diagnose_PurgeNothing => LocalizationService.Get("Diagnose_PurgeNothing");
+    internal static string Diagnose_PurgeSearching => LocalizationService.Get("Diagnose_PurgeSearching");
+    internal static string Diagnose_Purging => LocalizationService.Get("Diagnose_Purging");
+    internal static string Diagnose_Purged => LocalizationService.Get("Diagnose_Purged");
+    internal static string Diagnose_PurgedSomeLeft(int count, params object?[] values) =>
+        LocalizationService.Plural("Diagnose_PurgedSomeLeft", count, values);
+    internal static string Help_Diagnose_PurgeLogs_Title => LocalizationService.Get("Help_Diagnose_PurgeLogs_Title");
+    internal static string Help_Diagnose_PurgeLogs_Step1 => LocalizationService.Get("Help_Diagnose_PurgeLogs_Step1");
+    internal static string Help_Diagnose_PurgeLogs_Step2 => LocalizationService.Get("Help_Diagnose_PurgeLogs_Step2");
+    internal static string Help_Diagnose_PurgeLogs_Note => LocalizationService.Get("Help_Diagnose_PurgeLogs_Note");
+    internal static string Help_Diagnose_PurgeLogs_Keywords => LocalizationService.Get("Help_Diagnose_PurgeLogs_Keywords");
+    internal static string Tour_Diagnose_Purge_Title => LocalizationService.Get("Tour_Diagnose_Purge_Title");
+    internal static string Tour_Diagnose_Purge_Body => LocalizationService.Get("Tour_Diagnose_Purge_Body");
 }

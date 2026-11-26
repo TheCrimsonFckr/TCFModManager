@@ -11344,4 +11344,64 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Quand le serveur ne démarre pas ou affiche des erreurs, ceci désactive et réactive les mods serveur par moitiés pour trouver le responsable, puis les réactive tous.</value>
   </data>
+  <data name="ModInstall_InUsePurgeLogsFormat" xml:space="preserve">
+    <value>Fermez {0} avant de purger les journaux - il y écrit encore.</value>
+  </data>
+  <data name="Diagnose_PurgeLogs" xml:space="preserve">
+    <value>Purger les journaux</value>
+  </data>
+  <data name="Diagnose_PurgeLogsToolTip" xml:space="preserve">
+    <value>Envoyer les journaux du serveur, du jeu et de BepInEx à la Corbeille</value>
+  </data>
+  <data name="Diagnose_PurgeAskTitle" xml:space="preserve">
+    <value>Purger les journaux ?</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_one" xml:space="preserve">
+    <value>{0} fichier journal ({1}) part à la Corbeille : les journaux du serveur, les dossiers Logs du jeu et les journaux de BepInEx. Le journal du lanceur reste.</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_other" xml:space="preserve">
+    <value>{0} fichiers journaux ({1}) partent à la Corbeille : les journaux du serveur, les dossiers Logs du jeu et les journaux de BepInEx. Le journal du lanceur reste.</value>
+  </data>
+  <data name="Diagnose_PurgeAskButton" xml:space="preserve">
+    <value>Purger</value>
+  </data>
+  <data name="Diagnose_PurgeNothing" xml:space="preserve">
+    <value>Il n'y a aucun journal à purger.</value>
+  </data>
+  <data name="Diagnose_PurgeSearching" xml:space="preserve">
+    <value>Attendez la fin de « Trouver le mod défectueux », ou arrêtez-le, avant de purger les journaux.</value>
+  </data>
+  <data name="Diagnose_Purging" xml:space="preserve">
+    <value>Purge des journaux...</value>
+  </data>
+  <data name="Diagnose_Purged" xml:space="preserve">
+    <value>Journaux purgés : ils sont dans la Corbeille.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_one" xml:space="preserve">
+    <value>{0} journal n'a pas pu aller à la Corbeille : quelque chose l'a encore ouvert.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_other" xml:space="preserve">
+    <value>{0} journaux n'ont pas pu aller à la Corbeille : quelque chose les a encore ouverts.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Title" xml:space="preserve">
+    <value>Purger les journaux</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step1" xml:space="preserve">
+    <value>Sur {0}, appuyez sur {1}. Le nombre de fichiers journaux et leur taille s'affichent avant que quoi que ce soit parte.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step2" xml:space="preserve">
+    <value>Appuyez sur {0}. Les journaux du serveur, les dossiers Logs du jeu et ceux de BepInEx partent à la Corbeille, pour que le prochain problème que vous reproduisez soit le seul à y figurer.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Note" xml:space="preserve">
+    <value>Si le serveur tourne, on vous propose d'abord de l'arrêter ; fermez le jeu vous-même. Les journaux du lanceur, des installeurs et du patcheur restent.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Keywords" xml:space="preserve">
+    <value>purger journaux, supprimer journaux, effacer journaux, vieux journaux, espace disque</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Title" xml:space="preserve">
+    <value>Purger les journaux</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
+    <value>Envoie les journaux du serveur, du jeu et de BepInEx à la Corbeille, pour que le prochain problème parte de journaux propres.</value>
+  </data>
 </root>

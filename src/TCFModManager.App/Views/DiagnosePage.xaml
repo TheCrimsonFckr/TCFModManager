@@ -26,6 +26,14 @@
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
                 <ui:Button
                     Margin="0,0,8,0"
+                    behaviors:TourTarget.Key="diagnose.purge"
+                    Content="{loc:Str Diagnose_PurgeLogs}"
+                    Icon="{ui:SymbolIcon Delete24}"
+                    ToolTip="{loc:Str Diagnose_PurgeLogsToolTip}"
+                    Command="{Binding PurgeLogsCommand}"
+                    IsEnabled="{Binding IsNotBusy}" />
+                <ui:Button
+                    Margin="0,0,8,0"
                     behaviors:TourTarget.Key="diagnose.copy"
                     Content="{loc:Str Diagnose_CopyReport}"
                     Icon="{ui:SymbolIcon Copy24}"

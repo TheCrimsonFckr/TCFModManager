@@ -26,6 +26,9 @@ public enum ModInstallAction
 
     // OPEN-60: taking what mods left out of the SPT profiles.
     CleanProfiles,
+
+    // OPEN-73: Purge logs on Diagnose logs.
+    PurgeLogs,
 }
 
 //

@@ -13927,4 +13927,84 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <value>When the server won't start or logs errors, this switches server mods off and on in halves to find the one behind it, then turns them all back on.</value>
     <comment>Feature tour, Diagnose logs: Find the broken mod.</comment>
   </data>
+  <data name="ModInstall_InUsePurgeLogsFormat" xml:space="preserve">
+    <value>Close {0} before purging the logs - it's still writing to them.</value>
+    <comment>Sentence: SPT is running so the logs can't be purged. {0} = what to close.</comment>
+  </data>
+  <data name="Diagnose_PurgeLogs" xml:space="preserve">
+    <value>Purge logs</value>
+    <comment>Button.</comment>
+  </data>
+  <data name="Diagnose_PurgeLogsToolTip" xml:space="preserve">
+    <value>Send the server, game and BepInEx logs to the Recycle Bin</value>
+    <comment>Tooltip on Purge logs.</comment>
+  </data>
+  <data name="Diagnose_PurgeAskTitle" xml:space="preserve">
+    <value>Purge the logs?</value>
+    <comment>Pop-up title.</comment>
+  </data>
+  <data name="Diagnose_PurgeAskLead_one" xml:space="preserve">
+    <value>{0} log file ({1}) goes to the Recycle Bin - the server's logs, the game's Logs folders and BepInEx's logs. The launcher's log stays.</value>
+    <comment>Pop-up text. {0} = file count, {1} = size.</comment>
+  </data>
+  <data name="Diagnose_PurgeAskLead_other" xml:space="preserve">
+    <value>{0} log files ({1}) go to the Recycle Bin - the server's logs, the game's Logs folders and BepInEx's logs. The launcher's log stays.</value>
+    <comment>Pop-up text. {0} = file count, {1} = size.</comment>
+  </data>
+  <data name="Diagnose_PurgeAskButton" xml:space="preserve">
+    <value>Purge</value>
+    <comment>Pop-up button.</comment>
+  </data>
+  <data name="Diagnose_PurgeNothing" xml:space="preserve">
+    <value>There are no logs to purge.</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="Diagnose_PurgeSearching" xml:space="preserve">
+    <value>Wait for Find the broken mod to finish, or stop it, before purging the logs.</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="Diagnose_Purging" xml:space="preserve">
+    <value>Purging the logs...</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="Diagnose_Purged" xml:space="preserve">
+    <value>Logs purged - they're in the Recycle Bin.</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_one" xml:space="preserve">
+    <value>{0} log couldn't go to the Recycle Bin - something still has it open.</value>
+    <comment>Status. {0} = count.</comment>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_other" xml:space="preserve">
+    <value>{0} logs couldn't go to the Recycle Bin - something still has them open.</value>
+    <comment>Status. {0} = count.</comment>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Title" xml:space="preserve">
+    <value>Purge the logs</value>
+    <comment>Help topic title.</comment>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step1" xml:space="preserve">
+    <value>On {0}, press {1}. It says how many log files there are, and their size, before anything goes.</value>
+    <comment>Help step. {0} = page, {1} = button.</comment>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step2" xml:space="preserve">
+    <value>Press {0}. The server's logs, the game's Logs folders and BepInEx's logs go to the Recycle Bin, so the next problem you reproduce is all that's in them.</value>
+    <comment>Help step. {0} = button.</comment>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Note" xml:space="preserve">
+    <value>If the server is running you're offered a stop first; close the game yourself. The launcher's, installers' and patcher's logs are left.</value>
+    <comment>Help note.</comment>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Keywords" xml:space="preserve">
+    <value>purge logs, delete logs, clear logs, clean logs, old logs, log space</value>
+    <comment>Help search keywords.</comment>
+  </data>
+  <data name="Tour_Diagnose_Purge_Title" xml:space="preserve">
+    <value>Purge the logs</value>
+    <comment>Feature tour title.</comment>
+  </data>
+  <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
+    <value>Sends the server, game and BepInEx logs to the Recycle Bin, so the next problem starts from clean logs.</value>
+    <comment>Feature tour, Diagnose logs: Purge logs.</comment>
+  </data>
 </root>

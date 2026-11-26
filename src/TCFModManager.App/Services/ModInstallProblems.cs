@@ -168,6 +168,7 @@ public static class ModInstallProblems
         ModInstallAction.SortOutDuplicate => Strings.ModInstall_InUseSortOutFormat,
         ModInstallAction.RestoreProfiles => Strings.ModInstall_InUseRestoreProfilesFormat,
         ModInstallAction.CleanProfiles => Strings.ModInstall_InUseCleanProfilesFormat,
+        ModInstallAction.PurgeLogs => Strings.ModInstall_InUsePurgeLogsFormat,
         _ => Strings.ModInstall_InUseGenericFormat,
     };
 }

@@ -11344,4 +11344,64 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   <data name="Tour_Diagnose_Search_Body" xml:space="preserve">
     <value>Startet der Server nicht oder meldet Fehler, schaltet dies Server-Mods hälftenweise aus und ein, um die Ursache zu finden, und schaltet danach alle wieder ein.</value>
   </data>
+  <data name="ModInstall_InUsePurgeLogsFormat" xml:space="preserve">
+    <value>Schließe {0}, bevor du die Logs löschst - es schreibt noch hinein.</value>
+  </data>
+  <data name="Diagnose_PurgeLogs" xml:space="preserve">
+    <value>Logs löschen</value>
+  </data>
+  <data name="Diagnose_PurgeLogsToolTip" xml:space="preserve">
+    <value>Server-, Spiel- und BepInEx-Logs in den Papierkorb verschieben</value>
+  </data>
+  <data name="Diagnose_PurgeAskTitle" xml:space="preserve">
+    <value>Logs löschen?</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_one" xml:space="preserve">
+    <value>{0} Log-Datei ({1}) kommt in den Papierkorb - die Logs des Servers, die Logs-Ordner des Spiels und die Logs von BepInEx. Das Log des Launchers bleibt.</value>
+  </data>
+  <data name="Diagnose_PurgeAskLead_other" xml:space="preserve">
+    <value>{0} Log-Dateien ({1}) kommen in den Papierkorb - die Logs des Servers, die Logs-Ordner des Spiels und die Logs von BepInEx. Das Log des Launchers bleibt.</value>
+  </data>
+  <data name="Diagnose_PurgeAskButton" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Diagnose_PurgeNothing" xml:space="preserve">
+    <value>Es gibt keine Logs zum Löschen.</value>
+  </data>
+  <data name="Diagnose_PurgeSearching" xml:space="preserve">
+    <value>Warte, bis „Die kaputte Mod finden“ fertig ist, oder stoppe es, bevor du die Logs löschst.</value>
+  </data>
+  <data name="Diagnose_Purging" xml:space="preserve">
+    <value>Logs werden gelöscht...</value>
+  </data>
+  <data name="Diagnose_Purged" xml:space="preserve">
+    <value>Logs gelöscht - sie liegen im Papierkorb.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_one" xml:space="preserve">
+    <value>{0} Log konnte nicht in den Papierkorb - etwas hat es noch geöffnet.</value>
+  </data>
+  <data name="Diagnose_PurgedSomeLeft_other" xml:space="preserve">
+    <value>{0} Logs konnten nicht in den Papierkorb - etwas hat sie noch geöffnet.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Title" xml:space="preserve">
+    <value>Die Logs löschen</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step1" xml:space="preserve">
+    <value>Drücke auf {0} auf {1}. Bevor etwas weggeht, siehst du, wie viele Log-Dateien es gibt und wie groß sie sind.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Step2" xml:space="preserve">
+    <value>Drücke {0}. Die Logs des Servers, die Logs-Ordner des Spiels und die Logs von BepInEx kommen in den Papierkorb, damit danach nur das nächste Problem darin steht, das du nachstellst.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Note" xml:space="preserve">
+    <value>Läuft der Server, wird dir zuerst angeboten, ihn zu stoppen; das Spiel schließt du selbst. Die Logs von Launcher, Installern und Patcher bleiben.</value>
+  </data>
+  <data name="Help_Diagnose_PurgeLogs_Keywords" xml:space="preserve">
+    <value>Logs löschen, Logs leeren, Logs aufräumen, alte Logs, Speicherplatz</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Title" xml:space="preserve">
+    <value>Die Logs löschen</value>
+  </data>
+  <data name="Tour_Diagnose_Purge_Body" xml:space="preserve">
+    <value>Verschiebt die Logs von Server, Spiel und BepInEx in den Papierkorb, damit das nächste Problem in sauberen Logs steht.</value>
+  </data>
 </root>
