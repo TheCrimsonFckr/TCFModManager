@@ -220,20 +220,48 @@ public static class BrokenModSearch
         return fixedPart + perMod * modsOn;
     }
 
-    // The install's enabled server mods, each after what it needs; a mod installed twice is left out.
-    public static (IReadOnlyList<InstalledMod> Mods, Func<int, IEnumerable<int>> Needs) Suspects(IReadOnlyList<InstalledMod> scanned)
+    // The install's enabled server mods, each after what it needs - what it declares, and the mod it
+    // is an addon for (AddonParents) - so no try has a mod on without them; a mod installed twice is
+    // left out.
+    public static (IReadOnlyList<InstalledMod> Mods, Func<int, IEnumerable<int>> Needs) Suspects(
+        IReadOnlyList<InstalledMod> scanned, IReadOnlyList<AddonParent>? addons = null)
     {
         var twice = ModDisableService.DuplicatePairs(scanned).Select(p => p.Enabled).ToHashSet();
         var graph = ModDependencyGraph.Build(scanned);
 
         var enabled = scanned.Where(m => m.Target == InstalledModTarget.Server && !m.IsDisabled && !twice.Contains(m)).ToList();
-        var ordered = graph.DependencyOrder(enabled, m => [m]);
+        var included = enabled.ToHashSet();
+
+        var parents = new Dictionary<InstalledMod, List<InstalledMod>>();
+        foreach (var link in addons ?? [])
+        {
+            if (!included.Contains(link.Addon) || !included.Contains(link.Parent)) continue;
+            if (!parents.TryGetValue(link.Addon, out var list)) parents[link.Addon] = list = [];
+            list.Add(link.Parent);
+        }
+
+        IEnumerable<InstalledMod> NeedsOf(InstalledMod mod) => graph.DependenciesOf(mod)
+            .Where(link => !link.IsSoft && included.Contains(link.Dependency))
+            .Select(link => link.Dependency)
+            .Concat(parents.GetValueOrDefault(mod) ?? []);
+
+        var ordered = new List<InstalledMod>();
+        var placed = new HashSet<InstalledMod>();
+        var visiting = new HashSet<InstalledMod>();
+
+        void Place(InstalledMod mod)
+        {
+            if (placed.Contains(mod) || !visiting.Add(mod)) return;
+            foreach (var needed in NeedsOf(mod)) Place(needed);
+            visiting.Remove(mod);
+            if (placed.Add(mod)) ordered.Add(mod);
+        }
+
+        foreach (var mod in graph.DependencyOrder(enabled, m => [m])) Place(mod);
 
         var number = new Dictionary<InstalledMod, int>();
         for (var i = 0; i < ordered.Count; i++) number[ordered[i]] = i;
 
-        return (ordered, i => graph.DependenciesOf(ordered[i])
-            .Where(link => !link.IsSoft && number.ContainsKey(link.Dependency))
-            .Select(link => number[link.Dependency]));
+        return (ordered, i => NeedsOf(ordered[i]).Where(number.ContainsKey).Select(m => number[m]).Distinct());
     }
 }

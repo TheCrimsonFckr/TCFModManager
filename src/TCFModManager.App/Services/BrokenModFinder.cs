@@ -182,7 +182,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         var (scanned, mods, needs) = await Task.Run(() =>
         {
             var scan = InstalledScan.Run(install);
-            var (suspects, needed) = BrokenModSearch.Suspects(scan);
+            var (suspects, needed) = BrokenModSearch.Suspects(scan, AddonsOf(scan, install));
             return (scan, suspects, needed);
         });
         if (mods.Count == 0)
@@ -438,7 +438,11 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
     private async Task TurnOffAsync(FoundMod mod, string path, string install)
     {
-        var scanned = await Task.Run(() => InstalledScan.Run(install));
+        var (scanned, addons) = await Task.Run(() =>
+        {
+            var scan = InstalledScan.Run(install);
+            return (scan, AddonsOf(scan, install));
+        });
         var target = scanned.FirstOrDefault(m => !m.IsDisabled && string.Equals(m.FolderPath, path, StringComparison.OrdinalIgnoreCase));
         if (target is null)
         {
@@ -456,6 +460,13 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             impact.Add(new ModDisableImpactRow(TitleOf(link.Dependent), detail, link.IsSoft));
         }
 
+        var itsAddons = addons.Where(a => ReferenceEquals(a.Parent, target) && !a.Addon.IsDisabled).ToList();
+        foreach (var addon in itsAddons)
+        {
+            if (impact.Any(i => i.Name == TitleOf(addon.Addon))) continue;
+            impact.Add(new ModDisableImpactRow(TitleOf(addon.Addon), T(Strings.Installed_ImpactAddonForFormat, TitleOf(target)), false));
+        }
+
         var cascade = new List<InstalledMod>();
         if (impact.Count > 0)
         {
@@ -465,7 +476,8 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                     return;
                 case ModDisableChoice.ProceedWithCascade:
                     cascade.AddRange(ModDependencyGraph.Build(scanned).DisableImpact([target])
-                        .Where(l => !l.IsSoft && !l.Dependent.IsDisabled).Select(l => l.Dependent).Distinct());
+                        .Where(l => !l.IsSoft && !l.Dependent.IsDisabled).Select(l => l.Dependent)
+                        .Concat(itsAddons.Select(a => a.Addon)).Distinct());
                     break;
             }
         }
@@ -491,10 +503,35 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             return;
         }
 
+        MarkAddons(addons, target, [target, .. cascade]);
+
         AppLog.Info("Search", $"turned off {mod.Name} from the result");
         StatusMessage = null;
         mod.IsOff = true;
         SayTurnedOff();
+    }
+
+    private static IReadOnlyList<AddonParent> AddonsOf(IReadOnlyList<InstalledMod> scanned, string install) =>
+        AddonParents.Find(scanned, install, AppServices.InstallManifest.Load().Mods, id => AppServices.Addons.ById(id)?.ModId);
+
+    // OPEN-31 R5, as on Installed: addons turned off with their parent are marked so turning it back
+    // on brings them too; an addon turned off by itself is not.
+    private static void MarkAddons(IReadOnlyList<AddonParent> addons, InstalledMod target, IReadOnlyList<InstalledMod> moved)
+    {
+        var carried = addons.Where(a => ReferenceEquals(a.Parent, target) && moved.Contains(a.Addon)).Select(a => a.AddonId).Distinct().ToList();
+        var alone = addons.Where(a => ReferenceEquals(a.Addon, target)).Select(a => a.AddonId).Distinct().ToList();
+
+        if (carried.Count > 0)
+        {
+            AppServices.InstallManifest.SetDisabledForFit(carried, false);
+            AppServices.InstallManifest.SetDisabledWithParent(carried, true);
+        }
+
+        if (alone.Count > 0)
+        {
+            AppServices.InstallManifest.SetDisabledForFit(alone, false);
+            AppServices.InstallManifest.SetDisabledWithParent(alone, false);
+        }
     }
 
     private void SayTurnedOff()
