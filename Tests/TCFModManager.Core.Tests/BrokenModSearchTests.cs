@@ -405,6 +405,48 @@ public class BrokenModSearchTests : IDisposable
         Assert.Empty(search.Ahead);
     }
 
+    [Fact]
+    public void A_found_mod_is_settled_by_a_later_run_that_comes_up_without_its_errors()
+    {
+        var found = new DateTime(2026, 11, 26, 18, 2, 9);
+        LogEntry Line(int minutes, string level, string source, string message) =>
+            new(LogKind.Server, "spt.log", 1, found.AddMinutes(minutes), level, source, message, []);
+        var bundle = Line(5, "Error", "SPTarkov.Server.Core.Loaders.BundleLoader", "Unable to add bundle: assets/content/items/mods/barrels/barrel_vpo215_600mm_366tkm.bundle");
+        var up = Line(6, "Information", "SPTarkov.Server.Core.Services.Hosted.SPTStartupHostedService", "Started webserver at https://0.0.0.0:6969");
+        var start = Line(4, "Information", "SPTarkov.Server.Program", "Server starting");
+        IReadOnlySet<string> theirs = new HashSet<string> { ServerTrial.Signature(bundle) };
+
+        Assert.True(BrokenModSearch.ProblemGone([start, up], found, false, theirs));
+        Assert.False(BrokenModSearch.ProblemGone([start, bundle, up], found, false, theirs));
+        Assert.False(BrokenModSearch.ProblemGone([start], found, true, theirs));
+        Assert.True(BrokenModSearch.ProblemGone([start, up], found, true, theirs));
+
+        // A run from before the find says nothing.
+        Assert.False(BrokenModSearch.ProblemGone([Line(-10, "Information", "SPTarkov.Server.Program", "Server starting"), up], found, false, theirs));
+    }
+
+    [Fact]
+    public async Task Each_start_reports_what_it_was_for_and_whether_the_problem_showed()
+    {
+        var said = new List<BrokenModStep>();
+        Task<ServerTrialOutcome> Server(IReadOnlyList<int> on, bool errors, CancellationToken ct) =>
+            Task.FromResult(new ServerTrialOutcome(!on.Contains(5), false, []));
+
+        await BrokenModSearch.RunAsync(8, _ => [], Server, steps: new Steps(said));
+
+        Assert.Equal(BrokenModStage.AllOn, said[0].Stage);
+        Assert.True(said[0].ShowedProblem);
+        Assert.Equal(BrokenModStage.AllOff, said[1].Stage);
+        Assert.False(said[1].ShowedProblem);
+        Assert.All(said.Skip(2), s => Assert.Contains(s.Stage, new[] { BrokenModStage.Narrowing, BrokenModStage.Alone }));
+        Assert.Equal(Enumerable.Range(1, said.Count), said.Select(s => s.Try));
+    }
+
+    private sealed class Steps(List<BrokenModStep> into) : IProgress<BrokenModStep>
+    {
+        public void Report(BrokenModStep value) => into.Add(value);
+    }
+
     private sealed class Collect(List<BrokenModProgress> into) : IProgress<BrokenModProgress>
     {
         public void Report(BrokenModProgress value) => into.Add(value);

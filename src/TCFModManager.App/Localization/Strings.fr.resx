@@ -11180,7 +11180,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Préparation…</value>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Démarrage {0} sur environ {1} - {2} mods serveur activés sur {3}</value>
+    <value>Démarrage {0} sur environ {1} : {2}</value>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Réactivation de tous les mods…</value>
@@ -11406,5 +11406,35 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
   </data>
   <data name="Search_Disclaimer" xml:space="preserve">
     <value>Qu'un problème apparaisse ici ne veut pas dire que ce mod est en cause. Consultez sa page sp-mod et le Discord avant ou après l'avoir supprimé.</value>
+  </data>
+  <data name="Search_StageAllOnFormat" xml:space="preserve">
+    <value>Les {0} mods serveur activés</value>
+  </data>
+  <data name="Search_StageAllOff" xml:space="preserve">
+    <value>Tous les mods serveur désactivés</value>
+  </data>
+  <data name="Search_StageRecentOffFormat" xml:space="preserve">
+    <value>Mods modifiés récemment désactivés, {0} sur {1} activés</value>
+  </data>
+  <data name="Search_StageNarrowingFormat" xml:space="preserve">
+    <value>Affinage, {0} sur {1} activés</value>
+  </data>
+  <data name="Search_StageAloneFormat" xml:space="preserve">
+    <value>Le mod suspect seul, {0} activés</value>
+  </data>
+  <data name="Search_StagePartnerFormat" xml:space="preserve">
+    <value>Recherche d'un second mod, {0} sur {1} activés</value>
+  </data>
+  <data name="Search_StepProblem" xml:space="preserve">
+    <value>problème présent</value>
+  </data>
+  <data name="Search_StepClean" xml:space="preserve">
+    <value>aucun problème</value>
+  </data>
+  <data name="Search_StepFormat" xml:space="preserve">
+    <value>{0}. {1} - {2} ({3})</value>
+  </data>
+  <data name="Search_StepsHeaderFormat" xml:space="preserve">
+    <value>Démarrages ({0})</value>
   </data>
 </root>

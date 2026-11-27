@@ -59,6 +59,14 @@ public sealed class ModBisect
         _ => Partner is { } partner ? [partner, Culprit!.Value] : [Culprit!.Value],
     };
 
+    /// <summary>What the try with <see cref="Next"/> on is for.</summary>
+    public BrokenModStage Stage => _phase switch
+    {
+        Phase.Alone => BrokenModStage.Alone,
+        Phase.Partner => BrokenModStage.Partner,
+        _ => BrokenModStage.Narrowing,
+    };
+
     /// <summary>About how many tries are left - one more may follow when the fault takes two mods.</summary>
     public int TriesLeft => _phase switch
     {

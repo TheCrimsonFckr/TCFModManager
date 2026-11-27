@@ -27,6 +27,15 @@ public sealed class SavedSearchResult
     public string? Note { get; set; }
 
     public List<string[]> Found { get; set; } = [];
+
+    public List<string> Steps { get; set; } = [];
+
+    // A mod was found: the run of the server after this that comes up without the problem closes it.
+    public DateTimeOffset? FoundAt { get; set; }
+
+    public bool WontStart { get; set; }
+
+    public List<string> Signatures { get; set; } = [];
 }
 
 public sealed partial class FoundMod(string name, string title, string? path) : ObservableObject
@@ -70,6 +79,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private readonly System.Diagnostics.Stopwatch _clock = new();
     private readonly List<(IReadOnlyList<int> On, TimeSpan Took)> _starts = [];
     private TimeSpan[]? _shares;
+    private DateTimeOffset? _foundAt;
+    private bool _wontStart;
+    private HashSet<string> _signatures = new(StringComparer.Ordinal);
     private readonly System.Windows.Threading.DispatcherTimer _tick = new() { Interval = TimeSpan.FromSeconds(1) };
     private BrokenModProgress? _now;
     private TimeSpan _nowBegan;
@@ -78,6 +90,11 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
     public BrokenModFinder()
     {
+        Steps.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(HasSteps));
+            OnPropertyChanged(nameof(StepsHeader));
+        };
         _tick.Tick += (_, _) =>
         {
             ElapsedText = T(Strings.Search_ElapsedFormat, Duration(_clock.Elapsed));
@@ -135,6 +152,13 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     public bool HasResultDone => ResultDone is not null;
 
     public ObservableCollection<FoundMod> Found { get; } = [];
+
+    // OPEN-54 N27: each finished start - what it was for, the mods on, whether the problem showed.
+    public ObservableCollection<string> Steps { get; } = [];
+
+    public bool HasSteps => Steps.Count > 0;
+
+    public string StepsHeader => T(Strings.Search_StepsHeaderFormat, Steps.Count);
 
     public bool HasResult => ResultTitle is not null;
 
@@ -209,6 +233,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         _clock.Restart();
         _starts.Clear();
         _shares = null;
+        Steps.Clear();
         _now = null;
         ElapsedText = T(Strings.Search_ElapsedFormat, Duration(TimeSpan.Zero));
         _tick.Start();
@@ -264,6 +289,15 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                     SayProgress();
                 });
 
+                var steps = new Progress<BrokenModStep>(step =>
+                {
+                    var took = Duration(_clock.Elapsed - _nowBegan);
+                    var line = T(Strings.Search_StepFormat, step.Try, StageText(step.Stage, step.ModsOn, step.Mods),
+                        step.ShowedProblem ? Strings.Search_StepProblem : Strings.Search_StepClean, took);
+                    Steps.Add(line);
+                    AppLog.Info("Search", $"start {step.Try}: {step.Stage}, {step.ModsOn} on, {(step.ShowedProblem ? "problem" : "clean")}, {took}");
+                });
+
                 var recent = await Task.Run(() => new ServerUpLog().Last(install) is { } up
                     ? BrokenModSearch.ChangedSince(session.Mods, up)
                     : null);
@@ -284,7 +318,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                     if (_shares is null && on.Count == mods.Count) _shares = Shares(outcome, ModOf, mods);
                     AppLog.Info("Search", $"{on.Count} on: {(outcome.Started ? "started" : outcome.TimedOut ? "timed out" : "did not start")}, {outcome.Errors.Count} error(s)");
                     return outcome;
-                }, progress, cancel.Token, recent));
+                }, progress, cancel.Token, recent, steps));
             }
         }
         catch (OperationCanceledException)
@@ -378,7 +412,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         if (_now is not { } p || IsStopping || !_tick.IsEnabled) return;
 
         var left = BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.Ahead, _clock.Elapsed - _nowBegan);
-        ProgressText = T(Strings.Search_ProgressFormat, p.Try, p.About, p.ModsOn, p.Mods);
+        ProgressText = T(Strings.Search_ProgressFormat, p.Try, p.About, StageText(p.Stage, p.ModsOn, p.Mods));
         LeftText = left is not { } time ? null
             : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute
             : T(Strings.Search_LeftMinutesFormat, (int)Math.Ceiling(time.TotalMinutes));
@@ -565,6 +599,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         ResultNote = null;
         ResultDone = null;
         Found.Clear();
+        Steps.Clear();
+        _foundAt = null;
+        _signatures.Clear();
 
         try
         {
@@ -590,6 +627,10 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                 Lines = ResultLines,
                 Note = ResultNote,
                 Found = [.. Found.Select(f => new[] { f.Name, f.Title, f.Path ?? string.Empty })],
+                Steps = [.. Steps],
+                FoundAt = _foundAt,
+                WontStart = _wontStart,
+                Signatures = [.. _signatures],
             }));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -612,6 +653,10 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             ResultNote = saved.Note;
             foreach (var mod in saved.Found.Where(f => f is { Length: >= 2 }))
                 Found.Add(new FoundMod(mod[0], mod[1], mod.Length > 2 && mod[2].Length > 0 ? mod[2] : null));
+            foreach (var step in saved.Steps) Steps.Add(step);
+            _foundAt = saved.FoundAt;
+            _wontStart = saved.WontStart;
+            _signatures = new HashSet<string>(saved.Signatures, StringComparer.Ordinal);
 
             SayTurnedOff();
         }
@@ -726,7 +771,53 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             back.AllBack ? Strings.Search_AllBack : null,
             back.ProfilesRestored ? Strings.Search_ProfilesPutBack : null);
 
+        if (result.Verdict == BrokenModVerdict.Found)
+        {
+            _foundAt = DateTimeOffset.Now;
+            _wontStart = down;
+            _signatures = new HashSet<string>(result.Errors.Select(ServerTrial.Signature), StringComparer.Ordinal);
+        }
+
         AppLog.Info("Search", $"{result.Verdict} after {result.Tries} start(s) in {took.TotalSeconds:0} s: {ResultTitle}");
+    }
+
+    private static string StageText(BrokenModStage stage, int on, int mods) => stage switch
+    {
+        BrokenModStage.AllOn => T(Strings.Search_StageAllOnFormat, mods),
+        BrokenModStage.AllOff => Strings.Search_StageAllOff,
+        BrokenModStage.RecentOff => T(Strings.Search_StageRecentOffFormat, on, mods),
+        BrokenModStage.Alone => T(Strings.Search_StageAloneFormat, on),
+        BrokenModStage.Partner => T(Strings.Search_StagePartnerFormat, on, mods),
+        _ => T(Strings.Search_StageNarrowingFormat, on, mods),
+    };
+
+    //
+    // A found mod's result closes itself once the server has run without the problem: it came up,
+    // and none of the errors the search pinned on the mod were logged. Whatever the user did about
+    // it - turned it off, updated it, changed a setting - is theirs; this only notices it worked.
+    //
+    public void CheckAgainstServer(string? install)
+    {
+        if (IsRunning || !HasResult || _foundAt is not { } foundAt || string.IsNullOrWhiteSpace(install)) return;
+
+        var wontStart = _wontStart;
+        var signatures = _signatures.ToHashSet(StringComparer.Ordinal);
+
+        _ = Task.Run(() => ProblemGone(install, foundAt, wontStart, signatures)).ContinueWith(task =>
+        {
+            if (task.Status != TaskStatus.RanToCompletion || !task.Result || !HasResult || _foundAt != foundAt) return;
+
+            AppLog.Info("Search", "the server ran without the problem the search found; result closed");
+            ClearResult();
+        }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+
+    private static bool ProblemGone(string install, DateTimeOffset foundAt, bool wontStart, IReadOnlySet<string> signatures)
+    {
+        if (LogFiles.Find(install).Server is not { } log) return false;
+
+        var run = LogDiagnoser.LastRun(LogEntries.Parse(LogKind.Server, log, LogEntries.ReadLines(log)));
+        return BrokenModSearch.ProblemGone(run, foundAt.LocalDateTime, wontStart, signatures);
     }
 
     // At startup: a search the last run didn't finish is put back now, unless SPT from that install runs.

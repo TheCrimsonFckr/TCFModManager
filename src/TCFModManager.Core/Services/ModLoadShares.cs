@@ -10,6 +10,9 @@ public static class ModLoadShares
 {
     private const string Ready = "Started webserver";
 
+    /// <summary>The line SPT writes once the server is up and listening.</summary>
+    public static bool IsReady(LogEntry line) => line.Message.StartsWith(Ready, StringComparison.Ordinal);
+
     public static TimeSpan[] From(IReadOnlyList<LogEntry>? lines, Func<string, int?> modOf, int mods)
     {
         var shares = new TimeSpan[mods];
@@ -24,7 +27,7 @@ public static class ModLoadShares
                 shares[mod] += at - before;
 
             previous = at;
-            if (line.Message.StartsWith(Ready, StringComparison.Ordinal)) break;
+            if (IsReady(line)) break;
         }
 
         return shares;

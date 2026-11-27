@@ -11180,7 +11180,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Vorbereitung…</value>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Start {0} von etwa {1} - {2} von {3} Server-Mods an</value>
+    <value>Start {0} von etwa {1}: {2}</value>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Alle Mods werden wieder eingeschaltet…</value>
@@ -11406,5 +11406,35 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   </data>
   <data name="Search_Disclaimer" xml:space="preserve">
     <value>Wenn hier ein Problem erscheint, heißt das nicht, dass diese Mod schuld ist. Sieh dir ihre sp-mod-Seite und den Discord an, bevor oder nachdem du sie entfernst.</value>
+  </data>
+  <data name="Search_StageAllOnFormat" xml:space="preserve">
+    <value>Alle {0} Server-Mods an</value>
+  </data>
+  <data name="Search_StageAllOff" xml:space="preserve">
+    <value>Alle Server-Mods aus</value>
+  </data>
+  <data name="Search_StageRecentOffFormat" xml:space="preserve">
+    <value>Kürzlich geänderte Mods aus, {0} von {1} an</value>
+  </data>
+  <data name="Search_StageNarrowingFormat" xml:space="preserve">
+    <value>Eingrenzen, {0} von {1} an</value>
+  </data>
+  <data name="Search_StageAloneFormat" xml:space="preserve">
+    <value>Die verdächtige Mod allein, {0} an</value>
+  </data>
+  <data name="Search_StagePartnerFormat" xml:space="preserve">
+    <value>Suche nach einer zweiten Mod, {0} von {1} an</value>
+  </data>
+  <data name="Search_StepProblem" xml:space="preserve">
+    <value>Problem trat auf</value>
+  </data>
+  <data name="Search_StepClean" xml:space="preserve">
+    <value>kein Problem</value>
+  </data>
+  <data name="Search_StepFormat" xml:space="preserve">
+    <value>{0}. {1} - {2} ({3})</value>
+  </data>
+  <data name="Search_StepsHeaderFormat" xml:space="preserve">
+    <value>Starts ({0})</value>
   </data>
 </root>

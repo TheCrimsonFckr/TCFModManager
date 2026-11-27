@@ -3809,4 +3809,14 @@ internal static class Strings
     internal static string Tour_Diagnose_Purge_Title => LocalizationService.Get("Tour_Diagnose_Purge_Title");
     internal static string Tour_Diagnose_Purge_Body => LocalizationService.Get("Tour_Diagnose_Purge_Body");
     internal static string Search_Disclaimer => LocalizationService.Get("Search_Disclaimer");
+    internal static string Search_StageAllOnFormat => LocalizationService.Get("Search_StageAllOnFormat");
+    internal static string Search_StageAllOff => LocalizationService.Get("Search_StageAllOff");
+    internal static string Search_StageRecentOffFormat => LocalizationService.Get("Search_StageRecentOffFormat");
+    internal static string Search_StageNarrowingFormat => LocalizationService.Get("Search_StageNarrowingFormat");
+    internal static string Search_StageAloneFormat => LocalizationService.Get("Search_StageAloneFormat");
+    internal static string Search_StagePartnerFormat => LocalizationService.Get("Search_StagePartnerFormat");
+    internal static string Search_StepProblem => LocalizationService.Get("Search_StepProblem");
+    internal static string Search_StepClean => LocalizationService.Get("Search_StepClean");
+    internal static string Search_StepFormat => LocalizationService.Get("Search_StepFormat");
+    internal static string Search_StepsHeaderFormat => LocalizationService.Get("Search_StepsHeaderFormat");
 }

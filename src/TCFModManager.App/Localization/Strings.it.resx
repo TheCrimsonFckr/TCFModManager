@@ -11180,7 +11180,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Preparazione…</value>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Avvio {0} di circa {1} - {2} mod server attivi su {3}</value>
+    <value>Avvio {0} di circa {1}: {2}</value>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Riattivazione di tutti i mod…</value>
@@ -11406,5 +11406,35 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   </data>
   <data name="Search_Disclaimer" xml:space="preserve">
     <value>Se qui compare un problema, non significa che la colpa sia di questo mod. Controlla la sua pagina su sp-mod e il Discord prima o dopo averlo rimosso.</value>
+  </data>
+  <data name="Search_StageAllOnFormat" xml:space="preserve">
+    <value>Tutti i {0} mod server attivi</value>
+  </data>
+  <data name="Search_StageAllOff" xml:space="preserve">
+    <value>Tutti i mod server disattivati</value>
+  </data>
+  <data name="Search_StageRecentOffFormat" xml:space="preserve">
+    <value>Mod modificati di recente disattivati, {0} su {1} attivi</value>
+  </data>
+  <data name="Search_StageNarrowingFormat" xml:space="preserve">
+    <value>Restringimento, {0} su {1} attivi</value>
+  </data>
+  <data name="Search_StageAloneFormat" xml:space="preserve">
+    <value>Il mod sospetto da solo, {0} attivi</value>
+  </data>
+  <data name="Search_StagePartnerFormat" xml:space="preserve">
+    <value>Ricerca di un secondo mod, {0} su {1} attivi</value>
+  </data>
+  <data name="Search_StepProblem" xml:space="preserve">
+    <value>problema presente</value>
+  </data>
+  <data name="Search_StepClean" xml:space="preserve">
+    <value>nessun problema</value>
+  </data>
+  <data name="Search_StepFormat" xml:space="preserve">
+    <value>{0}. {1} - {2} ({3})</value>
+  </data>
+  <data name="Search_StepsHeaderFormat" xml:space="preserve">
+    <value>Avvii ({0})</value>
   </data>
 </root>

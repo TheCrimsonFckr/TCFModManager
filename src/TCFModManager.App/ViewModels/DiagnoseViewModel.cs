@@ -207,6 +207,7 @@ public sealed partial class DiagnoseViewModel : LocalizedViewModel
                 + string.Join("; ", _last.Findings.Select(f => $"{f.Kind} {f.Mod?.Name ?? "-"} x{f.Count}")));
 
             Show(_last);
+            Search.CheckAgainstServer(installPath);
         }
         catch (Exception ex)
         {

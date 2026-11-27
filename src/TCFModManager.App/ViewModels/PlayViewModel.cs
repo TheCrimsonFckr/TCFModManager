@@ -521,7 +521,13 @@ public partial class PlayViewModel : LocalizedViewModel
 
             Refresh();
             var waitedOn = string.Join(", ", ports.Order());
-            if (up) new ServerUpLog().Note(installPath!, DateTimeOffset.Now);
+            if (up)
+            {
+                new ServerUpLog().Note(installPath!, DateTimeOffset.Now);
+                _ = Task.Delay(TimeSpan.FromSeconds(3)).ContinueWith(
+                    _ => AppServices.BrokenModFinder.CheckAgainstServer(installPath),
+                    TaskScheduler.FromCurrentSynchronizationContext());
+            }
 
             var headlessFailed = false;
             var headlessStarted = false;

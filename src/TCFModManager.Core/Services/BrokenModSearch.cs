@@ -26,9 +26,26 @@ public sealed record BrokenModResult(
     int Tries,
     int RecentTried = 0);
 
+/// <summary>What a start is for: the first two settle what is wrong and whether it is the mods,
+/// the rest narrow it down to one mod, try it on its own, then look for the other of a pair.</summary>
+public enum BrokenModStage
+{
+    AllOn,
+    AllOff,
+    RecentOff,
+    Narrowing,
+    Alone,
+    Partner,
+}
+
+/// <summary>A finished start: what it was for, how many mods were on, and whether the problem showed.</summary>
+public sealed record BrokenModStep(int Try, BrokenModStage Stage, int ModsOn, int Mods, bool ShowedProblem);
+
 public sealed record BrokenModProgress(int Try, int About, int ModsOn, int Mods, IReadOnlyList<int>? Suspects = null)
 {
     public IReadOnlyList<int> On { get; init; } = [];
+
+    public BrokenModStage Stage { get; init; }
 
     /// <summary>About which mods the starts after this one will have on (ModBisect.Ahead).</summary>
     public IReadOnlyList<IReadOnlyList<int>> Ahead { get; init; } = [];
@@ -47,19 +64,23 @@ public static class BrokenModSearch
         Func<IReadOnlyList<int>, bool, CancellationToken, Task<ServerTrialOutcome>> tryWith,
         IProgress<BrokenModProgress>? progress = null,
         CancellationToken ct = default,
-        IReadOnlyCollection<int>? recent = null)
+        IReadOnlyCollection<int>? recent = null,
+        IProgress<BrokenModStep>? steps = null)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(mods, 1);
 
         var tries = 0;
 
-        async Task<ServerTrialOutcome> Try(IReadOnlyList<int> on, IReadOnlyList<IReadOnlyList<int>> ahead, bool errors, IReadOnlyList<int>? suspects = null)
+        async Task<ServerTrialOutcome> Try(BrokenModStage stage, IReadOnlyList<int> on, IReadOnlyList<IReadOnlyList<int>> ahead, bool errors, IReadOnlyList<int>? suspects = null)
         {
             ct.ThrowIfCancellationRequested();
             tries++;
-            progress?.Report(new BrokenModProgress(tries, tries + ahead.Count, on.Count, mods, suspects) { On = on, Ahead = ahead });
+            progress?.Report(new BrokenModProgress(tries, tries + ahead.Count, on.Count, mods, suspects) { On = on, Ahead = ahead, Stage = stage });
             return await tryWith(on, errors, ct).ConfigureAwait(false);
         }
+
+        void Done(BrokenModStage stage, IReadOnlyList<int> on, bool showed) =>
+            steps?.Report(new BrokenModStep(tries, stage, on.Count, mods, showed));
 
         var all = Enumerable.Range(0, mods).ToList();
         var search = new ModBisect(mods, needs);
@@ -67,7 +88,8 @@ public static class BrokenModSearch
         static IReadOnlyList<IReadOnlyList<int>> From(ModBisect bisect, Func<IReadOnlyList<int>, IReadOnlyList<int>> map) =>
             bisect.Next is { } next ? [map(next), .. bisect.Ahead.Select(map)] : [];
 
-        var first = await Try(all, [[], .. From(search, s => s)], errors: true).ConfigureAwait(false);
+        var first = await Try(BrokenModStage.AllOn, all, [[], .. From(search, s => s)], errors: true).ConfigureAwait(false);
+        Done(BrokenModStage.AllOn, all, !first.Started || first.Errors.Count > 0);
         if (first.Started && first.Errors.Count == 0)
             return new BrokenModResult(BrokenModVerdict.NothingWrong, null, null, null, [], tries);
 
@@ -75,12 +97,13 @@ public static class BrokenModSearch
 
         var errorsMatter = symptom == BrokenModSymptom.ServerLogsErrors;
 
-        var none = await Try([], From(search, s => s), errorsMatter).ConfigureAwait(false);
+        var none = await Try(BrokenModStage.AllOff, [], From(search, s => s), errorsMatter).ConfigureAwait(false);
         var theirs = first.Errors.Select(ServerTrial.Signature)
             .Except(none.Errors.Select(ServerTrial.Signature), StringComparer.Ordinal)
             .ToHashSet(StringComparer.Ordinal);
 
         var stillWrong = symptom == BrokenModSymptom.ServerDoesNotStart ? !none.Started : !none.Started || theirs.Count == 0;
+        Done(BrokenModStage.AllOff, [], stillWrong);
         if (stillWrong)
             return new BrokenModResult(BrokenModVerdict.NotTheMods, symptom, null, null, none.Errors, tries);
 
@@ -102,7 +125,8 @@ public static class BrokenModSearch
             var others = all.Except(changed).ToList();
             var narrow = new ModBisect(changed.Count, i => needs(changed[i]).Select(n => changed.IndexOf(n)).Where(n => n >= 0));
 
-            var without = await Try(others, From(narrow, s => [.. others.Concat(s.Select(i => changed[i])).Order()]), errorsMatter).ConfigureAwait(false);
+            var without = await Try(BrokenModStage.RecentOff, others, From(narrow, s => [.. others.Concat(s.Select(i => changed[i])).Order()]), errorsMatter).ConfigureAwait(false);
+            Done(BrokenModStage.RecentOff, others, Fails(without));
             if (!Fails(without))
             {
                 among = changed;
@@ -119,8 +143,10 @@ public static class BrokenModSearch
             var on = On(next);
             IReadOnlyList<int> suspects = [.. search.Suspects.Select(Mod)];
 
-            var outcome = await Try(on, [.. search.Ahead.Select(On)], errorsMatter, suspects).ConfigureAwait(false);
+            var stage = search.Stage;
+            var outcome = await Try(stage, on, [.. search.Ahead.Select(On)], errorsMatter, suspects).ConfigureAwait(false);
             var failed = Fails(outcome);
+            Done(stage, on, failed);
 
             if (failed && on.Count <= fewest)
             {
@@ -171,6 +197,16 @@ public static class BrokenModSearch
         }
 
         return changed;
+    }
+
+    // Whether a server run since a mod was found went without the problem: it began after the find,
+    // came up, and - when the problem was errors - logged none of the ones the search pinned on it.
+    public static bool ProblemGone(IReadOnlyList<LogEntry> run, DateTime foundAt, bool wontStart, IReadOnlySet<string> signatures)
+    {
+        if (run.FirstOrDefault(e => e.At is not null)?.At is not { } began || began < foundAt) return false;
+        if (!run.Any(ModLoadShares.IsReady)) return false;
+
+        return wontStart || !run.Any(e => e.IsError && signatures.Contains(ServerTrial.Signature(e)));
     }
 
     // About how long is left: this start and each one expected after it (ModBisect.Ahead), each

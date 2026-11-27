@@ -269,6 +269,22 @@
                         </StackPanel>
                         </Grid>
                         </Border>
+
+                        <ui:CardExpander
+                            Margin="28,12,0,0"
+                            IsExpanded="True"
+                            Visibility="{Binding HasSteps, Converter={StaticResource BoolToVisibility}}">
+                            <ui:CardExpander.Header>
+                                <TextBlock FontWeight="SemiBold" Text="{Binding StepsHeader}" />
+                            </ui:CardExpander.Header>
+                            <ItemsControl Focusable="False" ItemsSource="{Binding Steps}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Margin="0,2" FontSize="12" TextWrapping="Wrap" Text="{Binding}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ui:CardExpander>
                     </StackPanel>
                 </ui:Card>
 

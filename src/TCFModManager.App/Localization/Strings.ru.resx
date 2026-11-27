@@ -11603,7 +11603,7 @@
     <value>Подготовка…</value>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Запуск {0} из примерно {1} - включено {2} из {3} серверных модов</value>
+    <value>Запуск {0} из примерно {1}: {2}</value>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Все моды снова включаются…</value>
@@ -11841,5 +11841,35 @@
   </data>
   <data name="Search_Disclaimer" xml:space="preserve">
     <value>Если здесь появилась проблема, это не значит, что виноват этот мод. Посмотрите его страницу на sp-mod и Discord до или после удаления.</value>
+  </data>
+  <data name="Search_StageAllOnFormat" xml:space="preserve">
+    <value>Все {0} серверных модов включены</value>
+  </data>
+  <data name="Search_StageAllOff" xml:space="preserve">
+    <value>Все серверные моды выключены</value>
+  </data>
+  <data name="Search_StageRecentOffFormat" xml:space="preserve">
+    <value>Недавно изменённые моды выключены, включено {0} из {1}</value>
+  </data>
+  <data name="Search_StageNarrowingFormat" xml:space="preserve">
+    <value>Сужение поиска, включено {0} из {1}</value>
+  </data>
+  <data name="Search_StageAloneFormat" xml:space="preserve">
+    <value>Подозреваемый мод отдельно, включено {0}</value>
+  </data>
+  <data name="Search_StagePartnerFormat" xml:space="preserve">
+    <value>Поиск второго мода, включено {0} из {1}</value>
+  </data>
+  <data name="Search_StepProblem" xml:space="preserve">
+    <value>проблема есть</value>
+  </data>
+  <data name="Search_StepClean" xml:space="preserve">
+    <value>проблемы нет</value>
+  </data>
+  <data name="Search_StepFormat" xml:space="preserve">
+    <value>{0}. {1} - {2} ({3})</value>
+  </data>
+  <data name="Search_StepsHeaderFormat" xml:space="preserve">
+    <value>Запуски ({0})</value>
   </data>
 </root>

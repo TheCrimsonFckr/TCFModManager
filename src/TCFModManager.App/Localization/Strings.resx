@@ -13708,8 +13708,8 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Progress line before the first start.</comment>
   </data>
   <data name="Search_ProgressFormat" xml:space="preserve">
-    <value>Start {0} of about {1} - {2} of {3} server mods on</value>
-    <comment>Progress line. {0}: which start this is; {1}: about how many there will be; {2}: server mods on for it; {3}: server mods searched.</comment>
+    <value>Start {0} of about {1}: {2}</value>
+    <comment>Progress line. {0}: which start this is; {1}: about how many there will be; {2}: what this start is for (a Search_Stage... string).</comment>
   </data>
   <data name="Search_PuttingBack" xml:space="preserve">
     <value>Turning every mod back on…</value>
@@ -14010,5 +14010,45 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
   <data name="Search_Disclaimer" xml:space="preserve">
     <value>When a problem appears here, it does not mean that this mod is at fault. Check its sp-mod mod page and the Discord before or after removing it.</value>
     <comment>Disclaimer under a Find the mod causing it result, and the warning in its start pop-up. sp-mod is the site's name - keep it as it is.</comment>
+  </data>
+  <data name="Search_StageAllOnFormat" xml:space="preserve">
+    <value>All {0} server mods on</value>
+    <comment>Stage of a start. {0} = number of server mods.</comment>
+  </data>
+  <data name="Search_StageAllOff" xml:space="preserve">
+    <value>All server mods off</value>
+    <comment>Stage of a start.</comment>
+  </data>
+  <data name="Search_StageRecentOffFormat" xml:space="preserve">
+    <value>Recently changed mods off, {0} of {1} on</value>
+    <comment>Stage of a start. {0} = mods on, {1} = all server mods.</comment>
+  </data>
+  <data name="Search_StageNarrowingFormat" xml:space="preserve">
+    <value>Narrowing down, {0} of {1} on</value>
+    <comment>Stage of a start. {0} = mods on, {1} = all server mods.</comment>
+  </data>
+  <data name="Search_StageAloneFormat" xml:space="preserve">
+    <value>The suspect on its own, {0} on</value>
+    <comment>Stage of a start: the mod found so far with only what it needs. {0} = mods on.</comment>
+  </data>
+  <data name="Search_StagePartnerFormat" xml:space="preserve">
+    <value>Looking for a second mod, {0} of {1} on</value>
+    <comment>Stage of a start: looking for the other mod of a clashing pair. {0} = mods on, {1} = all server mods.</comment>
+  </data>
+  <data name="Search_StepProblem" xml:space="preserve">
+    <value>problem showed</value>
+    <comment>Outcome of a start.</comment>
+  </data>
+  <data name="Search_StepClean" xml:space="preserve">
+    <value>no problem</value>
+    <comment>Outcome of a start.</comment>
+  </data>
+  <data name="Search_StepFormat" xml:space="preserve">
+    <value>{0}. {1} - {2} ({3})</value>
+    <comment>One finished start. {0} = start number, {1} = stage, {2} = outcome, {3} = how long it took.</comment>
+  </data>
+  <data name="Search_StepsHeaderFormat" xml:space="preserve">
+    <value>Starts ({0})</value>
+    <comment>Header over the list of finished starts. {0} = how many.</comment>
   </data>
 </root>
