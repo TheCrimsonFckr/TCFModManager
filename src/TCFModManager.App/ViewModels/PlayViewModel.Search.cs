@@ -2,6 +2,7 @@ using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Services;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -31,9 +32,11 @@ public partial class PlayViewModel
         if (IsSearching) OfferBrokenModSearch = false;
     }
 
+    private bool _launchingForSearch;
+
     private bool RefusedWhileSearching()
     {
-        if (!IsSearching) return false;
+        if (!IsSearching || _launchingForSearch) return false;
 
         HasError = true;
         Message = Localization.Strings.Search_PlayLocked;
@@ -42,4 +45,36 @@ public partial class PlayViewModel
 
     [RelayCommand]
     private static void FindBrokenMod() => AppServices.BrokenModFinder.OpenAndStart();
+
+    //
+    // OPEN-54 N27c: one round of the client search - the game as Quick play starts it: Play for the
+    // picked profile, or else the server and the SPT launcher, where the user presses Play. Null when
+    // it started; otherwise what went wrong, as the card says it.
+    //
+    public async Task<string?> StartGameForSearchAsync()
+    {
+        _launchingForSearch = true;
+        try
+        {
+            Refresh();
+
+            if (QuickPlaysDirect)
+            {
+                await PlayAsync();
+                return PlayStatusIsError ? PlayStatus ?? Localization.Strings.Search_GameNotStarted : null;
+            }
+
+            if (Client is not { ExePath: not null } launcher) return Localization.Strings.Search_GameNotStarted;
+
+            HasError = false;
+            if (Server?.IsRunning != true) await StartServerAndWaitAsync(new SettingsService().Load(), openLauncher: !launcher.IsRunning);
+            else if (!launcher.IsRunning) Start(SptLaunchTarget.Client);
+
+            return HasError ? Message ?? Localization.Strings.Search_GameNotStarted : null;
+        }
+        finally
+        {
+            _launchingForSearch = false;
+        }
+    }
 }

@@ -163,6 +163,21 @@ public static class BrokenModSearch
             errors, tries, among?.Count ?? 0);
     }
 
+    //
+    // OPEN-54 N27c: the same search over client mods, where each try is a game start the user answers
+    // for. broke: true when the problem showed with those mods on.
+    //
+    public static Task<BrokenModResult> RunClientAsync(
+        int mods,
+        Func<int, IEnumerable<int>> needs,
+        Func<IReadOnlyList<int>, CancellationToken, Task<bool>> broke,
+        IProgress<BrokenModProgress>? progress = null,
+        CancellationToken ct = default,
+        IReadOnlyCollection<int>? recent = null,
+        IProgress<BrokenModStep>? steps = null) =>
+        RunAsync(mods, needs, async (on, _, token) =>
+            new ServerTrialOutcome(!await broke(on, token).ConfigureAwait(false), false, []), progress, ct, recent, steps);
+
     private static List<int> WithDependents(int mods, Func<int, IEnumerable<int>> needs, IReadOnlyCollection<int> picked)
     {
         var chosen = new bool[mods];
@@ -260,12 +275,12 @@ public static class BrokenModSearch
     // is an addon for (AddonParents) - so no try has a mod on without them; a mod installed twice is
     // left out.
     public static (IReadOnlyList<InstalledMod> Mods, Func<int, IEnumerable<int>> Needs) Suspects(
-        IReadOnlyList<InstalledMod> scanned, IReadOnlyList<AddonParent>? addons = null)
+        IReadOnlyList<InstalledMod> scanned, IReadOnlyList<AddonParent>? addons = null, InstalledModTarget target = InstalledModTarget.Server)
     {
         var twice = ModDisableService.DuplicatePairs(scanned).Select(p => p.Enabled).ToHashSet();
         var graph = ModDependencyGraph.Build(scanned);
 
-        var enabled = scanned.Where(m => m.Target == InstalledModTarget.Server && !m.IsDisabled && !twice.Contains(m)).ToList();
+        var enabled = scanned.Where(m => m.Target == target && !m.IsPatcher && !m.IsDisabled && !twice.Contains(m)).ToList();
         var included = enabled.ToHashSet();
 
         var parents = new Dictionary<InstalledMod, List<InstalledMod>>();

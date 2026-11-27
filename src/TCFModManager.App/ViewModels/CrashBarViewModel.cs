@@ -10,13 +10,15 @@ namespace TCFModManager.App.ViewModels;
 public sealed partial class CrashBarViewModel : LocalizedViewModel
 {
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Title), nameof(Message), nameof(HasMod))]
+    [NotifyPropertyChangedFor(nameof(Title), nameof(Message), nameof(HasMod), nameof(OfferClientSearch))]
     private ProcessCrash? _crash;
 
     [ObservableProperty]
     private bool _isOpen;
 
     public bool HasMod => Crash?.Mod is not null;
+
+    public bool OfferClientSearch => Crash is { Kind: WatchedProcessKind.Game } && AppServices.BrokenModFinder.CanStart;
 
     public string Title
     {
@@ -62,6 +64,13 @@ public sealed partial class CrashBarViewModel : LocalizedViewModel
     {
         IsOpen = false;
         AppNavigation.Navigate(typeof(DiagnosePage));
+    }
+
+    [RelayCommand]
+    private void FindClientMod()
+    {
+        IsOpen = false;
+        AppServices.BrokenModFinder.OpenAndStartClient();
     }
 
     [RelayCommand]

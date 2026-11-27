@@ -3825,4 +3825,26 @@ internal static class Strings
     internal static string Search_StepClean => LocalizationService.Get("Search_StepClean");
     internal static string Search_StepFormat => LocalizationService.Get("Search_StepFormat");
     internal static string Search_StepsHeaderFormat => LocalizationService.Get("Search_StepsHeaderFormat");
+    internal static string ClientCheck_Title => LocalizationService.Get("ClientCheck_Title");
+    internal static string ClientCheck_Description => LocalizationService.Get("ClientCheck_Description");
+    internal static string ClientCheck_Start => LocalizationService.Get("ClientCheck_Start");
+    internal static string ClientCheck_Checking => LocalizationService.Get("ClientCheck_Checking");
+    internal static string ClientCheck_NothingFound => LocalizationService.Get("ClientCheck_NothingFound");
+    internal static string ClientCheck_Found(int count, params object?[] values) =>
+        LocalizationService.Plural("ClientCheck_Found", count, values);
+    internal static string ClientCheck_More(int count, params object?[] values) =>
+        LocalizationService.Plural("ClientCheck_More", count, values);
+    internal static string ClientCheck_MissingAssemblyFormat => LocalizationService.Get("ClientCheck_MissingAssemblyFormat");
+    internal static string ClientCheck_MissingTypeFormat => LocalizationService.Get("ClientCheck_MissingTypeFormat");
+    internal static string ClientCheck_MissingMemberFormat => LocalizationService.Get("ClientCheck_MissingMemberFormat");
+    internal static string ClientCheck_PatchTargetFormat => LocalizationService.Get("ClientCheck_PatchTargetFormat");
+    internal static string ClientCheck_DependencyMissingFormat => LocalizationService.Get("ClientCheck_DependencyMissingFormat");
+    internal static string ClientCheck_DependencyOffFormat => LocalizationService.Get("ClientCheck_DependencyOffFormat");
+    internal static string Help_Diagnose_ClientCheck_Title => LocalizationService.Get("Help_Diagnose_ClientCheck_Title");
+    internal static string Help_Diagnose_ClientCheck_Step1 => LocalizationService.Get("Help_Diagnose_ClientCheck_Step1");
+    internal static string Help_Diagnose_ClientCheck_Step2 => LocalizationService.Get("Help_Diagnose_ClientCheck_Step2");
+    internal static string Help_Diagnose_ClientCheck_Note => LocalizationService.Get("Help_Diagnose_ClientCheck_Note");
+    internal static string Help_Diagnose_ClientCheck_Keywords => LocalizationService.Get("Help_Diagnose_ClientCheck_Keywords");
+    internal static string Tour_Diagnose_Clients_Title => LocalizationService.Get("Tour_Diagnose_Clients_Title");
+    internal static string Tour_Diagnose_Clients_Body => LocalizationService.Get("Tour_Diagnose_Clients_Body");
 }

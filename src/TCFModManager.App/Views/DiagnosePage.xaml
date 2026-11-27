@@ -288,6 +288,81 @@
                     </StackPanel>
                 </ui:Card>
 
+                <!-- OPEN-54 N27b: Check client mods - ClientLoadCheck, on demand. -->
+                <ui:Card Margin="0,0,0,12" Padding="16,12" behaviors:TourTarget.Key="diagnose.clients">
+                    <StackPanel>
+                        <DockPanel>
+                            <ui:SymbolIcon Margin="0,0,10,0" VerticalAlignment="Center" FontSize="18" Symbol="PuzzlePiece24" />
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:ProgressRing
+                                    Width="20"
+                                    Height="20"
+                                    Margin="0,0,12,0"
+                                    IsIndeterminate="True"
+                                    Visibility="{Binding IsCheckingClients, Converter={StaticResource BoolToVisibility}}" />
+                                <ui:Button
+                                    Content="{loc:Str ClientCheck_Start}"
+                                    Icon="{ui:SymbolIcon DocumentSearch24}"
+                                    Command="{Binding CheckClientModsCommand}"
+                                    IsEnabled="{Binding IsNotCheckingClients}" />
+                            </StackPanel>
+                            <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" TextWrapping="Wrap" Text="{loc:Str ClientCheck_Title}" />
+                        </DockPanel>
+                        <TextBlock
+                            Margin="28,4,0,0"
+                            TextWrapping="Wrap"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Text="{loc:Str ClientCheck_Description}" />
+                        <TextBlock
+                            Margin="28,8,0,0"
+                            TextWrapping="Wrap"
+                            Text="{Binding ClientCheckStatus}"
+                            Visibility="{Binding ClientCheckStatus, Converter={StaticResource NullToCollapsed}}" />
+                        <ItemsControl Margin="28,4,0,0" Focusable="False" ItemsSource="{Binding ClientChecks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Margin="0,8,0,0"
+                                        Padding="12,8"
+                                        CornerRadius="4"
+                                        BorderThickness="3,0,0,0"
+                                        BorderBrush="{DynamicResource SystemFillColorCautionBrush}"
+                                        Background="{DynamicResource ControlFillColorInputActiveBrush}">
+                                        <DockPanel>
+                                            <ui:Button
+                                                Margin="12,0,0,0"
+                                                DockPanel.Dock="Right"
+                                                VerticalAlignment="Top"
+                                                Content="{loc:Str Diagnose_ShowMod}"
+                                                Icon="{ui:SymbolIcon Apps24}"
+                                                Visibility="{Binding HasMod, Converter={StaticResource BoolToVisibility}}"
+                                                Command="{Binding DataContext.ShowClientModCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                                CommandParameter="{Binding}" />
+                                            <StackPanel>
+                                                <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding Title}" />
+                                                <TextBlock Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap" Text="{Binding Lines}" />
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <DockPanel Margin="28,10,0,0" Visibility="{Binding HasClientChecks, Converter={StaticResource BoolToVisibility}}">
+                            <ui:SymbolIcon
+                                Margin="0,1,6,0"
+                                VerticalAlignment="Top"
+                                FontSize="14"
+                                Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                Symbol="Warning24" />
+                            <TextBlock
+                                FontSize="12"
+                                TextWrapping="Wrap"
+                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                Text="{loc:Str Search_Disclaimer}" />
+                        </DockPanel>
+                    </StackPanel>
+                </ui:Card>
+
                 <ItemsControl Focusable="False" ItemsSource="{Binding Findings}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

@@ -14075,4 +14075,92 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <value>Starts ({0})</value>
     <comment>Header over the list of finished starts. {0} = how many.</comment>
   </data>
+  <data name="ClientCheck_Title" xml:space="preserve">
+    <value>Check client mods</value>
+    <comment>Card title on Diagnose logs.</comment>
+  </data>
+  <data name="ClientCheck_Description" xml:space="preserve">
+    <value>Reads every client plugin without starting the game, and lists those built for another game or SPT version, or missing a mod they need. A patch that finds its target while the game runs can't be seen this way, so a mod not listed isn't cleared.</value>
+    <comment>Card description.</comment>
+  </data>
+  <data name="ClientCheck_Start" xml:space="preserve">
+    <value>Check</value>
+    <comment>Button.</comment>
+  </data>
+  <data name="ClientCheck_Checking" xml:space="preserve">
+    <value>Checking client mods...</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="ClientCheck_NothingFound" xml:space="preserve">
+    <value>No client plugin uses anything this install doesn't have.</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="ClientCheck_Found_one" xml:space="preserve">
+    <value>{0} client mod to look at.</value>
+    <comment>Status. {0} = count.</comment>
+  </data>
+  <data name="ClientCheck_Found_other" xml:space="preserve">
+    <value>{0} client mods to look at.</value>
+    <comment>Status. {0} = count.</comment>
+  </data>
+  <data name="ClientCheck_More_one" xml:space="preserve">
+    <value>...and {0} more.</value>
+    <comment>After a mod's first lines. {0} = how many more.</comment>
+  </data>
+  <data name="ClientCheck_More_other" xml:space="preserve">
+    <value>...and {0} more.</value>
+    <comment>After a mod's first lines. {0} = how many more.</comment>
+  </data>
+  <data name="ClientCheck_MissingAssemblyFormat" xml:space="preserve">
+    <value>Needs {0}, which isn't installed or is turned off.</value>
+    <comment>{0} = an assembly name.</comment>
+  </data>
+  <data name="ClientCheck_MissingTypeFormat" xml:space="preserve">
+    <value>Uses {0} from {1}, which isn't there - it may be built for another game or SPT version.</value>
+    <comment>{0} = a type, {1} = an assembly name.</comment>
+  </data>
+  <data name="ClientCheck_MissingMemberFormat" xml:space="preserve">
+    <value>Uses {0} from {1}, which isn't there - it may be built for another game or SPT version.</value>
+    <comment>{0} = Type.Member, {1} = an assembly name.</comment>
+  </data>
+  <data name="ClientCheck_PatchTargetFormat" xml:space="preserve">
+    <value>Patches {0}, which isn't there - it may be built for another game or SPT version.</value>
+    <comment>{0} = Type or Type.Method.</comment>
+  </data>
+  <data name="ClientCheck_DependencyMissingFormat" xml:space="preserve">
+    <value>Needs {0}, which isn't installed.</value>
+    <comment>{0} = a plugin GUID.</comment>
+  </data>
+  <data name="ClientCheck_DependencyOffFormat" xml:space="preserve">
+    <value>Needs {0} ({1}), which is turned off.</value>
+    <comment>{0} = a mod name, {1} = its plugin GUID.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Title" xml:space="preserve">
+    <value>Check client mods without starting the game</value>
+    <comment>Help topic title.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step1" xml:space="preserve">
+    <value>On {0}, press {1} on the {2} card.</value>
+    <comment>{0} = page, {1} = button, {2} = card title.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step2" xml:space="preserve">
+    <value>Each mod listed uses something this install doesn't have, or needs a mod that's missing or turned off. {0} goes to it.</value>
+    <comment>{0} = a button.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
+    <value>It reads the plugins, it doesn't run them: a patch that finds its target while the game runs can't be seen, so a mod that isn't listed isn't cleared.</value>
+    <comment>Help note.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
+    <value>client mod, plugin, game won't start, game crash, wrong version, missing dependency, bepinex</value>
+    <comment>Help search keywords.</comment>
+  </data>
+  <data name="Tour_Diagnose_Clients_Title" xml:space="preserve">
+    <value>Check client mods</value>
+    <comment>Feature tour, Diagnose logs: step title.</comment>
+  </data>
+  <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
+    <value>Reads every client plugin without starting the game and lists the ones built for another game or SPT version, or missing a mod they need.</value>
+    <comment>Feature tour, Diagnose logs: Check client mods.</comment>
+  </data>
 </root>

@@ -11437,4 +11437,70 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   <data name="Search_StepsHeaderFormat" xml:space="preserve">
     <value>Avvii ({0})</value>
   </data>
+  <data name="ClientCheck_Title" xml:space="preserve">
+    <value>Controlla i mod client</value>
+  </data>
+  <data name="ClientCheck_Description" xml:space="preserve">
+    <value>Legge ogni plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario. Una patch che trova il suo obiettivo a gioco avviato non si vede così: un mod non elencato non è quindi scagionato.</value>
+  </data>
+  <data name="ClientCheck_Start" xml:space="preserve">
+    <value>Controlla</value>
+  </data>
+  <data name="ClientCheck_Checking" xml:space="preserve">
+    <value>Controllo dei mod client...</value>
+  </data>
+  <data name="ClientCheck_NothingFound" xml:space="preserve">
+    <value>Nessun plugin client usa qualcosa che manca in questa installazione.</value>
+  </data>
+  <data name="ClientCheck_Found_one" xml:space="preserve">
+    <value>{0} mod client da controllare.</value>
+  </data>
+  <data name="ClientCheck_Found_other" xml:space="preserve">
+    <value>{0} mod client da controllare.</value>
+  </data>
+  <data name="ClientCheck_More_one" xml:space="preserve">
+    <value>...e altri {0}.</value>
+  </data>
+  <data name="ClientCheck_More_other" xml:space="preserve">
+    <value>...e altri {0}.</value>
+  </data>
+  <data name="ClientCheck_MissingAssemblyFormat" xml:space="preserve">
+    <value>Richiede {0}, che non è installato o è disattivato.</value>
+  </data>
+  <data name="ClientCheck_MissingTypeFormat" xml:space="preserve">
+    <value>Usa {0} da {1}, che non c'è: forse è fatto per un'altra versione del gioco o di SPT.</value>
+  </data>
+  <data name="ClientCheck_MissingMemberFormat" xml:space="preserve">
+    <value>Usa {0} da {1}, che non c'è: forse è fatto per un'altra versione del gioco o di SPT.</value>
+  </data>
+  <data name="ClientCheck_PatchTargetFormat" xml:space="preserve">
+    <value>Modifica {0}, che non c'è: forse è fatto per un'altra versione del gioco o di SPT.</value>
+  </data>
+  <data name="ClientCheck_DependencyMissingFormat" xml:space="preserve">
+    <value>Richiede {0}, che non è installato.</value>
+  </data>
+  <data name="ClientCheck_DependencyOffFormat" xml:space="preserve">
+    <value>Richiede {0} ({1}), che è disattivato.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Title" xml:space="preserve">
+    <value>Controllare i mod client senza avviare il gioco</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step1" xml:space="preserve">
+    <value>In {0}, premi {1} nella scheda {2}.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step2" xml:space="preserve">
+    <value>Ogni mod elencato usa qualcosa che manca in questa installazione, o richiede un mod assente o disattivato. {0} ti porta lì.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
+    <value>Legge i plugin senza eseguirli: una patch che trova il suo obiettivo a gioco avviato non si vede, quindi un mod non elencato non è scagionato.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
+    <value>mod client, plugin, il gioco non parte, crash del gioco, versione sbagliata, dipendenza mancante, bepinex</value>
+  </data>
+  <data name="Tour_Diagnose_Clients_Title" xml:space="preserve">
+    <value>Controlla i mod client</value>
+  </data>
+  <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
+    <value>Legge ogni plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario.</value>
+  </data>
 </root>

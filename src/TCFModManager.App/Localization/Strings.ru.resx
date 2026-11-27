@@ -11872,4 +11872,82 @@
   <data name="Search_StepsHeaderFormat" xml:space="preserve">
     <value>Запуски ({0})</value>
   </data>
+  <data name="ClientCheck_Title" xml:space="preserve">
+    <value>Проверить клиентские моды</value>
+  </data>
+  <data name="ClientCheck_Description" xml:space="preserve">
+    <value>Читает каждый клиентский плагин без запуска игры и показывает те, что собраны под другую версию игры или SPT, или которым не хватает нужного мода. Патч, находящий цель уже в запущенной игре, так не увидеть, поэтому мод вне списка не оправдан.</value>
+  </data>
+  <data name="ClientCheck_Start" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="ClientCheck_Checking" xml:space="preserve">
+    <value>Проверка клиентских модов...</value>
+  </data>
+  <data name="ClientCheck_NothingFound" xml:space="preserve">
+    <value>Ни один клиентский плагин не использует того, чего нет в этой установке.</value>
+  </data>
+  <data name="ClientCheck_Found_one" xml:space="preserve">
+    <value>{0} клиентский мод стоит проверить.</value>
+  </data>
+  <data name="ClientCheck_Found_other" xml:space="preserve">
+    <value>Клиентских модов стоит проверить: {0}.</value>
+  </data>
+  <data name="ClientCheck_More_one" xml:space="preserve">
+    <value>...и ещё {0}.</value>
+  </data>
+  <data name="ClientCheck_More_other" xml:space="preserve">
+    <value>...и ещё {0}.</value>
+  </data>
+  <data name="ClientCheck_MissingAssemblyFormat" xml:space="preserve">
+    <value>Нужна сборка {0}, которой нет или она выключена.</value>
+  </data>
+  <data name="ClientCheck_MissingTypeFormat" xml:space="preserve">
+    <value>Использует {0} из {1}, которого нет - возможно, собран под другую версию игры или SPT.</value>
+  </data>
+  <data name="ClientCheck_MissingMemberFormat" xml:space="preserve">
+    <value>Использует {0} из {1}, которого нет - возможно, собран под другую версию игры или SPT.</value>
+  </data>
+  <data name="ClientCheck_PatchTargetFormat" xml:space="preserve">
+    <value>Патчит {0}, которого нет - возможно, собран под другую версию игры или SPT.</value>
+  </data>
+  <data name="ClientCheck_DependencyMissingFormat" xml:space="preserve">
+    <value>Нужен {0}, который не установлен.</value>
+  </data>
+  <data name="ClientCheck_DependencyOffFormat" xml:space="preserve">
+    <value>Нужен {0} ({1}), который выключен.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Title" xml:space="preserve">
+    <value>Проверить клиентские моды без запуска игры</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1} на карточке {2}.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step2" xml:space="preserve">
+    <value>Каждый мод в списке использует то, чего нет в установке, или требует отсутствующий либо выключенный мод. {0} ведёт к нему.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
+    <value>Плагины читаются, а не запускаются: патч, находящий цель в запущенной игре, не виден, поэтому мод вне списка не оправдан.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
+    <value>клиентский мод, плагин, игра не запускается, вылет игры, не та версия, нет зависимости, bepinex</value>
+  </data>
+  <data name="Tour_Diagnose_Clients_Title" xml:space="preserve">
+    <value>Проверить клиентские моды</value>
+  </data>
+  <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
+    <value>Читает каждый клиентский плагин без запуска игры и показывает те, что собраны под другую версию игры или SPT, или которым не хватает нужного мода.</value>
+  </data>
+  <data name="ClientCheck_Found_few" xml:space="preserve">
+    <value>{0} клиентских мода стоит проверить.</value>
+  </data>
+  <data name="ClientCheck_Found_many" xml:space="preserve">
+    <value>{0} клиентских модов стоит проверить.</value>
+  </data>
+  <data name="ClientCheck_More_few" xml:space="preserve">
+    <value>...и ещё {0}.</value>
+  </data>
+  <data name="ClientCheck_More_many" xml:space="preserve">
+    <value>...и ещё {0}.</value>
+  </data>
 </root>

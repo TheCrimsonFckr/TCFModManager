@@ -590,6 +590,13 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Diagnose_BrokenMod_Note)
                 .WithKeywords(() => Strings.Help_Diagnose_BrokenMod_Keywords),
 
+            // OPEN-54 N27b.
+            Topic("diagnose.clientcheck", () => Strings.Help_Diagnose_ClientCheck_Title,
+                Step(() => Strings.Help_Diagnose_ClientCheck_Step1, () => Strings.Nav_Diagnose, () => Strings.ClientCheck_Start, () => Strings.ClientCheck_Title),
+                Step(() => Strings.Help_Diagnose_ClientCheck_Step2, () => Strings.Diagnose_ShowMod))
+                .WithNote(() => Strings.Help_Diagnose_ClientCheck_Note)
+                .WithKeywords(() => Strings.Help_Diagnose_ClientCheck_Keywords),
+
             // OPEN-73.
             Topic("diagnose.purgelogs", () => Strings.Help_Diagnose_PurgeLogs_Title,
                 Step(() => Strings.Help_Diagnose_PurgeLogs_Step1, () => Strings.Nav_Diagnose, () => Strings.Diagnose_PurgeLogs),

@@ -11437,4 +11437,70 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   <data name="Search_StepsHeaderFormat" xml:space="preserve">
     <value>Starts ({0})</value>
   </data>
+  <data name="ClientCheck_Title" xml:space="preserve">
+    <value>Client-Mods prüfen</value>
+  </data>
+  <data name="ClientCheck_Description" xml:space="preserve">
+    <value>Liest jedes Client-Plugin, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt. Ein Patch, der sein Ziel erst im laufenden Spiel findet, ist so nicht zu sehen - eine nicht gelistete Mod ist also nicht entlastet.</value>
+  </data>
+  <data name="ClientCheck_Start" xml:space="preserve">
+    <value>Prüfen</value>
+  </data>
+  <data name="ClientCheck_Checking" xml:space="preserve">
+    <value>Client-Mods werden geprüft...</value>
+  </data>
+  <data name="ClientCheck_NothingFound" xml:space="preserve">
+    <value>Kein Client-Plugin nutzt etwas, das in dieser Installation fehlt.</value>
+  </data>
+  <data name="ClientCheck_Found_one" xml:space="preserve">
+    <value>{0} Client-Mod zum Ansehen.</value>
+  </data>
+  <data name="ClientCheck_Found_other" xml:space="preserve">
+    <value>{0} Client-Mods zum Ansehen.</value>
+  </data>
+  <data name="ClientCheck_More_one" xml:space="preserve">
+    <value>...und {0} weitere.</value>
+  </data>
+  <data name="ClientCheck_More_other" xml:space="preserve">
+    <value>...und {0} weitere.</value>
+  </data>
+  <data name="ClientCheck_MissingAssemblyFormat" xml:space="preserve">
+    <value>Braucht {0}, das nicht installiert oder ausgeschaltet ist.</value>
+  </data>
+  <data name="ClientCheck_MissingTypeFormat" xml:space="preserve">
+    <value>Nutzt {0} aus {1}, das es nicht gibt - vielleicht für eine andere Spiel- oder SPT-Version gebaut.</value>
+  </data>
+  <data name="ClientCheck_MissingMemberFormat" xml:space="preserve">
+    <value>Nutzt {0} aus {1}, das es nicht gibt - vielleicht für eine andere Spiel- oder SPT-Version gebaut.</value>
+  </data>
+  <data name="ClientCheck_PatchTargetFormat" xml:space="preserve">
+    <value>Patcht {0}, das es nicht gibt - vielleicht für eine andere Spiel- oder SPT-Version gebaut.</value>
+  </data>
+  <data name="ClientCheck_DependencyMissingFormat" xml:space="preserve">
+    <value>Braucht {0}, das nicht installiert ist.</value>
+  </data>
+  <data name="ClientCheck_DependencyOffFormat" xml:space="preserve">
+    <value>Braucht {0} ({1}), das ausgeschaltet ist.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Title" xml:space="preserve">
+    <value>Client-Mods prüfen, ohne das Spiel zu starten</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step1" xml:space="preserve">
+    <value>Drücke auf {0} {1} auf der Karte {2}.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Step2" xml:space="preserve">
+    <value>Jede gelistete Mod nutzt etwas, das in dieser Installation fehlt, oder braucht eine Mod, die fehlt oder aus ist. {0} führt zu ihr.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
+    <value>Es liest die Plugins, es führt sie nicht aus: Ein Patch, der sein Ziel erst im laufenden Spiel findet, ist nicht zu sehen - eine nicht gelistete Mod ist also nicht entlastet.</value>
+  </data>
+  <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
+    <value>Client-Mod, Plugin, Spiel startet nicht, Spielabsturz, falsche Version, fehlende Abhängigkeit, BepInEx</value>
+  </data>
+  <data name="Tour_Diagnose_Clients_Title" xml:space="preserve">
+    <value>Client-Mods prüfen</value>
+  </data>
+  <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
+    <value>Liest jedes Client-Plugin, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt.</value>
+  </data>
 </root>

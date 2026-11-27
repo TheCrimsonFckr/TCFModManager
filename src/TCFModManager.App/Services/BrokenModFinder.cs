@@ -36,6 +36,8 @@ public sealed class SavedSearchResult
     public bool WontStart { get; set; }
 
     public List<string> Signatures { get; set; } = [];
+
+    public bool Client { get; set; }
 }
 
 public sealed partial class FoundMod(string name, string title, string? path) : ObservableObject
@@ -106,11 +108,11 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     public event EventHandler? Ended;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsIdle), nameof(CanStart), nameof(IsActive))]
+    [NotifyPropertyChangedFor(nameof(IsIdle), nameof(CanStart), nameof(IsActive), nameof(ShowsStart))]
     private bool _isRunning;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CanStart))]
+    [NotifyPropertyChangedFor(nameof(CanStart), nameof(ShowsStart))]
     private bool _isStopping;
 
     [ObservableProperty]
@@ -163,7 +165,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     public bool HasResult => ResultTitle is not null;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsInterrupted), nameof(CanStart), nameof(IsActive))]
+    [NotifyPropertyChangedFor(nameof(IsInterrupted), nameof(CanStart), nameof(IsActive), nameof(ShowsStart))]
     private string? _interruptedText;
 
     public bool IsInterrupted => InterruptedText is not null;
@@ -180,7 +182,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private static string TitleOf(InstalledMod mod) => mod.DeclaredName is { Length: > 0 } declared ? declared : mod.Name;
 
     [RelayCommand]
-    private async Task StartAsync()
+    private Task StartAsync() => RunSearchAsync(client: false);
+
+    private async Task RunSearchAsync(bool client)
     {
         if (!CanStart) return;
 
@@ -197,7 +201,15 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             return;
         }
 
-        if (ModInstallService.RunningBlockers(install) is { Count: > 0 } running)
+        if (client)
+        {
+            if (await Task.Run(() => SptLaunchService.IsGameRunning(install, GameCloser.SparesWindowless(new SettingsService().Load(), install))))
+            {
+                StatusMessage = Strings.Search_CloseGameFirst;
+                return;
+            }
+        }
+        else if (ModInstallService.RunningBlockers(install) is { Count: > 0 } running)
         {
             StatusMessage = ModInstallProblems.InstallInUse(running, ModInstallAction.Disable);
             return;
@@ -206,12 +218,13 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         var (scanned, mods, needs) = await Task.Run(() =>
         {
             var scan = InstalledScan.Run(install);
-            var (suspects, needed) = BrokenModSearch.Suspects(scan, AddonsOf(scan, install));
+            var (suspects, needed) = BrokenModSearch.Suspects(scan, AddonsOf(scan, install),
+                client ? InstalledModTarget.Client : InstalledModTarget.Server);
             return (scan, suspects, needed);
         });
         if (mods.Count == 0)
         {
-            StatusMessage = Strings.Search_NoServerMods;
+            StatusMessage = client ? Strings.Search_NoClientMods : Strings.Search_NoServerMods;
             return;
         }
 
@@ -219,7 +232,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         if (AskWindow.Show(new AskRequest
             {
                 Title = Strings.Search_Title,
-                Lead = T(Strings.Search_ConfirmFormat, mods.Count, about),
+                Lead = T(client ? Strings.Search_ClientConfirmFormat : Strings.Search_ConfirmFormat, mods.Count, about),
                 Warning = Strings.Search_Disclaimer,
                 First = Strings.Search_Start,
             }) != AskChoice.First)
@@ -228,6 +241,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         }
 
         ClearResult();
+        IsClientSearch = client;
         StatusMessage = null;
         IsRunning = true;
         _clock.Restart();
@@ -269,9 +283,9 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             }
             else
             {
-                session.Logs = ServerTrial.LogLengths(install);
+                if (!client) session.Logs = ServerTrial.LogLengths(install);
                 _store.Save(session);
-                AppLog.Info("Search", $"searching {mods.Count} server mod(s) of {install}");
+                AppLog.Info("Search", $"searching {mods.Count} {(client ? "client" : "server")} mod(s) of {install}");
 
                 var progress = new Progress<BrokenModProgress>(p =>
                 {
@@ -308,6 +322,19 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                 for (var i = 0; i < session.Mods.Count; i++) indexOf.TryAdd(session.Mods[i], i);
                 int? ModOf(string source) => locator.ByCode(source) is { } mod && indexOf.TryGetValue(mod.FolderPath, out var i) ? i : null;
 
+                if (client)
+                {
+                    var dispatcher = Application.Current.Dispatcher;
+                    result = await BrokenModSearch.RunClientAsync(mods.Count, needs, async (on, ct) =>
+                    {
+                        var wanted = on.Select(i => session.Mods[i]).ToHashSet(StringComparer.OrdinalIgnoreCase);
+                        var moved = await Task.Run(() => BrokenModSessionStore.Set(session, wanted), ct).ConfigureAwait(false);
+                        if (moved.Failed.Count > 0) throw new SearchFailed(Failures(moved.Failed));
+
+                        return await dispatcher.InvokeAsync(() => RoundAsync(install, on.Count, ct)).Task.Unwrap().ConfigureAwait(false);
+                    }, progress, cancel.Token, recent, steps);
+                }
+                else
                 result = await Task.Run(() => BrokenModSearch.RunAsync(mods.Count, needs, async (on, errors, ct) =>
                 {
                     var wanted = on.Select(i => session.Mods[i]).ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -348,7 +375,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         LeftText = null;
         Progress = 100;
 
-        var back = await PutBackAsync(session, profiles == NoProfiles ? null : profiles, trimLogs: true);
+        var back = await PutBackAsync(session, profiles == NoProfiles ? null : profiles, trimLogs: !client);
 
         AppServices.DownloadQueue.IsPaused = queueWasPaused;
         _cancel = null;
@@ -376,6 +403,8 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             if (Application.Current?.MainWindow is not { IsActive: true })
                 UpdateToasts.ShowMessage("search", Strings.Search_Title, Sentences(ResultTitle, ResultBody));
         }
+
+        if (!HasResult) IsClientSearch = false;
 
         Ended?.Invoke(this, EventArgs.Empty);
 
@@ -411,7 +440,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     {
         if (_now is not { } p || IsStopping || !_tick.IsEnabled) return;
 
-        var left = BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.Ahead, _clock.Elapsed - _nowBegan);
+        var left = IsClientSearch ? null : BrokenModSearch.TimeLeft(_starts, _shares, p.On, p.Ahead, _clock.Elapsed - _nowBegan);
         ProgressText = T(Strings.Search_ProgressFormat, p.Try, p.About, StageText(p.Stage, p.ModsOn, p.Mods));
         LeftText = left is not { } time ? null
             : time.TotalSeconds < 60 ? Strings.Search_LeftUnderMinute
@@ -572,7 +601,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private void SayTurnedOff()
     {
         var off = Found.Where(f => f.IsOff).Select(f => f.Title).ToList();
-        ResultDone = off.Count > 0 ? T(Strings.Search_TurnedOffFormat, TextLists.Join(off)) : null;
+        ResultDone = off.Count > 0 ? T(IsClientSearch ? Strings.Search_ClientTurnedOffFormat : Strings.Search_TurnedOffFormat, TextLists.Join(off)) : null;
     }
 
     [RelayCommand]
@@ -598,6 +627,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         ResultLines = null;
         ResultNote = null;
         ResultDone = null;
+        IsClientSearch = false;
         Found.Clear();
         Steps.Clear();
         _foundAt = null;
@@ -631,6 +661,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
                 FoundAt = _foundAt,
                 WontStart = _wontStart,
                 Signatures = [.. _signatures],
+                Client = IsClientSearch,
             }));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -657,6 +688,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             _foundAt = saved.FoundAt;
             _wontStart = saved.WontStart;
             _signatures = new HashSet<string>(saved.Signatures, StringComparer.Ordinal);
+            IsClientSearch = saved.Client;
 
             SayTurnedOff();
         }
@@ -672,10 +704,12 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     // what the server logged since the search began is the search's own.
     private async Task<PutBack> PutBackAsync(BrokenModSession session, ProfileBackup? profiles, bool trimLogs)
     {
+        var closeGame = IsClientSearch;
         var (problem, restored) = await Task.Run(async () =>
         {
             try
             {
+                if (closeGame) CloseGame(session.InstallPath);
                 await ServerTrial.StopAsync(session.InstallPath).ConfigureAwait(false);
 
                 var outcome = BrokenModSessionStore.PutBack(session);
@@ -724,6 +758,12 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
 
     private void Show(BrokenModResult result, IReadOnlyList<InstalledMod> mods, PutBack back, TimeSpan took)
     {
+        if (IsClientSearch)
+        {
+            ShowClient(result, mods, back, took);
+            return;
+        }
+
         var down = result.Symptom == BrokenModSymptom.ServerDoesNotStart;
 
         switch (result.Verdict)
@@ -781,10 +821,10 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         AppLog.Info("Search", $"{result.Verdict} after {result.Tries} start(s) in {took.TotalSeconds:0} s: {ResultTitle}");
     }
 
-    private static string StageText(BrokenModStage stage, int on, int mods) => stage switch
+    private string StageText(BrokenModStage stage, int on, int mods) => stage switch
     {
-        BrokenModStage.AllOn => T(Strings.Search_StageAllOnFormat, mods),
-        BrokenModStage.AllOff => Strings.Search_StageAllOff,
+        BrokenModStage.AllOn => T(IsClientSearch ? Strings.Search_StageClientAllOnFormat : Strings.Search_StageAllOnFormat, mods),
+        BrokenModStage.AllOff => IsClientSearch ? Strings.Search_StageClientAllOff : Strings.Search_StageAllOff,
         BrokenModStage.RecentOff => T(Strings.Search_StageRecentOffFormat, on, mods),
         BrokenModStage.Alone => T(Strings.Search_StageAloneFormat, on),
         BrokenModStage.Partner => T(Strings.Search_StagePartnerFormat, on, mods),
@@ -798,7 +838,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     //
     public void CheckAgainstServer(string? install)
     {
-        if (IsRunning || !HasResult || _foundAt is not { } foundAt || string.IsNullOrWhiteSpace(install)) return;
+        if (IsRunning || !HasResult || IsClientSearch || _foundAt is not { } foundAt || string.IsNullOrWhiteSpace(install)) return;
 
         var wontStart = _wontStart;
         var signatures = _signatures.ToHashSet(StringComparer.Ordinal);
@@ -889,7 +929,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
         if (AskWindow.Show(new AskRequest
             {
                 Title = Strings.Search_Title,
-                Lead = Strings.Search_CloseAskLead,
+                Lead = IsClientSearch ? Strings.Search_ClientCloseAskLead : Strings.Search_CloseAskLead,
                 First = Strings.Search_CloseAskStop,
             }) == AskChoice.First)
         {
