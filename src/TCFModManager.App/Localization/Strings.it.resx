@@ -11441,7 +11441,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Controlla i mod client</value>
   </data>
   <data name="ClientCheck_Description" xml:space="preserve">
-    <value>Legge ogni plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario. Una patch che trova il suo obiettivo a gioco avviato non si vede così: un mod non elencato non è quindi scagionato.</value>
+    <value>Legge ogni plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario. Alcuni problemi si vedono solo a gioco avviato, quindi un mod non elencato può comunque esserne la causa. Se non viene elencato nulla ma il gioco si rompe lo stesso, usa Trova il mod.</value>
   </data>
   <data name="ClientCheck_Start" xml:space="preserve">
     <value>Controlla</value>
@@ -11492,7 +11492,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Ogni mod elencato usa qualcosa che manca in questa installazione, o richiede un mod assente o disattivato. {0} ti porta lì.</value>
   </data>
   <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
-    <value>Legge i plugin senza eseguirli: una patch che trova il suo obiettivo a gioco avviato non si vede, quindi un mod non elencato non è scagionato.</value>
+    <value>Legge i plugin senza eseguirli. Alcuni problemi si vedono solo a gioco avviato, quindi un mod non elencato può comunque esserne la causa.</value>
   </data>
   <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
     <value>mod client, plugin, il gioco non parte, crash del gioco, versione sbagliata, dipendenza mancante, bepinex</value>
@@ -11504,7 +11504,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Legge ogni plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario.</value>
   </data>
   <data name="Search_ClientStart" xml:space="preserve">
-    <value>Trova il mod client che lo causa</value>
+    <value>Trova il mod</value>
   </data>
   <data name="Search_ClientDescription" xml:space="preserve">
     <value>Avvia il gioco alcune volte con alcuni mod client disattivati, per trovare quello dietro un problema nel gioco. Dopo ogni avvio, controlla se il problema si presenta, poi rispondi qui. Alla fine ogni mod viene riattivato.</value>
@@ -11586,5 +11586,8 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>mod client, crash del gioco, il gioco non parte, trovare il mod, plugin, metà</value>
+  </data>
+  <data name="Search_Fixed" xml:space="preserve">
+    <value>È risolto</value>
   </data>
 </root>

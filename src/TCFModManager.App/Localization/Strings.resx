@@ -14080,7 +14080,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Card title on Diagnose logs.</comment>
   </data>
   <data name="ClientCheck_Description" xml:space="preserve">
-    <value>Reads every client plugin without starting the game, and lists those built for another game or SPT version, or missing a mod they need. A patch that finds its target while the game runs can't be seen this way, so a mod not listed isn't cleared.</value>
+    <value>Reads every client plugin without starting the game and lists any built for another game or SPT version, or missing a mod they need. Some problems only show once the game is running, so a mod that isn't listed can still be the cause. If nothing is listed but the game still breaks, use Find the mod.</value>
     <comment>Card description.</comment>
   </data>
   <data name="ClientCheck_Start" xml:space="preserve">
@@ -14148,7 +14148,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>{0} = a button.</comment>
   </data>
   <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
-    <value>It reads the plugins, it doesn't run them: a patch that finds its target while the game runs can't be seen, so a mod that isn't listed isn't cleared.</value>
+    <value>It reads the plugins, it doesn't run them. Some problems only show once the game is running, so a mod that isn't listed can still be the cause.</value>
     <comment>Help note.</comment>
   </data>
   <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
@@ -14164,7 +14164,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Feature tour, Diagnose logs: Check client mods.</comment>
   </data>
   <data name="Search_ClientStart" xml:space="preserve">
-    <value>Find the client mod causing it</value>
+    <value>Find the mod</value>
     <comment>Button on Check client mods and on the crash bar.</comment>
   </data>
   <data name="Search_ClientDescription" xml:space="preserve">
@@ -14274,5 +14274,9 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>client mod, game crash, game won't start, find the mod, plugin, bisect, halves</value>
     <comment>Help search keywords.</comment>
+  </data>
+  <data name="Search_Fixed" xml:space="preserve">
+    <value>It's fixed</value>
+    <comment>Button after turning the found mod off: the user confirms the problem has gone, and the result closes.</comment>
   </data>
 </root>

@@ -185,7 +185,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Panel.ZIndex="1"
-                            Appearance="Transparent"
+                            Appearance="Danger"
                             Icon="{ui:SymbolIcon Dismiss24}"
                             ToolTip="{loc:Str Search_Dismiss}"
                             AutomationProperties.Name="{loc:Str Search_Dismiss}"
@@ -244,6 +244,13 @@
                                     Text="{loc:Str Search_Disclaimer}" />
                             </DockPanel>
                             <DockPanel Margin="0,8,0,0" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
+                                <ui:Button
+                                    Margin="8,0,0,0"
+                                    DockPanel.Dock="Right"
+                                    VerticalAlignment="Center"
+                                    Content="{loc:Str Search_Fixed}"
+                                    Icon="{ui:SymbolIcon CheckmarkCircle24}"
+                                    Command="{Binding ConfirmFixedCommand}" />
                                 <ui:Button
                                     Margin="12,0,0,0"
                                     DockPanel.Dock="Right"

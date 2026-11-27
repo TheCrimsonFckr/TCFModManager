@@ -11441,7 +11441,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Vérifier les mods client</value>
   </data>
   <data name="ClientCheck_Description" xml:space="preserve">
-    <value>Lit chaque plugin client sans démarrer le jeu et liste ceux conçus pour une autre version du jeu ou de SPT, ou auxquels manque un mod requis. Un patch qui trouve sa cible pendant que le jeu tourne n'est pas visible ainsi : un mod absent de la liste n'est donc pas mis hors de cause.</value>
+    <value>Lit chaque plugin client sans démarrer le jeu et liste ceux conçus pour une autre version du jeu ou de SPT, ou auxquels manque un mod requis. Certains problèmes n'apparaissent qu'une fois le jeu lancé : un mod absent de la liste peut donc quand même en être la cause. Si rien n'est listé mais que le jeu plante quand même, utilisez Trouver le mod.</value>
   </data>
   <data name="ClientCheck_Start" xml:space="preserve">
     <value>Vérifier</value>
@@ -11492,7 +11492,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Chaque mod listé utilise quelque chose qui manque à cette installation, ou a besoin d'un mod absent ou désactivé. {0} y mène.</value>
   </data>
   <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
-    <value>Il lit les plugins sans les exécuter : un patch qui trouve sa cible pendant que le jeu tourne n'est pas visible, donc un mod absent de la liste n'est pas mis hors de cause.</value>
+    <value>Il lit les plugins sans les exécuter. Certains problèmes n'apparaissent qu'une fois le jeu lancé : un mod absent de la liste peut donc quand même en être la cause.</value>
   </data>
   <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
     <value>mod client, plugin, le jeu ne démarre pas, plantage du jeu, mauvaise version, dépendance manquante, bepinex</value>
@@ -11504,7 +11504,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Lit chaque plugin client sans démarrer le jeu et liste ceux conçus pour une autre version du jeu ou de SPT, ou auxquels manque un mod requis.</value>
   </data>
   <data name="Search_ClientStart" xml:space="preserve">
-    <value>Trouver le mod client en cause</value>
+    <value>Trouver le mod</value>
   </data>
   <data name="Search_ClientDescription" xml:space="preserve">
     <value>Démarre le jeu plusieurs fois avec certains mods client désactivés, pour trouver celui qui est derrière un problème dans le jeu. Après chaque démarrage, vérifiez si le problème apparaît, puis répondez ici. Chaque mod est réactivé ensuite.</value>
@@ -11586,5 +11586,8 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>mod client, plantage du jeu, le jeu ne démarre pas, trouver le mod, plugin, moitiés</value>
+  </data>
+  <data name="Search_Fixed" xml:space="preserve">
+    <value>C'est réglé</value>
   </data>
 </root>

@@ -11441,7 +11441,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Client-Mods prüfen</value>
   </data>
   <data name="ClientCheck_Description" xml:space="preserve">
-    <value>Liest jedes Client-Plugin, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt. Ein Patch, der sein Ziel erst im laufenden Spiel findet, ist so nicht zu sehen - eine nicht gelistete Mod ist also nicht entlastet.</value>
+    <value>Liest jedes Client-Plugin, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt. Manche Probleme zeigen sich erst im laufenden Spiel, eine nicht gelistete Mod kann also trotzdem die Ursache sein. Ist nichts gelistet, das Spiel geht aber trotzdem kaputt, nutze Mod finden.</value>
   </data>
   <data name="ClientCheck_Start" xml:space="preserve">
     <value>Prüfen</value>
@@ -11492,7 +11492,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Jede gelistete Mod nutzt etwas, das in dieser Installation fehlt, oder braucht eine Mod, die fehlt oder aus ist. {0} führt zu ihr.</value>
   </data>
   <data name="Help_Diagnose_ClientCheck_Note" xml:space="preserve">
-    <value>Es liest die Plugins, es führt sie nicht aus: Ein Patch, der sein Ziel erst im laufenden Spiel findet, ist nicht zu sehen - eine nicht gelistete Mod ist also nicht entlastet.</value>
+    <value>Es liest die Plugins, es führt sie nicht aus. Manche Probleme zeigen sich erst im laufenden Spiel, eine nicht gelistete Mod kann also trotzdem die Ursache sein.</value>
   </data>
   <data name="Help_Diagnose_ClientCheck_Keywords" xml:space="preserve">
     <value>Client-Mod, Plugin, Spiel startet nicht, Spielabsturz, falsche Version, fehlende Abhängigkeit, BepInEx</value>
@@ -11504,7 +11504,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Liest jedes Client-Plugin, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt.</value>
   </data>
   <data name="Search_ClientStart" xml:space="preserve">
-    <value>Die Client-Mod finden, die es verursacht</value>
+    <value>Mod finden</value>
   </data>
   <data name="Search_ClientDescription" xml:space="preserve">
     <value>Startet das Spiel ein paar Mal mit einigen Client-Mods aus, um die zu finden, die hinter einem Problem im Spiel steckt. Prüfe nach jedem Start, ob das Problem auftritt, und antworte dann hier. Danach wird jede Mod wieder eingeschaltet.</value>
@@ -11586,5 +11586,8 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>Client-Mod, Spielabsturz, Spiel startet nicht, Mod finden, Plugin, Halbierung</value>
+  </data>
+  <data name="Search_Fixed" xml:space="preserve">
+    <value>Es ist behoben</value>
   </data>
 </root>

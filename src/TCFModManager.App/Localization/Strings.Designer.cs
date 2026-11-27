@@ -3875,4 +3875,5 @@ internal static class Strings
     internal static string Help_Diagnose_ClientSearch_Step2 => LocalizationService.Get("Help_Diagnose_ClientSearch_Step2");
     internal static string Help_Diagnose_ClientSearch_Note => LocalizationService.Get("Help_Diagnose_ClientSearch_Note");
     internal static string Help_Diagnose_ClientSearch_Keywords => LocalizationService.Get("Help_Diagnose_ClientSearch_Keywords");
+    internal static string Search_Fixed => LocalizationService.Get("Search_Fixed");
 }

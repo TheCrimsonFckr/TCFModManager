@@ -133,6 +133,12 @@ public static class ServerStopper
     {
         if (_stopping || _checking) return;
 
+        if (AppServices.BrokenModFinder.IsRunning)
+        {
+            Reset();
+            return;
+        }
+
         var installPath = AppServices.SptEnvironment.InstallPath;
         if (!string.Equals(installPath, _watchedInstall, StringComparison.OrdinalIgnoreCase))
         {

@@ -471,6 +471,13 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
     private void Dismiss() => ClearResult();
 
     [RelayCommand]
+    private void ConfirmFixed()
+    {
+        AppLog.Info("Search", $"marked fixed by the user: {ResultTitle}");
+        ClearResult();
+    }
+
+    [RelayCommand]
     private void ShowMod(FoundMod? mod)
     {
         if (mod is not null) AppNavigation.ShowInInstalled(mod.Name);
