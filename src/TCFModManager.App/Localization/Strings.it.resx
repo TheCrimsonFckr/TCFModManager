@@ -11671,4 +11671,25 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   <data name="Hint_Search_DoneClientBody" xml:space="preserve">
     <value>Avvia il gioco per controllare. Se il problema è sparito, premi È risolto. ✕ mette da parte il risultato.</value>
   </data>
+  <data name="CardField_InstalledAddons" xml:space="preserve">
+    <value>Addon installati</value>
+  </data>
+  <data name="CardField_NeededBy" xml:space="preserve">
+    <value>Richiesta da</value>
+  </data>
+  <data name="Installed_AddonsIconToolTip_one" xml:space="preserve">
+    <value>1 addon installato: {1}. Fai clic per mostrarlo con questa mod.</value>
+  </data>
+  <data name="Installed_AddonsIconToolTip_other" xml:space="preserve">
+    <value>{0} addon installati: {1}. Fai clic per mostrarli con questa mod.</value>
+  </data>
+  <data name="Installed_NeededByIconToolTip_one" xml:space="preserve">
+    <value>Richiesta da {1}. Fai clic per mostrarla.</value>
+  </data>
+  <data name="Installed_NeededByIconToolTip_other" xml:space="preserve">
+    <value>Richiesta da {0} mod: {1}. Fai clic per mostrarle.</value>
+  </data>
+  <data name="Installed_NeededByPillFormat" xml:space="preserve">
+    <value>Visualizzati {0} e le mod che la richiedono</value>
+  </data>
 </root>

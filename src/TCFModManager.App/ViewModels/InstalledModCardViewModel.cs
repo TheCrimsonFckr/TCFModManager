@@ -312,6 +312,31 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     [ObservableProperty]
     private bool _hasDependencies;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasInstalledAddons))]
+    [NotifyPropertyChangedFor(nameof(InstalledAddonsToolTip))]
+    private IReadOnlyList<InstalledModCardViewModel> _installedAddons = [];
+
+    public bool HasInstalledAddons => InstalledAddons.Count > 0;
+
+    public string? InstalledAddonsToolTip => HasInstalledAddons
+        ? Strings.Installed_AddonsIconToolTip(InstalledAddons.Count, InstalledAddons.Count, TitlesOf(InstalledAddons))
+        : null;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNeeded))]
+    [NotifyPropertyChangedFor(nameof(NeededByToolTip))]
+    private IReadOnlyList<InstalledModCardViewModel> _neededBy = [];
+
+    public bool IsNeeded => NeededBy.Count > 0;
+
+    public string? NeededByToolTip => IsNeeded
+        ? Strings.Installed_NeededByIconToolTip(NeededBy.Count, NeededBy.Count, TitlesOf(NeededBy))
+        : null;
+
+    private static string TitlesOf(IEnumerable<InstalledModCardViewModel> cards) =>
+        string.Join(Strings.Common_ListSeparator, cards.Select(c => c.DisplayTitle));
+
     // True when the matched catalog listing is flagged Fika compatible.
     public bool IsFikaCompatible { get; init; }
 

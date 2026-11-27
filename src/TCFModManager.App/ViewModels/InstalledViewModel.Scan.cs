@@ -299,6 +299,8 @@ public partial class InstalledViewModel
             foreach (var card in _all)
                 card.HasDependencies = card.Entries.Any(e => dependencies.DependenciesOf(e).Count > 0);
 
+            ApplyRelations(_all, dependencies);
+
             RebuildCategoryOptions();
 
             _cardByEntry = [];
@@ -498,5 +500,28 @@ public partial class InstalledViewModel
         await ScanAsync();
 
         StatusMessage = Text(Strings.Installed_DownloadConfirmedFormat, d.Name, d.Version);
+    }
+
+    private static void ApplyRelations(IReadOnlyList<InstalledModCardViewModel> cards, ModDependencyGraph dependencies)
+    {
+        var cardOf = new Dictionary<InstalledMod, InstalledModCardViewModel>();
+        foreach (var card in cards)
+            foreach (var entry in card.Entries) cardOf.TryAdd(entry, card);
+
+        foreach (var card in cards)
+        {
+            card.InstalledAddons = card is { IsAddon: false, ModId: { } id }
+                ? [.. cards.Where(c => c.IsAddon && c.ParentModId == id).OrderBy(c => c.DisplayTitle, StringComparer.OrdinalIgnoreCase)]
+                : [];
+
+            card.NeededBy = [.. card.Entries
+                .SelectMany(dependencies.DependentsOf)
+                .Where(link => !link.IsSoft && !link.Dependent.IsDisabled)
+                .Select(link => cardOf.GetValueOrDefault(link.Dependent))
+                .OfType<InstalledModCardViewModel>()
+                .Where(c => !ReferenceEquals(c, card) && !card.InstalledAddons.Contains(c))
+                .Distinct()
+                .OrderBy(c => c.DisplayTitle, StringComparer.OrdinalIgnoreCase)];
+        }
     }
 }

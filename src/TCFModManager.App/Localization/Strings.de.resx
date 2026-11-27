@@ -11671,4 +11671,25 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   <data name="Hint_Search_DoneClientBody" xml:space="preserve">
     <value>Starte das Spiel, um es zu prüfen. Ist das Problem weg, drücke Es ist behoben. ✕ legt das Ergebnis beiseite.</value>
   </data>
+  <data name="CardField_InstalledAddons" xml:space="preserve">
+    <value>Installierte Addons</value>
+  </data>
+  <data name="CardField_NeededBy" xml:space="preserve">
+    <value>Benötigt von</value>
+  </data>
+  <data name="Installed_AddonsIconToolTip_one" xml:space="preserve">
+    <value>1 Addon installiert: {1}. Klicken, um es mit diesem Mod anzuzeigen.</value>
+  </data>
+  <data name="Installed_AddonsIconToolTip_other" xml:space="preserve">
+    <value>{0} Addons installiert: {1}. Klicken, um sie mit diesem Mod anzuzeigen.</value>
+  </data>
+  <data name="Installed_NeededByIconToolTip_one" xml:space="preserve">
+    <value>Benötigt von {1}. Klicken, um ihn anzuzeigen.</value>
+  </data>
+  <data name="Installed_NeededByIconToolTip_other" xml:space="preserve">
+    <value>Benötigt von {0} Mods: {1}. Klicken, um sie anzuzeigen.</value>
+  </data>
+  <data name="Installed_NeededByPillFormat" xml:space="preserve">
+    <value>{0} und die Mods, die ihn benötigen, werden angezeigt</value>
+  </data>
 </root>

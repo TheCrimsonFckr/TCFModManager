@@ -133,6 +133,7 @@ public partial class InstalledViewModel
         try
         {
             _family = null;
+            _neededByFocus = null;
 
             // A preset brings its own search text; a hand-edited one with none leaves the box alone.
             if (preset is null) SearchText = string.Empty;

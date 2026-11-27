@@ -55,7 +55,8 @@ public partial class InstalledViewModel
                 || (m.InstalledAt is { } at && at >= recentSince))
             .Where(m => !IsOn(ModAttributeFilter.HasInstalledAddons)
                 || (FamilyOf(m) is { } family && parentsWithAddons.Contains(family)))
-            .Where(m => _family is not { } focus || FamilyOf(m) == focus.ModId);
+            .Where(m => _family is not { } focus || FamilyOf(m) == focus.ModId)
+            .Where(InNeededByFocus);
 
         _filtered = SortMods(matched, SelectedSortOption.Value).ToList();
 

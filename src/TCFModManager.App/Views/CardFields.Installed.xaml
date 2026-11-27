@@ -152,6 +152,46 @@
             Visibility="{Binding IsPinned, Converter={StaticResource CardBoolToVis}}" />
     </DataTemplate>
 
+    <DataTemplate x:Key="CardField.Installed.InstalledAddons" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <ui:Button
+            Margin="0,0,6,0"
+            Padding="4,1"
+            MinWidth="0"
+            MinHeight="0"
+            VerticalAlignment="Center"
+            Appearance="Transparent"
+            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+            Command="{Binding DataContext.ShowFamilyCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+            CommandParameter="{Binding}"
+            ToolTip="{Binding InstalledAddonsToolTip}"
+            Visibility="{Binding HasInstalledAddons, Converter={StaticResource CardBoolToVis}}">
+            <StackPanel Orientation="Horizontal">
+                <ui:SymbolIcon Symbol="PuzzlePiece24" FontSize="14" VerticalAlignment="Center" />
+                <TextBlock Margin="4,0,0,0" Style="{StaticResource ModChipText}" Text="{Binding InstalledAddons.Count}" />
+            </StackPanel>
+        </ui:Button>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CardField.Installed.NeededBy" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+        <ui:Button
+            Margin="0,0,6,0"
+            Padding="4,1"
+            MinWidth="0"
+            MinHeight="0"
+            VerticalAlignment="Center"
+            Appearance="Transparent"
+            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+            Command="{Binding DataContext.ShowNeededByCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+            CommandParameter="{Binding}"
+            ToolTip="{Binding NeededByToolTip}"
+            Visibility="{Binding IsNeeded, Converter={StaticResource CardBoolToVis}}">
+            <StackPanel Orientation="Horizontal">
+                <ui:SymbolIcon Symbol="Branch24" FontSize="14" VerticalAlignment="Center" />
+                <TextBlock Margin="4,0,0,0" Style="{StaticResource ModChipText}" Text="{Binding NeededBy.Count}" />
+            </StackPanel>
+        </ui:Button>
+    </DataTemplate>
+
     <DataTemplate x:Key="CardField.Installed.SptFit" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
         <TextBlock
             FontSize="{DynamicResource CardLineFontSize}"

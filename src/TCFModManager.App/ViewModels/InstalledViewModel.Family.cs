@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.Input;
 using TCFModManager.App.Localization;
+using TCFModManager.Core.Services;
 
 namespace TCFModManager.App.ViewModels;
 
@@ -38,6 +39,28 @@ public partial class InstalledViewModel
     private void SetFamily((int ModId, string Name)? family)
     {
         _family = family;
+        if (family is not null) _neededByFocus = null;
+        OnPropertyChanged(nameof(MoreFiltersLabel));
+        AutoApplyFilter();
+    }
+
+    private (string Name, HashSet<string> Keys)? _neededByFocus;
+
+    [RelayCommand]
+    private void ShowNeededBy(InstalledModCardViewModel? mod)
+    {
+        if (mod is not { IsNeeded: true }) return;
+        var keys = mod.NeededBy.Append(mod).Select(c => ModGroupStore.KeyFor(c.Name)).ToHashSet();
+        SetNeededBy((mod.DisplayTitle, keys));
+    }
+
+    private bool InNeededByFocus(InstalledModCardViewModel mod) =>
+        _neededByFocus is not { } focus || focus.Keys.Contains(ModGroupStore.KeyFor(mod.Name));
+
+    private void SetNeededBy((string Name, HashSet<string> Keys)? focus)
+    {
+        _neededByFocus = focus;
+        if (focus is not null) _family = null;
         OnPropertyChanged(nameof(MoreFiltersLabel));
         AutoApplyFilter();
     }

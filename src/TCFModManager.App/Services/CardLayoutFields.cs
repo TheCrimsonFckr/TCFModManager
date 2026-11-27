@@ -31,6 +31,8 @@ public static class CardLayoutFields
     public const string Group = "Group";
     public const string Disabled = "Disabled";
     public const string Pinned = "Pinned";
+    public const string InstalledAddons = "InstalledAddons";
+    public const string NeededBy = "NeededBy";
     public const string DisableToggle = "DisableToggle";
     public const string QuickUpdate = "QuickUpdate";
     public const string PinButton = "PinButton";
@@ -67,6 +69,8 @@ public static class CardLayoutFields
         new(Group, CardFieldKind.Chip, nameof(Strings.CardField_Group)),
         new(Disabled, CardFieldKind.Chip, nameof(Strings.CardField_Disabled)),
         new(Pinned, CardFieldKind.Chip, nameof(Strings.CardField_Pinned)),
+        new(InstalledAddons, CardFieldKind.Chip, nameof(Strings.CardField_InstalledAddons)),
+        new(NeededBy, CardFieldKind.Chip, nameof(Strings.CardField_NeededBy)),
         new(DisableToggle, CardFieldKind.Button, nameof(Strings.CardField_DisableToggle)),
         new(QuickUpdate, CardFieldKind.Button, nameof(Strings.CardField_QuickUpdate)),
         new(PinButton, CardFieldKind.Button, nameof(Strings.CardField_PinButton)),
@@ -84,11 +88,13 @@ public static class CardLayoutFields
     ];
 
     public static IReadOnlyList<string> InstalledDefault { get; } =
-        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, DisableToggle, QuickUpdate, PinButton, RemoveButton, FolderButtons];
+        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, InstalledAddons, NeededBy, DisableToggle, QuickUpdate, PinButton, RemoveButton, FolderButtons];
 
-    public const int Revision = 1;
+    public const int Revision = 2;
 
     public static IReadOnlyList<string> AddedInRevision1 { get; } = [PinButton, RemoveButton, FolderButtons];
+
+    public static IReadOnlyList<string> AddedInRevision2 { get; } = [InstalledAddons, NeededBy];
 
     public static IReadOnlyList<CardFieldSpec> Browse { get; } =
     [

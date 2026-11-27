@@ -117,7 +117,8 @@ public partial class InstalledViewModel
         + (SelectedEnabledFilter.Value != EnabledFilter.All ? 1 : 0)
         + (SelectedCategory.Title is not null ? 1 : 0)
         + (SelectedGroupFilter.AllGroups ? 0 : 1)
-        + (_family is null ? 0 : 1);
+        + (_family is null ? 0 : 1)
+        + (_neededByFocus is null ? 0 : 1);
 
     //
     // The filters narrowing the list, as pills above the results - see ActiveFilterPill. Rebuilt
@@ -206,6 +207,9 @@ public partial class InstalledViewModel
 
         if (_family is { } family)
             ActiveFilters.Add(new(Text(Strings.Installed_FamilyPillFormat, family.Name), () => SetFamily(null)));
+
+        if (_neededByFocus is { } neededBy)
+            ActiveFilters.Add(new(Text(Strings.Installed_NeededByPillFormat, neededBy.Name), () => SetNeededBy(null)));
 
         OnPropertyChanged(nameof(HasActiveFilters));
     }
