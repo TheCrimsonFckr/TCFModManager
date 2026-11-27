@@ -49,6 +49,30 @@ public sealed class ModInstallManifestService
     }
 
     //
+    // Drops every addon record this app installed into this install, stamped with it, none of whose
+    // files are on disk live or disabled. Saves only when something changed; returns the names dropped.
+    //
+    public IReadOnlyList<string> DropAddonsWithNoFiles(string installPath)
+    {
+        if (string.IsNullOrWhiteSpace(installPath) || !Directory.Exists(installPath)) return [];
+
+        var current = InstallStamp.Of(installPath);
+        var manifest = Load();
+
+        var gone = manifest.Mods
+            .Where(r => r is { IsAddon: true, IsAppManaged: true, Files.Count: > 0 }
+                && string.Equals(r.InstallPath, current, StringComparison.OrdinalIgnoreCase)
+                && !r.Files.Any(f => DisabledModPaths.OnDisk(installPath, f)))
+            .ToList();
+
+        if (gone.Count == 0) return [];
+
+        manifest.Mods.RemoveAll(gone.Contains);
+        Save(manifest);
+        return [.. gone.Select(r => r.Name)];
+    }
+
+    //
     // Marks or clears the addon records disabled together with their parent (OPEN-31 R5). Saves only
     // when something changed; returns how many records changed.
     //

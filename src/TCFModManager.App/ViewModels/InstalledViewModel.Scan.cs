@@ -213,6 +213,10 @@ public partial class InstalledViewModel
                 if (filled > 0) AppLog.Info("Installed", $"filled in the slug of {filled} addon record(s)");
             }
 
+            var dropped = AppServices.InstallManifest.DropAddonsWithNoFiles(installPath);
+            if (dropped.Count > 0)
+                AppLog.Info("Installed", $"dropped the record of {dropped.Count} addon(s) with none of their files left: {string.Join(", ", dropped)}");
+
             // What this app itself installed, and which folders it placed - identifies those mods
             // exactly instead of inferring them from folder names.
             var installRecords = AppServices.InstallManifest.Load().Mods;

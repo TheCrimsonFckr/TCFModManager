@@ -216,13 +216,19 @@ public partial class InstalledViewModel
             .Distinct()
             .ToList();
 
-        if (unselectedAddons.Count > 0)
+        var records = AppServices.InstallManifest.Load();
+        var cardless = targets
+            .Select(t => (Parent: t, Records: CardlessAddonRecordsOf(t, records)))
+            .Where(p => p.Records.Count > 0)
+            .ToDictionary(p => p.Parent, p => p.Records);
+
+        if (unselectedAddons.Count > 0 || cardless.Count > 0)
         {
             var answer = AskWindow.Show(new AskRequest
             {
                 Title = Strings.Installed_RemoveSelectedAddonsTitle,
                 Lead = Strings.Installed_RemoveSelectedAddonsLead,
-                Sections = [new(null, [.. unselectedAddons.Select(a => a.DisplayTitle)])],
+                Sections = [new(null, [.. unselectedAddons.Select(a => a.DisplayTitle), .. CardlessNames(cardless)])],
                 First = Strings.Installed_RemoveAddonsToo,
                 Second = Strings.Installed_RemoveSelectedOnly,
             });
@@ -234,6 +240,7 @@ public partial class InstalledViewModel
             }
 
             if (answer == AskChoice.First) targets.AddRange(unselectedAddons);
+            else cardless.Clear();
         }
 
         StatusMessage = Strings.ProfileItems_Checking;
@@ -246,7 +253,7 @@ public partial class InstalledViewModel
         var holding = losses.Select(l => l.ModName).ToHashSet(StringComparer.Ordinal);
         var profileMods = targets.Where(t => !holding.Contains(t.DisplayTitle) && ChangesProfile(t)).Select(t => t.DisplayTitle).ToList();
 
-        var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle)]) };
+        var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle), .. CardlessNames(cardless)]) };
         sections.AddRange(offer.Sections);
         if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
         if (leftTwice.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedTwiceHeading, leftTwice));
@@ -283,10 +290,17 @@ public partial class InstalledViewModel
         {
             var manifest = AppServices.InstallManifest.Load();
 
-            foreach (var (mod, batch) in RemovalOrder(targets))
+            foreach (var (mod, batch) in RemovalOrder(targets, cardless.Keys.ToHashSet()))
             {
                 try
                 {
+                    foreach (var addon in cardless.GetValueOrDefault(mod) ?? [])
+                    {
+                        var result = await AppServices.ModInstall.UninstallAsync(installPath, addon, ConfigAction.Keep, batch: batch);
+                        if (result.FailedFiles.Count == 0) removed++;
+                        else failed.Add(addon.Name);
+                    }
+
                     if (await RemoveOneQuietlyAsync(mod, installPath, manifest, batch)) removed++;
                     else failed.Add(mod.DisplayTitle);
                 }
@@ -298,7 +312,7 @@ public partial class InstalledViewModel
                     // SPT started part way through: nothing after this would go either.
                     if (ex.Reason == ModInstallFailure.InstallInUse)
                     {
-                        failed.AddRange(RemovalOrder(targets).Select(o => o.Card).SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
+                        failed.AddRange(RemovalOrder(targets, cardless.Keys.ToHashSet()).Select(o => o.Card).SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
                         break;
                     }
                 }
@@ -319,7 +333,7 @@ public partial class InstalledViewModel
 
         await ScanAsync();
 
-        var message = Text(Strings.Installed_RemovedSelectedFormat, removed, targets.Count);
+        var message = Text(Strings.Installed_RemovedSelectedFormat, removed, targets.Count + cardless.Values.Sum(r => r.Count));
         if (failed.Count > 0) message = Sentences(message, Text(Strings.Installed_RemoveSelectedFailedFormat, TextLists.Join(failed)));
         if (cleaned is not null) message = Sentences(message, cleaned);
         StatusMessage = message;
@@ -381,7 +395,7 @@ public partial class InstalledViewModel
     // batch so one Undo puts them back together; anything else alone, in the order given.
     //
     private static List<(InstalledModCardViewModel Card, RemovalBatch? Batch)> RemovalOrder(
-        IReadOnlyList<InstalledModCardViewModel> targets)
+        IReadOnlyList<InstalledModCardViewModel> targets, IReadOnlySet<InstalledModCardViewModel> withCardlessAddons)
     {
         var order = new List<(InstalledModCardViewModel, RemovalBatch?)>();
         var placed = new HashSet<InstalledModCardViewModel>();
@@ -389,7 +403,7 @@ public partial class InstalledViewModel
         foreach (var parent in targets.Where(t => t is { IsAddon: false, ModId: not null }))
         {
             var addons = targets.Where(t => t.IsAddon && t.ParentModId == parent.ModId && !placed.Contains(t)).ToList();
-            if (addons.Count == 0) continue;
+            if (addons.Count == 0 && !withCardlessAddons.Contains(parent)) continue;
 
             var batch = RemovalBatch.For(parent.Name);
             foreach (var addon in addons) order.Add((addon, batch));
@@ -478,6 +492,9 @@ public partial class InstalledViewModel
 
         static List<string> Names(IEnumerable<InstalledModCardViewModel> cards) => [.. cards.Select(c => c.DisplayTitle)];
     }
+
+    private static IEnumerable<string> CardlessNames(Dictionary<InstalledModCardViewModel, List<InstalledModRecord>> cardless) =>
+        cardless.Values.SelectMany(r => r).Select(r => r.Name);
 
     private List<InstalledModRecord> CardlessAddonRecordsOf(InstalledModCardViewModel mod, ModInstallManifest manifest)
     {
