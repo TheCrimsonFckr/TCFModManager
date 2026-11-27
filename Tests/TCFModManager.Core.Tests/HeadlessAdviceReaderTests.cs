@@ -53,6 +53,13 @@ public class HeadlessAdviceReaderTests
         Assert.Equal(keepOff, avoids);
     }
 
+    [Theory]
+    [InlineData("<p>Just install it on all players\u2019 computers, except the headless client</p>")]
+    [InlineData("<p>Install it on every PC excluding the Fika headless.</p>")]
+    [InlineData("<p>All clients need it, apart from the dedicated client.</p>")]
+    public void AHeadlessNamedAsAnException_IsKeptOff(string html) =>
+        Assert.Equal(HeadlessVerdict.Avoid, HeadlessAdviceReader.Read(html).Verdict);
+
     [Fact]
     public void VramCleaner_QuotesItsInstallStep()
     {

@@ -6,7 +6,7 @@ namespace TCFModManager.Core.Services;
 
 public static partial class HeadlessAdviceReader
 {
-    public const int Version = 2;
+    public const int Version = 3;
 
     private const RegexOptions Loose = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
 
@@ -43,7 +43,8 @@ public static partial class HeadlessAdviceReader
     [GeneratedRegex(
         @"(\b(don" + Apos + @"?t|do not|dont|never|shouldn" + Apos + @"?t|should not|not)\b" + Any + @"{0,60}\b(install|put|add|need|needed|required|necessary)\b" + Any + @"{0,60}\b" + Hl + ")"
         + @"|(\bnot (on|onto|to|in|for) (the |a |your )?(fika )?" + Hl + ")"
-        + @"|(\b(only|just)\b" + Any + @"{0,30}\b(player|playing|graphical)\b" + Any + @"{0,20}\b(client|clients|pcs?|machines?)\b)"
+        + @"|(\b(only|just)\b" + Any + @"{0,30}\b(players?|playing|graphical)\b" + Any + @"{0,20}\b(client|clients|pcs?|machines?|computers?)\b)"
+        + @"|(\b(except|excluding|but not|other than|apart from)\b (on |for )?(the |a |your )?(fika )?" + Hl + ")"
         + @"|(\b(useless|not needed|isn" + Apos + @"?t needed|not required)\b" + Any + @"{0,20}\bon (the |a )?" + Hl + ")"
         + @"|(\b(do not|don" + Apos + @"?t) install anything there\b)"
         + @"|(\b(will not|won" + Apos + @"?t) load\b)|(\bcause crashes\b)|(\bbreaks when\b)",
