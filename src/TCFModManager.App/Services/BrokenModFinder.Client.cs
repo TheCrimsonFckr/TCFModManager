@@ -58,7 +58,26 @@ public sealed partial class BrokenModFinder
     private void AnswerWorked() => _answer?.TrySetResult(ClientRoundAnswer.Worked);
 
     [RelayCommand]
-    private void AnswerNotSure() => _answer?.TrySetResult(ClientRoundAnswer.NotSure);
+    private void AnswerNotSure()
+    {
+        if (_answer?.TrySetResult(ClientRoundAnswer.NotSure) == true) AnsweredNotSure?.Invoke(this, EventArgs.Empty);
+    }
+
+    public event EventHandler? AnsweredNotSure;
+
+    public bool GuideMe
+    {
+        get => new SettingsService().Load().SearchGuide;
+        set
+        {
+            var settings = new SettingsService().Load();
+            if (settings.SearchGuide == value) return;
+
+            settings.SearchGuide = value;
+            new SettingsService().Save(settings);
+            OnPropertyChanged();
+        }
+    }
 
     // On the UI thread: starts the game, waits for the answer, then closes the game. Not sure starts
     // it again with the same mods. True when the problem showed.
@@ -100,8 +119,9 @@ public sealed partial class BrokenModFinder
                 else if (seen && !told)
                 {
                     told = true;
-                    AskText = Strings.Search_GameClosedAsk;
                     if (Application.Current?.MainWindow is { } window) WindowActivation.BringForward(window);
+                    if (AppNavigation.CurrentPage != typeof(DiagnosePage)) AppNavigation.Navigate(typeof(DiagnosePage));
+                    AskText = Strings.Search_GameClosedAsk;
                     UpdateToasts.ShowMessage("search", Strings.Search_Title, Strings.Search_GameClosedAsk);
                 }
             }

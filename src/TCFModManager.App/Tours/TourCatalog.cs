@@ -69,6 +69,7 @@ internal static class TourCatalog
         [
             new("diagnose.search", () => Strings.Tour_Diagnose_Search_Title, () => Strings.Tour_Diagnose_Search_Body),
             new("diagnose.clients", () => Strings.Tour_Diagnose_Clients_Title, () => Strings.Tour_Diagnose_Clients_Body),
+            new("diagnose.clientsearch", () => Strings.Tour_Diagnose_ClientSearch_Title, () => Strings.Tour_Diagnose_ClientSearch_Body),
             new("diagnose.findings", () => Strings.Tour_Diagnose_Findings_Title, () => Strings.Tour_Diagnose_Findings_Body),
             new("diagnose.purge", () => Strings.Tour_Diagnose_Purge_Title, () => Strings.Tour_Diagnose_Purge_Body),
             new("diagnose.copy", () => Strings.Tour_Diagnose_Copy_Title, () => Strings.Tour_Diagnose_Copy_Body),
@@ -133,6 +134,15 @@ internal static class TourCatalog
         ],
         () => AppServices.Browse.HasLoadedResults,
         Since: "1.31.0"),
+
+        new("whatsnew-1.32.0-diagnose", typeof(DiagnosePage),
+        [
+            new("diagnose.clients", () => Strings.Tour_New132_ClientCheck_Title, () => Strings.Tour_New132_ClientCheck_Body),
+            new("diagnose.clientsearch", () => Strings.Tour_New132_ClientSearch_Title, () => Strings.Tour_New132_ClientSearch_Body),
+            new("diagnose.search", () => Strings.Tour_New132_Search_Title, () => Strings.Tour_New132_Search_Body),
+            new("diagnose.purge", () => Strings.Tour_New132_Purge_Title, () => Strings.Tour_New132_Purge_Body),
+        ],
+        Since: "1.32.0"),
     ];
 
     public static Tour? ForPage(Type? page) =>

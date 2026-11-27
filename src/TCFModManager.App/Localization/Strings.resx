@@ -13936,7 +13936,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>It tests the server only, not the game, and your profiles are copied first. It is also offered when the server stops before it is ready. It only shows on Diagnose logs when the server's last run logged a problem.</value>
+    <value>It tests the server only, not the game, and your profiles are copied first. It is also offered when the server stops before it is ready. It only shows on Diagnose logs when the server's last run logged a problem. Switch on Guide me for a hint at each step.</value>
     <comment>OPEN-54 N27: note under the how-to.</comment>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
@@ -14268,7 +14268,7 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>{0}, {1}, {2} = answer buttons.</comment>
   </data>
   <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
-    <value>Only the client half of a mod is switched, and the server keeps running between starts. Patchers stay on. The game starts as Quick play starts it: Play for the profile picked on the Play card, or else the SPT launcher, where you press Play. Your profiles are copied first and put back at the end if the starts changed them.</value>
+    <value>Only the client half of a mod is switched, and the server keeps running between starts. Patchers stay on. The game starts as Quick play starts it: Play for the profile picked on the Play card, or else the SPT launcher, where you press Play. Your profiles are copied first and put back at the end if the starts changed them. Switch on Guide me for a hint at each step.</value>
     <comment>Help note.</comment>
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
@@ -14278,5 +14278,113 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
   <data name="Search_Fixed" xml:space="preserve">
     <value>It's fixed</value>
     <comment>Button after turning the found mod off: the user confirms the problem has gone, and the result closes.</comment>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Find the mod</value>
+    <comment>Feature tour, Diagnose logs: step title.</comment>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Body" xml:space="preserve">
+    <value>For a problem in the game: starts the game a few times with client mods off in halves, asks you each time whether it broke, and names the mod behind it.</value>
+    <comment>Feature tour, Diagnose logs: the client search.</comment>
+  </data>
+  <data name="Tour_New132_ClientCheck_Title" xml:space="preserve">
+    <value>New: Check client mods</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_ClientCheck_Body" xml:space="preserve">
+    <value>Reads your client plugins without starting the game and lists any built for another game or SPT version, or missing a mod they need.</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_ClientSearch_Title" xml:space="preserve">
+    <value>New: Find the mod</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_ClientSearch_Body" xml:space="preserve">
+    <value>For a problem in the game: starts the game a few times with client mods off in halves, asks you each time whether it broke, and names the mod behind it.</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_Search_Title" xml:space="preserve">
+    <value>New: Find the mod causing it</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_Search_Body" xml:space="preserve">
+    <value>When the server won't start or logs errors, this finds the server mod behind it. It shows here only when the server's last run had a problem.</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_Purge_Title" xml:space="preserve">
+    <value>New: Purge logs</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Tour_New132_Purge_Body" xml:space="preserve">
+    <value>Sends the server, game and BepInEx logs to the Recycle Bin, so the next problem starts from clean logs.</value>
+    <comment>What's new tour v1.32.0, Diagnose logs.</comment>
+  </data>
+  <data name="Search_GuideMe" xml:space="preserve">
+    <value>Guide me</value>
+    <comment>Toggle on the search cards: hints as a search goes.</comment>
+  </data>
+  <data name="Search_GuideMeToolTip" xml:space="preserve">
+    <value>Show a hint at each step of the search</value>
+    <comment>Tooltip.</comment>
+  </data>
+  <data name="Search_HintGotIt" xml:space="preserve">
+    <value>Got it</value>
+    <comment>Button on a search hint.</comment>
+  </data>
+  <data name="Hint_Search_StartTitle" xml:space="preserve">
+    <value>The search has started</value>
+    <comment>Hint title.</comment>
+  </data>
+  <data name="Hint_Search_StartServerBody" xml:space="preserve">
+    <value>The server starts a few times with no window, with some server mods off each time. It takes a few minutes, and you can leave it running.</value>
+    <comment>Hint: server search started.</comment>
+  </data>
+  <data name="Hint_Search_StartClientBody" xml:space="preserve">
+    <value>The game starts shortly, with some client mods off. Each time, check whether the problem shows, then answer on this card.</value>
+    <comment>Hint: client search started.</comment>
+  </data>
+  <data name="Hint_Search_AnswerTitle" xml:space="preserve">
+    <value>Answer here</value>
+    <comment>Hint title.</comment>
+  </data>
+  <data name="Hint_Search_AnswerBody" xml:space="preserve">
+    <value>Play until you'd expect the problem, then press It broke, It worked or Not sure. If the game is still open, it's closed for you.</value>
+    <comment>Hint: the answer row.</comment>
+  </data>
+  <data name="Hint_Search_GameClosedTitle" xml:space="preserve">
+    <value>The game has closed</value>
+    <comment>Hint title.</comment>
+  </data>
+  <data name="Hint_Search_GameClosedBody" xml:space="preserve">
+    <value>Did the problem show before it closed? Answer here and the next start begins.</value>
+    <comment>Hint: game closed without an answer.</comment>
+  </data>
+  <data name="Hint_Search_NotSureTitle" xml:space="preserve">
+    <value>Trying again</value>
+    <comment>Hint title.</comment>
+  </data>
+  <data name="Hint_Search_NotSureBody" xml:space="preserve">
+    <value>Not sure starts the game again with the same mods, so you can check once more.</value>
+    <comment>Hint: after Not sure.</comment>
+  </data>
+  <data name="Hint_Search_ResultTitle" xml:space="preserve">
+    <value>What the search found</value>
+    <comment>Hint title.</comment>
+  </data>
+  <data name="Hint_Search_ResultBody" xml:space="preserve">
+    <value>A mod named here showed the problem when it was on, but it isn't necessarily at fault. Check its sp-mod page and the Discord. Turn off switches it off; Show opens it in Installed.</value>
+    <comment>Hint: the result.</comment>
+  </data>
+  <data name="Hint_Search_DoneTitle" xml:space="preserve">
+    <value>Check it worked</value>
+    <comment>Hint title.</comment>
+  </data>
+  <data name="Hint_Search_DoneServerBody" xml:space="preserve">
+    <value>Start the server to check. If the problem has gone, press It's fixed. ✕ sets the result aside.</value>
+    <comment>Hint: after turning the mod off, server search.</comment>
+  </data>
+  <data name="Hint_Search_DoneClientBody" xml:space="preserve">
+    <value>Start the game to check. If the problem has gone, press It's fixed. ✕ sets the result aside.</value>
+    <comment>Hint: after turning the mod off, client search.</comment>
   </data>
 </root>

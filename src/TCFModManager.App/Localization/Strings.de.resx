@@ -11333,7 +11333,7 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Nennt sie eine Mod, drücke {0} und dann {1}, um zu prüfen, ob der Server startet.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Getestet wird nur der Server, nicht das Spiel, und deine Profile werden vorher kopiert. Angeboten wird sie auch, wenn der Server stoppt, bevor er bereit ist. Unter „Logs diagnostizieren“ erscheint sie nur, wenn der letzte Serverlauf ein Problem geloggt hat.</value>
+    <value>Getestet wird nur der Server, nicht das Spiel, und deine Profile werden vorher kopiert. Angeboten wird sie auch, wenn der Server stoppt, bevor er bereit ist. Unter „Logs diagnostizieren“ erscheint sie nur, wenn der letzte Serverlauf ein Problem geloggt hat. Schalte Führ mich ein, um bei jedem Schritt einen Hinweis zu sehen.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>verursachende Mod, Problem-Mod, Server startet nicht, Serverabsturz, welche Mod, Mod finden, Fehler</value>
@@ -11582,12 +11582,93 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
     <value>Spiele bei jedem Start, bis du das Problem erwarten würdest, und drücke dann {0}, {1} oder {2} auf der Karte. {2} startet das Spiel mit denselben Mods erneut.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
-    <value>Nur die Client-Hälfte einer Mod wird umgeschaltet, und der Server läuft zwischen den Starts weiter. Patcher bleiben an. Das Spiel startet wie bei Schnellstart: Spielen für das auf der Spielen-Karte gewählte Profil, sonst der SPT-Launcher, in dem du auf Spielen drückst. Deine Profile werden zuerst kopiert und am Ende zurückgelegt, wenn die Starts sie geändert haben.</value>
+    <value>Nur die Client-Hälfte einer Mod wird umgeschaltet, und der Server läuft zwischen den Starts weiter. Patcher bleiben an. Das Spiel startet wie bei Schnellstart: Spielen für das auf der Spielen-Karte gewählte Profil, sonst der SPT-Launcher, in dem du auf Spielen drückst. Deine Profile werden zuerst kopiert und am Ende zurückgelegt, wenn die Starts sie geändert haben. Schalte Führ mich ein, um bei jedem Schritt einen Hinweis zu sehen.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>Client-Mod, Spielabsturz, Spiel startet nicht, Mod finden, Plugin, Halbierung</value>
   </data>
   <data name="Search_Fixed" xml:space="preserve">
     <value>Es ist behoben</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Mod finden</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Body" xml:space="preserve">
+    <value>Für ein Problem im Spiel: startet das Spiel ein paar Mal mit Client-Mods halbweise aus, fragt dich jedes Mal, ob es kaputtging, und nennt die Mod dahinter.</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Title" xml:space="preserve">
+    <value>Neu: Client-Mods prüfen</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Body" xml:space="preserve">
+    <value>Liest deine Client-Plugins, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt.</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Title" xml:space="preserve">
+    <value>Neu: Mod finden</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Body" xml:space="preserve">
+    <value>Für ein Problem im Spiel: startet das Spiel ein paar Mal mit Client-Mods halbweise aus, fragt dich jedes Mal, ob es kaputtging, und nennt die Mod dahinter.</value>
+  </data>
+  <data name="Tour_New132_Search_Title" xml:space="preserve">
+    <value>Neu: Die Mod finden, die es verursacht</value>
+  </data>
+  <data name="Tour_New132_Search_Body" xml:space="preserve">
+    <value>Wenn der Server nicht startet oder Fehler protokolliert, findet dies die Server-Mod dahinter. Es erscheint hier nur, wenn der letzte Serverlauf ein Problem hatte.</value>
+  </data>
+  <data name="Tour_New132_Purge_Title" xml:space="preserve">
+    <value>Neu: Logs löschen</value>
+  </data>
+  <data name="Tour_New132_Purge_Body" xml:space="preserve">
+    <value>Schiebt die Server-, Spiel- und BepInEx-Logs in den Papierkorb, damit das nächste Problem mit sauberen Logs beginnt.</value>
+  </data>
+  <data name="Search_GuideMe" xml:space="preserve">
+    <value>Führ mich</value>
+  </data>
+  <data name="Search_GuideMeToolTip" xml:space="preserve">
+    <value>Bei jedem Schritt der Suche einen Hinweis zeigen</value>
+  </data>
+  <data name="Search_HintGotIt" xml:space="preserve">
+    <value>Verstanden</value>
+  </data>
+  <data name="Hint_Search_StartTitle" xml:space="preserve">
+    <value>Die Suche hat begonnen</value>
+  </data>
+  <data name="Hint_Search_StartServerBody" xml:space="preserve">
+    <value>Der Server startet ein paar Mal ohne Fenster, jedes Mal mit einigen Server-Mods aus. Das dauert ein paar Minuten, du kannst es einfach laufen lassen.</value>
+  </data>
+  <data name="Hint_Search_StartClientBody" xml:space="preserve">
+    <value>Das Spiel startet gleich, mit einigen Client-Mods aus. Prüfe jedes Mal, ob das Problem auftritt, und antworte dann auf dieser Karte.</value>
+  </data>
+  <data name="Hint_Search_AnswerTitle" xml:space="preserve">
+    <value>Hier antworten</value>
+  </data>
+  <data name="Hint_Search_AnswerBody" xml:space="preserve">
+    <value>Spiele, bis du das Problem erwarten würdest, und drücke dann Es ging kaputt, Es lief oder Nicht sicher. Ist das Spiel noch offen, wird es für dich geschlossen.</value>
+  </data>
+  <data name="Hint_Search_GameClosedTitle" xml:space="preserve">
+    <value>Das Spiel wurde geschlossen</value>
+  </data>
+  <data name="Hint_Search_GameClosedBody" xml:space="preserve">
+    <value>Ist das Problem aufgetreten, bevor es sich geschlossen hat? Antworte hier, dann beginnt der nächste Start.</value>
+  </data>
+  <data name="Hint_Search_NotSureTitle" xml:space="preserve">
+    <value>Noch einmal</value>
+  </data>
+  <data name="Hint_Search_NotSureBody" xml:space="preserve">
+    <value>Nicht sicher startet das Spiel mit denselben Mods erneut, damit du noch einmal prüfen kannst.</value>
+  </data>
+  <data name="Hint_Search_ResultTitle" xml:space="preserve">
+    <value>Was die Suche gefunden hat</value>
+  </data>
+  <data name="Hint_Search_ResultBody" xml:space="preserve">
+    <value>Eine hier genannte Mod zeigte das Problem, wenn sie an war, ist aber nicht unbedingt schuld. Sieh dir ihre sp-mod-Seite und den Discord an. Ausschalten schaltet sie aus; Anzeigen öffnet sie unter Installiert.</value>
+  </data>
+  <data name="Hint_Search_DoneTitle" xml:space="preserve">
+    <value>Prüfen, ob es geklappt hat</value>
+  </data>
+  <data name="Hint_Search_DoneServerBody" xml:space="preserve">
+    <value>Starte den Server, um es zu prüfen. Ist das Problem weg, drücke Es ist behoben. ✕ legt das Ergebnis beiseite.</value>
+  </data>
+  <data name="Hint_Search_DoneClientBody" xml:space="preserve">
+    <value>Starte das Spiel, um es zu prüfen. Ist das Problem weg, drücke Es ist behoben. ✕ legt das Ergebnis beiseite.</value>
   </data>
 </root>

@@ -91,6 +91,13 @@
                         <DockPanel>
                             <ui:SymbolIcon Margin="0,0,10,0" VerticalAlignment="Center" FontSize="18" Symbol="Search24" />
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <ui:ToggleSwitch
+                                    Margin="0,0,12,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Content="{loc:Str Search_GuideMe}"
+                                    ToolTip="{loc:Str Search_GuideMeToolTip}"
+                                    IsChecked="{Binding GuideMe}" />
                                 <ui:Button
                                     Appearance="Primary"
                                     Content="{loc:Str Search_Start}"
@@ -112,7 +119,7 @@
                             Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                             Text="{Binding Description}" />
 
-                                                <StackPanel Margin="28,10,0,0" Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}">
+                                                <StackPanel Margin="28,10,0,0" behaviors:TourTarget.Key="diagnose.searchprogress" Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}">
                             <ProgressBar Height="4" Minimum="0" Maximum="100" Value="{Binding Progress}" />
                             <DockPanel Margin="0,6,0,0">
                                 <TextBlock Margin="16,0,0,0" DockPanel.Dock="Right" Text="{Binding ElapsedText}" />
@@ -126,6 +133,7 @@
                                 BorderThickness="3,0,0,0"
                                 BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
                                 Background="{DynamicResource ControlFillColorInputActiveBrush}"
+                                behaviors:TourTarget.Key="diagnose.searchanswer"
                                 Visibility="{Binding IsAsking, Converter={StaticResource BoolToVisibility}}">
                                 <StackPanel>
                                     <TextBlock FontSize="14" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding AskText}" />
@@ -177,6 +185,7 @@
                             BorderThickness="3,0,0,0"
                             BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
                             Background="{DynamicResource ControlFillColorInputActiveBrush}"
+                            behaviors:TourTarget.Key="diagnose.searchresult"
                             Visibility="{Binding HasResult, Converter={StaticResource BoolToVisibility}}">
                         <Grid>
                         <ui:Button
@@ -243,7 +252,7 @@
                                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                     Text="{loc:Str Search_Disclaimer}" />
                             </DockPanel>
-                            <DockPanel Margin="0,8,0,0" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
+                            <DockPanel Margin="0,8,0,0" behaviors:TourTarget.Key="diagnose.searchdone" Visibility="{Binding HasResultDone, Converter={StaticResource BoolToVisibility}}">
                                 <ui:Button
                                     Margin="8,0,0,0"
                                     DockPanel.Dock="Right"
@@ -342,8 +351,16 @@
                                     Icon="{ui:SymbolIcon DocumentSearch24}"
                                     Command="{Binding CheckClientModsCommand}"
                                     IsEnabled="{Binding IsNotCheckingClients}" />
+                                <ui:ToggleSwitch
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Content="{loc:Str Search_GuideMe}"
+                                    ToolTip="{loc:Str Search_GuideMeToolTip}"
+                                    IsChecked="{Binding Search.GuideMe}" />
                                 <ui:Button
                                     Margin="8,0,0,0"
+                                    behaviors:TourTarget.Key="diagnose.clientsearch"
                                     Content="{loc:Str Search_ClientStart}"
                                     Icon="{ui:SymbolIcon Search24}"
                                     Command="{Binding Search.StartClientCommand}"

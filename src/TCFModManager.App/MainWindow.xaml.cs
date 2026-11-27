@@ -167,6 +167,9 @@ public partial class MainWindow : FluentWindow
             // Raises the crash bar when the server, the game or the headless crashes (OPEN-54 N30).
             Services.CrashWatcher.Start();
 
+            // Hints while a Find the mod search runs, with Guide me on (OPEN-75).
+            Services.SearchHints.Start();
+
             // Puts back the mods of a Find the broken mod search the last run didn't finish (OPEN-54 N27).
             _ = AppServices.BrokenModFinder.RecoverAsync();
 

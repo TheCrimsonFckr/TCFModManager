@@ -11333,7 +11333,7 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Quand elle nomme un mod, appuyez sur {0}, puis sur {1} pour vérifier que le serveur démarre.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Seul le serveur est testé, pas le jeu, et vos profils sont copiés d'abord. La recherche est aussi proposée quand le serveur s'arrête avant d'être prêt. Elle n'apparaît dans « Diagnostiquer les journaux » que si la dernière exécution du serveur a signalé un problème.</value>
+    <value>Seul le serveur est testé, pas le jeu, et vos profils sont copiés d'abord. La recherche est aussi proposée quand le serveur s'arrête avant d'être prêt. Elle n'apparaît dans « Diagnostiquer les journaux » que si la dernière exécution du serveur a signalé un problème. Activez Me guider pour un conseil à chaque étape.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>mod en cause, mod problématique, serveur ne démarre pas, plantage serveur, quel mod, trouver mod, erreurs</value>
@@ -11582,12 +11582,93 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>À chaque démarrage, jouez jusqu'au moment où vous attendriez le problème, puis appuyez sur {0}, {1} ou {2} dans la carte. {2} redémarre le jeu avec les mêmes mods.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
-    <value>Seule la moitié client d'un mod est basculée, et le serveur continue de tourner entre les démarrages. Les patchers restent actifs. Le jeu démarre comme avec Jeu rapide : Jouer pour le profil choisi sur la carte Jouer, sinon le lanceur SPT, où vous appuyez sur Jouer. Vos profils sont copiés d'abord et remis à la fin si les démarrages les ont changés.</value>
+    <value>Seule la moitié client d'un mod est basculée, et le serveur continue de tourner entre les démarrages. Les patchers restent actifs. Le jeu démarre comme avec Jeu rapide : Jouer pour le profil choisi sur la carte Jouer, sinon le lanceur SPT, où vous appuyez sur Jouer. Vos profils sont copiés d'abord et remis à la fin si les démarrages les ont changés. Activez Me guider pour un conseil à chaque étape.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>mod client, plantage du jeu, le jeu ne démarre pas, trouver le mod, plugin, moitiés</value>
   </data>
   <data name="Search_Fixed" xml:space="preserve">
     <value>C'est réglé</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Trouver le mod</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Body" xml:space="preserve">
+    <value>Pour un problème dans le jeu : démarre le jeu plusieurs fois avec la moitié des mods client désactivés, vous demande à chaque fois si ça a planté, et nomme le mod en cause.</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Title" xml:space="preserve">
+    <value>Nouveau : Vérifier les mods client</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Body" xml:space="preserve">
+    <value>Lit vos plugins client sans démarrer le jeu et liste ceux conçus pour une autre version du jeu ou de SPT, ou auxquels manque un mod requis.</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Title" xml:space="preserve">
+    <value>Nouveau : Trouver le mod</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Body" xml:space="preserve">
+    <value>Pour un problème dans le jeu : démarre le jeu plusieurs fois avec la moitié des mods client désactivés, vous demande à chaque fois si ça a planté, et nomme le mod en cause.</value>
+  </data>
+  <data name="Tour_New132_Search_Title" xml:space="preserve">
+    <value>Nouveau : Trouver le mod en cause</value>
+  </data>
+  <data name="Tour_New132_Search_Body" xml:space="preserve">
+    <value>Quand le serveur ne démarre pas ou journalise des erreurs, ceci trouve le mod serveur en cause. Il n'apparaît ici que si le dernier lancement du serveur a eu un problème.</value>
+  </data>
+  <data name="Tour_New132_Purge_Title" xml:space="preserve">
+    <value>Nouveau : Purger les journaux</value>
+  </data>
+  <data name="Tour_New132_Purge_Body" xml:space="preserve">
+    <value>Envoie les journaux du serveur, du jeu et de BepInEx à la Corbeille, pour que le prochain problème parte de journaux propres.</value>
+  </data>
+  <data name="Search_GuideMe" xml:space="preserve">
+    <value>Me guider</value>
+  </data>
+  <data name="Search_GuideMeToolTip" xml:space="preserve">
+    <value>Afficher un conseil à chaque étape de la recherche</value>
+  </data>
+  <data name="Search_HintGotIt" xml:space="preserve">
+    <value>Compris</value>
+  </data>
+  <data name="Hint_Search_StartTitle" xml:space="preserve">
+    <value>La recherche a commencé</value>
+  </data>
+  <data name="Hint_Search_StartServerBody" xml:space="preserve">
+    <value>Le serveur démarre plusieurs fois sans fenêtre, avec certains mods serveur désactivés à chaque fois. Cela prend quelques minutes, vous pouvez le laisser tourner.</value>
+  </data>
+  <data name="Hint_Search_StartClientBody" xml:space="preserve">
+    <value>Le jeu démarre bientôt, avec certains mods client désactivés. À chaque fois, vérifiez si le problème apparaît, puis répondez sur cette carte.</value>
+  </data>
+  <data name="Hint_Search_AnswerTitle" xml:space="preserve">
+    <value>Répondez ici</value>
+  </data>
+  <data name="Hint_Search_AnswerBody" xml:space="preserve">
+    <value>Jouez jusqu'au moment où vous attendriez le problème, puis appuyez sur Ça a planté, Ça a marché ou Pas sûr. Si le jeu est encore ouvert, il est fermé pour vous.</value>
+  </data>
+  <data name="Hint_Search_GameClosedTitle" xml:space="preserve">
+    <value>Le jeu s'est fermé</value>
+  </data>
+  <data name="Hint_Search_GameClosedBody" xml:space="preserve">
+    <value>Le problème est-il apparu avant la fermeture ? Répondez ici et le démarrage suivant commence.</value>
+  </data>
+  <data name="Hint_Search_NotSureTitle" xml:space="preserve">
+    <value>Nouvel essai</value>
+  </data>
+  <data name="Hint_Search_NotSureBody" xml:space="preserve">
+    <value>Pas sûr redémarre le jeu avec les mêmes mods, pour vérifier une fois de plus.</value>
+  </data>
+  <data name="Hint_Search_ResultTitle" xml:space="preserve">
+    <value>Ce que la recherche a trouvé</value>
+  </data>
+  <data name="Hint_Search_ResultBody" xml:space="preserve">
+    <value>Un mod nommé ici a montré le problème quand il était actif, mais il n'est pas forcément en faute. Consultez sa page sp-mod et le Discord. Désactiver le désactive ; Afficher l'ouvre dans Installés.</value>
+  </data>
+  <data name="Hint_Search_DoneTitle" xml:space="preserve">
+    <value>Vérifiez que ça a marché</value>
+  </data>
+  <data name="Hint_Search_DoneServerBody" xml:space="preserve">
+    <value>Démarrez le serveur pour vérifier. Si le problème a disparu, appuyez sur C'est réglé. ✕ met le résultat de côté.</value>
+  </data>
+  <data name="Hint_Search_DoneClientBody" xml:space="preserve">
+    <value>Démarrez le jeu pour vérifier. Si le problème a disparu, appuyez sur C'est réglé. ✕ met le résultat de côté.</value>
   </data>
 </root>

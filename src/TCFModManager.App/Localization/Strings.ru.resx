@@ -11756,7 +11756,7 @@
     <value>Когда поиск назовёт мод, нажмите {0}, затем {1}, чтобы проверить, что сервер запускается.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Проверяется только сервер, не игра, а профили сначала копируются. Поиск также предлагается, если сервер останавливается до готовности. На странице «Диагностика журналов» он появляется, только если последний запуск сервера записал проблему.</value>
+    <value>Проверяется только сервер, не игра, а профили сначала копируются. Поиск также предлагается, если сервер останавливается до готовности. На странице «Диагностика журналов» он появляется, только если последний запуск сервера записал проблему. Включите «Подсказки», чтобы видеть подсказку на каждом шаге.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>мод-виновник, проблемный мод, сервер не запускается, вылет сервера, какой мод, найти мод, ошибки</value>
@@ -12029,12 +12029,93 @@
     <value>При каждом запуске играйте до момента, когда ожидаете проблему, затем нажмите {0}, {1} или {2} на карточке. {2} снова запускает игру с теми же модами.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
-    <value>Переключается только клиентская половина мода, а сервер продолжает работать между запусками. Патчеры остаются включёнными. Игра запускается как при быстрой игре: Играть для профиля, выбранного на карточке Играть, иначе лаунчер SPT, где вы нажимаете Играть. Профили сначала копируются и возвращаются в конце, если запуски их изменили.</value>
+    <value>Переключается только клиентская половина мода, а сервер продолжает работать между запусками. Патчеры остаются включёнными. Игра запускается как при быстрой игре: Играть для профиля, выбранного на карточке Играть, иначе лаунчер SPT, где вы нажимаете Играть. Профили сначала копируются и возвращаются в конце, если запуски их изменили. Включите «Подсказки», чтобы видеть подсказку на каждом шаге.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>клиентский мод, вылет игры, игра не запускается, найти мод, плагин, половины</value>
   </data>
   <data name="Search_Fixed" xml:space="preserve">
     <value>Исправлено</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Найти мод</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Body" xml:space="preserve">
+    <value>Для проблемы в игре: несколько раз запускает игру, выключая клиентские моды половинами, каждый раз спрашивает, сломалось ли, и называет мод-виновник.</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Title" xml:space="preserve">
+    <value>Новое: проверка клиентских модов</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Body" xml:space="preserve">
+    <value>Читает ваши клиентские плагины без запуска игры и показывает те, что собраны под другую версию игры или SPT, или которым не хватает нужного мода.</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Title" xml:space="preserve">
+    <value>Новое: найти мод</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Body" xml:space="preserve">
+    <value>Для проблемы в игре: несколько раз запускает игру, выключая клиентские моды половинами, каждый раз спрашивает, сломалось ли, и называет мод-виновник.</value>
+  </data>
+  <data name="Tour_New132_Search_Title" xml:space="preserve">
+    <value>Новое: найти мод-причину</value>
+  </data>
+  <data name="Tour_New132_Search_Body" xml:space="preserve">
+    <value>Когда сервер не запускается или пишет ошибки, это находит серверный мод-причину. Появляется здесь, только если при последнем запуске сервера была проблема.</value>
+  </data>
+  <data name="Tour_New132_Purge_Title" xml:space="preserve">
+    <value>Новое: очистка логов</value>
+  </data>
+  <data name="Tour_New132_Purge_Body" xml:space="preserve">
+    <value>Отправляет логи сервера, игры и BepInEx в корзину, чтобы следующая проблема начиналась с чистых логов.</value>
+  </data>
+  <data name="Search_GuideMe" xml:space="preserve">
+    <value>Подсказки</value>
+  </data>
+  <data name="Search_GuideMeToolTip" xml:space="preserve">
+    <value>Показывать подсказку на каждом шаге поиска</value>
+  </data>
+  <data name="Search_HintGotIt" xml:space="preserve">
+    <value>Понятно</value>
+  </data>
+  <data name="Hint_Search_StartTitle" xml:space="preserve">
+    <value>Поиск начался</value>
+  </data>
+  <data name="Hint_Search_StartServerBody" xml:space="preserve">
+    <value>Сервер несколько раз запускается без окна, каждый раз с частью серверных модов выключенной. Это займёт несколько минут, можно просто оставить.</value>
+  </data>
+  <data name="Hint_Search_StartClientBody" xml:space="preserve">
+    <value>Скоро запустится игра с частью клиентских модов выключенной. Каждый раз проверяйте, появилась ли проблема, и отвечайте на этой карточке.</value>
+  </data>
+  <data name="Hint_Search_AnswerTitle" xml:space="preserve">
+    <value>Ответьте здесь</value>
+  </data>
+  <data name="Hint_Search_AnswerBody" xml:space="preserve">
+    <value>Играйте до момента, когда ожидаете проблему, затем нажмите «Сломалось», «Всё работало» или «Не уверен». Если игра ещё открыта, её закроют за вас.</value>
+  </data>
+  <data name="Hint_Search_GameClosedTitle" xml:space="preserve">
+    <value>Игра закрылась</value>
+  </data>
+  <data name="Hint_Search_GameClosedBody" xml:space="preserve">
+    <value>Появилась ли проблема до закрытия? Ответьте здесь, и начнётся следующий запуск.</value>
+  </data>
+  <data name="Hint_Search_NotSureTitle" xml:space="preserve">
+    <value>Ещё раз</value>
+  </data>
+  <data name="Hint_Search_NotSureBody" xml:space="preserve">
+    <value>«Не уверен» снова запускает игру с теми же модами, чтобы проверить ещё раз.</value>
+  </data>
+  <data name="Hint_Search_ResultTitle" xml:space="preserve">
+    <value>Что нашёл поиск</value>
+  </data>
+  <data name="Hint_Search_ResultBody" xml:space="preserve">
+    <value>Названный здесь мод показывал проблему, когда был включён, но он не обязательно виноват. Проверьте его страницу на sp-mod и Discord. «Выключить» выключает его, «Показать» открывает в «Установленных».</value>
+  </data>
+  <data name="Hint_Search_DoneTitle" xml:space="preserve">
+    <value>Проверьте результат</value>
+  </data>
+  <data name="Hint_Search_DoneServerBody" xml:space="preserve">
+    <value>Запустите сервер, чтобы проверить. Если проблема ушла, нажмите «Исправлено». ✕ убирает результат.</value>
+  </data>
+  <data name="Hint_Search_DoneClientBody" xml:space="preserve">
+    <value>Запустите игру, чтобы проверить. Если проблема ушла, нажмите «Исправлено». ✕ убирает результат.</value>
   </data>
 </root>

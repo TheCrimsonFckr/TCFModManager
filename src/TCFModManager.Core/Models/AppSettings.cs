@@ -101,6 +101,9 @@ public sealed class AppSettings
 
     public List<string> SeenTours { get; set; } = [];
 
+    // OPEN-75: hints while Find the mod runs.
+    public bool SearchGuide { get; set; }
+
     public string? LastRunVersion { get; set; }
 
     //

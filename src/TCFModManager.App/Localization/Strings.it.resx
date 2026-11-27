@@ -11333,7 +11333,7 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>Quando indica un mod, premi {0}, poi {1} per controllare che il server si avvii.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Note" xml:space="preserve">
-    <value>Viene testato solo il server, non il gioco, e i tuoi profili vengono copiati prima. Viene proposta anche quando il server si ferma prima di essere pronto. In «Diagnostica log» compare solo se l'ultima esecuzione del server ha registrato un problema.</value>
+    <value>Viene testato solo il server, non il gioco, e i tuoi profili vengono copiati prima. Viene proposta anche quando il server si ferma prima di essere pronto. In «Diagnostica log» compare solo se l'ultima esecuzione del server ha registrato un problema. Attiva Guidami per un suggerimento a ogni passo.</value>
   </data>
   <data name="Help_Diagnose_BrokenMod_Keywords" xml:space="preserve">
     <value>mod responsabile, mod problematico, server non parte, crash server, quale mod, trovare mod, errori</value>
@@ -11582,12 +11582,93 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
     <value>A ogni avvio, gioca finché ti aspetteresti il problema, poi premi {0}, {1} o {2} nella scheda. {2} riavvia il gioco con gli stessi mod.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
-    <value>Viene cambiata solo la metà client di un mod, e il server resta avviato tra un avvio e l'altro. I patcher restano attivi. Il gioco parte come con Gioco rapido: Gioca per il profilo scelto nella scheda Gioca, altrimenti il launcher SPT, dove premi Gioca. I tuoi profili vengono prima copiati e rimessi alla fine se gli avvii li hanno cambiati.</value>
+    <value>Viene cambiata solo la metà client di un mod, e il server resta avviato tra un avvio e l'altro. I patcher restano attivi. Il gioco parte come con Gioco rapido: Gioca per il profilo scelto nella scheda Gioca, altrimenti il launcher SPT, dove premi Gioca. I tuoi profili vengono prima copiati e rimessi alla fine se gli avvii li hanno cambiati. Attiva Guidami per un suggerimento a ogni passo.</value>
   </data>
   <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
     <value>mod client, crash del gioco, il gioco non parte, trovare il mod, plugin, metà</value>
   </data>
   <data name="Search_Fixed" xml:space="preserve">
     <value>È risolto</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Trova il mod</value>
+  </data>
+  <data name="Tour_Diagnose_ClientSearch_Body" xml:space="preserve">
+    <value>Per un problema nel gioco: avvia il gioco alcune volte con metà dei mod client disattivati, ti chiede ogni volta se si è rotto e indica il mod responsabile.</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Title" xml:space="preserve">
+    <value>Novità: Controlla i mod client</value>
+  </data>
+  <data name="Tour_New132_ClientCheck_Body" xml:space="preserve">
+    <value>Legge i tuoi plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario.</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Title" xml:space="preserve">
+    <value>Novità: Trova il mod</value>
+  </data>
+  <data name="Tour_New132_ClientSearch_Body" xml:space="preserve">
+    <value>Per un problema nel gioco: avvia il gioco alcune volte con metà dei mod client disattivati, ti chiede ogni volta se si è rotto e indica il mod responsabile.</value>
+  </data>
+  <data name="Tour_New132_Search_Title" xml:space="preserve">
+    <value>Novità: Trova il mod che lo causa</value>
+  </data>
+  <data name="Tour_New132_Search_Body" xml:space="preserve">
+    <value>Quando il server non parte o registra errori, questo trova il mod server responsabile. Compare qui solo se l'ultimo avvio del server ha avuto un problema.</value>
+  </data>
+  <data name="Tour_New132_Purge_Title" xml:space="preserve">
+    <value>Novità: Elimina log</value>
+  </data>
+  <data name="Tour_New132_Purge_Body" xml:space="preserve">
+    <value>Sposta i log del server, del gioco e di BepInEx nel Cestino, così il prossimo problema parte da log puliti.</value>
+  </data>
+  <data name="Search_GuideMe" xml:space="preserve">
+    <value>Guidami</value>
+  </data>
+  <data name="Search_GuideMeToolTip" xml:space="preserve">
+    <value>Mostra un suggerimento a ogni passo della ricerca</value>
+  </data>
+  <data name="Search_HintGotIt" xml:space="preserve">
+    <value>Capito</value>
+  </data>
+  <data name="Hint_Search_StartTitle" xml:space="preserve">
+    <value>La ricerca è iniziata</value>
+  </data>
+  <data name="Hint_Search_StartServerBody" xml:space="preserve">
+    <value>Il server si avvia alcune volte senza finestra, ogni volta con alcuni mod server disattivati. Richiede qualche minuto e puoi lasciarlo andare.</value>
+  </data>
+  <data name="Hint_Search_StartClientBody" xml:space="preserve">
+    <value>Il gioco parte a breve, con alcuni mod client disattivati. Ogni volta controlla se il problema si presenta, poi rispondi in questa scheda.</value>
+  </data>
+  <data name="Hint_Search_AnswerTitle" xml:space="preserve">
+    <value>Rispondi qui</value>
+  </data>
+  <data name="Hint_Search_AnswerBody" xml:space="preserve">
+    <value>Gioca finché ti aspetteresti il problema, poi premi Si è rotto, Ha funzionato o Non sono sicuro. Se il gioco è ancora aperto, viene chiuso per te.</value>
+  </data>
+  <data name="Hint_Search_GameClosedTitle" xml:space="preserve">
+    <value>Il gioco si è chiuso</value>
+  </data>
+  <data name="Hint_Search_GameClosedBody" xml:space="preserve">
+    <value>Il problema si è presentato prima della chiusura? Rispondi qui e parte l'avvio successivo.</value>
+  </data>
+  <data name="Hint_Search_NotSureTitle" xml:space="preserve">
+    <value>Nuovo tentativo</value>
+  </data>
+  <data name="Hint_Search_NotSureBody" xml:space="preserve">
+    <value>Non sono sicuro riavvia il gioco con gli stessi mod, così puoi controllare ancora.</value>
+  </data>
+  <data name="Hint_Search_ResultTitle" xml:space="preserve">
+    <value>Cosa ha trovato la ricerca</value>
+  </data>
+  <data name="Hint_Search_ResultBody" xml:space="preserve">
+    <value>Un mod indicato qui ha mostrato il problema quando era attivo, ma non è per forza colpevole. Controlla la sua pagina sp-mod e il Discord. Disattiva lo spegne; Mostra lo apre in Installati.</value>
+  </data>
+  <data name="Hint_Search_DoneTitle" xml:space="preserve">
+    <value>Controlla che abbia funzionato</value>
+  </data>
+  <data name="Hint_Search_DoneServerBody" xml:space="preserve">
+    <value>Avvia il server per controllare. Se il problema è sparito, premi È risolto. ✕ mette da parte il risultato.</value>
+  </data>
+  <data name="Hint_Search_DoneClientBody" xml:space="preserve">
+    <value>Avvia il gioco per controllare. Se il problema è sparito, premi È risolto. ✕ mette da parte il risultato.</value>
   </data>
 </root>

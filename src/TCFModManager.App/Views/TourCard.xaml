@@ -84,6 +84,7 @@
                             Click="Back_Click"
                             Content="{loc:Str Tour_Back}" />
                         <ui:Button
+                            x:Name="SkipButton"
                             DockPanel.Dock="Right"
                             Appearance="Transparent"
                             Click="Skip_Click"

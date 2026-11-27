@@ -38,6 +38,8 @@ public partial class TourCard : UserControl
         TitleText.Text = title;
         BodyText.Text = body;
         CountText.Text = LocalizationService.Text(Strings.Tour_StepFormat, position, count);
+        CountText.Visibility = Visibility.Visible;
+        SkipButton.Visibility = Visibility.Visible;
         BackButton.Visibility = canGoBack ? Visibility.Visible : Visibility.Collapsed;
         NextButton.Content = isLast ? Strings.Tour_Done : Strings.Tour_Next;
 
@@ -46,6 +48,14 @@ public partial class TourCard : UserControl
         _wanted = true;
         Apply();
         Reposition();
+    }
+
+    public void ShowHint(FrameworkElement target, string title, string body)
+    {
+        Show(target, title, body, 1, 1, canGoBack: false, isLast: true, beside: false);
+        CountText.Visibility = Visibility.Collapsed;
+        SkipButton.Visibility = Visibility.Collapsed;
+        NextButton.Content = Strings.Search_HintGotIt;
     }
 
     public void Hide()

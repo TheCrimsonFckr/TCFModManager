@@ -22,6 +22,7 @@ internal static class TourRunner
     private static ContentPresenter? _dialogs;
 
     private static Tour? _tour;
+    private static bool _isHint;
     private static string? _requested;
     private static string? _whatsNewAfter;
     private static int _step;
@@ -105,6 +106,41 @@ internal static class TourRunner
     public static void Close()
     {
         if (_tour is not null) End(markSeen: true);
+    }
+
+    //
+    // OPEN-75: one card at a target, outside any tour - shown once the page has settled and the target
+    // is on screen, never over a tour, and never recorded as seen. False when it couldn't be shown.
+    //
+    public static async Task<bool> ShowHintAsync(string target, Func<string> title, Func<string> body)
+    {
+        if (_window is null || _card is null || _root is null) return false;
+        if (_tour is not null && !_isHint) return false;
+
+        await AppNavigation.AfterTransitionAsync();
+
+        var step = new TourStep(target, title, body);
+        FrameworkElement? found = null;
+        for (var waited = 0; waited < 3000 && (found = FindTarget(step)) is null; waited += PollMilliseconds)
+            await Task.Delay(PollMilliseconds);
+
+        if (found is null || (_tour is not null && !_isHint)) return false;
+        if (_tour is not null) End(markSeen: false);
+
+        _tour = new Tour("hint." + target, AppNavigation.CurrentPage ?? typeof(object), [step]);
+        _isHint = true;
+        _step = 0;
+
+        RemoveRing();
+        found.BringIntoView();
+        await _window.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Loaded);
+        if (!_isHint || _tour?.Steps[0] != step) return false;
+
+        AddRing(found);
+        _card.ShowHint(found, title(), body());
+        Suspend();
+        AppLog.Info("Tour", $"hint '{target}' shown");
+        return true;
     }
 
     private static async Task StartWhenReadyAsync(Tour tour, int generation)
@@ -242,12 +278,14 @@ internal static class TourRunner
     {
         if (_tour is not { } tour) return;
 
+        var wasHint = _isHint;
         _tour = null;
+        _isHint = false;
         _step = -1;
         RemoveRing();
         _card?.Hide();
 
-        if (!markSeen) return;
+        if (!markSeen || wasHint) return;
 
         var settings = Settings.Load();
         if (!settings.SeenTours.Contains(tour.Id))
