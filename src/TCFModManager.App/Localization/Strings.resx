@@ -3162,6 +3162,22 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>Files it replaced are put back. Files you changed, or that another mod also uses, stay where they are.</value>
     <comment>Under that first line in the window asked before removing one mod.</comment>
   </data>
+  <data name="Installed_RemoveAppKeepsFolder" xml:space="preserve">
+    <value>Files it replaced are put back. Files that another mod also uses stay where they are.</value>
+    <comment>Under that first line in the window asked before removing one mod, when the mod's folder goes too because it holds files the mod made itself.</comment>
+  </data>
+  <data name="Installed_RemoveLeftoversHeadingFormat" xml:space="preserve">
+    <value>{0} made these files itself after it was installed. They go too:</value>
+    <comment>Heading over a list in the window asked before removing one mod: files in the mod's folder that this app didn't install. {0} the mod.</comment>
+  </data>
+  <data name="Installed_RemoveLeftoverFolder_one" xml:space="preserve">
+    <value>{0}\ (1 file)</value>
+    <comment>One line in that list: a folder and how many files are in it. {0} the folder.</comment>
+  </data>
+  <data name="Installed_RemoveLeftoverFolder_other" xml:space="preserve">
+    <value>{0}\ ({1} files)</value>
+    <comment>One line in that list: a folder and how many files are in it. {0} the folder, {1} how many.</comment>
+  </data>
   <data name="Installed_RemoveNoInstallStampFormat" xml:space="preserve">
     <value>This app didn't record which SPT install this mod went into. It will be removed from {0}.</value>
     <comment>In the window asked before removing one mod when the install record is older than v1.19.0 (D17). {0} the SPT install folder.</comment>

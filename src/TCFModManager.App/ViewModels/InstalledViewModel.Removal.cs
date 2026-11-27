@@ -35,7 +35,7 @@ public partial class InstalledViewModel
         if (!await SptInUsePrompt.ClearAsync(installPath, ModInstallAction.Remove)) return;
 
         if (AskRemoveAddons(mod) is not { } addons) return;
-        var batch = addons.Count > 0 ? RemovalBatch.For(mod.Name) : null;
+        var batch = addons.Count > 0 ? RemovalBatch.For(BatchLeadOf(mod)) : null;
 
         StatusMessage = Strings.ProfileItems_Checking;
         IsCheckingProfiles = true;
@@ -52,7 +52,7 @@ public partial class InstalledViewModel
             var record = manifest.Find(modId, mod.IsAddon);
             if (record is null)
             {
-                StatusMessage = Text(Strings.Installed_RemoveNoRecordFormat, mod.Name);
+                StatusMessage = Text(Strings.Installed_RemoveNoRecordFormat, mod.DisplayTitle);
                 return;
             }
 
@@ -68,28 +68,44 @@ public partial class InstalledViewModel
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
+            var leftovers = LeftoversOf(mod, record, addons, installPath);
+            var leftoverConfigs = ModInstallService.FindLegacyConfigs(installPath, leftovers.Select(l => l.FullPath));
+
             //
             // A record made before v1.19.0 doesn't say which install it came from (D17). When the app
             // doesn't sit inside this install either, nothing proves it belongs here - so the install
             // is named before anything happens.
             //
-            var detail = new List<string> { Strings.Installed_RemoveAppKeeps };
+            var detail = new List<string> { leftovers.Count > 0 ? Strings.Installed_RemoveAppKeepsFolder : Strings.Installed_RemoveAppKeeps };
             if (record.InstallPath is null && !InstallStamp.AppIsInside(installPath))
                 detail.Add(Text(Strings.Installed_RemoveNoInstallStampFormat, installPath));
 
-            if (ConfirmRemoval(mod, Text(Strings.Installed_RemoveAppLeadFormat, mod.Name), [], detail, configs.Count, offer)
-                is not { } configAction)
+            if (ConfirmRemoval(
+                    mod,
+                    Text(Strings.Installed_RemoveAppLeadFormat, mod.DisplayTitle),
+                    LeftoverSections(mod, leftovers),
+                    detail,
+                    configs.Count + leftoverConfigs.Count,
+                    offer) is not { } configAction)
             {
                 return;
             }
+
+            if (leftovers.Count > 0) batch ??= RemovalBatch.For(record.Name);
 
             IsBusy = true;
             try
             {
                 var removedAddons = await RemoveAddonsAsync(addons, installPath, batch);
                 var result = await AppServices.ModInstall.UninstallAsync(installPath, record, configAction, batch: batch);
+                var (leftoverKept, taken) = RemoveLeftovers(record.Name, leftovers, installPath, configAction, batch);
+                var shown = taken.Count == 0
+                    ? result
+                    : result with { FoldersLeft = [.. result.FoldersLeft.Where(f => !taken.Contains(f.Folder, StringComparer.OrdinalIgnoreCase))] };
                 StatusMessage = WithRemovedAddons(
-                    DescribeRemoval(mod.Name, result.FailedFiles.Count, result.ConfigsKept, result.ConfigsFolder, result), removedAddons);
+                    DescribeRemoval(mod.DisplayTitle, result.FailedFiles.Count, result.ConfigsKept + leftoverKept.Count,
+                        result.ConfigsFolder ?? leftoverKept.Folder, shown),
+                    removedAddons);
                 if (await offer.CleanAsync() is { } cleaned) StatusMessage = Sentences(StatusMessage, cleaned);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
@@ -110,7 +126,7 @@ public partial class InstalledViewModel
                 .ToList();
             if (paths.Count == 0)
             {
-                StatusMessage = Text(Strings.Installed_RemoveNoFolderFormat, mod.Name);
+                StatusMessage = Text(Strings.Installed_RemoveNoFolderFormat, mod.DisplayTitle);
                 return;
             }
 
@@ -130,7 +146,7 @@ public partial class InstalledViewModel
             var configs = ModInstallService.FindLegacyConfigs(installPath, paths!);
             if (ConfirmRemoval(
                     mod,
-                    Text(Strings.Installed_RemoveHandLeadFormat, mod.Name),
+                    Text(Strings.Installed_RemoveHandLeadFormat, mod.DisplayTitle),
                     [new(null, [.. HandRemovalShown(mod, paths.Select(p => p!))])],
                     [],
                     configs.Count,
@@ -159,7 +175,7 @@ public partial class InstalledViewModel
                     AppServices.InstallManifest.ClearManualVersion(overriddenModId, mod.IsAddon);
 
                 StatusMessage = WithRemovedAddons(
-                    DescribeRemoval(mod.Name, failedFiles: 0, kept.Count, kept.Folder, held: held is not null), removedAddons);
+                    DescribeRemoval(mod.DisplayTitle, failedFiles: 0, kept.Count, kept.Folder, held: held is not null), removedAddons);
                 if (await offer.CleanAsync() is { } cleaned) StatusMessage = Sentences(StatusMessage, cleaned);
                 ModRemoved?.Invoke(this, EventArgs.Empty);
             }
@@ -169,7 +185,7 @@ public partial class InstalledViewModel
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                StatusMessage = Text(Strings.Installed_RemoveFailedFormat, mod.Name, ex.Message);
+                StatusMessage = Text(Strings.Installed_RemoveFailedFormat, mod.DisplayTitle, ex.Message);
             }
             finally
             {
@@ -405,7 +421,7 @@ public partial class InstalledViewModel
             var addons = targets.Where(t => t.IsAddon && t.ParentModId == parent.ModId && !placed.Contains(t)).ToList();
             if (addons.Count == 0 && !withCardlessAddons.Contains(parent)) continue;
 
-            var batch = RemovalBatch.For(parent.Name);
+            var batch = RemovalBatch.For(BatchLeadOf(parent));
             foreach (var addon in addons) order.Add((addon, batch));
             order.Add((parent, batch));
 
@@ -543,6 +559,71 @@ public partial class InstalledViewModel
             .Concat(paths.Where(p => !shares.Any(s => IsSamePath(s.FolderPath, p))));
     }
 
+    private static string BatchLeadOf(InstalledModCardViewModel mod) =>
+        mod is { IsAppManaged: true, ModId: { } id } && AppServices.InstallManifest.Load().Find(id, mod.IsAddon) is { } record
+            ? record.Name
+            : mod.Name;
+
+    private List<LeftoverFolder> LeftoversOf(
+        InstalledModCardViewModel mod, InstalledModRecord record, IReadOnlyList<InstalledModRecord> addons, string installPath)
+    {
+        var going = AddonCardsOf(mod).Append(mod).ToHashSet();
+
+        return
+        [
+            .. AppServices.ModInstall.LeftoversOf(installPath, record, addons)
+                .Where(l => !_all.Any(c => !going.Contains(c) && c.Entries.Any(e => IsSamePath(e.FolderPath, l.FullPath)))),
+        ];
+    }
+
+    private static IReadOnlyList<AskSection> LeftoverSections(InstalledModCardViewModel mod, IReadOnlyList<LeftoverFolder> leftovers) =>
+        leftovers.Count == 0
+            ? []
+            : [new(Text(Strings.Installed_RemoveLeftoversHeadingFormat, mod.DisplayTitle), [.. leftovers.SelectMany(l => LeftoverLines(l, leftovers.Count > 1))])];
+
+    private static IEnumerable<string> LeftoverLines(LeftoverFolder leftover, bool named)
+    {
+        var prefix = named ? Path.GetFileName(leftover.Folder) + "\\" : "";
+
+        return leftover.Files
+            .GroupBy(f => f.Split('/')[0], StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.First().Contains('/') ? 0 : 1)
+            .ThenBy(g => g.Key, StringComparer.OrdinalIgnoreCase)
+            .Select(g => g.First().Contains('/')
+                ? prefix + Strings.Installed_RemoveLeftoverFolder(g.Count(), g.Key, g.Count())
+                : prefix + g.Key);
+    }
+
+    private static (KeptConfigs Kept, List<string> Taken) RemoveLeftovers(
+        string modName, IReadOnlyList<LeftoverFolder> leftovers, string installPath, ConfigAction configAction, RemovalBatch? batch)
+    {
+        var none = (new KeptConfigs(0, null), new List<string>());
+        if (leftovers.Count == 0) return none;
+
+        var owned = AppServices.InstallManifest.Load().Mods.SelectMany(m => m.Files).ToList();
+        var still = leftovers
+            .Where(l => Directory.Exists(l.FullPath)
+                && InstallPathGuard.CheckModFolder(installPath, l.FullPath) is null
+                && !owned.Any(f => f.StartsWith(DisabledModPaths.ToEnabledRelativePath(l.Folder) + "/", StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+        if (still.Count == 0) return none;
+
+        var paths = still.Select(l => l.FullPath).ToList();
+        var configs = configAction == ConfigAction.Keep ? ModInstallService.FindLegacyConfigs(installPath, paths) : new List<string>();
+        var kept = configs.Count > 0 ? ModInstallService.KeepLegacyConfigs(installPath, configs, modName) : new KeptConfigs(0, null);
+
+        try
+        {
+            AppServices.ModInstall.RemoveHandInstalled(paths, installPath, modName, kept.Folder, batch);
+            return (kept, [.. still.Select(l => l.Folder)]);
+        }
+        catch (Exception ex) when (ex is ModInstallException or IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warn("Remove", $"{modName}: left {string.Join(", ", still.Select(l => l.Folder))}: {ex.Message}");
+            return (kept, []);
+        }
+    }
+
     private static bool IsSamePath(string a, string b) =>
         string.Equals(
             Path.TrimEndingDirectorySeparator(Path.GetFullPath(a)),
@@ -575,7 +656,7 @@ public partial class InstalledViewModel
         if (profile) lines.Add(Strings.Installed_ProfileUndoOne);
         lines.AddRange(offer.Notes);
         lines.AddRange(detail);
-        if (hasConfigs) lines.Add(Strings.Installed_RemoveConfigCount(configCount, mod.Name, configCount));
+        if (hasConfigs) lines.Add(Strings.Installed_RemoveConfigCount(configCount, mod.DisplayTitle, configCount));
         if (mod.IsDisabled) lines.Add(Text(Strings.Installed_RemoveDisabledNoteFormat, mod.DisplayTitle));
         else if (mod.IsMixedState) lines.Add(Text(Strings.Installed_RemovePartDisabledNoteFormat, mod.DisplayTitle));
         lines.Add(HeldSentence());
@@ -583,7 +664,7 @@ public partial class InstalledViewModel
 
         var answer = AskWindow.Show(new AskRequest
         {
-            Title = Text(Strings.Installed_RemoveTitleFormat, mod.Name),
+            Title = Text(Strings.Installed_RemoveTitleFormat, mod.DisplayTitle),
             Warning = offer.Warning ?? (profile ? Text(Strings.Installed_ProfileWarningFormat, mod.DisplayTitle) : null),
             Lead = lead,
             Sections = sections,

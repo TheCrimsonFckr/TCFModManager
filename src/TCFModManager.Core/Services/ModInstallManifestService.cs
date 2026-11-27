@@ -178,6 +178,8 @@ public sealed class ModInstallManifestService
             Fingerprints = existing?.Fingerprints ?? [],
             InstallPath = existing?.InstallPath,
             Overwrote = existing?.Overwrote ?? [],
+            EmptyFolders = existing?.EmptyFolders ?? [],
+            CreatedFolders = existing?.CreatedFolders ?? [],
             Slug = existing?.Slug,
         };
 
@@ -252,6 +254,8 @@ public sealed class ModInstallManifestService
             Fingerprints = fingerprints,
             InstallPath = string.IsNullOrWhiteSpace(installPath) ? existing.InstallPath : InstallStamp.Of(installPath),
             Overwrote = existing.Overwrote,
+            EmptyFolders = existing.EmptyFolders,
+            CreatedFolders = existing.CreatedFolders,
             Slug = existing.Slug,
         };
 

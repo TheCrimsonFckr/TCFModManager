@@ -238,6 +238,9 @@ public sealed record UninstallResult(
 // A mod folder a removal left in place, install-relative, and how many files in it the mod didn't install.
 public sealed record FolderLeft(string Folder, int Files);
 
+// A mod folder a removal would leave, install-relative and in full, with its files no record lists, relative to it.
+public sealed record LeftoverFolder(string Folder, string FullPath, IReadOnlyList<string> Files);
+
 // What Undo did: whether it ran at all, how many files and folders came back, and the paths it left in
 // the holding folder because something else now occupies them.
 public sealed record UndoResult(bool Ran, int PutBack, List<string> Blocked);

@@ -83,6 +83,12 @@ public sealed class InstalledModRecord
     //
     public List<string> EmptyFolders { get; init; } = [];
 
+    //
+    // Folders this install created to place its files, anywhere in the install, relative to the SPT
+    // install root, forward-slash separated. A removal takes them while they are still empty.
+    //
+    public List<string> CreatedFolders { get; init; } = [];
+
     // The addon's sp-mod slug at install time, which keys its share of a folder (OPEN-31). Null for a mod.
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Slug { get; set; }

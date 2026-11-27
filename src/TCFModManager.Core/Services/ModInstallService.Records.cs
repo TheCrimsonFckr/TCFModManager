@@ -15,7 +15,8 @@ public sealed partial class ModInstallService
         string installPath,
         List<OverwrittenFile> overwrote,
         List<FileFingerprint> fingerprints,
-        List<string>? emptyFolders = null)
+        List<string>? emptyFolders = null,
+        IEnumerable<string>? createdFolders = null)
     {
         var current = manifestService.Load();
 
@@ -35,6 +36,7 @@ public sealed partial class ModInstallService
             InstallPath = InstallStamp.Of(installPath),
             Overwrote = overwrote,
             EmptyFolders = emptyFolders ?? [],
+            CreatedFolders = [.. (createdFolders ?? []).Order(StringComparer.OrdinalIgnoreCase)],
             Slug = target.IsAddon ? target.Slug ?? current.Mods.FirstOrDefault(target.Matches)?.Slug : null,
             FitOverride = target.IsAddon && !string.IsNullOrWhiteSpace(target.FitOverride) ? target.FitOverride.Trim() : null,
         };

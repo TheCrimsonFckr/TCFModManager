@@ -214,6 +214,31 @@ public static class InstallPathGuard
     }
 
     //
+    // Whether an empty folder an install created may be removed, anywhere in the install: never a mod
+    // container or anything above one, never a protected area, this app's folder or a link.
+    //
+    public static bool MayRemoveCreatedFolder(string installPath, string installRelative, out string fullPath)
+    {
+        fullPath = string.Empty;
+
+        if (ProtectedInstallPaths.Segments(installRelative) is not { } segments) return false;
+        if (!TryFullPath(installPath, out var root)
+            || !TryFullPath(Path.Combine(root, Path.Combine(segments)), out var full)
+            || !IsStrictlyInside(full, root))
+        {
+            return false;
+        }
+
+        if (IsInAppFolder(full, root)) return false;
+        if (ModContainers.Concat(PrepatchContainers).Any(c => segments.Length <= c.Length && StartsWith(c, segments))) return false;
+        if (ProtectedInstallPaths.IsProtected(string.Join('/', segments) + "/_")) return false;
+        if (IsLink(full) || PassesThroughLink(root, full)) return false;
+
+        fullPath = full;
+        return true;
+    }
+
+    //
     // Whether anything below a folder is a link. Stops at the first one found, so a link is reported
     // rather than walked into.
     //

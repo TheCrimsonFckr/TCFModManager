@@ -263,6 +263,12 @@ public sealed partial class ModInstallService
 
         TidyEmptyFolders(installPath, touchedDirectories);
 
+        var otherCreatedFolders = manifestService.Load().Mods
+            .Where(m => !(m.ModId == record.ModId && m.IsAddon == record.IsAddon))
+            .SelectMany(m => m.CreatedFolders)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        TidyCreatedFolders(installPath, record.CreatedFolders.Where(f => !otherCreatedFolders.Contains(f)));
+
         foreach (var container in disabledContainers)
             ModDisableService.TryRemoveEmptyDisabledContainer(Path.Combine(installPath, container.Replace('/', Path.DirectorySeparatorChar)));
 
@@ -372,6 +378,66 @@ public sealed partial class ModInstallService
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
         }
+    }
+
+    private static void TidyCreatedFolders(string installPath, IEnumerable<string> folders)
+    {
+        foreach (var folder in folders.OrderByDescending(f => f.Count(c => c == '/')))
+        {
+            if (!InstallPathGuard.MayRemoveCreatedFolder(installPath, DisabledModPaths.WhereNow(installPath, folder), out var full))
+                continue;
+
+            try
+            {
+                if (Directory.Exists(full) && !Directory.EnumerateFileSystemEntries(full).Any()) Directory.Delete(full);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+            }
+        }
+    }
+
+    //
+    // What removing this record, and the records going with it, would leave in each of its mod folders:
+    // the files no record lists. A folder another record still has files in, or that a hand removal
+    // would refuse, is not included.
+    //
+    public List<LeftoverFolder> LeftoversOf(string installPath, InstalledModRecord record, IEnumerable<InstalledModRecord> alsoGoing)
+    {
+        var going = alsoGoing.Append(record).ToList();
+        var goingKeys = going.Select(r => (r.ModId, r.IsAddon)).ToHashSet();
+        var goingFiles = going.SelectMany(r => r.Files).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var otherFiles = manifestService.Load().Mods
+            .Where(m => !goingKeys.Contains((m.ModId, m.IsAddon)))
+            .SelectMany(m => m.Files)
+            .ToList();
+        var walk = new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.ReparsePoint };
+        var leftovers = new List<LeftoverFolder>();
+
+        foreach (var recordFolder in record.Files.Select(InstallPathGuard.ModFolderOf).OfType<string>().Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            var folder = DisabledModPaths.WhereNow(installPath, recordFolder);
+            var full = Path.GetFullPath(Path.Combine(installPath, folder.Replace('/', Path.DirectorySeparatorChar)));
+            if (!Directory.Exists(full) || InstallPathGuard.CheckModFolder(installPath, full) is not null) continue;
+            if (otherFiles.Any(f => f.StartsWith(recordFolder + "/", StringComparison.OrdinalIgnoreCase))) continue;
+
+            try
+            {
+                var files = Directory.EnumerateFiles(full, "*", walk)
+                    .Select(f => Path.GetRelativePath(full, f).Replace('\\', '/'))
+                    .Where(f => !goingFiles.Contains(recordFolder + "/" + f))
+                    .Order(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                if (files.Count > 0) leftovers.Add(new LeftoverFolder(folder, full, files));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warn("Remove", $"{record.Name}: couldn't read {folder}: {ex.Message}");
+            }
+        }
+
+        return leftovers;
     }
 
     private static void TidyEmptyFolders(string installPath, HashSet<string> touchedDirectories)

@@ -323,6 +323,12 @@ public sealed partial class ModInstallService
             status?.Report(new ModInstallProgress(
                 ModInstallStage.Installing, Total: placements.Count));
             var placedFiles = new List<string>(placements.Count);
+            var createdFolders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var claimedFolders = manifestService.Load().Mods
+                .Where(m => !target.Matches(m))
+                .SelectMany(m => m.CreatedFolders)
+                .Concat(existing?.CreatedFolders ?? [])
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
             var keptSettings = new List<string>();
             var reportClock = Stopwatch.StartNew();
 
@@ -367,7 +373,11 @@ public sealed partial class ModInstallService
                     }
 
                     var destinationDir = Path.GetDirectoryName(destination);
-                    if (!string.IsNullOrEmpty(destinationDir)) Directory.CreateDirectory(destinationDir);
+                    if (!string.IsNullOrEmpty(destinationDir))
+                    {
+                        NoteCreatedFolders(installPath, destinationDir, createdFolders, claimedFolders);
+                        Directory.CreateDirectory(destinationDir);
+                    }
 
                     if (canMoveIntoInstall) File.Move(file, destination, overwrite: true);
                     else File.Copy(file, destination, overwrite: true);
@@ -389,7 +399,7 @@ public sealed partial class ModInstallService
                 // interrupted update leaves the old version deleted and the new one untracked. The
                 // originals kept so far are recorded too - they are owed back whatever happens next.
                 SaveRecord(target, version, placedFiles, incomplete: true, installPath, overwrote,
-                    KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing));
+                    KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing), createdFolders: createdFolders);
                 _journal.Delete(journalEntry);
 
                 AppLog.Error("Install",
@@ -406,7 +416,7 @@ public sealed partial class ModInstallService
 
             var emptyFolders = PlaceEmptyFolders(folderEntries, contentRoot, bareBepInEx, serverRoot, installPath, existing, target, version);
 
-            var record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote, fingerprints: [], emptyFolders);
+            var record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote, fingerprints: [], emptyFolders, createdFolders);
 
             AppLog.Info("Install",
                 $"{target.Name} {version.Version} placed {placedFiles.Count} file(s) in folders [{string.Join(", ", record.Folders)}]"
@@ -430,7 +440,7 @@ public sealed partial class ModInstallService
             //
             var fingerprintClock = Stopwatch.StartNew();
             record = SaveRecord(target, version, placedFiles, incomplete: false, installPath, overwrote,
-                KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing), emptyFolders);
+                KeepSettingsPrints(Fingerprint(installPath, placedFiles), pending, existing), emptyFolders, createdFolders);
             _journal.Delete(journalEntry);
             AppLog.Debug("Install", $"fingerprinted {record.Fingerprints.Count} file(s) in {fingerprintClock.ElapsedMilliseconds}ms");
 
@@ -594,6 +604,21 @@ public sealed partial class ModInstallService
     // the ones this install owns - created now, or carried from the previous version's record - so a
     // removal can tidy them away while they are still empty.
     //
+    private static void NoteCreatedFolders(string installPath, string directory, HashSet<string> created, HashSet<string> claimed)
+    {
+        var root = Path.TrimEndingDirectorySeparator(Path.GetFullPath(installPath));
+        var prefix = root + Path.DirectorySeparatorChar;
+
+        for (var dir = Path.TrimEndingDirectorySeparator(Path.GetFullPath(directory));
+             dir.Length > prefix.Length && dir.StartsWith(prefix, StringComparison.OrdinalIgnoreCase);
+             dir = Path.GetDirectoryName(dir)!)
+        {
+            var relative = Path.GetRelativePath(root, dir).Replace('\\', '/');
+            if (Directory.Exists(dir) && !claimed.Contains(relative)) break;
+            created.Add(relative);
+        }
+    }
+
     private static List<string> PlaceEmptyFolders(
         IReadOnlyList<string> folderEntries, string contentRoot, bool bareBepInEx, string serverRoot,
         string installPath, InstalledModRecord? existing, InstallTarget target, ModVersion version)

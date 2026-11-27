@@ -920,6 +920,10 @@ internal static class Strings
     internal static string Installed_RemoveTitleFormat => LocalizationService.Get("Installed_RemoveTitleFormat");
     internal static string Installed_RemoveAppLeadFormat => LocalizationService.Get("Installed_RemoveAppLeadFormat");
     internal static string Installed_RemoveAppKeeps => LocalizationService.Get("Installed_RemoveAppKeeps");
+    internal static string Installed_RemoveAppKeepsFolder => LocalizationService.Get("Installed_RemoveAppKeepsFolder");
+    internal static string Installed_RemoveLeftoversHeadingFormat => LocalizationService.Get("Installed_RemoveLeftoversHeadingFormat");
+    internal static string Installed_RemoveLeftoverFolder(int count, params object?[] values) =>
+        LocalizationService.Plural("Installed_RemoveLeftoverFolder", count, values);
     internal static string Installed_RemoveNoInstallStampFormat => LocalizationService.Get("Installed_RemoveNoInstallStampFormat");
     internal static string Installed_RemoveHandLeadFormat => LocalizationService.Get("Installed_RemoveHandLeadFormat");
     internal static string Installed_ProfileWarningFormat => LocalizationService.Get("Installed_ProfileWarningFormat");
