@@ -101,7 +101,7 @@ public static class ThemeMath
             Stroke = ThemeColor.Parse("#12FFFFFF"),
             Divider = ThemeColor.Parse("#15FFFFFF"),
             Success = ThemeColor.Parse("#6CCB5F"),
-            Caution = ThemeColor.Parse("#FCE100"),
+            Caution = ThemeColor.Parse("#FFC82C"),
             Critical = ThemeColor.Parse("#FF99A4"),
             Attention = ThemeColor.Parse("#4CC2FF"),
         }

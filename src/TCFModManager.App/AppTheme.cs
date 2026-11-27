@@ -94,6 +94,7 @@ public static class AppTheme
             {
                 if (ThemeApplier.Active is { } active && !_applyingCustom) ThemeApplier.Apply(active);
                 ThemeApplier.ApplyStockLightBackground(ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Light);
+                ThemeApplier.ApplyStockCaution(ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Dark);
                 RefreshWindowChrome();
                 PinPressedButtonForeground();
                 StrengthenLightButtonHover();
@@ -170,6 +171,7 @@ public static class AppTheme
             ApplicationThemeManager.Apply(theme.Base == ThemeBase.Light ? ApplicationTheme.Light : ApplicationTheme.Dark);
             ThemeApplier.Apply(theme);
             ThemeApplier.ApplyStockLightBackground(false);
+            ThemeApplier.ApplyStockCaution(false);
         }
         finally
         {
@@ -203,6 +205,7 @@ public static class AppTheme
         }
 
         ThemeApplier.ApplyStockLightBackground(ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Light);
+        ThemeApplier.ApplyStockCaution(ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Dark);
         RefreshWindowChrome();
         PinPressedButtonForeground();
         StrengthenLightButtonHover();

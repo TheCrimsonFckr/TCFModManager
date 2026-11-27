@@ -29,6 +29,9 @@ internal static class ThemeApplier
     private static readonly string[] StockLightBackgroundKeys = ["ApplicationBackgroundBrush", "WindowBackground", "LoadingScreenBackground"];
     private static readonly MediaColor StockLightBackground = MediaColor.FromRgb(0xF8, 0xF8, 0xFF);
 
+    private static readonly string[] StockCautionKeys = ["SystemFillColorCautionBrush", "InfoBadgeCautionSeverityBackgroundBrush", "InfoBarWarningSeverityIconBackground"];
+    private static readonly string[] StockCautionBackgroundKeys = ["SystemFillColorCautionBackgroundBrush", "InfoBarWarningSeverityBackgroundBrush"];
+
     private static readonly HashSet<string> Written = new(StringComparer.Ordinal);
     private static ResourceDictionary? _shadow;
     private static bool _fontActive;
@@ -36,6 +39,8 @@ internal static class ThemeApplier
     private static bool _backgroundHooked;
     private static SolidColorBrush? _stockLightBrush;
     private static bool _stockLightActive;
+    private static SolidColorBrush? _stockCautionBrush;
+    private static SolidColorBrush? _stockCautionBackgroundBrush;
 
     private static bool OwnsWindowBackground => Active is not null || _stockLightActive;
 
@@ -51,7 +56,7 @@ internal static class ThemeApplier
         var own = theme.Colors;
 
         ApplyAccent(theme);
-        WriteSeeds(app, own, resolved);
+        WriteSeeds(app, own, resolved, theme.Base);
         WriteStatusBrushes(app, theme, own);
         WriteFootprint(app, own);
 
@@ -123,6 +128,38 @@ internal static class ThemeApplier
         }
     }
 
+    public static void ApplyStockCaution(bool dark)
+    {
+        if (Application.Current is not { } app) return;
+
+        if (dark && Active is null)
+        {
+            if (_stockCautionBrush is null || _stockCautionBackgroundBrush is null)
+            {
+                var stock = ThemeMath.BaseColors(ThemeBase.Dark);
+                var caution = stock.Caution!.Value.WithAlpha(0xFF);
+                var page = ThemeMath.CompositeOver(stock.Page!.Value, stock.Background!.Value);
+                _stockCautionBrush = FrozenBrush(caution);
+                _stockCautionBackgroundBrush = FrozenBrush(ThemeMath.Mix(page, caution, StatusBackgroundMix));
+            }
+
+            foreach (var key in StockCautionKeys) app.Resources[key] = _stockCautionBrush;
+            foreach (var key in StockCautionBackgroundKeys) app.Resources[key] = _stockCautionBackgroundBrush;
+        }
+        else if (_stockCautionBrush is not null)
+        {
+            foreach (var key in StockCautionKeys)
+            {
+                if (ReferenceEquals(app.Resources[key], _stockCautionBrush)) app.Resources.Remove(key);
+            }
+
+            foreach (var key in StockCautionBackgroundKeys)
+            {
+                if (ReferenceEquals(app.Resources[key], _stockCautionBackgroundBrush)) app.Resources.Remove(key);
+            }
+        }
+    }
+
     public static void ReferenceWindowBackgrounds(Application app)
     {
         if (!OwnsWindowBackground) return;
@@ -158,7 +195,7 @@ internal static class ThemeApplier
         ApplicationAccentColorManager.Apply(ToMedia(accent), ToMedia(shades.Primary), ToMedia(shades.Secondary), ToMedia(shades.Tertiary));
     }
 
-    private static void WriteSeeds(Application app, ThemeColors own, ThemeColors resolved)
+    private static void WriteSeeds(Application app, ThemeColors own, ThemeColors resolved, ThemeBase themeBase)
     {
         if (own.Background is { } background)
         {
@@ -191,7 +228,7 @@ internal static class ThemeApplier
 
         var page = ThemeMath.CompositeOver(resolved.Page!.Value, resolved.Background!.Value);
         WriteStatus(app, own.Success, page, "SystemFillColorSuccess");
-        WriteStatus(app, own.Caution, page, "SystemFillColorCaution");
+        WriteStatus(app, own.Caution ?? (themeBase == ThemeBase.Dark ? resolved.Caution : null), page, "SystemFillColorCaution");
         WriteStatus(app, own.Critical, page, "SystemFillColorCritical");
         WriteStatus(app, own.Attention, page, "SystemFillColorAttention");
     }
@@ -316,10 +353,15 @@ internal static class ThemeApplier
 
     private static void WriteBrush(Application app, string key, ThemeColor color)
     {
+        app.Resources[key] = FrozenBrush(color);
+        Written.Add(key);
+    }
+
+    private static SolidColorBrush FrozenBrush(ThemeColor color)
+    {
         var brush = new SolidColorBrush(ToMedia(color));
         brush.Freeze();
-        app.Resources[key] = brush;
-        Written.Add(key);
+        return brush;
     }
 
     private static void RemoveWritten(Application app)
