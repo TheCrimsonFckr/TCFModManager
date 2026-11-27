@@ -264,7 +264,7 @@ public static class ClientLoadCheck
                 try
                 {
                     var spec = md.GetTypeSpecification((TypeSpecificationHandle)parent);
-                    return spec.DecodeSignature(new GenericDefinitionProvider(md, index), null) is { } h
+                    return spec.DecodeSignature(GenericDefinitionProvider.Instance, null) is { } h
                         && h.Kind == HandleKind.TypeReference
                         ? Resolve(md, (TypeReferenceHandle)h, index)
                         : null;
@@ -281,8 +281,10 @@ public static class ClientLoadCheck
     private static string Qualified(string ns, string name) => ns.Length == 0 ? name : ns + "." + name;
 
     // Decodes a generic instance down to its generic type's handle; anything else is of no interest.
-    private sealed class GenericDefinitionProvider(MetadataReader md, AssemblyIndex index) : ISignatureTypeProvider<EntityHandle?, object?>
+    private sealed class GenericDefinitionProvider : ISignatureTypeProvider<EntityHandle?, object?>
     {
+        public static readonly GenericDefinitionProvider Instance = new();
+
         public EntityHandle? GetGenericInstantiation(EntityHandle? genericType, ImmutableArray<EntityHandle?> typeArguments) => genericType;
         public EntityHandle? GetTypeFromReference(MetadataReader reader, TypeReferenceHandle handle, byte rawTypeKind) => handle;
         public EntityHandle? GetTypeFromDefinition(MetadataReader reader, TypeDefinitionHandle handle, byte rawTypeKind) => handle;

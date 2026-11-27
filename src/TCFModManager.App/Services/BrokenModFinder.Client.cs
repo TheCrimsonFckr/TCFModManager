@@ -89,10 +89,10 @@ public sealed partial class BrokenModFinder
             var told = false;
             while (!answer.Task.IsCompleted)
             {
-                await Task.WhenAny(answer.Task, Task.Delay(TimeSpan.FromSeconds(2)));
+                await Task.WhenAny(answer.Task, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken.None));
                 if (answer.Task.IsCompleted) break;
 
-                var running = await Task.Run(() => SptLaunchService.IsGameRunning(install, spares));
+                var running = await Task.Run(() => SptLaunchService.IsGameRunning(install, spares), CancellationToken.None);
                 if (running)
                 {
                     seen = true;
@@ -113,7 +113,7 @@ public sealed partial class BrokenModFinder
             AskText = null;
             _answer = null;
             UpdateToasts.RemoveMessage("search");
-            await Task.Run(() => CloseGame(install));
+            await Task.Run(() => CloseGame(install), CancellationToken.None);
         }
     }
 

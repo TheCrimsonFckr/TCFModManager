@@ -11503,4 +11503,88 @@ Vorher werden die Profile kopiert, und am Ende sind alle Mods wieder an. Starte 
   <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
     <value>Liest jedes Client-Plugin, ohne das Spiel zu starten, und listet die, die für eine andere Spiel- oder SPT-Version gebaut sind oder denen eine benötigte Mod fehlt.</value>
   </data>
+  <data name="Search_ClientStart" xml:space="preserve">
+    <value>Die Client-Mod finden, die es verursacht</value>
+  </data>
+  <data name="Search_ClientDescription" xml:space="preserve">
+    <value>Startet das Spiel ein paar Mal mit einigen Client-Mods aus, um die zu finden, die hinter einem Problem im Spiel steckt. Prüfe nach jedem Start, ob das Problem auftritt, und antworte dann hier. Danach wird jede Mod wieder eingeschaltet.</value>
+  </data>
+  <data name="Search_ClientConfirmFormat" xml:space="preserve">
+    <value>Eingeschaltete Client-Mods: {0}. Das Spiel wird etwa {1}-mal gestartet, jedes Mal mit einigen davon aus. Prüfe jedes Mal, ob das Problem auftritt, und antworte dann hier. Der Server läuft zwischen den Starts weiter.</value>
+  </data>
+  <data name="Search_NoClientMods" xml:space="preserve">
+    <value>Keine Client-Mods sind eingeschaltet, es gibt also nichts zu suchen.</value>
+  </data>
+  <data name="Search_CloseGameFirst" xml:space="preserve">
+    <value>Schließe zuerst das Spiel.</value>
+  </data>
+  <data name="Search_GameNotStarted" xml:space="preserve">
+    <value>Das Spiel konnte nicht gestartet werden.</value>
+  </data>
+  <data name="Search_AskRound" xml:space="preserve">
+    <value>Ist das Problem diesmal aufgetreten? Spiele, bis du es erwarten würdest, und antworte dann hier - das Spiel wird für dich geschlossen.</value>
+  </data>
+  <data name="Search_GameClosedAsk" xml:space="preserve">
+    <value>Das Spiel wurde geschlossen. Ist das Problem aufgetreten?</value>
+  </data>
+  <data name="Search_AnswerBroke" xml:space="preserve">
+    <value>Es ging kaputt</value>
+  </data>
+  <data name="Search_AnswerWorked" xml:space="preserve">
+    <value>Es lief</value>
+  </data>
+  <data name="Search_AnswerNotSure" xml:space="preserve">
+    <value>Nicht sicher</value>
+  </data>
+  <data name="Search_StageClientAllOnFormat" xml:space="preserve">
+    <value>Alle {0} Client-Mods an</value>
+  </data>
+  <data name="Search_StageClientAllOff" xml:space="preserve">
+    <value>Alle Client-Mods aus</value>
+  </data>
+  <data name="Search_ClientNothingWrongTitle" xml:space="preserve">
+    <value>Kein Problem mit allen Client-Mods an</value>
+  </data>
+  <data name="Search_ClientNothingWrongBody" xml:space="preserve">
+    <value>Der erste Start mit allen Client-Mods an lief, es gab also nichts einzugrenzen. Wenn das Problem mal auftritt und mal nicht, starte die Suche erneut, wenn es oft auftritt.</value>
+  </data>
+  <data name="Search_ClientNotTheModsTitle" xml:space="preserve">
+    <value>Es ist keine der Client-Mods</value>
+  </data>
+  <data name="Search_ClientNotTheModsBody" xml:space="preserve">
+    <value>Das Problem trat sogar mit allen Client-Mods aus auf, es kommt also von woanders - von einer Server-Mod, SPT oder dem Spiel.</value>
+  </data>
+  <data name="Search_ClientFoundFormat" xml:space="preserve">
+    <value>Das Problem tritt mit {0} an auf, mit ihm aus nicht.</value>
+  </data>
+  <data name="Search_ClientFoundPairFormat" xml:space="preserve">
+    <value>{0} und {1} vertragen sich nicht. Jede läuft allein, aber mit beiden an tritt das Problem auf.</value>
+  </data>
+  <data name="Search_ClientSummaryFormat" xml:space="preserve">
+    <value>{0} Client-Mods in {1} Spielstarts durchsucht ({2}).</value>
+  </data>
+  <data name="Search_ClientRecentFirstFormat" xml:space="preserve">
+    <value>Client-Mods, die seit dem letzten Serverstart geändert wurden, wurden zuerst geprüft: {0}.</value>
+  </data>
+  <data name="Search_ClientTurnedOffFormat" xml:space="preserve">
+    <value>{0} ist aus. Starte das Spiel, um es zu prüfen.</value>
+  </data>
+  <data name="Search_ClientCloseAskLead" xml:space="preserve">
+    <value>Die Suche nach der Client-Mod, die es verursacht, läuft noch. Beenden und schließen? Zuerst wird das Spiel geschlossen und jede Mod wieder eingeschaltet.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Die Client-Mod finden, die ein Problem im Spiel verursacht</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step1" xml:space="preserve">
+    <value>Drücke auf {0} {1} auf der Karte {2} - oder auf der roten Leiste, wenn das Spiel abstürzt.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step2" xml:space="preserve">
+    <value>Spiele bei jedem Start, bis du das Problem erwarten würdest, und drücke dann {0}, {1} oder {2} auf der Karte. {2} startet das Spiel mit denselben Mods erneut.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
+    <value>Nur die Client-Hälfte einer Mod wird umgeschaltet, und der Server läuft zwischen den Starts weiter. Patcher bleiben an. Das Spiel startet wie bei Schnellstart: Spielen für das auf der Spielen-Karte gewählte Profil, sonst der SPT-Launcher, in dem du auf Spielen drückst. Deine Profile werden zuerst kopiert und am Ende zurückgelegt, wenn die Starts sie geändert haben.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
+    <value>Client-Mod, Spielabsturz, Spiel startet nicht, Mod finden, Plugin, Halbierung</value>
+  </data>
 </root>

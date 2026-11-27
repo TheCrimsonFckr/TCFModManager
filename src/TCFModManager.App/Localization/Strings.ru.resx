@@ -11950,4 +11950,88 @@
   <data name="ClientCheck_More_many" xml:space="preserve">
     <value>...и ещё {0}.</value>
   </data>
+  <data name="Search_ClientStart" xml:space="preserve">
+    <value>Найти клиентский мод, который вызывает это</value>
+  </data>
+  <data name="Search_ClientDescription" xml:space="preserve">
+    <value>Несколько раз запускает игру с частью клиентских модов выключенной, чтобы найти мод, стоящий за проблемой в игре. После каждого запуска проверьте, появилась ли проблема, и ответьте здесь. Потом все моды снова включаются.</value>
+  </data>
+  <data name="Search_ClientConfirmFormat" xml:space="preserve">
+    <value>Включено клиентских модов: {0}. Игра будет запущена примерно {1} раз, каждый раз с частью из них выключенной. Каждый раз проверяйте, появилась ли проблема, затем возвращайтесь сюда и отвечайте. Сервер продолжает работать между запусками.</value>
+  </data>
+  <data name="Search_NoClientMods" xml:space="preserve">
+    <value>Ни один клиентский мод не включён, искать нечего.</value>
+  </data>
+  <data name="Search_CloseGameFirst" xml:space="preserve">
+    <value>Сначала закройте игру.</value>
+  </data>
+  <data name="Search_GameNotStarted" xml:space="preserve">
+    <value>Не удалось запустить игру.</value>
+  </data>
+  <data name="Search_AskRound" xml:space="preserve">
+    <value>Появилась ли проблема в этот раз? Играйте до момента, когда она обычно появляется, затем ответьте здесь - игра будет закрыта за вас.</value>
+  </data>
+  <data name="Search_GameClosedAsk" xml:space="preserve">
+    <value>Игра закрылась. Появилась ли проблема?</value>
+  </data>
+  <data name="Search_AnswerBroke" xml:space="preserve">
+    <value>Сломалось</value>
+  </data>
+  <data name="Search_AnswerWorked" xml:space="preserve">
+    <value>Всё работало</value>
+  </data>
+  <data name="Search_AnswerNotSure" xml:space="preserve">
+    <value>Не уверен</value>
+  </data>
+  <data name="Search_StageClientAllOnFormat" xml:space="preserve">
+    <value>Все клиентские моды включены ({0})</value>
+  </data>
+  <data name="Search_StageClientAllOff" xml:space="preserve">
+    <value>Все клиентские моды выключены</value>
+  </data>
+  <data name="Search_ClientNothingWrongTitle" xml:space="preserve">
+    <value>С включёнными клиентскими модами проблем нет</value>
+  </data>
+  <data name="Search_ClientNothingWrongBody" xml:space="preserve">
+    <value>Первый запуск со всеми включёнными клиентскими модами прошёл без проблем, сужать было нечего. Если проблема то появляется, то нет, запустите поиск снова, когда она будет появляться часто.</value>
+  </data>
+  <data name="Search_ClientNotTheModsTitle" xml:space="preserve">
+    <value>Дело не в клиентских модах</value>
+  </data>
+  <data name="Search_ClientNotTheModsBody" xml:space="preserve">
+    <value>Проблема появилась даже со всеми выключенными клиентскими модами, значит, она в другом месте - в серверном моде, SPT или самой игре.</value>
+  </data>
+  <data name="Search_ClientFoundFormat" xml:space="preserve">
+    <value>Проблема появляется, когда {0} включён, и не появляется без него.</value>
+  </data>
+  <data name="Search_ClientFoundPairFormat" xml:space="preserve">
+    <value>{0} и {1} конфликтуют. По отдельности работают, но вместе вызывают проблему.</value>
+  </data>
+  <data name="Search_ClientSummaryFormat" xml:space="preserve">
+    <value>Проверено клиентских модов: {0}, запусков игры: {1} ({2}).</value>
+  </data>
+  <data name="Search_ClientRecentFirstFormat" xml:space="preserve">
+    <value>Сначала проверены клиентские моды, изменённые с последнего запуска сервера: {0}.</value>
+  </data>
+  <data name="Search_ClientTurnedOffFormat" xml:space="preserve">
+    <value>{0} выключен. Запустите игру, чтобы проверить.</value>
+  </data>
+  <data name="Search_ClientCloseAskLead" xml:space="preserve">
+    <value>Поиск клиентского мода, который вызывает это, ещё идёт. Остановить и закрыть? Сначала игра будет закрыта, а все моды снова включены.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Найти клиентский мод, вызывающий проблему в игре</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step1" xml:space="preserve">
+    <value>На странице {0} нажмите {1} на карточке {2} - или на красной полосе, когда игра вылетает.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step2" xml:space="preserve">
+    <value>При каждом запуске играйте до момента, когда ожидаете проблему, затем нажмите {0}, {1} или {2} на карточке. {2} снова запускает игру с теми же модами.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
+    <value>Переключается только клиентская половина мода, а сервер продолжает работать между запусками. Патчеры остаются включёнными. Игра запускается как при быстрой игре: Играть для профиля, выбранного на карточке Играть, иначе лаунчер SPT, где вы нажимаете Играть. Профили сначала копируются и возвращаются в конце, если запуски их изменили.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
+    <value>клиентский мод, вылет игры, игра не запускается, найти мод, плагин, половины</value>
+  </data>
 </root>

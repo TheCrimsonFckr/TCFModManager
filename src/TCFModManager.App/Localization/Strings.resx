@@ -14163,4 +14163,116 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <value>Reads every client plugin without starting the game and lists the ones built for another game or SPT version, or missing a mod they need.</value>
     <comment>Feature tour, Diagnose logs: Check client mods.</comment>
   </data>
+  <data name="Search_ClientStart" xml:space="preserve">
+    <value>Find the client mod causing it</value>
+    <comment>Button on Check client mods and on the crash bar.</comment>
+  </data>
+  <data name="Search_ClientDescription" xml:space="preserve">
+    <value>Starts the game a few times with some client mods off, to find the one behind a problem in the game. After each start, check whether the problem shows, then answer here. Every mod is turned back on after.</value>
+    <comment>Search card description during a client search.</comment>
+  </data>
+  <data name="Search_ClientConfirmFormat" xml:space="preserve">
+    <value>Client mods on: {0}. The game will be started about {1} times, each time with some of them off. Each time, check whether the problem shows, then come back here and answer. The server keeps running between starts.</value>
+    <comment>{0} = client mods, {1} = about how many game starts.</comment>
+  </data>
+  <data name="Search_NoClientMods" xml:space="preserve">
+    <value>No client mods are on, so there is nothing to search.</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="Search_CloseGameFirst" xml:space="preserve">
+    <value>Close the game first.</value>
+    <comment>Status.</comment>
+  </data>
+  <data name="Search_GameNotStarted" xml:space="preserve">
+    <value>The game couldn't be started.</value>
+    <comment>Search stopped: no game start.</comment>
+  </data>
+  <data name="Search_AskRound" xml:space="preserve">
+    <value>Did the problem show this time? Play until you'd expect it, then answer here - the game is closed for you.</value>
+    <comment>Asked after each game start.</comment>
+  </data>
+  <data name="Search_GameClosedAsk" xml:space="preserve">
+    <value>The game has closed. Did the problem show?</value>
+    <comment>Asked, and as a notification, when the game closes before an answer.</comment>
+  </data>
+  <data name="Search_AnswerBroke" xml:space="preserve">
+    <value>It broke</value>
+    <comment>Answer button.</comment>
+  </data>
+  <data name="Search_AnswerWorked" xml:space="preserve">
+    <value>It worked</value>
+    <comment>Answer button.</comment>
+  </data>
+  <data name="Search_AnswerNotSure" xml:space="preserve">
+    <value>Not sure</value>
+    <comment>Answer button: starts the game again with the same mods.</comment>
+  </data>
+  <data name="Search_StageClientAllOnFormat" xml:space="preserve">
+    <value>All {0} client mods on</value>
+    <comment>Stage. {0} = count.</comment>
+  </data>
+  <data name="Search_StageClientAllOff" xml:space="preserve">
+    <value>All client mods off</value>
+    <comment>Stage.</comment>
+  </data>
+  <data name="Search_ClientNothingWrongTitle" xml:space="preserve">
+    <value>No problem with every client mod on</value>
+    <comment>Result title.</comment>
+  </data>
+  <data name="Search_ClientNothingWrongBody" xml:space="preserve">
+    <value>The first start, with every client mod on, worked, so there was nothing to narrow down. If the problem comes and goes, run it again when it shows often.</value>
+    <comment>Result body.</comment>
+  </data>
+  <data name="Search_ClientNotTheModsTitle" xml:space="preserve">
+    <value>It isn't one of the client mods</value>
+    <comment>Result title.</comment>
+  </data>
+  <data name="Search_ClientNotTheModsBody" xml:space="preserve">
+    <value>The problem showed even with every client mod off, so it comes from somewhere else - a server mod, SPT or the game.</value>
+    <comment>Result body.</comment>
+  </data>
+  <data name="Search_ClientFoundFormat" xml:space="preserve">
+    <value>The problem shows with {0} on, and not with it off.</value>
+    <comment>Result body. {0} = mod.</comment>
+  </data>
+  <data name="Search_ClientFoundPairFormat" xml:space="preserve">
+    <value>{0} and {1} clash. Each works alone, but with both on the problem shows.</value>
+    <comment>Result body. {0}, {1} = mods.</comment>
+  </data>
+  <data name="Search_ClientSummaryFormat" xml:space="preserve">
+    <value>Searched {0} client mods in {1} game starts ({2}).</value>
+    <comment>{0} = mods, {1} = starts, {2} = time.</comment>
+  </data>
+  <data name="Search_ClientRecentFirstFormat" xml:space="preserve">
+    <value>Client mods changed since the server last came up were tried first: {0}.</value>
+    <comment>{0} = count.</comment>
+  </data>
+  <data name="Search_ClientTurnedOffFormat" xml:space="preserve">
+    <value>{0} is off. Start the game to check.</value>
+    <comment>{0} = mods.</comment>
+  </data>
+  <data name="Search_ClientCloseAskLead" xml:space="preserve">
+    <value>The search for the client mod causing it is still running. Stop it and close? The game is closed and every mod turned back on first.</value>
+    <comment>Closing mid-search.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Find the client mod causing a problem in the game</value>
+    <comment>Help topic title.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step1" xml:space="preserve">
+    <value>On {0}, press {1} on the {2} card - or on the red bar when the game crashes.</value>
+    <comment>{0} = page, {1} = button, {2} = card title.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step2" xml:space="preserve">
+    <value>Each time the game starts, play until you'd expect the problem, then press {0}, {1} or {2} on the card. {2} starts the game again with the same mods.</value>
+    <comment>{0}, {1}, {2} = answer buttons.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
+    <value>Only the client half of a mod is switched, and the server keeps running between starts. Patchers stay on. The game starts as Quick play starts it: Play for the profile picked on the Play card, or else the SPT launcher, where you press Play. Your profiles are copied first and put back at the end if the starts changed them.</value>
+    <comment>Help note.</comment>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
+    <value>client mod, game crash, game won't start, find the mod, plugin, bisect, halves</value>
+    <comment>Help search keywords.</comment>
+  </data>
 </root>

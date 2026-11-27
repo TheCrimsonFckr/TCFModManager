@@ -11503,4 +11503,88 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
   <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
     <value>Lit chaque plugin client sans démarrer le jeu et liste ceux conçus pour une autre version du jeu ou de SPT, ou auxquels manque un mod requis.</value>
   </data>
+  <data name="Search_ClientStart" xml:space="preserve">
+    <value>Trouver le mod client en cause</value>
+  </data>
+  <data name="Search_ClientDescription" xml:space="preserve">
+    <value>Démarre le jeu plusieurs fois avec certains mods client désactivés, pour trouver celui qui est derrière un problème dans le jeu. Après chaque démarrage, vérifiez si le problème apparaît, puis répondez ici. Chaque mod est réactivé ensuite.</value>
+  </data>
+  <data name="Search_ClientConfirmFormat" xml:space="preserve">
+    <value>Mods client actifs : {0}. Le jeu sera démarré environ {1} fois, chaque fois avec certains d'entre eux désactivés. À chaque fois, vérifiez si le problème apparaît, puis revenez ici pour répondre. Le serveur continue de tourner entre les démarrages.</value>
+  </data>
+  <data name="Search_NoClientMods" xml:space="preserve">
+    <value>Aucun mod client n'est actif, il n'y a donc rien à chercher.</value>
+  </data>
+  <data name="Search_CloseGameFirst" xml:space="preserve">
+    <value>Fermez d'abord le jeu.</value>
+  </data>
+  <data name="Search_GameNotStarted" xml:space="preserve">
+    <value>Le jeu n'a pas pu être démarré.</value>
+  </data>
+  <data name="Search_AskRound" xml:space="preserve">
+    <value>Le problème est-il apparu cette fois ? Jouez jusqu'au moment où vous l'attendriez, puis répondez ici - le jeu est fermé pour vous.</value>
+  </data>
+  <data name="Search_GameClosedAsk" xml:space="preserve">
+    <value>Le jeu s'est fermé. Le problème est-il apparu ?</value>
+  </data>
+  <data name="Search_AnswerBroke" xml:space="preserve">
+    <value>Ça a planté</value>
+  </data>
+  <data name="Search_AnswerWorked" xml:space="preserve">
+    <value>Ça a marché</value>
+  </data>
+  <data name="Search_AnswerNotSure" xml:space="preserve">
+    <value>Pas sûr</value>
+  </data>
+  <data name="Search_StageClientAllOnFormat" xml:space="preserve">
+    <value>Les {0} mods client actifs</value>
+  </data>
+  <data name="Search_StageClientAllOff" xml:space="preserve">
+    <value>Tous les mods client désactivés</value>
+  </data>
+  <data name="Search_ClientNothingWrongTitle" xml:space="preserve">
+    <value>Aucun problème avec tous les mods client actifs</value>
+  </data>
+  <data name="Search_ClientNothingWrongBody" xml:space="preserve">
+    <value>Le premier démarrage, avec tous les mods client actifs, a marché : il n'y avait donc rien à affiner. Si le problème va et vient, relancez la recherche quand il apparaît souvent.</value>
+  </data>
+  <data name="Search_ClientNotTheModsTitle" xml:space="preserve">
+    <value>Ce n'est pas un des mods client</value>
+  </data>
+  <data name="Search_ClientNotTheModsBody" xml:space="preserve">
+    <value>Le problème est apparu même avec tous les mods client désactivés : il vient donc d'ailleurs - un mod serveur, SPT ou le jeu.</value>
+  </data>
+  <data name="Search_ClientFoundFormat" xml:space="preserve">
+    <value>Le problème apparaît avec {0} actif, et pas sans lui.</value>
+  </data>
+  <data name="Search_ClientFoundPairFormat" xml:space="preserve">
+    <value>{0} et {1} entrent en conflit. Chacun marche seul, mais avec les deux actifs le problème apparaît.</value>
+  </data>
+  <data name="Search_ClientSummaryFormat" xml:space="preserve">
+    <value>{0} mods client cherchés en {1} démarrages du jeu ({2}).</value>
+  </data>
+  <data name="Search_ClientRecentFirstFormat" xml:space="preserve">
+    <value>Les mods client modifiés depuis le dernier démarrage du serveur ont été essayés en premier : {0}.</value>
+  </data>
+  <data name="Search_ClientTurnedOffFormat" xml:space="preserve">
+    <value>{0} est désactivé. Démarrez le jeu pour vérifier.</value>
+  </data>
+  <data name="Search_ClientCloseAskLead" xml:space="preserve">
+    <value>La recherche du mod client en cause est toujours en cours. L'arrêter et fermer ? Le jeu est d'abord fermé et chaque mod réactivé.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Trouver le mod client à l'origine d'un problème dans le jeu</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step1" xml:space="preserve">
+    <value>Sur {0}, appuyez sur {1} dans la carte {2} - ou sur la barre rouge quand le jeu plante.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step2" xml:space="preserve">
+    <value>À chaque démarrage, jouez jusqu'au moment où vous attendriez le problème, puis appuyez sur {0}, {1} ou {2} dans la carte. {2} redémarre le jeu avec les mêmes mods.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
+    <value>Seule la moitié client d'un mod est basculée, et le serveur continue de tourner entre les démarrages. Les patchers restent actifs. Le jeu démarre comme avec Jeu rapide : Jouer pour le profil choisi sur la carte Jouer, sinon le lanceur SPT, où vous appuyez sur Jouer. Vos profils sont copiés d'abord et remis à la fin si les démarrages les ont changés.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
+    <value>mod client, plantage du jeu, le jeu ne démarre pas, trouver le mod, plugin, moitiés</value>
+  </data>
 </root>

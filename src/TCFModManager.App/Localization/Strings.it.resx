@@ -11503,4 +11503,88 @@ Prima vengono copiati i profili, e alla fine tutti i mod vengono riattivati. Non
   <data name="Tour_Diagnose_Clients_Body" xml:space="preserve">
     <value>Legge ogni plugin client senza avviare il gioco ed elenca quelli fatti per un'altra versione del gioco o di SPT, o a cui manca un mod necessario.</value>
   </data>
+  <data name="Search_ClientStart" xml:space="preserve">
+    <value>Trova il mod client che lo causa</value>
+  </data>
+  <data name="Search_ClientDescription" xml:space="preserve">
+    <value>Avvia il gioco alcune volte con alcuni mod client disattivati, per trovare quello dietro un problema nel gioco. Dopo ogni avvio, controlla se il problema si presenta, poi rispondi qui. Alla fine ogni mod viene riattivato.</value>
+  </data>
+  <data name="Search_ClientConfirmFormat" xml:space="preserve">
+    <value>Mod client attivi: {0}. Il gioco verrà avviato circa {1} volte, ogni volta con alcuni di essi disattivati. Ogni volta controlla se il problema si presenta, poi torna qui e rispondi. Il server resta avviato tra un avvio e l'altro.</value>
+  </data>
+  <data name="Search_NoClientMods" xml:space="preserve">
+    <value>Nessun mod client è attivo, quindi non c'è nulla da cercare.</value>
+  </data>
+  <data name="Search_CloseGameFirst" xml:space="preserve">
+    <value>Chiudi prima il gioco.</value>
+  </data>
+  <data name="Search_GameNotStarted" xml:space="preserve">
+    <value>Non è stato possibile avviare il gioco.</value>
+  </data>
+  <data name="Search_AskRound" xml:space="preserve">
+    <value>Il problema si è presentato questa volta? Gioca finché te lo aspetteresti, poi rispondi qui: il gioco viene chiuso per te.</value>
+  </data>
+  <data name="Search_GameClosedAsk" xml:space="preserve">
+    <value>Il gioco si è chiuso. Il problema si è presentato?</value>
+  </data>
+  <data name="Search_AnswerBroke" xml:space="preserve">
+    <value>Si è rotto</value>
+  </data>
+  <data name="Search_AnswerWorked" xml:space="preserve">
+    <value>Ha funzionato</value>
+  </data>
+  <data name="Search_AnswerNotSure" xml:space="preserve">
+    <value>Non sono sicuro</value>
+  </data>
+  <data name="Search_StageClientAllOnFormat" xml:space="preserve">
+    <value>Tutti i {0} mod client attivi</value>
+  </data>
+  <data name="Search_StageClientAllOff" xml:space="preserve">
+    <value>Tutti i mod client disattivati</value>
+  </data>
+  <data name="Search_ClientNothingWrongTitle" xml:space="preserve">
+    <value>Nessun problema con tutti i mod client attivi</value>
+  </data>
+  <data name="Search_ClientNothingWrongBody" xml:space="preserve">
+    <value>Il primo avvio, con tutti i mod client attivi, ha funzionato, quindi non c'era nulla da restringere. Se il problema va e viene, riavvia la ricerca quando si presenta spesso.</value>
+  </data>
+  <data name="Search_ClientNotTheModsTitle" xml:space="preserve">
+    <value>Non è uno dei mod client</value>
+  </data>
+  <data name="Search_ClientNotTheModsBody" xml:space="preserve">
+    <value>Il problema si è presentato anche con tutti i mod client disattivati, quindi viene da altro: un mod server, SPT o il gioco.</value>
+  </data>
+  <data name="Search_ClientFoundFormat" xml:space="preserve">
+    <value>Il problema si presenta con {0} attivo, e non senza.</value>
+  </data>
+  <data name="Search_ClientFoundPairFormat" xml:space="preserve">
+    <value>{0} e {1} sono in conflitto. Ognuno funziona da solo, ma con entrambi attivi il problema si presenta.</value>
+  </data>
+  <data name="Search_ClientSummaryFormat" xml:space="preserve">
+    <value>Cercati {0} mod client in {1} avvii del gioco ({2}).</value>
+  </data>
+  <data name="Search_ClientRecentFirstFormat" xml:space="preserve">
+    <value>I mod client cambiati dall'ultimo avvio del server sono stati provati per primi: {0}.</value>
+  </data>
+  <data name="Search_ClientTurnedOffFormat" xml:space="preserve">
+    <value>{0} è disattivato. Avvia il gioco per controllare.</value>
+  </data>
+  <data name="Search_ClientCloseAskLead" xml:space="preserve">
+    <value>La ricerca del mod client che lo causa è ancora in corso. Fermarla e chiudere? Prima il gioco viene chiuso e ogni mod riattivato.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Title" xml:space="preserve">
+    <value>Trovare il mod client che causa un problema nel gioco</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step1" xml:space="preserve">
+    <value>In {0}, premi {1} nella scheda {2}, oppure sulla barra rossa quando il gioco va in crash.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Step2" xml:space="preserve">
+    <value>A ogni avvio, gioca finché ti aspetteresti il problema, poi premi {0}, {1} o {2} nella scheda. {2} riavvia il gioco con gli stessi mod.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Note" xml:space="preserve">
+    <value>Viene cambiata solo la metà client di un mod, e il server resta avviato tra un avvio e l'altro. I patcher restano attivi. Il gioco parte come con Gioco rapido: Gioca per il profilo scelto nella scheda Gioca, altrimenti il launcher SPT, dove premi Gioca. I tuoi profili vengono prima copiati e rimessi alla fine se gli avvii li hanno cambiati.</value>
+  </data>
+  <data name="Help_Diagnose_ClientSearch_Keywords" xml:space="preserve">
+    <value>mod client, crash del gioco, il gioco non parte, trovare il mod, plugin, metà</value>
+  </data>
 </root>
