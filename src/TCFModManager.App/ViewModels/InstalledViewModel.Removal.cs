@@ -259,6 +259,9 @@ public partial class InstalledViewModel
             else cardless.Clear();
         }
 
+        var leftovers = SelectedLeftovers(targets, cardless, records, installPath);
+        var batched = cardless.Keys.Concat(leftovers.Keys).ToHashSet();
+
         StatusMessage = Strings.ProfileItems_Checking;
         IsCheckingProfiles = true;
         var offer = await ProfileCleanOffer.ForCardsAsync(targets, removing: true);
@@ -270,6 +273,15 @@ public partial class InstalledViewModel
         var profileMods = targets.Where(t => !holding.Contains(t.DisplayTitle) && ChangesProfile(t)).Select(t => t.DisplayTitle).ToList();
 
         var sections = new List<AskSection> { new(null, [.. targets.Select(t => t.DisplayTitle), .. CardlessNames(cardless)]) };
+        if (leftovers.Count > 0)
+        {
+            sections.Add(new(Strings.Installed_RemoveSelectedLeftoversHeading,
+            [
+                .. leftovers.Select(p => Text(Strings.Installed_RemoveSelectedLeftoverLineFormat,
+                    p.Key.DisplayTitle,
+                    string.Join(Strings.Common_ListSeparator, p.Value.Folders.SelectMany(l => LeftoverLines(l, p.Value.Folders.Count > 1))))),
+            ]));
+        }
         sections.AddRange(offer.Sections);
         if (profileMods.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedProfileHeading, profileMods));
         if (leftTwice.Count > 0) sections.Add(new(Strings.Installed_RemoveSelectedTwiceHeading, leftTwice));
@@ -306,7 +318,7 @@ public partial class InstalledViewModel
         {
             var manifest = AppServices.InstallManifest.Load();
 
-            foreach (var (mod, batch) in RemovalOrder(targets, cardless.Keys.ToHashSet()))
+            foreach (var (mod, batch) in RemovalOrder(targets, batched))
             {
                 try
                 {
@@ -317,8 +329,16 @@ public partial class InstalledViewModel
                         else failed.Add(addon.Name);
                     }
 
-                    if (await RemoveOneQuietlyAsync(mod, installPath, manifest, batch)) removed++;
-                    else failed.Add(mod.DisplayTitle);
+                    if (await RemoveOneQuietlyAsync(mod, installPath, manifest, batch))
+                    {
+                        removed++;
+                        if (leftovers.TryGetValue(mod, out var left))
+                            RemoveLeftovers(left.RecordName, left.Folders, installPath, ConfigAction.Keep, batch);
+                    }
+                    else
+                    {
+                        failed.Add(mod.DisplayTitle);
+                    }
                 }
                 catch (ModInstallException ex)
                 {
@@ -328,7 +348,7 @@ public partial class InstalledViewModel
                     // SPT started part way through: nothing after this would go either.
                     if (ex.Reason == ModInstallFailure.InstallInUse)
                     {
-                        failed.AddRange(RemovalOrder(targets, cardless.Keys.ToHashSet()).Select(o => o.Card).SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
+                        failed.AddRange(RemovalOrder(targets, batched).Select(o => o.Card).SkipWhile(t => t != mod).Skip(1).Select(t => t.DisplayTitle));
                         break;
                     }
                 }
@@ -411,7 +431,7 @@ public partial class InstalledViewModel
     // batch so one Undo puts them back together; anything else alone, in the order given.
     //
     private static List<(InstalledModCardViewModel Card, RemovalBatch? Batch)> RemovalOrder(
-        IReadOnlyList<InstalledModCardViewModel> targets, IReadOnlySet<InstalledModCardViewModel> withCardlessAddons)
+        IReadOnlyList<InstalledModCardViewModel> targets, IReadOnlySet<InstalledModCardViewModel> batched)
     {
         var order = new List<(InstalledModCardViewModel, RemovalBatch?)>();
         var placed = new HashSet<InstalledModCardViewModel>();
@@ -419,7 +439,7 @@ public partial class InstalledViewModel
         foreach (var parent in targets.Where(t => t is { IsAddon: false, ModId: not null }))
         {
             var addons = targets.Where(t => t.IsAddon && t.ParentModId == parent.ModId && !placed.Contains(t)).ToList();
-            if (addons.Count == 0 && !withCardlessAddons.Contains(parent)) continue;
+            if (addons.Count == 0 && !batched.Contains(parent)) continue;
 
             var batch = RemovalBatch.For(BatchLeadOf(parent));
             foreach (var addon in addons) order.Add((addon, batch));
@@ -574,6 +594,32 @@ public partial class InstalledViewModel
             .. AppServices.ModInstall.LeftoversOf(installPath, record, addons)
                 .Where(l => !_all.Any(c => !going.Contains(c) && c.Entries.Any(e => IsSamePath(e.FolderPath, l.FullPath)))),
         ];
+    }
+
+    private Dictionary<InstalledModCardViewModel, (string RecordName, List<LeftoverFolder> Folders)> SelectedLeftovers(
+        IReadOnlyList<InstalledModCardViewModel> targets,
+        Dictionary<InstalledModCardViewModel, List<InstalledModRecord>> cardless,
+        ModInstallManifest manifest,
+        string installPath)
+    {
+        var addonsGoing = targets
+            .Where(t => t is { IsAddon: true, ModId: not null })
+            .Select(t => manifest.Find(t.ModId!.Value, isAddon: true))
+            .OfType<InstalledModRecord>()
+            .Concat(cardless.Values.SelectMany(r => r))
+            .ToList();
+
+        var found = new Dictionary<InstalledModCardViewModel, (string, List<LeftoverFolder>)>();
+
+        foreach (var target in targets.Where(t => t is { IsAppManaged: true, ModId: not null }))
+        {
+            if (manifest.Find(target.ModId!.Value, target.IsAddon) is not { } record) continue;
+
+            var folders = LeftoversOf(target, record, addonsGoing, installPath);
+            if (folders.Count > 0) found[target] = (record.Name, folders);
+        }
+
+        return found;
     }
 
     private static IReadOnlyList<AskSection> LeftoverSections(InstalledModCardViewModel mod, IReadOnlyList<LeftoverFolder> leftovers) =>

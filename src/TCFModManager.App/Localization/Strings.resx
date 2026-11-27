@@ -3274,6 +3274,14 @@ That happens legitimately if the server was rebuilt or you're reaching it throug
     <value>These are in both an enabled and a disabled folder and won't be removed. Use Sort out on their cards first:</value>
     <comment>Heading in the Remove selected question. Sort out is the button named by Installed_SortOut - translate both the same way.</comment>
   </data>
+  <data name="Installed_RemoveSelectedLeftoversHeading" xml:space="preserve">
+    <value>These mods made files of their own after they were installed. They go too:</value>
+    <comment>Heading in the Remove selected question over files in the mods' folders that this app didn't install.</comment>
+  </data>
+  <data name="Installed_RemoveSelectedLeftoverLineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>One line under that heading. {0} a mod, {1} its folders and files, separated by Common_ListSeparator.</comment>
+  </data>
   <data name="Installed_RemoveSelectedConfigsKeptFormat" xml:space="preserve">
     <value>Their config files are kept in {0}.</value>
     <comment>Small print in the window asked before Remove selected. {0} a folder.</comment>

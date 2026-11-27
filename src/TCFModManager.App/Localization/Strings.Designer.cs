@@ -948,6 +948,8 @@ internal static class Strings
     internal static string Installed_RemoveSelectedProfileHeading => LocalizationService.Get("Installed_RemoveSelectedProfileHeading");
     internal static string Installed_ProfileUndoMany => LocalizationService.Get("Installed_ProfileUndoMany");
     internal static string Installed_RemoveSelectedTwiceHeading => LocalizationService.Get("Installed_RemoveSelectedTwiceHeading");
+    internal static string Installed_RemoveSelectedLeftoversHeading => LocalizationService.Get("Installed_RemoveSelectedLeftoversHeading");
+    internal static string Installed_RemoveSelectedLeftoverLineFormat => LocalizationService.Get("Installed_RemoveSelectedLeftoverLineFormat");
     internal static string Installed_RemoveSelectedConfigsKeptFormat => LocalizationService.Get("Installed_RemoveSelectedConfigsKeptFormat");
     internal static string Installed_RemoveSelectedAddonsTitle => LocalizationService.Get("Installed_RemoveSelectedAddonsTitle");
     internal static string Installed_RemoveSelectedAddonsLead => LocalizationService.Get("Installed_RemoveSelectedAddonsLead");
