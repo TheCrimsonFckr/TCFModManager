@@ -14396,18 +14396,26 @@ The profiles are copied first, and every mod is turned back on at the end. Don't
     <comment>Card layout field: an icon and count when other installed mods need this one.</comment>
   </data>
   <data name="Installed_AddonsIconToolTip_one" xml:space="preserve">
-    <value>1 addon installed: {1}. Click to show it with this mod.</value>
-    <comment>Card icon tooltip. {0} is the count, {1} the addon names.</comment>
+    <value>1 addon installed:
+{1}
+Click to show it with this mod.</value>
+    <comment>Card icon tooltip. {0} is the count, {1} the addon names, one per line.</comment>
   </data>
   <data name="Installed_AddonsIconToolTip_other" xml:space="preserve">
-    <value>{0} addons installed: {1}. Click to show them with this mod.</value>
+    <value>{0} addons installed:
+{1}
+Click to show them with this mod.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_one" xml:space="preserve">
-    <value>Needed by {1}. Click to show it.</value>
-    <comment>Card icon tooltip. {0} is how many enabled mods need this one, {1} their names. Soft dependencies and the mod's own addons don't count.</comment>
+    <value>Needed by 1 mod:
+{1}
+Click to show it.</value>
+    <comment>Card icon tooltip. {0} is how many enabled mods need this one, {1} their names, one per line. Soft dependencies and the mod's own addons don't count.</comment>
   </data>
   <data name="Installed_NeededByIconToolTip_other" xml:space="preserve">
-    <value>Needed by {0} mods: {1}. Click to show them.</value>
+    <value>Needed by {0} mods:
+{1}
+Click to show them.</value>
   </data>
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>Showing {0} and the mods that need it</value>

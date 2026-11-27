@@ -60,6 +60,10 @@ public sealed class CardLayoutView
 
     public bool ShowFolderButtons => Has(F.FolderButtons);
 
+    public bool ShowInstalledAddons => Has(F.InstalledAddons);
+
+    public bool ShowNeededBy => Has(F.NeededBy);
+
     public bool RowShowsDisabled => Has(F.Disabled);
 
     public bool RowShowsPinned => Has(F.Pinned);
@@ -73,6 +77,10 @@ public sealed class CardLayoutView
     public bool ListShowsDisabled => ListHas(F.Disabled);
 
     public bool ListShowsPinned => ListHas(F.Pinned);
+
+    public bool ListShowsInstalledAddons => ListHas(F.InstalledAddons);
+
+    public bool ListShowsNeededBy => ListHas(F.NeededBy);
 
     public CardSize Size => Layout.Size;
 

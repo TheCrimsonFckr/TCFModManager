@@ -335,7 +335,7 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
         : null;
 
     private static string TitlesOf(IEnumerable<InstalledModCardViewModel> cards) =>
-        string.Join(Strings.Common_ListSeparator, cards.Select(c => c.DisplayTitle));
+        string.Join("\n", cards.Select(c => "• " + c.DisplayTitle));
 
     // True when the matched catalog listing is flagged Fika compatible.
     public bool IsFikaCompatible { get; init; }

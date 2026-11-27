@@ -11678,16 +11678,24 @@ Les profils sont copiés d'abord, et tous les mods sont réactivés à la fin. N
     <value>Requis par</value>
   </data>
   <data name="Installed_AddonsIconToolTip_one" xml:space="preserve">
-    <value>1 addon installé : {1}. Cliquez pour l'afficher avec ce mod.</value>
+    <value>1 addon installé :
+{1}
+Cliquez pour l'afficher avec ce mod.</value>
   </data>
   <data name="Installed_AddonsIconToolTip_other" xml:space="preserve">
-    <value>{0} addons installés : {1}. Cliquez pour les afficher avec ce mod.</value>
+    <value>{0} addons installés :
+{1}
+Cliquez pour les afficher avec ce mod.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_one" xml:space="preserve">
-    <value>Requis par {1}. Cliquez pour l'afficher.</value>
+    <value>Requis par 1 mod :
+{1}
+Cliquez pour l'afficher.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_other" xml:space="preserve">
-    <value>Requis par {0} mods : {1}. Cliquez pour les afficher.</value>
+    <value>Requis par {0} mods :
+{1}
+Cliquez pour les afficher.</value>
   </data>
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>Affichage de {0} et des mods qui en ont besoin</value>

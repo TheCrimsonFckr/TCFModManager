@@ -12125,28 +12125,44 @@
     <value>Требуется для</value>
   </data>
   <data name="Installed_AddonsIconToolTip_one" xml:space="preserve">
-    <value>Установлен {0} аддон: {1}. Нажмите, чтобы показать его с этим модом.</value>
+    <value>Установлен {0} аддон:
+{1}
+Нажмите, чтобы показать его с этим модом.</value>
   </data>
   <data name="Installed_AddonsIconToolTip_few" xml:space="preserve">
-    <value>Установлено {0} аддона: {1}. Нажмите, чтобы показать их с этим модом.</value>
+    <value>Установлено {0} аддона:
+{1}
+Нажмите, чтобы показать их с этим модом.</value>
   </data>
   <data name="Installed_AddonsIconToolTip_many" xml:space="preserve">
-    <value>Установлено {0} аддонов: {1}. Нажмите, чтобы показать их с этим модом.</value>
+    <value>Установлено {0} аддонов:
+{1}
+Нажмите, чтобы показать их с этим модом.</value>
   </data>
   <data name="Installed_AddonsIconToolTip_other" xml:space="preserve">
-    <value>Установлено аддонов: {0} — {1}. Нажмите, чтобы показать их с этим модом.</value>
+    <value>Установлено аддонов: {0}
+{1}
+Нажмите, чтобы показать их с этим модом.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_one" xml:space="preserve">
-    <value>Требуется для {1}. Нажмите, чтобы показать.</value>
+    <value>Требуется для {0} мода:
+{1}
+Нажмите, чтобы показать его.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_few" xml:space="preserve">
-    <value>Требуется для {0} модов: {1}. Нажмите, чтобы показать их.</value>
+    <value>Требуется для {0} модов:
+{1}
+Нажмите, чтобы показать их.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_many" xml:space="preserve">
-    <value>Требуется для {0} модов: {1}. Нажмите, чтобы показать их.</value>
+    <value>Требуется для {0} модов:
+{1}
+Нажмите, чтобы показать их.</value>
   </data>
   <data name="Installed_NeededByIconToolTip_other" xml:space="preserve">
-    <value>Требуется для модов ({0}): {1}. Нажмите, чтобы показать их.</value>
+    <value>Требуется для модов: {0}
+{1}
+Нажмите, чтобы показать их.</value>
   </data>
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>Показаны {0} и моды, которым он нужен</value>
