@@ -148,7 +148,10 @@ public sealed class ModListService
             var cards = InstalledModCardViewModel.BuildFrom(
                 found, catalog, sptVersion, records, AppServices.Addons.AllAddons);
 
-            return (ModListCandidates.From(cards, records), FolderNeedsOf(found));
+            var candidates = ModListCandidates.From(
+                cards, records, onDisk: r => r.Files.Any(f => DisabledModPaths.OnDisk(installPath, f)));
+
+            return (candidates, FolderNeedsOf(found));
         });
 
         return new ModListInstall(installPath, candidates, sptVersion, needs);

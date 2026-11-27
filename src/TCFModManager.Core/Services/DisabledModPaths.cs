@@ -221,6 +221,10 @@ public static class DisabledModPaths
     public static bool CounterpartOnDisk(string installPath, string relativePath) =>
         TryGetRelativeCounterpart(relativePath, out var counterpart) && ExistsUnder(installPath, counterpart);
 
+    // True when something sits at the path or at its counterpart in the container's other state.
+    public static bool OnDisk(string installPath, string relativePath) =>
+        ExistsUnder(installPath, ToRelative(relativePath)) || CounterpartOnDisk(installPath, relativePath);
+
     // True when the path and its counterpart are both on disk - the duplicate the Installed page sorts out.
     public static bool IsOnDiskTwice(string installPath, string relativePath) =>
         ExistsUnder(installPath, ToRelative(relativePath)) && CounterpartOnDisk(installPath, relativePath);

@@ -28,7 +28,8 @@ public static class ModListCandidates
     public static List<ModListCandidate> From(
         IEnumerable<InstalledModCardViewModel> cards,
         IReadOnlyList<InstalledModRecord> records,
-        Func<int, int?>? parentOf = null)
+        Func<int, int?>? parentOf = null,
+        Func<InstalledModRecord, bool>? onDisk = null)
     {
         var candidates = From(cards);
         parentOf ??= id => AppServices.Addons.ById(id)?.ModId;
@@ -43,7 +44,7 @@ public static class ModListCandidates
             .Select(c => c.ModId!.Value)
             .ToHashSet();
 
-        foreach (var record in records.Where(r => r.IsAddon && !covered.Contains(r.ModId)))
+        foreach (var record in records.Where(r => r.IsAddon && !covered.Contains(r.ModId) && (onDisk?.Invoke(r) ?? true)))
         {
             candidates.Add(new ModListCandidate
             {

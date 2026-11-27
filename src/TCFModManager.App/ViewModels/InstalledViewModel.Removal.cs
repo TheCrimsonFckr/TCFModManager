@@ -446,11 +446,13 @@ public partial class InstalledViewModel
     {
         var cards = AddonCardsOf(mod);
         var live = cards.Where(c => !c.HasDuplicateFolders).ToList();
-        if (live.Count == 0) return [];
+        var manifest = AppServices.InstallManifest.Load();
+        var uncarded = CardlessAddonRecordsOf(mod, manifest);
+        if (live.Count == 0 && uncarded.Count == 0) return [];
 
         var twice = cards.Where(c => c.HasDuplicateFolders).ToList();
 
-        var sections = new List<AskSection> { new(null, Names(live)) };
+        var sections = new List<AskSection> { new(null, [.. Names(live), .. uncarded.Select(r => r.Name)]) };
         if (twice.Count > 0) sections.Add(new(Strings.Installed_RemoveAddonsTwiceHeading, Names(twice)));
 
         var answer = AskWindow.Show(new AskRequest
@@ -465,16 +467,32 @@ public partial class InstalledViewModel
         if (answer == AskChoice.Cancel) return null;
         if (answer == AskChoice.Second) return [];
 
-        var manifest = AppServices.InstallManifest.Load();
         return
         [
             .. live
                 .Select(c => c.ModId is { } id ? manifest.Find(id, isAddon: true) : null)
                 .OfType<InstalledModRecord>()
                 .Where(r => r.IsAppManaged),
+            .. uncarded,
         ];
 
         static List<string> Names(IEnumerable<InstalledModCardViewModel> cards) => [.. cards.Select(c => c.DisplayTitle)];
+    }
+
+    private List<InstalledModRecord> CardlessAddonRecordsOf(InstalledModCardViewModel mod, ModInstallManifest manifest)
+    {
+        if (mod is not { IsAddon: false, ModId: { } parentId }) return [];
+
+        var carded = _all.Where(c => c is { IsAddon: true, ModId: not null }).Select(c => c.ModId!.Value).ToHashSet();
+
+        return
+        [
+            .. manifest.Mods
+                .Where(r => r is { IsAddon: true, IsAppManaged: true }
+                    && !carded.Contains(r.ModId)
+                    && AppServices.Addons.ById(r.ModId)?.ModId == parentId)
+                .OrderBy(r => r.Name, StringComparer.OrdinalIgnoreCase),
+        ];
     }
 
     // Removes a mod's addons ahead of the mod itself, in the same batch. Returns the names removed.
