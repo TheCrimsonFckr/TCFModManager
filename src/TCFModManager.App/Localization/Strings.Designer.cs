@@ -3905,9 +3905,9 @@ internal static class Strings
     internal static string Hint_Search_DoneClientBody => LocalizationService.Get("Hint_Search_DoneClientBody");
     internal static string CardField_InstalledAddons => LocalizationService.Get("CardField_InstalledAddons");
     internal static string CardField_NeededBy => LocalizationService.Get("CardField_NeededBy");
-    internal static string Installed_NeededByPillFormat => LocalizationService.Get("Installed_NeededByPillFormat");
     internal static string Installed_AddonsIconToolTip(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_AddonsIconToolTip", count, values);
     internal static string Installed_NeededByIconToolTip(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_NeededByIconToolTip", count, values);
+    internal static string Installed_NeededByPillFormat => LocalizationService.Get("Installed_NeededByPillFormat");
 }
