@@ -39,13 +39,13 @@ public static class ModDisableService
     // second SPT running elsewhere on the machine isn't a reason to refuse. Optional only because
     // not every caller has the root in hand; passing it is always better.
     public static ModDisableOutcome Apply(
-        IEnumerable<InstalledMod> mods, bool disable, string? installPath = null)
+        IEnumerable<InstalledMod> mods, bool disable, string? installPath = null, bool serverMayRun = false)
     {
         var targets = mods.Where(mod => mod.IsDisabled != disable).ToList();
         if (targets.Count == 0) return ModDisableOutcome.Empty;
 
         ModInstallService.EnsureInstallNotInUse(
-            disable ? ModInstallAction.Disable : ModInstallAction.Enable, installPath);
+            disable ? ModInstallAction.Disable : ModInstallAction.Enable, installPath, gameOnly: serverMayRun);
 
         var moved = new List<ModMove>();
         var failed = new List<ModDisableFailure>();

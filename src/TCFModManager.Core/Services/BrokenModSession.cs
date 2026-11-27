@@ -12,6 +12,8 @@ public sealed class BrokenModSession
     public List<string> Mods { get; set; } = [];
 
     public Dictionary<string, long>? Logs { get; set; }
+
+    public bool Client { get; set; }
 }
 
 //
@@ -76,12 +78,12 @@ public sealed class BrokenModSessionStore
             if (isOn == isOff) continue;
 
             var wanted = on.Contains(enabledPath);
-            if (isOn && !wanted) turnOff.Add(Entry(enabledPath, disabled: false));
-            else if (isOff && wanted) turnOn.Add(Entry(disabledPath, disabled: true));
+            if (isOn && !wanted) turnOff.Add(Entry(enabledPath, disabled: false, session.Client));
+            else if (isOff && wanted) turnOn.Add(Entry(disabledPath, disabled: true, session.Client));
         }
 
-        var off = ModDisableService.Apply(turnOff, disable: true, session.InstallPath);
-        var back = ModDisableService.Apply(turnOn, disable: false, session.InstallPath);
+        var off = ModDisableService.Apply(turnOff, disable: true, session.InstallPath, serverMayRun: session.Client);
+        var back = ModDisableService.Apply(turnOn, disable: false, session.InstallPath, serverMayRun: session.Client);
         return new ModDisableOutcome([.. off.Moved, .. back.Moved], [.. off.Failed, .. back.Failed]);
     }
 
@@ -93,10 +95,10 @@ public sealed class BrokenModSessionStore
 
     private static bool Exists(string path) => Directory.Exists(path) || File.Exists(path);
 
-    private static InstalledMod Entry(string path, bool disabled) => new()
+    private static InstalledMod Entry(string path, bool disabled, bool client) => new()
     {
         Name = Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)),
-        Target = InstalledModTarget.Server,
+        Target = client ? InstalledModTarget.Client : InstalledModTarget.Server,
         FolderPath = path,
         IsDisabled = disabled,
     };

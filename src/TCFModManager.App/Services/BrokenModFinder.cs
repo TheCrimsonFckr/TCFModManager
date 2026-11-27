@@ -263,6 +263,7 @@ public sealed partial class BrokenModFinder : LocalizedViewModel
             InstallPath = install,
             StartedAt = DateTimeOffset.Now,
             Mods = [.. mods.Select(m => m.FolderPath)],
+            Client = client,
         };
 
         BrokenModResult? result = null;

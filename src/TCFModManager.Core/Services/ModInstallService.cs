@@ -36,7 +36,9 @@ public sealed partial class ModInstallService(
     // Processes that hold handles on files inside an SPT install. Placing or deleting a mod's
     // files while one of these is running fails partway through, which on an update leaves the old
     // version already removed - so both install and uninstall refuse to start until they're closed.
-    private static readonly string[] BlockingProcessNames = ["EscapeFromTarkov", "SPT.Server", "Aki.Server"];
+    private const string GameProcessName = "EscapeFromTarkov";
+
+    private static readonly string[] BlockingProcessNames = [GameProcessName, "SPT.Server", "Aki.Server"];
 
     //
     // The blocking processes running OUT OF THIS INSTALL, or an empty list when it is safe to modify.
@@ -51,11 +53,11 @@ public sealed partial class ModInstallService(
     // Passing no path keeps the old machine-wide behaviour, for callers that genuinely have no
     // install in hand.
     //
-    public static IReadOnlyList<string> RunningBlockers(string? installPath = null)
+    public static IReadOnlyList<string> RunningBlockers(string? installPath = null, bool gameOnly = false)
     {
         var running = new List<string>();
 
-        foreach (var name in BlockingProcessNames)
+        foreach (var name in gameOnly ? [GameProcessName] : BlockingProcessNames)
         {
             Process[] found;
 
@@ -139,9 +141,9 @@ public sealed partial class ModInstallService(
     // refused. It takes the operation rather than a verb phrase: the caller says what it was doing,
     // App/Services/ModInstallProblems says it in English.
     //
-    public static void EnsureInstallNotInUse(ModInstallAction action, string? installPath = null)
+    public static void EnsureInstallNotInUse(ModInstallAction action, string? installPath = null, bool gameOnly = false)
     {
-        var running = RunningBlockers(installPath);
+        var running = RunningBlockers(installPath, gameOnly);
         if (running.Count == 0) return;
 
         throw new ModInstallException(ModInstallFailure.InstallInUse)
