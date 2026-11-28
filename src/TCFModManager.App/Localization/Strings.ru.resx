@@ -12239,4 +12239,22 @@
   <data name="Help_Options_SpModAccount_Keywords" xml:space="preserve">
     <value>войти, вход, логин, аккаунт, аккаунт sp-mod, оставаться в системе, remember me, discord, выйти, выход</value>
   </data>
+  <data name="CardField_SpModActions" xml:space="preserve">
+    <value>Действия sp-mod</value>
+  </data>
+  <data name="CardField_Favourites" xml:space="preserve">
+    <value>Избранное</value>
+  </data>
+  <data name="Card_FavouritesFormat" xml:space="preserve">
+    <value>{0:N0} в избранном</value>
+  </data>
+  <data name="SpModActions_ToolTip" xml:space="preserve">
+    <value>Одобрить, отреагировать, подписаться или добавить в список на sp-mod</value>
+  </data>
+  <data name="SpModActions_CouldNotLoad" xml:space="preserve">
+    <value>Не удалось загрузить страницу этого мода на sp-mod.</value>
+  </data>
+  <data name="MainWindow_DiscordToolTip" xml:space="preserve">
+    <value>Присоединиться к Discord TCFModManager</value>
+  </data>
 </root>

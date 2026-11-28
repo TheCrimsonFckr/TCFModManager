@@ -20,6 +20,9 @@ internal static class AppIcons
     private static readonly Uri Black = new("pack://application:,,,/Assets/AppIconBlack.ico");
     private static readonly Uri White = new("pack://application:,,,/Assets/AppIconWhite.ico");
 
+    private static readonly Uri DiscordBlack = new("pack://application:,,,/Assets/DiscordSymbolBlack.png");
+    private static readonly Uri DiscordWhite = new("pack://application:,,,/Assets/DiscordSymbolWhite.png");
+
     private static readonly Dictionary<Uri, BitmapDecoder> Decoders = [];
 
     private static bool _watching;
@@ -48,6 +51,9 @@ internal static class AppIcons
     public static ImageSource ForTray => Frame(WindowsIsLight ? Black : White, 32);
 
     public static ImageSource ForTitleBar => Frame(ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Light ? Black : White, 32);
+
+    // Discord's own symbol, unchanged: black on the light theme, white on the others (OPEN-76 R4).
+    public static ImageSource ForDiscord => Decoder(ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Light ? DiscordBlack : DiscordWhite).Frames[0];
 
     public static void Watch()
     {

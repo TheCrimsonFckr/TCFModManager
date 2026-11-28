@@ -7,7 +7,8 @@
     xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
-    xmlns:controls="clr-namespace:TCFModManager.App.Controls">
+    xmlns:controls="clr-namespace:TCFModManager.App.Controls"
+    xmlns:app="clr-namespace:TCFModManager.App">
 
     <converters:NullToVisibilityConverter x:Key="CardNullToCollapsed" />
     <converters:FalseToVisibilityConverter x:Key="CardFalseToVisible" />
@@ -342,6 +343,26 @@
                         <ui:SymbolIcon Symbol="Branch24" FontSize="16" />
                     </ui:Button>
                 </Border>
+
+                <!-- OPEN-76 R11: sp-mod's Subscribe / Endorse / Add to list and reactions, signed in only. -->
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSpModActions, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <Border Visibility="{Binding SpModActionsModId, Converter={StaticResource CardNullToCollapsed}}">
+                        <ui:Button
+                            Margin="0,2,10,0"
+                            Padding="0"
+                            MinWidth="0"
+                            MinHeight="0"
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Appearance="Transparent"
+                            behaviors:SpModActions.ModId="{Binding SpModActionsModId}"
+                            ToolTip="{loc:Str SpModActions_ToolTip}"
+                            Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource CardBoolToVis}}">
+                            <ui:SymbolIcon Symbol="ThumbLike24" FontSize="16" />
+                        </ui:Button>
+                    </Border>
+                </Border>
             </StackPanel>
 
             <Border
@@ -471,6 +492,20 @@
                 ToolTip="{Binding NeededByToolTip}">
                 <ui:SymbolIcon Symbol="Branch24" FontSize="16" />
             </ui:Button>
+            </Border>
+            <Border VerticalAlignment="Top" Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsSpModActions, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+            <Border Visibility="{Binding SpModActionsModId, Converter={StaticResource CardNullToCollapsed}}">
+            <ui:Button
+                Padding="6"
+                Margin="0,0,4,0"
+                VerticalAlignment="Top"
+                Appearance="Transparent"
+                behaviors:SpModActions.ModId="{Binding SpModActionsModId}"
+                ToolTip="{loc:Str SpModActions_ToolTip}"
+                Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource CardBoolToVis}}">
+                <ui:SymbolIcon Symbol="ThumbLike24" FontSize="16" />
+            </ui:Button>
+            </Border>
             </Border>
             <Border VerticalAlignment="Top" Visibility="{Binding (controls:CardLayoutScope.Layout).ListShowsQuickUpdate, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
             <ui:Button

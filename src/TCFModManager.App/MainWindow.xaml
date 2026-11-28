@@ -65,6 +65,22 @@
                     VerticalAlignment="Top"
                     DataContext="{x:Static app:AppServices.SpModAccount}">
                     <ui:Button
+                        Width="44"
+                        Height="30"
+                        Padding="0"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        CornerRadius="0"
+                        Appearance="Transparent"
+                        BorderThickness="0"
+                        ToolTip="{loc:Str MainWindow_DiscordToolTip}"
+                        Click="DiscordButton_Click">
+                        <ui:Button.Icon>
+                            <ui:ImageIcon x:Name="DiscordIcon" Width="18" Height="14" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+                    <ui:Button
                         x:Name="AccountButton"
                         Width="44"
                         Height="30"

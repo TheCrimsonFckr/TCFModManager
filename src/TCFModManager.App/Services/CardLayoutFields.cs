@@ -44,6 +44,8 @@ public static class CardLayoutFields
     public const string InstalledOn = "InstalledOn";
     public const string SptFit = "SptFit";
     public const string Teaser = "Teaser";
+    public const string Favourites = "Favourites";
+    public const string SpModActions = "SpModActions";
 
     public const string Guid = "Guid";
     public const string Endorsements = "Endorsements";
@@ -85,16 +87,23 @@ public static class CardLayoutFields
             o => Date(I(o)?.InstalledAt) is { } d ? LocalizationService.Text(Strings.Card_InstalledOnFormat, d) : null),
         new(SptFit, CardFieldKind.Block, nameof(Strings.CardField_SptFit), o => I(o)?.SptFitLine),
         new(Teaser, CardFieldKind.Block, nameof(Strings.CardField_Teaser), o => I(o)?.PreviewTeaser),
+        new(Endorsements, CardFieldKind.Line, nameof(Strings.CardField_Endorsements),
+            o => I(o)?.SpModEndorsements is { } n ? LocalizationService.Text(Strings.Browse_EndorsementsFormat, n) : null),
+        new(Favourites, CardFieldKind.Line, nameof(Strings.CardField_Favourites),
+            o => I(o)?.SpModFavourites is { } n ? LocalizationService.Text(Strings.Card_FavouritesFormat, n) : null),
+        new(SpModActions, CardFieldKind.Button, nameof(Strings.CardField_SpModActions)),
     ];
 
     public static IReadOnlyList<string> InstalledDefault { get; } =
-        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, InstalledAddons, NeededBy, DisableToggle, QuickUpdate, PinButton, RemoveButton, FolderButtons];
+        [Note, Version, Author, Sides, AddonParent, ModLists, Group, Disabled, Pinned, InstalledAddons, NeededBy, DisableToggle, QuickUpdate, PinButton, RemoveButton, FolderButtons, SpModActions];
 
-    public const int Revision = 2;
+    public const int Revision = 3;
 
     public static IReadOnlyList<string> AddedInRevision1 { get; } = [PinButton, RemoveButton, FolderButtons];
 
     public static IReadOnlyList<string> AddedInRevision2 { get; } = [InstalledAddons, NeededBy];
+
+    public static IReadOnlyList<string> AddedInRevision3 { get; } = [SpModActions];
 
     public static IReadOnlyList<CardFieldSpec> Browse { get; } =
     [
@@ -102,6 +111,8 @@ public static class CardLayoutFields
         new(Guid, CardFieldKind.Block, nameof(Strings.CardField_Guid), o => B(o)?.Guid),
         new(Downloads, CardFieldKind.Block, nameof(Strings.CardField_Downloads)),
         new(Endorsements, CardFieldKind.Block, nameof(Strings.CardField_Endorsements)),
+        new(Favourites, CardFieldKind.Block, nameof(Strings.CardField_Favourites)),
+        new(SpModActions, CardFieldKind.Button, nameof(Strings.CardField_SpModActions)),
         new(MatchedAddons, CardFieldKind.Block, nameof(Strings.CardField_MatchedAddons)),
         new(SptVersion, CardFieldKind.Block, nameof(Strings.CardField_SptVersion)),
         new(AlternateNote, CardFieldKind.Block, nameof(Strings.CardField_AlternateNote)),
@@ -109,7 +120,7 @@ public static class CardLayoutFields
     ];
 
     public static IReadOnlyList<string> BrowseDefault { get; } =
-        [Author, Guid, Downloads, Endorsements, MatchedAddons, SptVersion, AlternateNote, Badges];
+        [Author, Guid, Downloads, Endorsements, Favourites, SpModActions, MatchedAddons, SptVersion, AlternateNote, Badges];
 
     public static IReadOnlyList<CardFieldSpec> For(CardLayoutPage page) => page == CardLayoutPage.Browse ? Browse : Installed;
 

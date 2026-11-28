@@ -63,6 +63,15 @@
             Visibility="{Binding Endorsements, Converter={StaticResource BrowseCardNullToCollapsed}}" />
     </DataTemplate>
 
+    <DataTemplate x:Key="CardField.Browse.Favourites" DataType="{x:Type viewmodels:ModCardViewModel}">
+        <TextBlock
+            Text="{Binding Favourites, Mode=OneWay, StringFormat={loc:Str Card_FavouritesFormat}}"
+            FontSize="{DynamicResource CardLineFontSize}"
+            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+            TextTrimming="CharacterEllipsis"
+            Visibility="{Binding Favourites, Converter={StaticResource BrowseCardNullToCollapsed}}" />
+    </DataTemplate>
+
     <DataTemplate x:Key="CardField.Browse.MatchedAddons" DataType="{x:Type viewmodels:ModCardViewModel}">
         <TextBlock
             Text="{Binding MatchedAddonsText}"

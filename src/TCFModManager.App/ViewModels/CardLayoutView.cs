@@ -64,6 +64,8 @@ public sealed class CardLayoutView
 
     public bool ShowNeededBy => Has(F.NeededBy);
 
+    public bool ShowSpModActions => Has(F.SpModActions);
+
     public bool RowShowsDisabled => Has(F.Disabled);
 
     public bool RowShowsPinned => Has(F.Pinned);
@@ -81,6 +83,8 @@ public sealed class CardLayoutView
     public bool ListShowsInstalledAddons => ListHas(F.InstalledAddons);
 
     public bool ListShowsNeededBy => ListHas(F.NeededBy);
+
+    public bool ListShowsSpModActions => ListHas(F.SpModActions);
 
     public CardSize Size => Layout.Size;
 

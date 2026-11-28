@@ -19,6 +19,7 @@ public partial class MainWindow : FluentWindow
     {
         Icon = AppIcons.ForWindow;
         TitleBarIcon.Source = AppIcons.ForTitleBar;
+        DiscordIcon.Source = AppIcons.ForDiscord;
     }
 
     public MainWindow()
@@ -318,6 +319,8 @@ public partial class MainWindow : FluentWindow
     }
 
     private void RootTitleBar_HelpClicked(TitleBar sender, RoutedEventArgs e) => ShowHelp();
+
+    private void DiscordButton_Click(object sender, RoutedEventArgs e) => MarkupActions.OpenInBrowser(SelfMod.DiscordUrl);
 
     private void AccountButton_Click(object sender, RoutedEventArgs e)
     {

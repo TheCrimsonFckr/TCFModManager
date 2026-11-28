@@ -272,6 +272,11 @@ public sealed partial class InstalledModCardViewModel : LocalizedViewModel
     public string? PreviewAuthor => Author;
     public string? PreviewTeaser => CatalogListing?.Teaser is { Length: > 0 } teaser ? teaser : null;
     public int? PreviewDownloads => CatalogListing?.Downloads;
+
+    // OPEN-76: sp-mod's own counts for the listing, and the listing the sp-mod actions button opens.
+    public int? SpModEndorsements => CatalogListing?.EndorsementsCount is > 0 and var n ? n : null;
+    public int? SpModFavourites => CatalogListing?.FavouritesCount is > 0 and var n ? n : null;
+    public int? SpModActionsModId => IsAddon ? null : ModId;
     public string? PreviewSpt => null;
 
     // The raw installed folder/package name, shown as a secondary line under DisplayTitle only

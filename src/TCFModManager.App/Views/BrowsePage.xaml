@@ -692,6 +692,21 @@
                                 VerticalAlignment="Bottom"
                                 Orientation="Horizontal"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource FalseToVisible}}">
+                                <Border
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSpModActions, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
+                                    <ui:Button
+                                        Margin="0,0,4,0"
+                                        Padding="6"
+                                        Appearance="Transparent"
+                                        behaviors:SpModActions.ModId="{Binding Mod.Id}"
+                                        ToolTip="{loc:Str SpModActions_ToolTip}"
+                                        Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource BoolToVis}}">
+                                        <ui:Button.Icon>
+                                            <ui:SymbolIcon Symbol="ThumbLike24" />
+                                        </ui:Button.Icon>
+                                    </ui:Button>
+                                </Border>
                                 <ui:Button
                                     Margin="0,0,4,0"
                                     Padding="6"
@@ -723,6 +738,21 @@
                                 VerticalAlignment="Bottom"
                                 Orientation="Horizontal"
                                 Visibility="{Binding IsInstalled, Converter={StaticResource TrueToVisible}}">
+                                <Border
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSpModActions, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVis}}">
+                                    <ui:Button
+                                        Margin="0,0,4,0"
+                                        Padding="6"
+                                        Appearance="Transparent"
+                                        behaviors:SpModActions.ModId="{Binding Mod.Id}"
+                                        ToolTip="{loc:Str SpModActions_ToolTip}"
+                                        Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource BoolToVis}}">
+                                        <ui:Button.Icon>
+                                            <ui:SymbolIcon Symbol="ThumbLike24" />
+                                        </ui:Button.Icon>
+                                    </ui:Button>
+                                </Border>
                                 <ui:Button
                                     Margin="0,0,4,0"
                                     Padding="6"

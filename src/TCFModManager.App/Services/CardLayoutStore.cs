@@ -90,8 +90,13 @@ public sealed class CardLayoutStore
             var added = new List<string>();
             if (revision < 1) added.AddRange(CardLayoutFields.AddedInRevision1);
             if (revision < 2) added.AddRange(CardLayoutFields.AddedInRevision2);
+            if (revision < 3) added.AddRange(CardLayoutFields.AddedInRevision3);
             layout.Fields = [.. layout.Fields ?? [], .. added];
             if (layout.ListFields is not null) layout.ListFields = [.. layout.ListFields, .. added];
+        }
+        else if ((layout.FieldsRevision ?? 0) < 3)
+        {
+            layout.Fields = [.. layout.Fields ?? [], .. CardLayoutFields.AddedInRevision3];
         }
 
         layout.FieldsRevision = CardLayoutFields.Revision;
