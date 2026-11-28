@@ -58,24 +58,28 @@
             <ui:TitleBar.Icon>
                 <ui:ImageIcon x:Name="TitleBarIcon" />
             </ui:TitleBar.Icon>
-            <!-- OPEN-76: left of the caption "?". TitleBar hit-tests TrailingContent as client area, so these click. -->
+            <!-- OPEN-76: left of the caption "?", sized and top-aligned like the caption buttons (44x30). TitleBar hit-tests TrailingContent as client area, so these click. -->
             <ui:TitleBar.TrailingContent>
                 <StackPanel
                     Orientation="Horizontal"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     DataContext="{x:Static app:AppServices.SpModAccount}">
                     <ui:Button
                         x:Name="AccountButton"
-                        Margin="0,0,4,0"
-                        Padding="8,5"
-                        VerticalAlignment="Center"
+                        Width="44"
+                        Height="30"
+                        Padding="0"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        CornerRadius="0"
                         Appearance="Transparent"
                         BorderThickness="0"
                         ToolTip="{Binding TitleBarToolTip}"
                         Visibility="{Binding IsAvailable, Converter={StaticResource BoolToVis}}"
                         Click="AccountButton_Click">
                         <ui:Button.Icon>
-                            <ui:SymbolIcon Symbol="Person24" Filled="{Binding IsSignedIn}" />
+                            <ui:SymbolIcon Symbol="Person24" FontSize="16" Filled="{Binding IsSignedIn}" />
                         </ui:Button.Icon>
                     </ui:Button>
                 </StackPanel>
