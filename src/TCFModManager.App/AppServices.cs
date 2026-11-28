@@ -18,7 +18,8 @@ internal static class AppServices
 
     public static HeadlessAdviceService HeadlessAdvice { get; } = new(SpModApi);
 
-    public static ModDownloadService Downloads { get; } = new();
+    // With the user's sp-mod sign-in while there is one (OPEN-76 N2) - see SpModDownloadCookies.
+    public static ModDownloadService Downloads { get; } = new(SpModDownloadCookies.CreateClient());
 
     public static ModInstallManifestService InstallManifest { get; } = new();
 

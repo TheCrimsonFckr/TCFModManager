@@ -128,6 +128,7 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
             {
                 CouldNotCheck = false;
                 State = SpModSignIn.SignedOut;
+                SpModDownloadCookies.Clear();
                 return;
             }
 
@@ -144,6 +145,9 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
                 : SpModSignIn.SignedOut;
 
             AppLog.Info("SpModAccount", $"state: {State}");
+
+            if (IsSignedIn) SpModDownloadCookies.Use(cookies);
+            else SpModDownloadCookies.Clear();
         }
         finally
         {
