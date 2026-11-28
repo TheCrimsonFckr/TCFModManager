@@ -65,6 +65,23 @@
                     VerticalAlignment="Top"
                     DataContext="{x:Static app:AppServices.SpModAccount}">
                     <ui:Button
+                        x:Name="AppEndorseButton"
+                        Width="44"
+                        Height="30"
+                        Padding="0"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        CornerRadius="0"
+                        Appearance="Transparent"
+                        BorderThickness="0"
+                        ToolTip="{loc:Str MainWindow_EndorseAppToolTip}"
+                        Visibility="{Binding IsSignedIn, Converter={StaticResource BoolToVis}}">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="ThumbLike24" FontSize="16" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+                    <ui:Button
                         Width="44"
                         Height="30"
                         Padding="0"

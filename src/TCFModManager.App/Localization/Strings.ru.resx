@@ -12257,4 +12257,7 @@
   <data name="MainWindow_DiscordToolTip" xml:space="preserve">
     <value>Присоединиться к Discord TCFModManager</value>
   </data>
+  <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
+    <value>Одобрить TCFModManager или отреагировать на sp-mod</value>
+  </data>
 </root>

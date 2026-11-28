@@ -36,6 +36,9 @@ public partial class MainWindow : FluentWindow
 
         ApplyIcons();
         AppIcons.Watch();
+
+        // OPEN-76: the title bar's thumbs-up opens sp-mod's strip for this app's own listing.
+        SpModActions.SetModId(AppEndorseButton, int.Parse(SelfMod.ModId, System.Globalization.CultureInfo.InvariantCulture));
         AppIcons.Changed += (_, _) => ApplyIcons();
 
         // F1 is the title bar's "?" (Help R8). Preview, so a focused text box doesn't get it first.

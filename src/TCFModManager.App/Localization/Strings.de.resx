@@ -11790,4 +11790,7 @@ Klicken, um sie anzuzeigen.</value>
   <data name="MainWindow_DiscordToolTip" xml:space="preserve">
     <value>Dem TCFModManager-Discord beitreten</value>
   </data>
+  <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
+    <value>TCFModManager auf sp-mod empfehlen oder darauf reagieren</value>
+  </data>
 </root>

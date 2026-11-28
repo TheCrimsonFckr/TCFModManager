@@ -14541,4 +14541,8 @@ Click to show them.</value>
     <value>Join the TCFModManager Discord</value>
     <comment>Tooltip on the title bar's Discord button.</comment>
   </data>
+  <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
+    <value>Endorse or react to TCFModManager on sp-mod</value>
+    <comment>Tooltip on the title bar's thumbs-up, shown while signed in to sp-mod.</comment>
+  </data>
 </root>

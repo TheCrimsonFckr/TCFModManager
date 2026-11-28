@@ -27,12 +27,16 @@ internal static class SpModActionsFlyout
     private const double StripWidth = 700;
     private const double MinStripHeight = 56;
     private const double MaxStripHeight = 640;
-    private const double Chrome = 10;
+    private const double MaxStripWidth = 1100;
+    private const double BarHeight = 32;
+    private const double Chrome = 10 + BarHeight;
 
     private static Window? _window;
     private static Border? _host;
     private static ProgressRing? _ring;
     private static TextBlock? _failed;
+    private static TextBlock? _title;
+    private static bool _swallowUp;
     private static WebView2? _view;
     private static Task<bool>? _starting;
 
@@ -45,6 +49,8 @@ internal static class SpModActionsFlyout
         if (PageFor(modId) is not { } page) return;
 
         var window = EnsureWindow();
+        if (_shownId != modId) window.Width = StripWidth;
+        if (_title is not null) _title.Text = NameFor(modId) ?? Strings.CardField_SpModActions;
         Place(window, anchor);
         window.Show();
         window.Activate();
@@ -61,9 +67,16 @@ internal static class SpModActionsFlyout
     private static Uri? PageFor(int modId)
     {
         var mod = AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == modId);
-        var url = mod?.DetailUrl ?? (mod?.Slug is { Length: > 0 } slug ? $"https://sp-mod.com/mod/{modId}/{slug}" : null);
+        var url = mod?.DetailUrl
+            ?? (mod?.Slug is { Length: > 0 } slug ? $"https://sp-mod.com/mod/{modId}/{slug}" : null)
+            ?? (IsSelf(modId) ? SelfMod.ModPageUrl : null);
         return Uri.TryCreate(url, UriKind.Absolute, out var uri) && WebViews.IsSpModPage(uri) ? uri : null;
     }
+
+    private static string? NameFor(int modId) =>
+        AppServices.ModCache.AllMods.FirstOrDefault(m => m.Id == modId)?.Name ?? (IsSelf(modId) ? SelfMod.Name : null);
+
+    private static bool IsSelf(int modId) => modId.ToString(System.Globalization.CultureInfo.InvariantCulture) == SelfMod.ModId;
 
     private static async Task ShowAsync(int modId, Uri page)
     {
@@ -151,7 +164,10 @@ internal static class SpModActionsFlyout
             try
             {
                 using var json = JsonDocument.Parse(e.TryGetWebMessageAsString());
-                if (json.RootElement.TryGetProperty("height", out var height) && height.TryGetDouble(out var h)) Resize(h);
+                var root = json.RootElement;
+                var h = root.TryGetProperty("height", out var height) && height.TryGetDouble(out var hv) ? hv : 0;
+                var w = root.TryGetProperty("width", out var width) && width.TryGetDouble(out var wv) ? wv : 0;
+                Resize(h, w);
             }
             catch (Exception ex) when (ex is JsonException or ArgumentException or InvalidOperationException)
             {
@@ -186,12 +202,39 @@ internal static class SpModActionsFlyout
         };
         _failed.SetResourceReference(TextBlock.ForegroundProperty, "TextFillColorSecondaryBrush");
 
-        var grid = new Grid();
-        grid.Children.Add(_host);
-        grid.Children.Add(_ring);
-        grid.Children.Add(_failed);
+        var content = new Grid();
+        content.Children.Add(_host);
+        content.Children.Add(_ring);
+        content.Children.Add(_failed);
 
-        var frame = new Border { Child = grid, BorderThickness = new Thickness(1), Padding = new Thickness(4) };
+        _title = new TextBlock { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(8, 0, 8, 0), TextTrimming = TextTrimming.CharacterEllipsis, FontWeight = FontWeights.SemiBold };
+        _title.SetResourceReference(TextBlock.ForegroundProperty, "TextFillColorPrimaryBrush");
+
+        var close = new Wpf.Ui.Controls.Button
+        {
+            Icon = new SymbolIcon { Symbol = SymbolRegular.Dismiss24, FontSize = 14 },
+            Appearance = ControlAppearance.Transparent,
+            BorderThickness = new Thickness(0),
+            Padding = new Thickness(0),
+            Width = 32,
+            Height = 28,
+            ToolTip = Strings.Common_Close,
+        };
+
+        var bar = new DockPanel { Height = BarHeight, LastChildFill = true };
+        DockPanel.SetDock(close, Dock.Right);
+        bar.Children.Add(close);
+        bar.Children.Add(_title);
+
+        var layout = new Grid();
+        layout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        layout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        Grid.SetRow(bar, 0);
+        Grid.SetRow(content, 1);
+        layout.Children.Add(bar);
+        layout.Children.Add(content);
+
+        var frame = new Border { Child = layout, BorderThickness = new Thickness(1), Padding = new Thickness(4) };
         frame.SetResourceReference(Border.BackgroundProperty, "ApplicationBackgroundBrush");
         frame.SetResourceReference(Border.BorderBrushProperty, "ControlStrokeColorDefaultBrush");
 
@@ -207,14 +250,20 @@ internal static class SpModActionsFlyout
             Owner = Application.Current?.MainWindow,
             Title = Strings.CardField_SpModActions,
         };
-        window.Deactivated += (_, _) => window.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(window.Hide));
+        close.Click += (_, _) => Dismiss(window);
+        window.Deactivated += (_, _) => window.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(window.Hide));
         window.PreviewKeyDown += (_, e) =>
         {
             if (e.Key != Key.Escape) return;
             e.Handled = true;
-            window.Hide();
-            window.Owner?.Activate();
+            Dismiss(window);
         };
+
+        if (window.Owner is { } owner)
+        {
+            owner.PreviewMouseDown += SwallowWhileOpen;
+            owner.PreviewMouseUp += SwallowRelease;
+        }
         window.Closed += (_, _) =>
         {
             _view?.Dispose();
@@ -222,6 +271,7 @@ internal static class SpModActionsFlyout
             _host = null;
             _ring = null;
             _failed = null;
+            _title = null;
             _view = null;
             _starting = null;
             _shownId = null;
@@ -231,6 +281,31 @@ internal static class SpModActionsFlyout
 
         _window = window;
         return window;
+    }
+
+    private static void Dismiss(Window window)
+    {
+        window.Hide();
+        window.Owner?.Activate();
+    }
+
+    // A click on the main window while the strip is open only closes the strip: it doesn't also open
+    // the card or the page under the pointer.
+    private static void SwallowWhileOpen(object sender, MouseButtonEventArgs e)
+    {
+        if (_window is not { IsVisible: true } window) return;
+
+        e.Handled = true;
+        _swallowUp = true;
+        window.Hide();
+    }
+
+    private static void SwallowRelease(object sender, MouseButtonEventArgs e)
+    {
+        if (!_swallowUp) return;
+
+        _swallowUp = false;
+        e.Handled = true;
     }
 
     private static void Place(Window window, FrameworkElement anchor)
@@ -249,13 +324,24 @@ internal static class SpModActionsFlyout
         window.Top = top;
     }
 
-    private static void Resize(double contentHeight)
+    private static void Resize(double contentHeight, double contentWidth)
     {
         if (_host is null || _window is null) return;
 
-        var height = Math.Clamp(Math.Ceiling(contentHeight), MinStripHeight, MaxStripHeight);
-        _host.Height = height;
-        _window.Height = height + Chrome;
+        if (contentHeight > 0)
+        {
+            var height = Math.Clamp(Math.Ceiling(contentHeight), MinStripHeight, MaxStripHeight);
+            _host.Height = height;
+            _window.Height = height + Chrome;
+        }
+
+        var width = Math.Min(Math.Ceiling(contentWidth) + 12, MaxStripWidth);
+        if (width > _window.Width)
+        {
+            var grow = width - _window.Width;
+            _window.Left = Math.Max(SystemParameters.VirtualScreenLeft, _window.Left - grow);
+            _window.Width = width;
+        }
     }
 
     private static void ShowLoading()
@@ -348,10 +434,19 @@ internal static class SpModActionsFlyout
           const report = () => {
             const keep = [find().row, find().card].filter(Boolean);
             let bottom = 0;
-            for (const part of keep) bottom = Math.max(bottom, part.getBoundingClientRect().bottom + window.scrollY);
+            let right = 0;
+            for (const part of keep) {
+              for (const element of [part, ...part.querySelectorAll('*')]) {
+                const box = element.getBoundingClientRect();
+                if (!box.width || !box.height) continue;
+                bottom = Math.max(bottom, box.bottom + window.scrollY);
+                right = Math.max(right, box.right);
+              }
+            }
             const open = document.querySelector('dialog[open]');
             if (open) bottom = Math.max(bottom, open.getBoundingClientRect().height + 32);
-            window.chrome.webview.postMessage(JSON.stringify({ height: Math.ceil(bottom + 8) }));
+            const width = right > window.innerWidth ? Math.ceil(right + 16) : 0;
+            window.chrome.webview.postMessage(JSON.stringify({ height: Math.ceil(bottom + 8), width }));
           };
 
           let pending = false;
