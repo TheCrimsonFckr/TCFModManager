@@ -201,23 +201,22 @@
                     <ToggleButton
                         x:Name="MoreFiltersToggle"
                         behaviors:TourTarget.Key="browse.filters"
-                        MinWidth="130"
+                        MinWidth="0"
                         Margin="0,0,8,4"
                         VerticalAlignment="Center"
-                        ToolTip="{loc:Str Filter_MoreToolTip}"
+                        AutomationProperties.Name="{Binding MoreFiltersLabel}"
                         Style="{StaticResource FilterDropDownToggle}">
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon
-                                Margin="0,0,8,0"
-                                VerticalAlignment="Center"
-                                FontSize="14"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Symbol="Filter24" />
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{Binding MoreFiltersLabel}" />
-                        </StackPanel>
+                        <ToggleButton.ToolTip>
+                            <StackPanel MaxWidth="320">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding MoreFiltersLabel}" />
+                                <TextBlock TextWrapping="Wrap" Text="{loc:Str Filter_MoreToolTip}" />
+                            </StackPanel>
+                        </ToggleButton.ToolTip>
+                        <ui:SymbolIcon
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Symbol="Filter24" />
                     </ToggleButton>
                 </WrapPanel>
             </DockPanel>
@@ -247,9 +246,10 @@
              its width as it opens and closes; the panel inside keeps its own width throughout. -->
         <Grid
             x:Name="FiltersHost"
-            Grid.Row="1"
-            Grid.RowSpan="3"
+            Grid.Row="2"
+            Grid.RowSpan="2"
             Grid.Column="0"
+            Margin="0,4,0,0"
             HorizontalAlignment="Left"
             Visibility="Collapsed">
             <Border
