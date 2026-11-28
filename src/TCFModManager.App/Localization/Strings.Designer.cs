@@ -3941,4 +3941,7 @@ internal static class Strings
     internal static string SpModActions_CouldNotLoad => LocalizationService.Get("SpModActions_CouldNotLoad");
     internal static string MainWindow_DiscordToolTip => LocalizationService.Get("MainWindow_DiscordToolTip");
     internal static string MainWindow_EndorseAppToolTip => LocalizationService.Get("MainWindow_EndorseAppToolTip");
+    internal static string CardLayout_ButtonPlacementHeader => LocalizationService.Get("CardLayout_ButtonPlacementHeader");
+    internal static string CardLayout_ButtonsBottom => LocalizationService.Get("CardLayout_ButtonsBottom");
+    internal static string CardLayout_ButtonsSide => LocalizationService.Get("CardLayout_ButtonsSide");
 }

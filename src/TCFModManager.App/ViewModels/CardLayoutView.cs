@@ -105,6 +105,11 @@ public sealed class CardLayoutView
 
     public bool ButtonsAtBottom => Page == CardLayoutPage.Installed && !ButtonsAtSide;
 
+    // OPEN-77: with the buttons along the bottom, Pin sits under the status icon instead.
+    public bool ShowPinInButtons => ShowPinButton && ButtonsAtSide;
+
+    public bool ShowPinUnderStatus => ShowPinButton && ButtonsAtBottom;
+
     public System.Windows.Controls.Orientation ButtonsOrientation =>
         ButtonsAtSide ? System.Windows.Controls.Orientation.Vertical : System.Windows.Controls.Orientation.Horizontal;
 
@@ -122,7 +127,7 @@ public sealed class CardLayoutView
             var (title, line, chip) = Behaviors.CardDensity.FontSizes(Size);
             var gap = Behaviors.CardDensity.LineGap(Size);
 
-            var buttons = 26 + (ButtonsAtSide ? (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0) : 0);
+            var buttons = 26 + (ButtonsAtSide ? (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0) : (ShowPinButton ? 34 : 0));
 
             var inlineRuns = Fields.Count(f => f.Kind == CardFieldKind.Line);
             var chipRuns = 0;
