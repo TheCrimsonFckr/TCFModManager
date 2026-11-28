@@ -12210,7 +12210,7 @@
     <value>Не удалось связаться с sp-mod, чтобы проверить вход.</value>
   </data>
   <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
-    <value>Для входа нужна среда Microsoft Edge WebView2 Runtime, которой нет на этом ПК.</value>
+    <value>Для входа нужна среда WebView2 Runtime от Microsoft, которой нет на этом ПК. Сам браузер Edge не нужен.</value>
   </data>
   <data name="SpModWindow_Title" xml:space="preserve">
     <value>sp-mod</value>

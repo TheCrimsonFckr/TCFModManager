@@ -11743,7 +11743,7 @@ Klicken, um sie anzuzeigen.</value>
     <value>sp-mod war nicht erreichbar, um zu prüfen, ob du angemeldet bist.</value>
   </data>
   <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
-    <value>Zum Anmelden wird die Microsoft Edge WebView2 Runtime gebraucht, die auf diesem PC fehlt.</value>
+    <value>Zum Anmelden wird die WebView2 Runtime von Microsoft gebraucht, die auf diesem PC fehlt. Den Edge-Browser selbst brauchst du nicht.</value>
   </data>
   <data name="SpModWindow_Title" xml:space="preserve">
     <value>sp-mod</value>

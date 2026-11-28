@@ -14478,7 +14478,7 @@ Click to show them.</value>
     <comment>Options card status line.</comment>
   </data>
   <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
-    <value>Signing in needs the Microsoft Edge WebView2 Runtime, which isn't on this PC.</value>
+    <value>Signing in needs Microsoft's WebView2 Runtime, which isn't on this PC. The Edge browser itself isn't needed.</value>
     <comment>Options card status line.</comment>
   </data>
   <data name="SpModWindow_Title" xml:space="preserve">

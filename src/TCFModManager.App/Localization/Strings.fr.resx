@@ -11743,7 +11743,7 @@ Cliquez pour les afficher.</value>
     <value>Impossible de joindre sp-mod pour vérifier si vous êtes connecté.</value>
   </data>
   <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
-    <value>La connexion nécessite Microsoft Edge WebView2 Runtime, absent de ce PC.</value>
+    <value>La connexion nécessite WebView2 Runtime de Microsoft, absent de ce PC. Le navigateur Edge lui-même n'est pas nécessaire.</value>
   </data>
   <data name="SpModWindow_Title" xml:space="preserve">
     <value>sp-mod</value>

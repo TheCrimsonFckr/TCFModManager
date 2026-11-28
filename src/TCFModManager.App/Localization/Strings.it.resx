@@ -11743,7 +11743,7 @@ Fai clic per mostrarle.</value>
     <value>Impossibile raggiungere sp-mod per controllare se hai eseguito l'accesso.</value>
   </data>
   <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
-    <value>Per accedere serve Microsoft Edge WebView2 Runtime, che manca su questo PC.</value>
+    <value>Per accedere serve WebView2 Runtime di Microsoft, che manca su questo PC. Il browser Edge non serve.</value>
   </data>
   <data name="SpModWindow_Title" xml:space="preserve">
     <value>sp-mod</value>
