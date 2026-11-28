@@ -40,6 +40,8 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
 
     private const string RememberCookiePrefix = "remember_web_";
 
+    private const string SessionCookie = "the_forge_session";
+
     private const string WebView2Download = "https://developer.microsoft.com/microsoft-edge/webview2/";
 
     private Task? _check;
@@ -250,8 +252,9 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
             var cookies = await manager.GetCookiesAsync(Site.AbsoluteUri);
             if (cookies.Count == 0 || cookies.Any(c => c.Name.StartsWith(RememberCookiePrefix, StringComparison.OrdinalIgnoreCase))) return;
 
-            foreach (var cookie in cookies) manager.DeleteCookie(cookie);
-            AppLog.Info("SpModAccount", $"no Remember me: ended last run's sign-in, {cookies.Count} cookie(s) deleted");
+            var sessions = cookies.Where(c => c.Name.Equals(SessionCookie, StringComparison.OrdinalIgnoreCase)).ToList();
+            foreach (var cookie in sessions) manager.DeleteCookie(cookie);
+            AppLog.Info("SpModAccount", $"no Remember me: ended last run's sign-in, {sessions.Count} session cookie(s) deleted");
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.Runtime.InteropServices.COMException)
         {
