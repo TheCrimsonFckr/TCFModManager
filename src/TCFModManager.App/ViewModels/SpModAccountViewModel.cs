@@ -67,6 +67,9 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
 
     public bool IsSignedIn => State is SpModSignIn.SignedIn or SpModSignIn.Remembered;
 
+    // True once the first check has answered, or there's nothing to check with.
+    public bool HasSettled => !IsAvailable || (!IsChecking && (State != SpModSignIn.Unknown || CouldNotCheck));
+
     public bool CanSignIn => IsAvailable && !IsSignedIn;
 
     public string Status

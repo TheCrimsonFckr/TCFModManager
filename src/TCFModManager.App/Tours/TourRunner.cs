@@ -217,7 +217,8 @@ internal static class TourRunner
         if (next < 0) return;
         if (next >= _tour.Steps.Count)
         {
-            End(markSeen: true);
+            if (_step < 0) AppLog.Info("Tour", $"'{_tour.Id}' had nothing on screen to show - left for next time");
+            End(markSeen: _step >= 0);
             return;
         }
 
@@ -256,7 +257,8 @@ internal static class TourRunner
     }
 
     private static FrameworkElement? FindTarget(TourStep step) =>
-        _root is null ? null : TourTarget.Find(_root, step.Target);
+        (_root is null ? null : TourTarget.Find(_root, step.Target))
+        ?? (_window is null ? null : TourTarget.Find(_window, step.Target));
 
     private static void AddRing(FrameworkElement target)
     {

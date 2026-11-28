@@ -3953,4 +3953,15 @@ internal static class Strings
     internal static string Tour_New133_EndorseApp_Body => LocalizationService.Get("Tour_New133_EndorseApp_Body");
     internal static string Tour_New133_CardActions_Title => LocalizationService.Get("Tour_New133_CardActions_Title");
     internal static string Tour_New133_CardActions_Body => LocalizationService.Get("Tour_New133_CardActions_Body");
+    internal static string Help_Installed_CardLayouts_Step5 => LocalizationService.Get("Help_Installed_CardLayouts_Step5");
+    internal static string Help_Browse_SpModActions_Title => LocalizationService.Get("Help_Browse_SpModActions_Title");
+    internal static string Help_Browse_SpModActions_Step1 => LocalizationService.Get("Help_Browse_SpModActions_Step1");
+    internal static string Help_Browse_SpModActions_Step2 => LocalizationService.Get("Help_Browse_SpModActions_Step2");
+    internal static string Help_Browse_SpModActions_Step3 => LocalizationService.Get("Help_Browse_SpModActions_Step3");
+    internal static string Help_Browse_SpModActions_Note => LocalizationService.Get("Help_Browse_SpModActions_Note");
+    internal static string Help_Browse_SpModActions_Keywords => LocalizationService.Get("Help_Browse_SpModActions_Keywords");
+    internal static string Help_AppUpdate_History_Title => LocalizationService.Get("Help_AppUpdate_History_Title");
+    internal static string Help_AppUpdate_History_Step1 => LocalizationService.Get("Help_AppUpdate_History_Step1");
+    internal static string Help_AppUpdate_History_Step2 => LocalizationService.Get("Help_AppUpdate_History_Step2");
+    internal static string Help_AppUpdate_History_Keywords => LocalizationService.Get("Help_AppUpdate_History_Keywords");
 }

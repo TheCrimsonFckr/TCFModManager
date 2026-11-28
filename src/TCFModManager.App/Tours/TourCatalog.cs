@@ -150,7 +150,7 @@ internal static class TourCatalog
             new("titlebar.endorse", () => Strings.Tour_New133_EndorseApp_Title, () => Strings.Tour_New133_EndorseApp_Body),
             new("browse.spmodactions", () => Strings.Tour_New133_CardActions_Title, () => Strings.Tour_New133_CardActions_Body),
         ],
-        () => AppServices.Browse.HasLoadedResults,
+        () => AppServices.Browse.HasLoadedResults && AppServices.SpModAccount.HasSettled,
         Since: "1.33.0"),
     ];
 
