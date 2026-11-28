@@ -168,6 +168,12 @@ internal static class SpModActionsFlyout
                 var h = root.TryGetProperty("height", out var height) && height.TryGetDouble(out var hv) ? hv : 0;
                 var w = root.TryGetProperty("width", out var width) && width.TryGetDouble(out var wv) ? wv : 0;
                 Resize(h, w);
+
+                if (_shownId is { } id && root.TryGetProperty("endorsed", out var endorsed)
+                    && endorsed.ValueKind is JsonValueKind.True or JsonValueKind.False)
+                {
+                    AppServices.EndorsedMods.Set(id, endorsed.GetBoolean());
+                }
             }
             catch (Exception ex) when (ex is JsonException or ArgumentException or InvalidOperationException)
             {
@@ -446,7 +452,9 @@ internal static class SpModActionsFlyout
             const open = document.querySelector('dialog[open]');
             if (open) bottom = Math.max(bottom, open.getBoundingClientRect().height + 32);
             const width = right > window.innerWidth ? Math.ceil(right + 16) : 0;
-            window.chrome.webview.postMessage(JSON.stringify({ height: Math.ceil(bottom + 8), width }));
+            const icon = document.querySelector(`[wire\\:key="mod-endorse-${id}"] button [data-flux-icon]:not(.animate-spin)`);
+            const endorsed = icon ? icon.getAttribute('fill') === 'currentColor' : null;
+            window.chrome.webview.postMessage(JSON.stringify({ height: Math.ceil(bottom + 8), width, endorsed }));
           };
 
           let pending = false;

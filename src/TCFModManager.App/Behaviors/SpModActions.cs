@@ -18,6 +18,8 @@ public static class SpModActions
 
     private static int? _resting;
 
+    private static readonly HashSet<ButtonBase> Shown = [];
+
     public static readonly DependencyProperty ModIdProperty = DependencyProperty.RegisterAttached(
         "ModId", typeof(int?), typeof(SpModActions), new PropertyMetadata(null, OnModIdChanged));
 
@@ -27,6 +29,12 @@ public static class SpModActions
         {
             Rest.Stop();
             if (_resting is { } id) SpModActionsFlyout.Preload(id);
+        };
+
+        AppServices.EndorsedMods.Changed += id =>
+        {
+            foreach (var button in Shown.ToList())
+                if (id is null || GetModId(button) == id) ShowEndorsed(button);
         };
     }
 
@@ -41,12 +49,45 @@ public static class SpModActions
         button.Click -= Click;
         button.MouseEnter -= Enter;
         button.MouseLeave -= Leave;
+        button.Loaded -= Loaded;
+        button.Unloaded -= Unloaded;
 
-        if (e.NewValue is null) return;
+        if (e.NewValue is null)
+        {
+            Shown.Remove(button);
+            return;
+        }
 
         button.Click += Click;
         button.MouseEnter += Enter;
         button.MouseLeave += Leave;
+        button.Loaded += Loaded;
+        button.Unloaded += Unloaded;
+
+        if (button.IsLoaded) Shown.Add(button);
+        ShowEndorsed(button);
+    }
+
+    private static void Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is not ButtonBase button) return;
+
+        Shown.Add(button);
+        ShowEndorsed(button);
+    }
+
+    private static void Unloaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is ButtonBase button) Shown.Remove(button);
+    }
+
+    private static void ShowEndorsed(ButtonBase button)
+    {
+        var icon = button.Content as Wpf.Ui.Controls.SymbolIcon
+            ?? (button as Wpf.Ui.Controls.Button)?.Icon as Wpf.Ui.Controls.SymbolIcon;
+        if (icon is null) return;
+
+        icon.Filled = GetModId(button) is { } id && AppServices.EndorsedMods.Contains(id);
     }
 
     private static void Click(object sender, RoutedEventArgs e)

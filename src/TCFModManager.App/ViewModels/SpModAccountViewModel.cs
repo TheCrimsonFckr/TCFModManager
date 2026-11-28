@@ -243,6 +243,7 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
         }
 
         AppLog.Info("SpModAccount", $"signed out, {deleted} cookie(s) deleted");
+        AppServices.EndorsedMods.Clear();
         State = SpModSignIn.SignedOut;
         await CheckAsync();
     }
