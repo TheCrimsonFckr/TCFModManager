@@ -122,14 +122,17 @@ public partial class InstalledViewModel
             _ => data.Groups.OrderBy(g => g.SortOrder),
         };
 
-        // Built in full off to the side, then handed over a couple of sections per frame - every
-        // section is a new object, so every one needs a new container anyway. See GradualFill.
-        var sections = ordered.Select(ModGroupSectionViewModel.FromGroup).ToList();
+        var shown = Sections.Where(s => s.GroupId is not null).ToDictionary(s => s.GroupId!.Value);
 
-        var ungrouped = ModGroupSectionViewModel.Ungrouped();
+        var sections = ordered
+            .Select(g => shown.TryGetValue(g.Id, out var section) ? section.TakeGroup(g) : ModGroupSectionViewModel.FromGroup(g))
+            .ToList();
+
+        var ungrouped = Sections.FirstOrDefault(s => s.GroupId is null)?.TakeUngrouped() ?? ModGroupSectionViewModel.Ungrouped();
         sections.Add(ungrouped);
 
         var byId = sections.Where(s => s.GroupId is not null).ToDictionary(s => s.GroupId!.Value);
+        var items = sections.ToDictionary(s => s, _ => new List<InstalledModCardViewModel>());
 
         foreach (var mod in _filtered)
         {
@@ -138,7 +141,13 @@ public partial class InstalledViewModel
                 ? found
                 : ungrouped;
 
-            section.Items.Add(mod);
+            items[section].Add(mod);
+        }
+
+        foreach (var (section, wanted) in items)
+        {
+            ItemsSync.Apply(section.Items, wanted);
+            section.RefreshState();
         }
 
         _sectionsFill.Apply(Sections, sections);

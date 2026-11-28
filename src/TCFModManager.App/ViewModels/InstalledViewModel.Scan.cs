@@ -252,6 +252,11 @@ public partial class InstalledViewModel
 
             _fingerprint = fingerprint;
 
+            foreach (var card in _all) card.PropertyChanged -= OnCardPropertyChanged;
+
+            cards = InstalledModCardViewModel.KeepUnchanged(_all, cards, out var kept);
+            if (kept > 0) AppLog.Debug("Installed", $"kept {kept} of {cards.Count} card(s) from the last scan");
+
             // What was open in each view, keyed the same way group assignments are, so the sets
             // survive every card object being replaced. Captured before _all is reassigned, and
             // kept apart because the two views expand independently.

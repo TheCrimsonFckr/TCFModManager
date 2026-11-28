@@ -96,4 +96,25 @@ public partial class ModGroupSectionViewModel : LocalizedViewModel
         GroupId = null,
         Name = Strings.Filter_Ungrouped,
     };
+
+    public ModGroupSectionViewModel TakeGroup(ModGroup group)
+    {
+        if (!IsEditing) Name = group.Name;
+        IsCollapsed = group.IsCollapsed;
+        Icon = Services.GroupIcons.Find(group.Icon)?.Key;
+        Color = Services.GroupColors.Find(group.Color)?.Key;
+        return this;
+    }
+
+    public ModGroupSectionViewModel TakeUngrouped()
+    {
+        Name = Strings.Filter_Ungrouped;
+        return this;
+    }
+
+    public void RefreshState()
+    {
+        OnPropertyChanged(nameof(DisabledCount));
+        OnPropertyChanged(nameof(StateLabel));
+    }
 }
