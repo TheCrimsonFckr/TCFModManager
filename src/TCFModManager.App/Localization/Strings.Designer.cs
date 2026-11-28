@@ -3934,4 +3934,10 @@ internal static class Strings
     internal static string Help_Options_SpModAccount_Step2 => LocalizationService.Get("Help_Options_SpModAccount_Step2");
     internal static string Help_Options_SpModAccount_Note => LocalizationService.Get("Help_Options_SpModAccount_Note");
     internal static string Help_Options_SpModAccount_Keywords => LocalizationService.Get("Help_Options_SpModAccount_Keywords");
+    internal static string CardField_SpModActions => LocalizationService.Get("CardField_SpModActions");
+    internal static string CardField_Favourites => LocalizationService.Get("CardField_Favourites");
+    internal static string Card_FavouritesFormat => LocalizationService.Get("Card_FavouritesFormat");
+    internal static string SpModActions_ToolTip => LocalizationService.Get("SpModActions_ToolTip");
+    internal static string SpModActions_CouldNotLoad => LocalizationService.Get("SpModActions_CouldNotLoad");
+    internal static string MainWindow_DiscordToolTip => LocalizationService.Get("MainWindow_DiscordToolTip");
 }

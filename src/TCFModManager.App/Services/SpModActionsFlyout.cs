@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using TCFModManager.App.Localization;
@@ -14,8 +15,8 @@ using TextBlock = System.Windows.Controls.TextBlock;
 namespace TCFModManager.App.Services;
 
 //
-// OPEN-76 R9-R11: sp-mod's own Subscribe, Endorse and Add to list buttons and the reactions bar for
-// one mod, under the card button that asked for them. One small window and one web view for the
+// OPEN-76 R9-R11: sp-mod's own Subscribe, Endorse and Add to list buttons and the mod's own sp-mod card
+// (picture, title, counts, reactions) for one mod, under the card button that asked for them. One small window and one web view for the
 // whole app, made on first use, hidden rather than closed, and pointed at the next mod's page. The
 // page is loaded and everything but the strip hidden, the way the Comments tab keeps the comments.
 // A window rather than a Popup: a Popup that closes on an outside click also closes on a click into
@@ -23,9 +24,9 @@ namespace TCFModManager.App.Services;
 //
 internal static class SpModActionsFlyout
 {
-    private const double StripWidth = 460;
+    private const double StripWidth = 700;
     private const double MinStripHeight = 56;
-    private const double MaxStripHeight = 560;
+    private const double MaxStripHeight = 640;
     private const double Chrome = 10;
 
     private static Window? _window;
@@ -162,6 +163,7 @@ internal static class SpModActionsFlyout
     private static void Leave(Uri uri)
     {
         _window?.Hide();
+        _window?.Owner?.Activate();
 
         if (WebViews.IsSignInPage(uri)) SpModWindow.Open(Application.Current?.MainWindow, uri);
         else MarkupActions.OpenInBrowser(uri.AbsoluteUri);
@@ -205,12 +207,13 @@ internal static class SpModActionsFlyout
             Owner = Application.Current?.MainWindow,
             Title = Strings.CardField_SpModActions,
         };
-        window.Deactivated += (_, _) => window.Hide();
+        window.Deactivated += (_, _) => window.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(window.Hide));
         window.PreviewKeyDown += (_, e) =>
         {
             if (e.Key != Key.Escape) return;
             e.Handled = true;
             window.Hide();
+            window.Owner?.Activate();
         };
         window.Closed += (_, _) =>
         {
@@ -283,58 +286,90 @@ internal static class SpModActionsFlyout
     }
 
     //
-    // Keeps sp-mod's action row (without Ignore mod and Create Addon, R9) and the reactions bar, and
-    // hides the rest. Hidden, not removed, so the site's own scripts keep working on it. Reports the
-    // height left, and again whenever it changes (a reaction picker or a dialog opening). The row is
-    // trimmed again after sp-mod re-renders it. A page with neither part answers "none".
+    // Keeps sp-mod's action row (without Ignore mod and Create Addon, R9) and the mod's own card on the
+    // page (the one holding the reactions bar), and hides the rest. Hidden, not removed, so the site's
+    // own scripts keep working on it. sp-mod re-renders parts of the page after an endorsement or a
+    // reaction, which undoes the hiding, so it is done again after every change to the page. Reports
+    // the height of what is left, and again whenever it changes (a reaction picker or a dialog). A
+    // page with neither part answers "none".
     //
     private const string StripScript = """
         (() => {
           const id = '__ID__';
-          const endorse = document.querySelector(`[wire\\:key="mod-endorse-${id}"]`);
-          const subscribe = document.querySelector(`[wire\\:key="mod-subscribe-${id}"]`);
-          const row = (endorse || subscribe) ? (endorse || subscribe).parentElement : null;
-          const reactions = document.querySelector(`[data-test="reaction-bar-mod-${id}"]`);
-          const keep = [row, reactions].filter(Boolean);
-          if (!keep.length) return 'none';
-
-          const trimRow = () => {
-            if (!row) return;
-            for (const child of row.children) {
-              const text = (child.innerText || '').trim().toLowerCase();
-              if (text.includes('ignore') || text.includes('create addon') || child.querySelector('a[href*="addon/create"]')) child.style.display = 'none';
-            }
+          const find = () => {
+            const anchor = document.querySelector(`[wire\\:key="mod-endorse-${id}"]`) || document.querySelector(`[wire\\:key="mod-subscribe-${id}"]`);
+            const reactions = document.querySelector(`[data-test="reaction-bar-mod-${id}"]`);
+            const card = reactions ? (reactions.closest('div.rounded-xl') || reactions) : null;
+            return { row: anchor ? anchor.parentElement : null, card };
           };
 
-          const path = new Set();
-          for (const part of keep) for (let node = part.parentElement; node && node !== document.documentElement; node = node.parentElement) path.add(node);
+          if (!find().row && !find().card) return 'none';
 
-          const hide = (element) => {
-            for (const child of element.children) {
-              if (keep.includes(child)) continue;
-              if (path.has(child)) {
-                Object.assign(child.style, { display: 'block', margin: '0', padding: '0', border: '0', maxWidth: 'none', width: 'auto', minHeight: '0', position: 'static' });
-                hide(child);
-              } else if (!['SCRIPT', 'STYLE', 'LINK', 'TEMPLATE', 'DIALOG', 'UI-MODAL'].includes(child.tagName)) {
-                child.style.display = 'none';
+          const unwanted = (child) => {
+            const text = (child.textContent || '').trim().toLowerCase();
+            return text.includes('ignore') || text.includes('create addon') ||
+              child.querySelector('a[href*="addon/create"], [wire\\:name*="ignore"]') !== null ||
+              (child.getAttribute('wire:name') || '').includes('ignore');
+          };
+
+          const set = (element, styles) => {
+            for (const [name, value] of Object.entries(styles)) if (element.style[name] !== value) element.style[name] = value;
+          };
+
+          const trim = () => {
+            const { row, card } = find();
+            const keep = [row, card].filter(Boolean);
+            if (!keep.length) return keep;
+
+            if (row) for (const child of row.children) if (unwanted(child)) set(child, { display: 'none' });
+
+            const path = new Set();
+            for (const part of keep) for (let node = part.parentElement; node && node !== document.documentElement; node = node.parentElement) path.add(node);
+
+            const hide = (element) => {
+              for (const child of element.children) {
+                if (keep.includes(child)) continue;
+                if (path.has(child)) {
+                  set(child, { display: 'block', margin: '0', padding: '0', border: '0', maxWidth: 'none', width: 'auto', minHeight: '0', position: 'static', boxShadow: 'none', background: 'transparent' });
+                  hide(child);
+                } else if (!['SCRIPT', 'STYLE', 'LINK', 'TEMPLATE', 'DIALOG', 'UI-MODAL'].includes(child.tagName)) {
+                  set(child, { display: 'none' });
+                }
               }
-            }
-          };
+            };
 
-          hide(document.body);
-          trimRow();
-          Object.assign(document.body.style, { margin: '0', padding: '8px', minHeight: '0', overflow: 'hidden' });
-          for (const part of keep) Object.assign(part.style, { margin: '0 0 8px 0', justifyContent: 'flex-start' });
+            hide(document.body);
+            set(document.body, { margin: '0', padding: '8px', minHeight: '0', overflow: 'hidden' });
+            if (row) set(row, { justifyContent: 'flex-start', margin: '0 0 8px 0' });
+            if (card) set(card, { margin: '0' });
+            return keep;
+          };
 
           const report = () => {
+            const keep = [find().row, find().card].filter(Boolean);
+            let bottom = 0;
+            for (const part of keep) bottom = Math.max(bottom, part.getBoundingClientRect().bottom + window.scrollY);
             const open = document.querySelector('dialog[open]');
-            const height = Math.max(document.body.scrollHeight, open ? open.getBoundingClientRect().height + 32 : 0);
-            window.chrome.webview.postMessage(JSON.stringify({ height: Math.ceil(height) }));
+            if (open) bottom = Math.max(bottom, open.getBoundingClientRect().height + 32);
+            window.chrome.webview.postMessage(JSON.stringify({ height: Math.ceil(bottom + 8) }));
           };
 
-          if (row) new MutationObserver(trimRow).observe(row, { childList: true, subtree: true });
+          let pending = false;
+          const observer = new MutationObserver(() => {
+            if (pending) return;
+            pending = true;
+            setTimeout(() => {
+              pending = false;
+              trim();
+              observer.takeRecords();
+              report();
+            }, 30);
+          });
+
+          trim();
+          observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class', 'open'] });
+          observer.takeRecords();
           new ResizeObserver(report).observe(document.body);
-          new MutationObserver(report).observe(document.body, { attributes: true, subtree: true, attributeFilter: ['open'] });
           window.scrollTo(0, 0);
           report();
           return 'shown';
