@@ -14,10 +14,12 @@ namespace TCFModManager.Core.Services;
 //
 public sealed class AppUpdateService(SpModApiClient spModApi)
 {
-    // Plenty for a listing that has published five versions in its lifetime, and small enough that
-    // this stays one page. Newest-first ordering is requested as well, so even a listing that
-    // outgrows this still has its newest release on the page that gets fetched.
-    private const int VersionsToInspect = 25;
+    // sp-mod's largest page. Newest-first ordering is requested as well, so the newest release is
+    // always on the first page, which is all the check itself reads.
+    private const int VersionsPerPage = 50;
+
+    // A ceiling on AllReleasesAsync, far above what the listing holds.
+    private const int MaxReleasePages = 10;
 
     //
     // Returns the newest published version of this app alongside the running one, or null if the
@@ -35,7 +37,7 @@ public sealed class AppUpdateService(SpModApiClient spModApi)
         var versions = await spModApi
             .GetModVersionsAsync(
                 SelfMod.ModId,
-                new ModVersionsQuery { Sort = "-published_at", PerPage = VersionsToInspect },
+                new ModVersionsQuery { Sort = "-published_at", PerPage = VersionsPerPage },
                 ct)
             .ConfigureAwait(false);
 
@@ -67,8 +69,44 @@ public sealed class AppUpdateService(SpModApiClient spModApi)
             Changelog = newest.Description,
             DownloadSizeBytes = newest.ContentLength,
             PublishedAt = newest.PublishedAt,
+            Releases = ToReleases(versions.Data),
+            HasOlderReleases = versions.Meta?.LastPage > 1,
         };
     }
+
+    // OPEN-79: every published version of this app, for the update page's version history.
+    public async Task<IReadOnlyList<AppRelease>> AllReleasesAsync(CancellationToken ct = default)
+    {
+        var all = new List<ModVersion>();
+
+        for (var page = 1; page <= MaxReleasePages; page++)
+        {
+            var result = await spModApi
+                .GetModVersionsAsync(
+                    SelfMod.ModId,
+                    new ModVersionsQuery { Sort = "-published_at", PerPage = VersionsPerPage, Page = page },
+                    ct)
+                .ConfigureAwait(false);
+
+            all.AddRange(result.Data);
+            if (result.Meta is not { } meta || page >= meta.LastPage) break;
+        }
+
+        var releases = ToReleases(all);
+        AppLog.Info("AppUpdate", $"read {releases.Count} published version(s) of listing {SelfMod.ModId}");
+        return releases;
+    }
+
+    // Newest version number first; a version that doesn't parse goes after those that do.
+    public static IReadOnlyList<AppRelease> ToReleases(IEnumerable<ModVersion> versions) =>
+    [
+        .. versions
+            .Where(v => !string.IsNullOrWhiteSpace(v.Version))
+            .DistinctBy(v => v.Version, StringComparer.OrdinalIgnoreCase)
+            .OrderByDescending(v => SemanticVersion.TryParse(v.Version, out var parsed) ? parsed : (SemanticVersion?)null)
+            .ThenByDescending(v => v.PublishedAt)
+            .Select(v => new AppRelease(v.Version!, v.PublishedAt, string.IsNullOrWhiteSpace(v.Description) ? null : v.Description)),
+    ];
 
     // The mod page the user is sent to before an update installs. Asked for live so a slug change
     // on sp-mod.com doesn't leave the app pointing at a dead link, but a failure here must not fail

@@ -3944,4 +3944,7 @@ internal static class Strings
     internal static string CardLayout_ButtonPlacementHeader => LocalizationService.Get("CardLayout_ButtonPlacementHeader");
     internal static string CardLayout_ButtonsBottom => LocalizationService.Get("CardLayout_ButtonsBottom");
     internal static string CardLayout_ButtonsSide => LocalizationService.Get("CardLayout_ButtonsSide");
+    internal static string AppUpdate_VersionHistoryHeader => LocalizationService.Get("AppUpdate_VersionHistoryHeader");
+    internal static string AppUpdate_RunningBadge => LocalizationService.Get("AppUpdate_RunningBadge");
+    internal static string AppUpdate_NoReleaseNotes => LocalizationService.Get("AppUpdate_NoReleaseNotes");
 }

@@ -6,6 +6,7 @@
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
+    xmlns:viewmodels="clr-namespace:TCFModManager.App.ViewModels"
     Title="{loc:Str Nav_AppUpdate}"
     ScrollViewer.CanContentScroll="False">
     <!--
@@ -314,6 +315,65 @@
                             behaviors:HtmlText.Html="{Binding Changelog}" />
                     </StackPanel>
                 </ui:Card>
+            </StackPanel>
+
+            <StackPanel Margin="0,24,0,0" Visibility="{Binding HasReleases, Converter={StaticResource BoolToVis}}">
+                <TextBlock
+                    Margin="0,0,0,8"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Text="{loc:Str AppUpdate_VersionHistoryHeader}" />
+                <ItemsControl Focusable="False" ItemsSource="{Binding Releases}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type viewmodels:AppReleaseRowViewModel}">
+                            <ui:CardExpander
+                                Margin="0,0,0,4"
+                                Style="{StaticResource HoverCardExpander}"
+                                IsExpanded="{Binding IsExpanded}">
+                                <ui:CardExpander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Version}" />
+                                        <Border
+                                            Margin="10,0,0,0"
+                                            Padding="6,1"
+                                            VerticalAlignment="Center"
+                                            CornerRadius="{DynamicResource ControlCornerRadius}"
+                                            Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                            Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}">
+                                            <TextBlock
+                                                FontSize="11"
+                                                Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+                                                Text="{loc:Str AppUpdate_RunningBadge}" />
+                                        </Border>
+                                        <TextBlock
+                                            Margin="12,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                            Text="{Binding PublishedText}" />
+                                    </StackPanel>
+                                </ui:CardExpander.Header>
+                                <StackPanel>
+                                    <RichTextBox
+                                        Padding="0"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        IsReadOnly="True"
+                                        IsDocumentEnabled="True"
+                                        Focusable="False"
+                                        VerticalScrollBarVisibility="Disabled"
+                                        HorizontalScrollBarVisibility="Disabled"
+                                        Visibility="{Binding HasNotes, Converter={StaticResource BoolToVis}}"
+                                        behaviors:HtmlText.Html="{Binding ShownNotes}" />
+                                    <TextBlock
+                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Str AppUpdate_NoReleaseNotes}"
+                                        Visibility="{Binding HasNoNotes, Converter={StaticResource BoolToVis}}" />
+                                </StackPanel>
+                            </ui:CardExpander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Net.Http;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -103,6 +104,58 @@ public partial class AppUpdateViewModel : LocalizedViewModel
 
     public string? Changelog => Update?.Changelog;
 
+    // ---- Version history (OPEN-79) -------------------------------------------------------------
+
+    public ObservableCollection<AppReleaseRowViewModel> Releases { get; } = [];
+
+    public bool HasReleases => Releases.Count > 0;
+
+    private bool _allReleasesLoaded;
+
+    private bool _loadingReleases;
+
+    partial void OnUpdateChanged(AppUpdateInfo? value)
+    {
+        _allReleasesLoaded = false;
+        ShowReleases(value?.Releases ?? []);
+    }
+
+    public async Task LoadAllReleasesAsync()
+    {
+        if (_allReleasesLoaded || _loadingReleases || Update is not { HasOlderReleases: true }) return;
+
+        _loadingReleases = true;
+        try
+        {
+            ShowReleases(await _updates.AllReleasesAsync().ConfigureAwait(true));
+            _allReleasesLoaded = true;
+        }
+        catch (Exception ex)
+        {
+            AppLog.Warn("AppUpdate", $"older versions not read: {ex.GetType().Name}: {ex.Message}");
+        }
+        finally
+        {
+            _loadingReleases = false;
+        }
+    }
+
+    private void ShowReleases(IReadOnlyList<AppRelease> releases)
+    {
+        var open = Releases.Where(r => r.IsExpanded).Select(r => r.Version).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        Releases.Clear();
+        foreach (var release in releases)
+            Releases.Add(new AppReleaseRowViewModel(release, IsRunning(release.Version)) { IsExpanded = open.Contains(release.Version) });
+
+        OnPropertyChanged(nameof(HasReleases));
+    }
+
+    private static bool IsRunning(string version) =>
+        SemanticVersion.TryParse(version, out var listed) && SemanticVersion.TryParse(AppVersion.Current, out var running)
+            ? listed == running
+            : string.Equals(version, AppVersion.Current, StringComparison.OrdinalIgnoreCase);
+
     // ---- What kind of update this is ----------------------------------------------------------
     //
     // Which of the three numbers moved is the most useful thing to tell someone deciding whether to
@@ -200,6 +253,8 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         {
             Update = await _updates.CheckAsync().ConfigureAwait(true);
             HasChecked = true;
+
+            if (!announce) await LoadAllReleasesAsync().ConfigureAwait(true);
 
             // A version the user has already closed the banner on stays closed until something
             // newer than it is published.

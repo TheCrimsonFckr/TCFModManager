@@ -11802,4 +11802,13 @@ Klicken, um sie anzuzeigen.</value>
   <data name="CardLayout_ButtonsSide" xml:space="preserve">
     <value>An der Seite</value>
   </data>
+  <data name="AppUpdate_VersionHistoryHeader" xml:space="preserve">
+    <value>Versionsverlauf</value>
+  </data>
+  <data name="AppUpdate_RunningBadge" xml:space="preserve">
+    <value>Installiert</value>
+  </data>
+  <data name="AppUpdate_NoReleaseNotes" xml:space="preserve">
+    <value>Für diese Version wurden keine Hinweise veröffentlicht.</value>
+  </data>
 </root>

@@ -12269,4 +12269,13 @@
   <data name="CardLayout_ButtonsSide" xml:space="preserve">
     <value>Сбоку</value>
   </data>
+  <data name="AppUpdate_VersionHistoryHeader" xml:space="preserve">
+    <value>История версий</value>
+  </data>
+  <data name="AppUpdate_RunningBadge" xml:space="preserve">
+    <value>Установлена</value>
+  </data>
+  <data name="AppUpdate_NoReleaseNotes" xml:space="preserve">
+    <value>Для этой версии заметки не публиковались.</value>
+  </data>
 </root>

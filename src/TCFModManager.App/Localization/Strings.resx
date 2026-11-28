@@ -14557,4 +14557,16 @@ Click to show them.</value>
     <value>Down the side</value>
     <comment>Choice: the buttons in a column down the card's left side.</comment>
   </data>
+  <data name="AppUpdate_VersionHistoryHeader" xml:space="preserve">
+    <value>Version history</value>
+    <comment>Heading over the list of every published version of the app.</comment>
+  </data>
+  <data name="AppUpdate_RunningBadge" xml:space="preserve">
+    <value>Installed</value>
+    <comment>Badge on the version of the app that is running.</comment>
+  </data>
+  <data name="AppUpdate_NoReleaseNotes" xml:space="preserve">
+    <value>No notes were published for this version.</value>
+    <comment>Shown when a version of the app has no release notes.</comment>
+  </data>
 </root>
