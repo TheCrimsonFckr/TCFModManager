@@ -3947,4 +3947,10 @@ internal static class Strings
     internal static string AppUpdate_VersionHistoryHeader => LocalizationService.Get("AppUpdate_VersionHistoryHeader");
     internal static string AppUpdate_RunningBadge => LocalizationService.Get("AppUpdate_RunningBadge");
     internal static string AppUpdate_NoReleaseNotes => LocalizationService.Get("AppUpdate_NoReleaseNotes");
+    internal static string Tour_New133_SignIn_Title => LocalizationService.Get("Tour_New133_SignIn_Title");
+    internal static string Tour_New133_SignIn_Body => LocalizationService.Get("Tour_New133_SignIn_Body");
+    internal static string Tour_New133_EndorseApp_Title => LocalizationService.Get("Tour_New133_EndorseApp_Title");
+    internal static string Tour_New133_EndorseApp_Body => LocalizationService.Get("Tour_New133_EndorseApp_Body");
+    internal static string Tour_New133_CardActions_Title => LocalizationService.Get("Tour_New133_CardActions_Title");
+    internal static string Tour_New133_CardActions_Body => LocalizationService.Get("Tour_New133_CardActions_Body");
 }

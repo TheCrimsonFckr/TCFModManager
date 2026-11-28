@@ -322,6 +322,7 @@
                     Margin="0,0,0,8"
                     FontSize="16"
                     FontWeight="SemiBold"
+                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                     Text="{loc:Str AppUpdate_VersionHistoryHeader}" />
                 <ItemsControl Focusable="False" ItemsSource="{Binding Releases}">
                     <ItemsControl.ItemTemplate>
@@ -332,7 +333,7 @@
                                 IsExpanded="{Binding IsExpanded}">
                                 <ui:CardExpander.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Version}" />
+                                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding Version}" />
                                         <Border
                                             Margin="10,0,0,0"
                                             Padding="6,1"

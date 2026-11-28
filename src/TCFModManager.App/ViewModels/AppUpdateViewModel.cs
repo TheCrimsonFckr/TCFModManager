@@ -110,42 +110,16 @@ public partial class AppUpdateViewModel : LocalizedViewModel
 
     public bool HasReleases => Releases.Count > 0;
 
-    private bool _allReleasesLoaded;
+    private const int ReleasesShown = 5;
 
-    private bool _loadingReleases;
-
-    partial void OnUpdateChanged(AppUpdateInfo? value)
-    {
-        _allReleasesLoaded = false;
-        ShowReleases(value?.Releases ?? []);
-    }
-
-    public async Task LoadAllReleasesAsync()
-    {
-        if (_allReleasesLoaded || _loadingReleases || Update is not { HasOlderReleases: true }) return;
-
-        _loadingReleases = true;
-        try
-        {
-            ShowReleases(await _updates.AllReleasesAsync().ConfigureAwait(true));
-            _allReleasesLoaded = true;
-        }
-        catch (Exception ex)
-        {
-            AppLog.Warn("AppUpdate", $"older versions not read: {ex.GetType().Name}: {ex.Message}");
-        }
-        finally
-        {
-            _loadingReleases = false;
-        }
-    }
+    partial void OnUpdateChanged(AppUpdateInfo? value) => ShowReleases(value?.Releases ?? []);
 
     private void ShowReleases(IReadOnlyList<AppRelease> releases)
     {
         var open = Releases.Where(r => r.IsExpanded).Select(r => r.Version).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         Releases.Clear();
-        foreach (var release in releases)
+        foreach (var release in releases.Take(ReleasesShown))
             Releases.Add(new AppReleaseRowViewModel(release, IsRunning(release.Version)) { IsExpanded = open.Contains(release.Version) });
 
         OnPropertyChanged(nameof(HasReleases));
@@ -253,8 +227,6 @@ public partial class AppUpdateViewModel : LocalizedViewModel
         {
             Update = await _updates.CheckAsync().ConfigureAwait(true);
             HasChecked = true;
-
-            if (!announce) await LoadAllReleasesAsync().ConfigureAwait(true);
 
             // A version the user has already closed the banner on stays closed until something
             // newer than it is published.

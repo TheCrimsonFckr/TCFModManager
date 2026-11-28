@@ -32,11 +32,8 @@ public sealed record AppUpdateInfo
 
     public DateTimeOffset? PublishedAt { get; init; }
 
-    // OPEN-79: every version on the first page of the listing's versions, newest first.
+    // OPEN-79: the listing's newest versions, newest first.
     public IReadOnlyList<AppRelease> Releases { get; init; } = [];
-
-    // True when the listing has more versions than that first page holds - see AllReleasesAsync.
-    public bool HasOlderReleases { get; init; }
 
     // True only when the published version is genuinely newer than the running one.
     public bool IsUpdate => ChangeKind is VersionChangeKind.Patch
