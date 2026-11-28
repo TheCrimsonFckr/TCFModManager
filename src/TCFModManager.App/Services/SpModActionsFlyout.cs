@@ -24,7 +24,7 @@ namespace TCFModManager.App.Services;
 //
 internal static class SpModActionsFlyout
 {
-    private const double StripWidth = 700;
+    private const double StripWidth = 860;
     private const double MinStripHeight = 56;
     private const double MaxStripHeight = 640;
     private const double MaxStripWidth = 1100;

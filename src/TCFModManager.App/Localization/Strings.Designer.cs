@@ -3940,4 +3940,5 @@ internal static class Strings
     internal static string SpModActions_ToolTip => LocalizationService.Get("SpModActions_ToolTip");
     internal static string SpModActions_CouldNotLoad => LocalizationService.Get("SpModActions_CouldNotLoad");
     internal static string MainWindow_DiscordToolTip => LocalizationService.Get("MainWindow_DiscordToolTip");
+    internal static string MainWindow_EndorseAppToolTip => LocalizationService.Get("MainWindow_EndorseAppToolTip");
 }
