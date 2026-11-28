@@ -11700,4 +11700,76 @@ Fai clic per mostrarle.</value>
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>Visualizzati {0} e le mod che la richiedono</value>
   </data>
+  <data name="Options_SpModAccountHeader" xml:space="preserve">
+    <value>Account sp-mod</value>
+  </data>
+  <data name="Options_SpModAccountHint" xml:space="preserve">
+    <value>Accedi per commentare e far contare i tuoi download su sp-mod.</value>
+  </data>
+  <data name="Options_SpModAccountDescription" xml:space="preserve">
+    <value>Accedi sulla pagina di sp-mod stessa. La password va a sp-mod, mai a questa app. Spunta "Remember me" per restare connesso.</value>
+  </data>
+  <data name="SpModAccount_SignIn" xml:space="preserve">
+    <value>Accedi</value>
+  </data>
+  <data name="SpModAccount_SignOut" xml:space="preserve">
+    <value>Esci</value>
+  </data>
+  <data name="SpModAccount_OpenAccount" xml:space="preserve">
+    <value>Apri il mio account sp-mod</value>
+  </data>
+  <data name="SpModAccount_GetWebView2" xml:space="preserve">
+    <value>Scarica WebView2</value>
+  </data>
+  <data name="SpModAccount_SignedIn" xml:space="preserve">
+    <value>Accesso a sp-mod eseguito</value>
+  </data>
+  <data name="SpModAccount_SignInToolTip" xml:space="preserve">
+    <value>Accedi a sp-mod</value>
+  </data>
+  <data name="SpModAccount_StatusSignedOut" xml:space="preserve">
+    <value>Accesso non eseguito.</value>
+  </data>
+  <data name="SpModAccount_StatusRemembered" xml:space="preserve">
+    <value>Accesso eseguito. Resti connesso finché non esci.</value>
+  </data>
+  <data name="SpModAccount_StatusSession" xml:space="preserve">
+    <value>Accesso eseguito. sp-mod ti disconnette dopo 2 ore di inattività.</value>
+  </data>
+  <data name="SpModAccount_StatusChecking" xml:space="preserve">
+    <value>Controllo…</value>
+  </data>
+  <data name="SpModAccount_StatusCouldNotCheck" xml:space="preserve">
+    <value>Impossibile raggiungere sp-mod per controllare se hai eseguito l'accesso.</value>
+  </data>
+  <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
+    <value>Per accedere serve Microsoft Edge WebView2 Runtime, che manca su questo PC.</value>
+  </data>
+  <data name="SpModWindow_Title" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="SpModWindow_SignInTitle" xml:space="preserve">
+    <value>Accedi a sp-mod</value>
+  </data>
+  <data name="SpModWindow_SecureToolTip" xml:space="preserve">
+    <value>Connessione sicura (https)</value>
+  </data>
+  <data name="SpModWindow_RememberHint" xml:space="preserve">
+    <value>Spunta "Remember me" per restare connesso. La password va a sp-mod, non a questa app.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Title" xml:space="preserve">
+    <value>Accedi a sp-mod</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step1" xml:space="preserve">
+    <value>In {0}, sotto {1}, premi {2} in {3}. Oppure premi il pulsante a forma di persona in alto nella finestra, a sinistra del ?.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step2" xml:space="preserve">
+    <value>Accedi sulla pagina di sp-mod, con l'e-mail o con Discord. Spunta "Remember me" per restare connesso. La finestra si chiude appena hai eseguito l'accesso.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Note" xml:space="preserve">
+    <value>La password va a sp-mod, mai a questa app. {0} rimuove l'accesso da questo PC.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Keywords" xml:space="preserve">
+    <value>accedi, accesso, login, account, account sp-mod, resta connesso, remember me, discord, esci, disconnetti</value>
+  </data>
 </root>

@@ -127,6 +127,9 @@ internal static class AppServices
     // Back and Forward at the top of the sidebar (OPEN-56 N18) - see AppNavigation.
     public static NavigationHistoryViewModel History { get; } = new();
 
+    // Signing in to sp-mod (OPEN-76) - see SpModAccountViewModel.
+    public static SpModAccountViewModel SpModAccount { get; } = new();
+
     //
     // The Server Map connection: where the server is, whether it answered, and what it said.
     // Shared so the sidebar item, the Options section and the page read one connection rather than

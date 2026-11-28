@@ -1,0 +1,75 @@
+<ui:FluentWindow
+    x:Class="TCFModManager.App.Views.SpModWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    Width="960"
+    Height="780"
+    MinWidth="560"
+    MinHeight="480"
+    ShowInTaskbar="False"
+    ExtendsContentIntoTitleBar="True"
+    TextOptions.TextFormattingMode="Display"
+    TextOptions.TextRenderingMode="ClearType">
+    <!--
+        OPEN-76: sp-mod's own pages - its sign-in page, or the signed-in user's account page - in a web
+        view on the shared profile. The address row shows where the page is (R-S1).
+    -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            x:Name="WindowTitleBar"
+            Grid.Row="0"
+            ShowMinimize="False" />
+
+        <Grid Grid.Row="1" Margin="12,0,12,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Padding="10,6"
+                CornerRadius="4"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                <DockPanel>
+                    <ui:SymbolIcon
+                        DockPanel.Dock="Left"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"
+                        Symbol="LockClosed16"
+                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        ToolTip="{loc:Str SpModWindow_SecureToolTip}" />
+                    <TextBlock
+                        x:Name="Address"
+                        VerticalAlignment="Center"
+                        TextTrimming="CharacterEllipsis"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DockPanel>
+            </Border>
+
+            <TextBlock
+                x:Name="SignInHint"
+                Grid.Column="2"
+                Margin="12,0,0,0"
+                MaxWidth="360"
+                VerticalAlignment="Center"
+                TextWrapping="Wrap"
+                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                Text="{loc:Str SpModWindow_RememberHint}" />
+        </Grid>
+
+        <Border x:Name="Host" Grid.Row="2" />
+    </Grid>
+</ui:FluentWindow>

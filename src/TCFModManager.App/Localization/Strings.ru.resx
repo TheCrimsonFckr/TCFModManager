@@ -12167,4 +12167,76 @@
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>Показаны {0} и моды, которым он нужен</value>
   </data>
+  <data name="Options_SpModAccountHeader" xml:space="preserve">
+    <value>Аккаунт sp-mod</value>
+  </data>
+  <data name="Options_SpModAccountHint" xml:space="preserve">
+    <value>Войдите, чтобы писать комментарии, а ваши загрузки учитывались на sp-mod.</value>
+  </data>
+  <data name="Options_SpModAccountDescription" xml:space="preserve">
+    <value>Вход выполняется на странице самого sp-mod. Пароль уходит на sp-mod, а не в это приложение. Отметьте «Remember me», чтобы оставаться в системе.</value>
+  </data>
+  <data name="SpModAccount_SignIn" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="SpModAccount_SignOut" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="SpModAccount_OpenAccount" xml:space="preserve">
+    <value>Открыть мой аккаунт sp-mod</value>
+  </data>
+  <data name="SpModAccount_GetWebView2" xml:space="preserve">
+    <value>Скачать WebView2</value>
+  </data>
+  <data name="SpModAccount_SignedIn" xml:space="preserve">
+    <value>Вход в sp-mod выполнен</value>
+  </data>
+  <data name="SpModAccount_SignInToolTip" xml:space="preserve">
+    <value>Войти в sp-mod</value>
+  </data>
+  <data name="SpModAccount_StatusSignedOut" xml:space="preserve">
+    <value>Вход не выполнен.</value>
+  </data>
+  <data name="SpModAccount_StatusRemembered" xml:space="preserve">
+    <value>Вход выполнен. Вы остаётесь в системе, пока не выйдете.</value>
+  </data>
+  <data name="SpModAccount_StatusSession" xml:space="preserve">
+    <value>Вход выполнен. sp-mod выйдет из аккаунта после 2 часов бездействия.</value>
+  </data>
+  <data name="SpModAccount_StatusChecking" xml:space="preserve">
+    <value>Проверка…</value>
+  </data>
+  <data name="SpModAccount_StatusCouldNotCheck" xml:space="preserve">
+    <value>Не удалось связаться с sp-mod, чтобы проверить вход.</value>
+  </data>
+  <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
+    <value>Для входа нужна среда Microsoft Edge WebView2 Runtime, которой нет на этом ПК.</value>
+  </data>
+  <data name="SpModWindow_Title" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="SpModWindow_SignInTitle" xml:space="preserve">
+    <value>Войти в sp-mod</value>
+  </data>
+  <data name="SpModWindow_SecureToolTip" xml:space="preserve">
+    <value>Защищённое соединение (https)</value>
+  </data>
+  <data name="SpModWindow_RememberHint" xml:space="preserve">
+    <value>Отметьте «Remember me», чтобы оставаться в системе. Пароль уходит на sp-mod, а не в это приложение.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Title" xml:space="preserve">
+    <value>Войти в sp-mod</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step1" xml:space="preserve">
+    <value>На странице {0}, в разделе {1}, нажмите {2} в карточке {3}. Или нажмите кнопку с человечком вверху окна, слева от ?.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step2" xml:space="preserve">
+    <value>Войдите на странице sp-mod — по e-mail или через Discord. Отметьте «Remember me», чтобы оставаться в системе. Окно закроется, как только вы войдёте.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Note" xml:space="preserve">
+    <value>Пароль уходит на sp-mod, а не в это приложение. {0} удаляет вход с этого ПК.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Keywords" xml:space="preserve">
+    <value>войти, вход, логин, аккаунт, аккаунт sp-mod, оставаться в системе, remember me, discord, выйти, выход</value>
+  </data>
 </root>

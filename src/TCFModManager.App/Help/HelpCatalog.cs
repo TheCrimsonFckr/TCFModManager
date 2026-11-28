@@ -782,6 +782,16 @@ internal static class HelpCatalog
                 .WithKeywords(() => Strings.Help_Options_Sidebar_Keywords)
                 .WithPage(typeof(OptionsPage)),
 
+            // OPEN-76.
+            Topic("options.spmodaccount", () => Strings.Help_Options_SpModAccount_Title,
+                Step(() => Strings.Help_Options_SpModAccount_Step1,
+                    () => Strings.Nav_Options, () => Strings.Options_SectionGeneral,
+                    () => Strings.SpModAccount_SignIn, () => Strings.Options_SpModAccountHeader),
+                Step(() => Strings.Help_Options_SpModAccount_Step2))
+                .WithNote(() => Strings.Help_Options_SpModAccount_Note, () => Strings.SpModAccount_SignOut)
+                .WithKeywords(() => Strings.Help_Options_SpModAccount_Keywords)
+                .WithPage(typeof(OptionsPage)),
+
             Topic("options.language", () => Strings.Help_Options_Language_Title,
                 Step(() => Strings.Help_Options_Language_Step1,
                     () => Strings.Nav_Options, () => Strings.Options_SectionGeneral,

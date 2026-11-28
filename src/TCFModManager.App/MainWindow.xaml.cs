@@ -173,6 +173,9 @@ public partial class MainWindow : FluentWindow
             // Puts back the mods of a Find the broken mod search the last run didn't finish (OPEN-54 N27).
             _ = AppServices.BrokenModFinder.RecoverAsync();
 
+            // Whether the sp-mod sign-in from last time still holds (OPEN-76).
+            _ = AppServices.SpModAccount.StartAsync();
+
             // A server already up as the app opens - left running last time, perhaps with no window.
             _ = SayServerAlreadyRunningAsync();
         };
@@ -315,6 +318,33 @@ public partial class MainWindow : FluentWindow
     }
 
     private void RootTitleBar_HelpClicked(TitleBar sender, RoutedEventArgs e) => ShowHelp();
+
+    private void AccountButton_Click(object sender, RoutedEventArgs e)
+    {
+        var account = AppServices.SpModAccount;
+        if (!account.IsSignedIn)
+        {
+            account.SignInCommand.Execute(null);
+            return;
+        }
+
+        var menu = new System.Windows.Controls.ContextMenu { PlacementTarget = AccountButton, Placement = PlacementMode.Bottom };
+        menu.Items.Add(new System.Windows.Controls.MenuItem { Header = Strings.SpModAccount_SignedIn, IsEnabled = false });
+        menu.Items.Add(new System.Windows.Controls.Separator());
+        menu.Items.Add(new System.Windows.Controls.MenuItem
+        {
+            Header = Strings.SpModAccount_OpenAccount,
+            Icon = new SymbolIcon { Symbol = SymbolRegular.Person24 },
+            Command = account.OpenAccountCommand,
+        });
+        menu.Items.Add(new System.Windows.Controls.MenuItem
+        {
+            Header = Strings.SpModAccount_SignOut,
+            Icon = new SymbolIcon { Symbol = SymbolRegular.SignOut24 },
+            Command = account.SignOutCommand,
+        });
+        menu.IsOpen = true;
+    }
 
     //
     // The "?" and F1. A ContentDialog (mod details, mod update) sits over the page inside this

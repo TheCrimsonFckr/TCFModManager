@@ -58,6 +58,28 @@
             <ui:TitleBar.Icon>
                 <ui:ImageIcon x:Name="TitleBarIcon" />
             </ui:TitleBar.Icon>
+            <!-- OPEN-76: left of the caption "?". TitleBar hit-tests TrailingContent as client area, so these click. -->
+            <ui:TitleBar.TrailingContent>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    DataContext="{x:Static app:AppServices.SpModAccount}">
+                    <ui:Button
+                        x:Name="AccountButton"
+                        Margin="0,0,4,0"
+                        Padding="8,5"
+                        VerticalAlignment="Center"
+                        Appearance="Transparent"
+                        BorderThickness="0"
+                        ToolTip="{Binding TitleBarToolTip}"
+                        Visibility="{Binding IsAvailable, Converter={StaticResource BoolToVis}}"
+                        Click="AccountButton_Click">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="Person24" Filled="{Binding IsSignedIn}" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+                </StackPanel>
+            </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
         <!-- Both banners live in the same row, stacked, so raising one never overlaps the other. -->

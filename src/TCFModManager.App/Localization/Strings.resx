@@ -14421,4 +14421,100 @@ Click to show them.</value>
     <value>Showing {0} and the mods that need it</value>
     <comment>Pill above the Installed results while that view is on; its x turns it off. {0} is the mod's name.</comment>
   </data>
+  <data name="Options_SpModAccountHeader" xml:space="preserve">
+    <value>sp-mod account</value>
+    <comment>Options card title.</comment>
+  </data>
+  <data name="Options_SpModAccountHint" xml:space="preserve">
+    <value>Sign in to post comments and have your downloads count on sp-mod.</value>
+    <comment>Options card hint, one line.</comment>
+  </data>
+  <data name="Options_SpModAccountDescription" xml:space="preserve">
+    <value>You sign in on sp-mod's own page. Your password goes to sp-mod, never to this app. Tick Remember me there to stay signed in.</value>
+    <comment>Options card tooltip. 'Remember me' is sp-mod's own English label on its sign-in page.</comment>
+  </data>
+  <data name="SpModAccount_SignIn" xml:space="preserve">
+    <value>Sign in</value>
+    <comment>Button.</comment>
+  </data>
+  <data name="SpModAccount_SignOut" xml:space="preserve">
+    <value>Sign out</value>
+    <comment>Button and menu item.</comment>
+  </data>
+  <data name="SpModAccount_OpenAccount" xml:space="preserve">
+    <value>Open my sp-mod account</value>
+    <comment>Button and menu item: opens sp-mod's account page in the app's sp-mod window.</comment>
+  </data>
+  <data name="SpModAccount_GetWebView2" xml:space="preserve">
+    <value>Get WebView2</value>
+    <comment>Button: opens Microsoft's WebView2 download page.</comment>
+  </data>
+  <data name="SpModAccount_SignedIn" xml:space="preserve">
+    <value>Signed in to sp-mod</value>
+    <comment>Title-bar person button tooltip, and the first line of its menu, when signed in.</comment>
+  </data>
+  <data name="SpModAccount_SignInToolTip" xml:space="preserve">
+    <value>Sign in to sp-mod</value>
+    <comment>Title-bar person button tooltip when signed out.</comment>
+  </data>
+  <data name="SpModAccount_StatusSignedOut" xml:space="preserve">
+    <value>Not signed in.</value>
+    <comment>Options card status line.</comment>
+  </data>
+  <data name="SpModAccount_StatusRemembered" xml:space="preserve">
+    <value>Signed in. You stay signed in until you sign out.</value>
+    <comment>Options card status line: signed in with sp-mod's Remember me ticked.</comment>
+  </data>
+  <data name="SpModAccount_StatusSession" xml:space="preserve">
+    <value>Signed in. sp-mod signs you out after 2 hours without use.</value>
+    <comment>Options card status line: signed in without Remember me.</comment>
+  </data>
+  <data name="SpModAccount_StatusChecking" xml:space="preserve">
+    <value>Checking…</value>
+    <comment>Options card status line.</comment>
+  </data>
+  <data name="SpModAccount_StatusCouldNotCheck" xml:space="preserve">
+    <value>Couldn't reach sp-mod to check whether you're signed in.</value>
+    <comment>Options card status line.</comment>
+  </data>
+  <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
+    <value>Signing in needs the Microsoft Edge WebView2 Runtime, which isn't on this PC.</value>
+    <comment>Options card status line.</comment>
+  </data>
+  <data name="SpModWindow_Title" xml:space="preserve">
+    <value>sp-mod</value>
+    <comment>Window title of the app's sp-mod window when it shows the account page.</comment>
+  </data>
+  <data name="SpModWindow_SignInTitle" xml:space="preserve">
+    <value>Sign in to sp-mod</value>
+    <comment>Window title of the sign-in window.</comment>
+  </data>
+  <data name="SpModWindow_SecureToolTip" xml:space="preserve">
+    <value>Secure connection (https)</value>
+    <comment>Tooltip on the padlock beside the page address.</comment>
+  </data>
+  <data name="SpModWindow_RememberHint" xml:space="preserve">
+    <value>Tick Remember me to stay signed in. Your password goes to sp-mod, not to this app.</value>
+    <comment>Line beside the address in the sign-in window. 'Remember me' is sp-mod's own English label.</comment>
+  </data>
+  <data name="Help_Options_SpModAccount_Title" xml:space="preserve">
+    <value>Sign in to sp-mod</value>
+    <comment>Help topic title.</comment>
+  </data>
+  <data name="Help_Options_SpModAccount_Step1" xml:space="preserve">
+    <value>In {0}, under {1}, press {2} on {3}. Or press the person button at the top of the window, left of the ?.</value>
+    <comment>Help step. {0} = page, {1} = section, {2} = button, {3} = card title.</comment>
+  </data>
+  <data name="Help_Options_SpModAccount_Step2" xml:space="preserve">
+    <value>Sign in on sp-mod's own page, by email or with Discord. Tick Remember me to stay signed in. The window closes once you're in.</value>
+    <comment>Help step. 'Remember me' is sp-mod's own English label.</comment>
+  </data>
+  <data name="Help_Options_SpModAccount_Note" xml:space="preserve">
+    <value>Your password goes to sp-mod, never to this app. {0} removes the sign-in from this PC.</value>
+    <comment>Help note. {0} = button.</comment>
+  </data>
+  <data name="Help_Options_SpModAccount_Keywords" xml:space="preserve">
+    <value>sign in, log in, login, account, sp-mod account, remember me, stay signed in, discord, sign out, log out</value>
+    <comment>Help search keywords.</comment>
+  </data>
 </root>

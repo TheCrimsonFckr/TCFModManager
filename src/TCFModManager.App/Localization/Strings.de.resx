@@ -11700,4 +11700,76 @@ Klicken, um sie anzuzeigen.</value>
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>{0} und die Mods, die ihn benötigen, werden angezeigt</value>
   </data>
+  <data name="Options_SpModAccountHeader" xml:space="preserve">
+    <value>sp-mod-Konto</value>
+  </data>
+  <data name="Options_SpModAccountHint" xml:space="preserve">
+    <value>Melde dich an, um Kommentare zu schreiben und deine Downloads auf sp-mod zu zählen.</value>
+  </data>
+  <data name="Options_SpModAccountDescription" xml:space="preserve">
+    <value>Du meldest dich auf der Seite von sp-mod selbst an. Dein Passwort geht an sp-mod, nie an diese App. Setze dort „Remember me“, um angemeldet zu bleiben.</value>
+  </data>
+  <data name="SpModAccount_SignIn" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="SpModAccount_SignOut" xml:space="preserve">
+    <value>Abmelden</value>
+  </data>
+  <data name="SpModAccount_OpenAccount" xml:space="preserve">
+    <value>Mein sp-mod-Konto öffnen</value>
+  </data>
+  <data name="SpModAccount_GetWebView2" xml:space="preserve">
+    <value>WebView2 holen</value>
+  </data>
+  <data name="SpModAccount_SignedIn" xml:space="preserve">
+    <value>Bei sp-mod angemeldet</value>
+  </data>
+  <data name="SpModAccount_SignInToolTip" xml:space="preserve">
+    <value>Bei sp-mod anmelden</value>
+  </data>
+  <data name="SpModAccount_StatusSignedOut" xml:space="preserve">
+    <value>Nicht angemeldet.</value>
+  </data>
+  <data name="SpModAccount_StatusRemembered" xml:space="preserve">
+    <value>Angemeldet. Du bleibst angemeldet, bis du dich abmeldest.</value>
+  </data>
+  <data name="SpModAccount_StatusSession" xml:space="preserve">
+    <value>Angemeldet. sp-mod meldet dich nach 2 Stunden ohne Nutzung ab.</value>
+  </data>
+  <data name="SpModAccount_StatusChecking" xml:space="preserve">
+    <value>Wird geprüft…</value>
+  </data>
+  <data name="SpModAccount_StatusCouldNotCheck" xml:space="preserve">
+    <value>sp-mod war nicht erreichbar, um zu prüfen, ob du angemeldet bist.</value>
+  </data>
+  <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
+    <value>Zum Anmelden wird die Microsoft Edge WebView2 Runtime gebraucht, die auf diesem PC fehlt.</value>
+  </data>
+  <data name="SpModWindow_Title" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="SpModWindow_SignInTitle" xml:space="preserve">
+    <value>Bei sp-mod anmelden</value>
+  </data>
+  <data name="SpModWindow_SecureToolTip" xml:space="preserve">
+    <value>Sichere Verbindung (https)</value>
+  </data>
+  <data name="SpModWindow_RememberHint" xml:space="preserve">
+    <value>Setze „Remember me“, um angemeldet zu bleiben. Dein Passwort geht an sp-mod, nicht an diese App.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Title" xml:space="preserve">
+    <value>Bei sp-mod anmelden</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step1" xml:space="preserve">
+    <value>Drücke in {0} unter {1} bei {3} auf {2}. Oder drücke oben im Fenster auf das Personen-Symbol links vom ?.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step2" xml:space="preserve">
+    <value>Melde dich auf der Seite von sp-mod an, per E-Mail oder mit Discord. Setze „Remember me“, um angemeldet zu bleiben. Das Fenster schließt sich, sobald du angemeldet bist.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Note" xml:space="preserve">
+    <value>Dein Passwort geht an sp-mod, nie an diese App. {0} entfernt die Anmeldung von diesem PC.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Keywords" xml:space="preserve">
+    <value>anmelden, einloggen, login, konto, sp-mod-konto, angemeldet bleiben, remember me, discord, abmelden, ausloggen</value>
+  </data>
 </root>

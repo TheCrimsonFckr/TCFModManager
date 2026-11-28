@@ -48,6 +48,8 @@ public class LocalizationLiteralTests
             "Win32 filter syntax; both names in it are keyed"),
         ("MarkupRenderer.cs", "Cascadia Mono, Consolas, Courier New, DejaVu Sans Mono, Liberation Mono, Tahoma",
             "font family names for code in a description (OPEN-12 F18), with Wine's fallbacks (OPEN-40)"),
+        ("SpModAccountViewModel.cs", "Local State",
+            "the name of the WebView2 profile's own file, read for OPEN-76 S1"),
         ("ThemeApplier.cs", "Segoe UI, DejaVu Sans, Noto Sans, Tahoma",
             "font family fallbacks for the UI font under Wine (OPEN-40)"),
         ("ConsoleLog.cs", "happy playing",

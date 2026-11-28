@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
     xmlns:converters="clr-namespace:TCFModManager.App.Converters"
     xmlns:loc="clr-namespace:TCFModManager.App.Localization"
+    xmlns:app="clr-namespace:TCFModManager.App"
     xmlns:behaviors="clr-namespace:TCFModManager.App.Behaviors"
     xmlns:tcf="clr-namespace:TCFModManager.App.Controls"
     Title="{loc:Str Nav_Options}">
@@ -149,6 +150,47 @@
                         Text="{Binding SptEnvironment.StatusMessage}" />
                 </StackPanel>
             </ui:CardControl.Header>
+        </ui:CardControl>
+
+        <!-- OPEN-76: signing in to sp-mod. -->
+        <ui:CardControl
+            Style="{StaticResource SettingRow}"
+            DataContext="{x:Static app:AppServices.SpModAccount}"
+            Icon="{ui:SymbolIcon Person24}"
+            ToolTip="{loc:Str Options_SpModAccountDescription}">
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SettingTitle}" Text="{loc:Str Options_SpModAccountHeader}" />
+                    <TextBlock Style="{StaticResource SettingHint}" Text="{loc:Str Options_SpModAccountHint}" />
+                    <TextBlock
+                        Style="{StaticResource SettingNote}"
+                        Margin="0,4,0,0"
+                        Text="{Binding Status}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <StackPanel Orientation="Horizontal">
+                <ui:Button
+                    Icon="{ui:SymbolIcon Person24}"
+                    Content="{loc:Str SpModAccount_SignIn}"
+                    Command="{Binding SignInCommand}"
+                    Visibility="{Binding CanSignIn, Converter={StaticResource BoolToVisibility}}" />
+                <ui:Button
+                    Icon="{ui:SymbolIcon Open24}"
+                    Content="{loc:Str SpModAccount_OpenAccount}"
+                    Command="{Binding OpenAccountCommand}"
+                    Visibility="{Binding IsSignedIn, Converter={StaticResource BoolToVisibility}}" />
+                <ui:Button
+                    Margin="8,0,0,0"
+                    Icon="{ui:SymbolIcon SignOut24}"
+                    Content="{loc:Str SpModAccount_SignOut}"
+                    Command="{Binding SignOutCommand}"
+                    Visibility="{Binding IsSignedIn, Converter={StaticResource BoolToVisibility}}" />
+                <ui:Button
+                    Icon="{ui:SymbolIcon Open24}"
+                    Content="{loc:Str SpModAccount_GetWebView2}"
+                    Command="{Binding GetWebView2Command}"
+                    Visibility="{Binding IsUnavailable, Converter={StaticResource BoolToVisibility}}" />
+            </StackPanel>
         </ui:CardControl>
 
         <ui:CardControl

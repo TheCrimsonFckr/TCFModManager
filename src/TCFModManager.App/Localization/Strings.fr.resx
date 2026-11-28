@@ -11700,4 +11700,76 @@ Cliquez pour les afficher.</value>
   <data name="Installed_NeededByPillFormat" xml:space="preserve">
     <value>Affichage de {0} et des mods qui en ont besoin</value>
   </data>
+  <data name="Options_SpModAccountHeader" xml:space="preserve">
+    <value>Compte sp-mod</value>
+  </data>
+  <data name="Options_SpModAccountHint" xml:space="preserve">
+    <value>Connectez-vous pour commenter et faire compter vos téléchargements sur sp-mod.</value>
+  </data>
+  <data name="Options_SpModAccountDescription" xml:space="preserve">
+    <value>Vous vous connectez sur la page de sp-mod elle-même. Votre mot de passe va à sp-mod, jamais à cette application. Cochez « Remember me » pour rester connecté.</value>
+  </data>
+  <data name="SpModAccount_SignIn" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
+  <data name="SpModAccount_SignOut" xml:space="preserve">
+    <value>Se déconnecter</value>
+  </data>
+  <data name="SpModAccount_OpenAccount" xml:space="preserve">
+    <value>Ouvrir mon compte sp-mod</value>
+  </data>
+  <data name="SpModAccount_GetWebView2" xml:space="preserve">
+    <value>Obtenir WebView2</value>
+  </data>
+  <data name="SpModAccount_SignedIn" xml:space="preserve">
+    <value>Connecté à sp-mod</value>
+  </data>
+  <data name="SpModAccount_SignInToolTip" xml:space="preserve">
+    <value>Se connecter à sp-mod</value>
+  </data>
+  <data name="SpModAccount_StatusSignedOut" xml:space="preserve">
+    <value>Non connecté.</value>
+  </data>
+  <data name="SpModAccount_StatusRemembered" xml:space="preserve">
+    <value>Connecté. Vous restez connecté jusqu'à ce que vous vous déconnectiez.</value>
+  </data>
+  <data name="SpModAccount_StatusSession" xml:space="preserve">
+    <value>Connecté. sp-mod vous déconnecte après 2 heures sans utilisation.</value>
+  </data>
+  <data name="SpModAccount_StatusChecking" xml:space="preserve">
+    <value>Vérification…</value>
+  </data>
+  <data name="SpModAccount_StatusCouldNotCheck" xml:space="preserve">
+    <value>Impossible de joindre sp-mod pour vérifier si vous êtes connecté.</value>
+  </data>
+  <data name="SpModAccount_StatusNoWebView2" xml:space="preserve">
+    <value>La connexion nécessite Microsoft Edge WebView2 Runtime, absent de ce PC.</value>
+  </data>
+  <data name="SpModWindow_Title" xml:space="preserve">
+    <value>sp-mod</value>
+  </data>
+  <data name="SpModWindow_SignInTitle" xml:space="preserve">
+    <value>Se connecter à sp-mod</value>
+  </data>
+  <data name="SpModWindow_SecureToolTip" xml:space="preserve">
+    <value>Connexion sécurisée (https)</value>
+  </data>
+  <data name="SpModWindow_RememberHint" xml:space="preserve">
+    <value>Cochez « Remember me » pour rester connecté. Votre mot de passe va à sp-mod, pas à cette application.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Title" xml:space="preserve">
+    <value>Se connecter à sp-mod</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step1" xml:space="preserve">
+    <value>Dans {0}, sous {1}, appuyez sur {2} dans {3}. Ou appuyez sur le bouton en forme de personne en haut de la fenêtre, à gauche du ?.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Step2" xml:space="preserve">
+    <value>Connectez-vous sur la page de sp-mod, par e-mail ou avec Discord. Cochez « Remember me » pour rester connecté. La fenêtre se ferme une fois connecté.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Note" xml:space="preserve">
+    <value>Votre mot de passe va à sp-mod, jamais à cette application. {0} retire la connexion de ce PC.</value>
+  </data>
+  <data name="Help_Options_SpModAccount_Keywords" xml:space="preserve">
+    <value>se connecter, connexion, login, compte, compte sp-mod, rester connecté, remember me, discord, se déconnecter, déconnexion</value>
+  </data>
 </root>
