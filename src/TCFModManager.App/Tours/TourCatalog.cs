@@ -143,6 +143,15 @@ internal static class TourCatalog
             new("diagnose.purge", () => Strings.Tour_New132_Purge_Title, () => Strings.Tour_New132_Purge_Body),
         ],
         Since: "1.32.0"),
+
+        new("whatsnew-1.33.0-browse", typeof(BrowsePage),
+        [
+            new("titlebar.account", () => Strings.Tour_New133_SignIn_Title, () => Strings.Tour_New133_SignIn_Body),
+            new("titlebar.endorse", () => Strings.Tour_New133_EndorseApp_Title, () => Strings.Tour_New133_EndorseApp_Body),
+            new("browse.spmodactions", () => Strings.Tour_New133_CardActions_Title, () => Strings.Tour_New133_CardActions_Body),
+        ],
+        () => AppServices.Browse.HasLoadedResults,
+        Since: "1.33.0"),
     ];
 
     public static Tour? ForPage(Type? page) =>

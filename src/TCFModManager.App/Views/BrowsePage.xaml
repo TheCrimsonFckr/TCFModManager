@@ -700,6 +700,7 @@
                                         Padding="6"
                                         Appearance="Transparent"
                                         behaviors:SpModActions.ModId="{Binding Mod.Id}"
+                                        behaviors:TourTarget.Key="browse.spmodactions"
                                         ToolTip="{loc:Str SpModActions_ToolTip}"
                                         Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource BoolToVis}}">
                                         <ui:Button.Icon>
@@ -746,6 +747,7 @@
                                         Padding="6"
                                         Appearance="Transparent"
                                         behaviors:SpModActions.ModId="{Binding Mod.Id}"
+                                        behaviors:TourTarget.Key="browse.spmodactions"
                                         ToolTip="{loc:Str SpModActions_ToolTip}"
                                         Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource BoolToVis}}">
                                         <ui:Button.Icon>

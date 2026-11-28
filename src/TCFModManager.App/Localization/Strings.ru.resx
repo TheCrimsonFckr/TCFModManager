@@ -12278,4 +12278,22 @@
   <data name="AppUpdate_NoReleaseNotes" xml:space="preserve">
     <value>Для этой версии заметки не публиковались.</value>
   </data>
+  <data name="Tour_New133_SignIn_Title" xml:space="preserve">
+    <value>Новое: вход в sp-mod</value>
+  </data>
+  <data name="Tour_New133_SignIn_Body" xml:space="preserve">
+    <value>Войдите в свою учётную запись sp-mod по e-mail или через Discord. Тогда ваши загрузки засчитываются на sp-mod, а здесь и на карточках появляются кнопки с большим пальцем вверх.</value>
+  </data>
+  <data name="Tour_New133_EndorseApp_Title" xml:space="preserve">
+    <value>Новое: одобрить TCFModManager</value>
+  </data>
+  <data name="Tour_New133_EndorseApp_Body" xml:space="preserve">
+    <value>Одобрите это приложение на sp-mod или отреагируйте на него, не выходя из него.</value>
+  </data>
+  <data name="Tour_New133_CardActions_Title" xml:space="preserve">
+    <value>Новое: одобрение и реакции с карточки</value>
+  </data>
+  <data name="Tour_New133_CardActions_Body" xml:space="preserve">
+    <value>Открывает одобрение, реакции, подписку и добавление в список sp-mod для этого мода прямо здесь.</value>
+  </data>
 </root>

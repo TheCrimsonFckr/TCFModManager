@@ -14569,4 +14569,22 @@ Click to show them.</value>
     <value>No notes were published for this version.</value>
     <comment>Shown when a version of the app has no release notes.</comment>
   </data>
+  <data name="Tour_New133_SignIn_Title" xml:space="preserve">
+    <value>New: Sign in to sp-mod</value>
+  </data>
+  <data name="Tour_New133_SignIn_Body" xml:space="preserve">
+    <value>Sign in with your sp-mod account, by email or with Discord. Your downloads then count on sp-mod, and thumbs-up buttons appear up here and on the cards.</value>
+  </data>
+  <data name="Tour_New133_EndorseApp_Title" xml:space="preserve">
+    <value>New: Endorse TCFModManager</value>
+  </data>
+  <data name="Tour_New133_EndorseApp_Body" xml:space="preserve">
+    <value>Endorse or react to this app on sp-mod without leaving it.</value>
+  </data>
+  <data name="Tour_New133_CardActions_Title" xml:space="preserve">
+    <value>New: Endorse and react from a card</value>
+  </data>
+  <data name="Tour_New133_CardActions_Body" xml:space="preserve">
+    <value>Opens the mod's sp-mod endorse, reactions, subscribe and add to list, right here.</value>
+  </data>
 </root>

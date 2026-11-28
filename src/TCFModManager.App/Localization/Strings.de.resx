@@ -11811,4 +11811,22 @@ Klicken, um sie anzuzeigen.</value>
   <data name="AppUpdate_NoReleaseNotes" xml:space="preserve">
     <value>Für diese Version wurden keine Hinweise veröffentlicht.</value>
   </data>
+  <data name="Tour_New133_SignIn_Title" xml:space="preserve">
+    <value>Neu: Bei sp-mod anmelden</value>
+  </data>
+  <data name="Tour_New133_SignIn_Body" xml:space="preserve">
+    <value>Melde dich mit deinem sp-mod-Konto an, per E-Mail oder mit Discord. Deine Downloads zählen dann auf sp-mod, und hier oben und auf den Karten erscheinen Daumen-hoch-Schaltflächen.</value>
+  </data>
+  <data name="Tour_New133_EndorseApp_Title" xml:space="preserve">
+    <value>Neu: TCFModManager empfehlen</value>
+  </data>
+  <data name="Tour_New133_EndorseApp_Body" xml:space="preserve">
+    <value>Empfiehl diese App auf sp-mod oder reagiere darauf, ohne sie zu verlassen.</value>
+  </data>
+  <data name="Tour_New133_CardActions_Title" xml:space="preserve">
+    <value>Neu: Von der Karte aus empfehlen und reagieren</value>
+  </data>
+  <data name="Tour_New133_CardActions_Body" xml:space="preserve">
+    <value>Öffnet Empfehlen, Reaktionen, Abonnieren und Zu einer Liste hinzufügen von sp-mod für diese Mod, direkt hier.</value>
+  </data>
 </root>

@@ -66,6 +66,7 @@
                     DataContext="{x:Static app:AppServices.SpModAccount}">
                     <ui:Button
                         x:Name="AppEndorseButton"
+                        behaviors:TourTarget.Key="titlebar.endorse"
                         Width="44"
                         Height="30"
                         Padding="0"
@@ -99,6 +100,7 @@
                     </ui:Button>
                     <ui:Button
                         x:Name="AccountButton"
+                        behaviors:TourTarget.Key="titlebar.account"
                         Width="44"
                         Height="30"
                         Padding="0"
