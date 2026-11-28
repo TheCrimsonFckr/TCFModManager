@@ -12201,7 +12201,7 @@
     <value>Вход выполнен. Вы остаётесь в системе, пока не выйдете.</value>
   </data>
   <data name="SpModAccount_StatusSession" xml:space="preserve">
-    <value>Вход выполнен. sp-mod выйдет из аккаунта после 2 часов бездействия.</value>
+    <value>Вход выполнен до закрытия приложения. Отметьте «Remember me» при входе, чтобы оставаться в системе.</value>
   </data>
   <data name="SpModAccount_StatusChecking" xml:space="preserve">
     <value>Проверка…</value>

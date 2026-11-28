@@ -11734,7 +11734,7 @@ Klicken, um sie anzuzeigen.</value>
     <value>Angemeldet. Du bleibst angemeldet, bis du dich abmeldest.</value>
   </data>
   <data name="SpModAccount_StatusSession" xml:space="preserve">
-    <value>Angemeldet. sp-mod meldet dich nach 2 Stunden ohne Nutzung ab.</value>
+    <value>Angemeldet, bis du die App schließt. Setze beim Anmelden „Remember me“, um angemeldet zu bleiben.</value>
   </data>
   <data name="SpModAccount_StatusChecking" xml:space="preserve">
     <value>Wird geprüft…</value>

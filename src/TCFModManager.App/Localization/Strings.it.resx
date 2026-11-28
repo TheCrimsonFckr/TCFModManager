@@ -11734,7 +11734,7 @@ Fai clic per mostrarle.</value>
     <value>Accesso eseguito. Resti connesso finché non esci.</value>
   </data>
   <data name="SpModAccount_StatusSession" xml:space="preserve">
-    <value>Accesso eseguito. sp-mod ti disconnette dopo 2 ore di inattività.</value>
+    <value>Accesso eseguito finché non chiudi l'app. Spunta "Remember me" quando accedi per restare connesso.</value>
   </data>
   <data name="SpModAccount_StatusChecking" xml:space="preserve">
     <value>Controllo…</value>

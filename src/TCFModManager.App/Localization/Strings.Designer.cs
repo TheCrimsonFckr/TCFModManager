@@ -3910,4 +3910,28 @@ internal static class Strings
     internal static string Installed_NeededByIconToolTip(int count, params object?[] values) =>
         LocalizationService.Plural("Installed_NeededByIconToolTip", count, values);
     internal static string Installed_NeededByPillFormat => LocalizationService.Get("Installed_NeededByPillFormat");
+    internal static string Options_SpModAccountHeader => LocalizationService.Get("Options_SpModAccountHeader");
+    internal static string Options_SpModAccountHint => LocalizationService.Get("Options_SpModAccountHint");
+    internal static string Options_SpModAccountDescription => LocalizationService.Get("Options_SpModAccountDescription");
+    internal static string SpModAccount_SignIn => LocalizationService.Get("SpModAccount_SignIn");
+    internal static string SpModAccount_SignOut => LocalizationService.Get("SpModAccount_SignOut");
+    internal static string SpModAccount_OpenAccount => LocalizationService.Get("SpModAccount_OpenAccount");
+    internal static string SpModAccount_GetWebView2 => LocalizationService.Get("SpModAccount_GetWebView2");
+    internal static string SpModAccount_SignedIn => LocalizationService.Get("SpModAccount_SignedIn");
+    internal static string SpModAccount_SignInToolTip => LocalizationService.Get("SpModAccount_SignInToolTip");
+    internal static string SpModAccount_StatusSignedOut => LocalizationService.Get("SpModAccount_StatusSignedOut");
+    internal static string SpModAccount_StatusRemembered => LocalizationService.Get("SpModAccount_StatusRemembered");
+    internal static string SpModAccount_StatusSession => LocalizationService.Get("SpModAccount_StatusSession");
+    internal static string SpModAccount_StatusChecking => LocalizationService.Get("SpModAccount_StatusChecking");
+    internal static string SpModAccount_StatusCouldNotCheck => LocalizationService.Get("SpModAccount_StatusCouldNotCheck");
+    internal static string SpModAccount_StatusNoWebView2 => LocalizationService.Get("SpModAccount_StatusNoWebView2");
+    internal static string SpModWindow_Title => LocalizationService.Get("SpModWindow_Title");
+    internal static string SpModWindow_SignInTitle => LocalizationService.Get("SpModWindow_SignInTitle");
+    internal static string SpModWindow_SecureToolTip => LocalizationService.Get("SpModWindow_SecureToolTip");
+    internal static string SpModWindow_RememberHint => LocalizationService.Get("SpModWindow_RememberHint");
+    internal static string Help_Options_SpModAccount_Title => LocalizationService.Get("Help_Options_SpModAccount_Title");
+    internal static string Help_Options_SpModAccount_Step1 => LocalizationService.Get("Help_Options_SpModAccount_Step1");
+    internal static string Help_Options_SpModAccount_Step2 => LocalizationService.Get("Help_Options_SpModAccount_Step2");
+    internal static string Help_Options_SpModAccount_Note => LocalizationService.Get("Help_Options_SpModAccount_Note");
+    internal static string Help_Options_SpModAccount_Keywords => LocalizationService.Get("Help_Options_SpModAccount_Keywords");
 }

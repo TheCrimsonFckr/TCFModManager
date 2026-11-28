@@ -92,6 +92,7 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
         if (_started || !IsAvailable) return;
         _started = true;
 
+        await EndUnrememberedSignInAsync();
         await CheckAsync();
         LogProfileEncryption();
     }
@@ -238,6 +239,24 @@ public sealed partial class SpModAccountViewModel : LocalizedViewModel
         AppLog.Info("SpModAccount", $"signed out, {deleted} cookie(s) deleted");
         State = SpModSignIn.SignedOut;
         await CheckAsync();
+    }
+
+    private static async Task EndUnrememberedSignInAsync()
+    {
+        if (await WebViews.CookiesAsync() is not { } manager) return;
+
+        try
+        {
+            var cookies = await manager.GetCookiesAsync(Site.AbsoluteUri);
+            if (cookies.Count == 0 || cookies.Any(c => c.Name.StartsWith(RememberCookiePrefix, StringComparison.OrdinalIgnoreCase))) return;
+
+            foreach (var cookie in cookies) manager.DeleteCookie(cookie);
+            AppLog.Info("SpModAccount", $"no Remember me: ended last run's sign-in, {cookies.Count} cookie(s) deleted");
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.Runtime.InteropServices.COMException)
+        {
+            AppLog.Warn("SpModAccount", $"could not end last run's sign-in: {ex.Message}");
+        }
     }
 
     [RelayCommand]

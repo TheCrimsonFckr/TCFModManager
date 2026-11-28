@@ -14466,8 +14466,8 @@ Click to show them.</value>
     <comment>Options card status line: signed in with sp-mod's Remember me ticked.</comment>
   </data>
   <data name="SpModAccount_StatusSession" xml:space="preserve">
-    <value>Signed in. sp-mod signs you out after 2 hours without use.</value>
-    <comment>Options card status line: signed in without Remember me.</comment>
+    <value>Signed in until you close the app. Tick Remember me when you sign in to stay signed in.</value>
+    <comment>Options card status line: signed in without Remember me, so the sign-in ends when the app next starts. 'Remember me' is sp-mod's own English label.</comment>
   </data>
   <data name="SpModAccount_StatusChecking" xml:space="preserve">
     <value>Checking…</value>
