@@ -28,6 +28,6 @@ public static class SelfMod
 
     public const string CodePasteUrl = "https://codepaste.sp-mod.com/";
 
-    // The app's Discord server, from the title bar's Discord button (OPEN-76 R4).
+    // The SPT Discord server, from the title bar's Discord button (OPEN-76 R4).
     public const string DiscordUrl = "https://discord.com/invite/Xn9msqQZan";
 }

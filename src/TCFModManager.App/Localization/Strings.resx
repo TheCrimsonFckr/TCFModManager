@@ -14538,7 +14538,7 @@ Click to show them.</value>
     <comment>Shown in the sp-mod actions strip when the mod's sp-mod page couldn't be loaded or had no actions.</comment>
   </data>
   <data name="MainWindow_DiscordToolTip" xml:space="preserve">
-    <value>Join the TCFModManager Discord</value>
+    <value>Join the SPT Discord</value>
     <comment>Tooltip on the title bar's Discord button.</comment>
   </data>
   <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">

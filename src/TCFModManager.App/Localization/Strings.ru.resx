@@ -12255,7 +12255,7 @@
     <value>Не удалось загрузить страницу этого мода на sp-mod.</value>
   </data>
   <data name="MainWindow_DiscordToolTip" xml:space="preserve">
-    <value>Присоединиться к Discord TCFModManager</value>
+    <value>Присоединиться к Discord SPT</value>
   </data>
   <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
     <value>Одобрить TCFModManager или отреагировать на sp-mod</value>

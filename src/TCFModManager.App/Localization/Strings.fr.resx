@@ -11788,7 +11788,7 @@ Cliquez pour les afficher.</value>
     <value>Impossible de charger la page sp-mod de ce mod.</value>
   </data>
   <data name="MainWindow_DiscordToolTip" xml:space="preserve">
-    <value>Rejoindre le Discord de TCFModManager</value>
+    <value>Rejoindre le Discord de SPT</value>
   </data>
   <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
     <value>Recommander TCFModManager ou y réagir sur sp-mod</value>
