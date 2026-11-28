@@ -9341,7 +9341,7 @@ See Dependencies and Conflicts.</value>
     <value>Filter, sort and clear what's listed</value>
   </data>
   <data name="Help_Browse_Filters_Step1" xml:space="preserve">
-    <value>On {0} or {1}, press {2}. A panel opens down the left with every filter, the sort order and how many show per page.</value>
+    <value>On {0} or {1}, press the filter button beside the search box ({2}). A panel opens down the left with every filter, the sort order and how many show per page.</value>
     <comment>Each {n} is the label of a control, filled in by the app and shown in bold - keep every placeholder, move it wherever the sentence needs it.</comment>
   </data>
   <data name="Help_Browse_Filters_Step2" xml:space="preserve">
@@ -12994,7 +12994,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <value>Choose what mod cards show</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>On {0} or {1}, open {2} and pick a layout under {3}.</value>
+    <value>On {0} or {1}, open the filter button ({2}) and pick a layout under {3}.</value>
     <comment>Help step. {0} Installed, {1} Browse, {2} Filters and view options, {3} Card layout.</comment>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
@@ -13014,7 +13014,7 @@ Right-click to save the current filters to it, rename it or delete it.</value>
     <comment>Help note. {0} Default.</comment>
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
-    <value>card layout, card view, layout, fields, compact, card size, card width, picture, thumbnail, banner, list columns, customise cards, customize cards</value>
+    <value>card layout, card view, layout, fields, compact, card size, card width, picture, thumbnail, banner, list columns, customise cards, customize cards, buttons, button row, buttons at the bottom, buttons down the side</value>
   </data>
   <data name="CardLayout_PreviewListHeader" xml:space="preserve">
     <value>List view row</value>
@@ -14586,5 +14586,38 @@ Click to show them.</value>
   </data>
   <data name="Tour_New133_CardActions_Body" xml:space="preserve">
     <value>Opens the mod's sp-mod endorse, reactions, subscribe and add to list, right here.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step5" xml:space="preserve">
+    <value>On {0}, {1} puts a card's buttons in a row along the bottom ({2}) or down the left side ({3}).</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Title" xml:space="preserve">
+    <value>Endorse or react to a mod</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step1" xml:space="preserve">
+    <value>Sign in to sp-mod first: press the person button at the top of the window.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step2" xml:space="preserve">
+    <value>On {0} or {1}, press the thumbs-up button on a mod's card.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step3" xml:space="preserve">
+    <value>Endorse, react, subscribe or add the mod to a list in the pop-up. Press ✕ or click outside it to close it.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Note" xml:space="preserve">
+    <value>The thumbs-up at the top of the window does the same for TCFModManager itself. A card layout can hide the button.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Keywords" xml:space="preserve">
+    <value>endorse, react, reaction, like, thumbs up, subscribe, add to list, sp-mod</value>
+  </data>
+  <data name="Help_AppUpdate_History_Title" xml:space="preserve">
+    <value>Read an earlier version's notes</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step1" xml:space="preserve">
+    <value>Open {0}. {1}, at the bottom, lists the app's 5 newest versions, with yours marked {2}.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step2" xml:space="preserve">
+    <value>Click a version to read its notes, and again to close them.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Keywords" xml:space="preserve">
+    <value>version history, release notes, changelog, previous versions, older versions, what changed</value>
   </data>
 </root>

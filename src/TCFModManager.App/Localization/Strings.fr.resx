@@ -7367,7 +7367,7 @@ Voir Dépendances et conflits.</value>
     <value>Filtrer, trier et effacer les filtres</value>
   </data>
   <data name="Help_Browse_Filters_Step1" xml:space="preserve">
-    <value>Dans {0} ou {1}, cliquez sur {2}. Un panneau s'ouvre à gauche avec tous les filtres, le tri et le nombre affiché par page.</value>
+    <value>Dans {0} ou {1}, cliquez sur le bouton de filtre à côté de la recherche ({2}). Un panneau s'ouvre à gauche avec tous les filtres, le tri et le nombre affiché par page.</value>
   </data>
   <data name="Help_Browse_Filters_Step2" xml:space="preserve">
     <value>Cliquez sur le nom d'une section pour l'ouvrir, puis choisissez ce que vous voulez. La liste change aussitôt.</value>
@@ -10623,7 +10623,7 @@ Les détails sont dans le journal :
     <value>Choisir ce que montrent les cartes de mods</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>Sur {0} ou {1}, ouvrez {2} et choisissez une disposition sous {3}.</value>
+    <value>Sur {0} ou {1}, ouvrez le bouton de filtre ({2}) et choisissez une disposition sous {3}.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
     <value>Pour créer la vôtre, cliquez sur {0}, puis sur {1}. Cochez les champs voulus et faites-les glisser dans l'ordre.</value>
@@ -10638,7 +10638,7 @@ Les détails sont dans le journal :
     <value>{0} ne peut pas être modifiée. Sur Installés, une disposition règle aussi ce que montrent les lignes des vues Groupes et Liste.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
-    <value>disposition des cartes, vue cartes, disposition, champs, compacte, taille des cartes, largeur, image, miniature, bannière, colonnes de liste, personnaliser les cartes</value>
+    <value>disposition des cartes, vue cartes, disposition, champs, compacte, taille des cartes, largeur, image, miniature, bannière, colonnes de liste, personnaliser les cartes, boutons, boutons en bas, boutons sur le côté</value>
   </data>
   <data name="CardLayout_PreviewListHeader" xml:space="preserve">
     <value>Ligne de la vue Liste</value>
@@ -11828,5 +11828,38 @@ Cliquez pour les afficher.</value>
   </data>
   <data name="Tour_New133_CardActions_Body" xml:space="preserve">
     <value>Ouvre la recommandation, les réactions, l'abonnement et l'ajout à une liste de sp-mod pour ce mod, ici même.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step5" xml:space="preserve">
+    <value>Sur {0}, {1} place les boutons d'une carte sur une ligne en bas ({2}) ou sur le côté gauche ({3}).</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Title" xml:space="preserve">
+    <value>Recommander un mod ou y réagir</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step1" xml:space="preserve">
+    <value>Connectez-vous d'abord à sp-mod : cliquez sur le bouton personne en haut de la fenêtre.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step2" xml:space="preserve">
+    <value>Dans {0} ou {1}, cliquez sur le bouton pouce levé de la carte d'un mod.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step3" xml:space="preserve">
+    <value>Dans la fenêtre qui s'ouvre, recommandez le mod, réagissez, abonnez-vous ou ajoutez-le à une liste. Cliquez sur ✕ ou à côté pour la fermer.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Note" xml:space="preserve">
+    <value>Le pouce levé en haut de la fenêtre fait de même pour TCFModManager. Une disposition de carte peut masquer le bouton.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Keywords" xml:space="preserve">
+    <value>recommander, réagir, réaction, j'aime, pouce levé, s'abonner, ajouter à une liste, sp-mod</value>
+  </data>
+  <data name="Help_AppUpdate_History_Title" xml:space="preserve">
+    <value>Lire les notes d'une version précédente</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step1" xml:space="preserve">
+    <value>Ouvrez {0}. {1}, en bas, liste les 5 versions les plus récentes de l'application, la vôtre marquée {2}.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step2" xml:space="preserve">
+    <value>Cliquez sur une version pour lire ses notes, puis à nouveau pour les fermer.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Keywords" xml:space="preserve">
+    <value>historique des versions, notes de version, journal des modifications, versions précédentes, anciennes versions, nouveautés</value>
   </data>
 </root>

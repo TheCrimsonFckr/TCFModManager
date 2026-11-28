@@ -197,6 +197,14 @@ internal static class HelpCatalog
                 .WithNote(() => Strings.Help_Browse_Details_Note)
                 .WithKeywords(() => Strings.Help_Browse_Details_Keywords),
 
+            Topic("browse.spmodactions", () => Strings.Help_Browse_SpModActions_Title,
+                Step(() => Strings.Help_Browse_SpModActions_Step1),
+                Step(() => Strings.Help_Browse_SpModActions_Step2, () => Strings.Nav_Browse, () => Strings.Nav_Installed),
+                Step(() => Strings.Help_Browse_SpModActions_Step3))
+                .WithNote(() => Strings.Help_Browse_SpModActions_Note)
+                .WithKeywords(() => Strings.Help_Browse_SpModActions_Keywords)
+                .WithPage(typeof(BrowsePage)),
+
             Topic("browse.hideinstalled", () => Strings.Help_Browse_HideInstalled_Title,
                 Step(() => Strings.Help_Browse_HideInstalled_Step1,
                     () => Strings.Nav_Browse, () => Strings.Filter_More, () => Strings.Filter_HideInstalled,
@@ -276,7 +284,10 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_Installed_CardLayouts_Step2, () => Strings.CardLayout_Edit, () => Strings.CardLayout_New),
                 Step(() => Strings.Help_Installed_CardLayouts_Step3,
                     () => Strings.CardLayout_SizeHeader, () => Strings.CardLayout_WidthHeader, () => Strings.CardLayout_PictureHeader),
-                Step(() => Strings.Help_Installed_CardLayouts_Step4, () => Strings.CardLayout_Use, () => Strings.CardLayout_MakeDefault))
+                Step(() => Strings.Help_Installed_CardLayouts_Step4, () => Strings.CardLayout_Use, () => Strings.CardLayout_MakeDefault),
+                Step(() => Strings.Help_Installed_CardLayouts_Step5,
+                    () => Strings.Nav_Installed, () => Strings.CardLayout_ButtonPlacementHeader,
+                    () => Strings.CardLayout_ButtonsBottom, () => Strings.CardLayout_ButtonsSide))
                 .WithNote(() => Strings.Help_Installed_CardLayouts_Note, () => Strings.CardLayout_Default)
                 .WithKeywords(() => Strings.Help_Installed_CardLayouts_Keywords)
                 .WithPage(typeof(InstalledPage)),
@@ -769,6 +780,13 @@ internal static class HelpCatalog
                 Step(() => Strings.Help_AppUpdate_Update_Step3))
                 .WithNote(() => Strings.Help_AppUpdate_Update_Note, () => Strings.AppUpdate_CheckNow)
                 .WithKeywords(() => Strings.Help_AppUpdate_Update_Keywords),
+
+            Topic("appupdate.history", () => Strings.Help_AppUpdate_History_Title,
+                Step(() => Strings.Help_AppUpdate_History_Step1,
+                    () => Strings.Nav_AppUpdate, () => Strings.AppUpdate_VersionHistoryHeader, () => Strings.AppUpdate_RunningBadge),
+                Step(() => Strings.Help_AppUpdate_History_Step2))
+                .WithKeywords(() => Strings.Help_AppUpdate_History_Keywords)
+                .WithPage(typeof(AppUpdatePage)),
         ]),
 
         new("options", () => Strings.Nav_Options, SymbolRegular.Settings24, typeof(OptionsPage),

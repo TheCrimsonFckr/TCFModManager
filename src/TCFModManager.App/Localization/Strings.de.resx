@@ -7367,7 +7367,7 @@ Siehe Abhängigkeiten und Konflikte.</value>
     <value>Filtern, sortieren und Filter zurücksetzen</value>
   </data>
   <data name="Help_Browse_Filters_Step1" xml:space="preserve">
-    <value>Klicke unter {0} oder {1} auf {2}. Links öffnet sich ein Bereich mit allen Filtern, der Sortierung und der Anzahl pro Seite.</value>
+    <value>Klicke unter {0} oder {1} auf die Filterschaltfläche neben der Suche ({2}). Links öffnet sich ein Bereich mit allen Filtern, der Sortierung und der Anzahl pro Seite.</value>
   </data>
   <data name="Help_Browse_Filters_Step2" xml:space="preserve">
     <value>Klicke auf den Namen eines Abschnitts, um ihn zu öffnen, und wähle aus. Die Liste ändert sich sofort.</value>
@@ -10623,7 +10623,7 @@ Die Details stehen im Log:
     <value>Festlegen, was Mod-Karten zeigen</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>Öffne auf {0} oder {1} {2} und wähle unter {3} ein Layout.</value>
+    <value>Öffne auf {0} oder {1} die Filterschaltfläche ({2}) und wähle unter {3} ein Layout.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
     <value>Für ein eigenes klicke dort auf {0} und dann auf {1}. Hake die gewünschten Felder an und ziehe sie in die Reihenfolge.</value>
@@ -10638,7 +10638,7 @@ Die Details stehen im Log:
     <value>{0} kann nicht geändert werden. Auf Installiert legt ein Layout auch fest, was die Zeilen der Gruppen- und Listenansicht zeigen.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
-    <value>Kartenlayout, Kartenansicht, Layout, Felder, kompakt, Kartengröße, Kartenbreite, Bild, Vorschaubild, Banner, Listenspalten, Karten anpassen</value>
+    <value>Kartenlayout, Kartenansicht, Layout, Felder, kompakt, Kartengröße, Kartenbreite, Bild, Vorschaubild, Banner, Listenspalten, Karten anpassen, Schaltflächen, Schaltflächen unten, Schaltflächen an der Seite</value>
   </data>
   <data name="CardLayout_PreviewListHeader" xml:space="preserve">
     <value>Zeile der Listenansicht</value>
@@ -11828,5 +11828,38 @@ Klicken, um sie anzuzeigen.</value>
   </data>
   <data name="Tour_New133_CardActions_Body" xml:space="preserve">
     <value>Öffnet Empfehlen, Reaktionen, Abonnieren und Zu einer Liste hinzufügen von sp-mod für diese Mod, direkt hier.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step5" xml:space="preserve">
+    <value>Auf {0} legt {1} fest, ob die Schaltflächen einer Karte in einer Reihe unten ({2}) oder an der linken Seite ({3}) sitzen.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Title" xml:space="preserve">
+    <value>Eine Mod empfehlen oder darauf reagieren</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step1" xml:space="preserve">
+    <value>Melde dich zuerst bei sp-mod an: Klicke oben im Fenster auf die Personen-Schaltfläche.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step2" xml:space="preserve">
+    <value>Klicke unter {0} oder {1} auf der Karte einer Mod auf die Daumen-hoch-Schaltfläche.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step3" xml:space="preserve">
+    <value>Empfiehl die Mod im Pop-up, reagiere darauf, abonniere sie oder füge sie einer Liste hinzu. Mit ✕ oder einem Klick daneben schließt du es.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Note" xml:space="preserve">
+    <value>Der Daumen hoch oben im Fenster macht dasselbe für TCFModManager selbst. Ein Kartenlayout kann die Schaltfläche ausblenden.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Keywords" xml:space="preserve">
+    <value>empfehlen, reagieren, Reaktion, gefällt mir, Daumen hoch, abonnieren, zur Liste hinzufügen, sp-mod</value>
+  </data>
+  <data name="Help_AppUpdate_History_Title" xml:space="preserve">
+    <value>Hinweise einer früheren Version lesen</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step1" xml:space="preserve">
+    <value>Öffne {0}. {1} ganz unten zeigt die 5 neuesten Versionen der App, deine ist mit {2} markiert.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step2" xml:space="preserve">
+    <value>Klicke auf eine Version, um ihre Hinweise zu lesen, und noch einmal, um sie zu schließen.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Keywords" xml:space="preserve">
+    <value>Versionsverlauf, Versionshinweise, Änderungsprotokoll, frühere Versionen, ältere Versionen, was ist neu</value>
   </data>
 </root>

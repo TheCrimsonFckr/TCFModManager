@@ -7367,7 +7367,7 @@ Vedi Dipendenze e conflitti.</value>
     <value>Filtrare, ordinare e azzerare i filtri</value>
   </data>
   <data name="Help_Browse_Filters_Step1" xml:space="preserve">
-    <value>In {0} o {1}, premi {2}. A sinistra si apre un pannello con tutti i filtri, l'ordinamento e quanti elementi mostrare per pagina.</value>
+    <value>In {0} o {1}, premi il pulsante dei filtri accanto alla ricerca ({2}). A sinistra si apre un pannello con tutti i filtri, l'ordinamento e quanti elementi mostrare per pagina.</value>
   </data>
   <data name="Help_Browse_Filters_Step2" xml:space="preserve">
     <value>Fai clic sul nome di una sezione per aprirla, poi scegli ciò che vuoi. L'elenco cambia subito.</value>
@@ -10623,7 +10623,7 @@ I dettagli sono nel log:
     <value>Scegliere cosa mostrano le schede mod</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>In {0} o {1}, apri {2} e scegli un layout in {3}.</value>
+    <value>In {0} o {1}, apri il pulsante dei filtri ({2}) e scegli un layout in {3}.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
     <value>Per crearne uno tuo, fai clic su {0}, poi su {1}. Spunta i campi che vuoi e trascinali nell'ordine.</value>
@@ -10638,7 +10638,7 @@ I dettagli sono nel log:
     <value>{0} non si può modificare. In Installate, un layout decide anche cosa mostrano le righe delle viste Gruppi ed Elenco.</value>
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
-    <value>layout schede, vista schede, layout, campi, compatta, dimensione schede, larghezza, immagine, miniatura, banner, colonne elenco, personalizzare schede</value>
+    <value>layout schede, vista schede, layout, campi, compatta, dimensione schede, larghezza, immagine, miniatura, banner, colonne elenco, personalizzare schede, pulsanti, pulsanti in basso, pulsanti di lato</value>
   </data>
   <data name="CardLayout_PreviewListHeader" xml:space="preserve">
     <value>Riga della vista Elenco</value>
@@ -11828,5 +11828,38 @@ Fai clic per mostrarle.</value>
   </data>
   <data name="Tour_New133_CardActions_Body" xml:space="preserve">
     <value>Apre consiglia, reazioni, iscriviti e aggiungi a una lista di sp-mod per questa mod, proprio qui.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step5" xml:space="preserve">
+    <value>In {0}, {1} mette i pulsanti di una scheda in una riga in basso ({2}) o sul lato sinistro ({3}).</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Title" xml:space="preserve">
+    <value>Consiglia una mod o reagisci</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step1" xml:space="preserve">
+    <value>Prima accedi a sp-mod: premi il pulsante persona in alto nella finestra.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step2" xml:space="preserve">
+    <value>In {0} o {1}, premi il pulsante pollice in su sulla scheda di una mod.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step3" xml:space="preserve">
+    <value>Nel pop-up consiglia la mod, reagisci, iscriviti o aggiungila a una lista. Premi ✕ o fai clic fuori per chiuderlo.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Note" xml:space="preserve">
+    <value>Il pollice in su in alto nella finestra fa lo stesso per TCFModManager. Un layout delle schede può nascondere il pulsante.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Keywords" xml:space="preserve">
+    <value>consigliare, reagire, reazione, mi piace, pollice in su, iscriviti, aggiungi a una lista, sp-mod</value>
+  </data>
+  <data name="Help_AppUpdate_History_Title" xml:space="preserve">
+    <value>Leggi le note di una versione precedente</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step1" xml:space="preserve">
+    <value>Apri {0}. {1}, in fondo, elenca le 5 versioni più recenti dell'app, con la tua segnata come {2}.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step2" xml:space="preserve">
+    <value>Fai clic su una versione per leggerne le note e di nuovo per chiuderle.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Keywords" xml:space="preserve">
+    <value>cronologia versioni, note di rilascio, changelog, versioni precedenti, versioni vecchie, novità</value>
   </data>
 </root>

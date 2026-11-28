@@ -7706,7 +7706,7 @@
     <value>Фильтры, сортировка и их сброс</value>
   </data>
   <data name="Help_Browse_Filters_Step1" xml:space="preserve">
-    <value>На странице {0} или {1} нажмите {2}. Слева откроется панель со всеми фильтрами, сортировкой и числом элементов на странице.</value>
+    <value>На странице {0} или {1} нажмите кнопку фильтра рядом с поиском ({2}). Слева откроется панель со всеми фильтрами, сортировкой и числом элементов на странице.</value>
   </data>
   <data name="Help_Browse_Filters_Step2" xml:space="preserve">
     <value>Нажмите на название раздела, чтобы открыть его, и выберите нужное. Список сразу изменится.</value>
@@ -11046,7 +11046,7 @@
     <value>Выбрать, что показывают карточки модов</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step1" xml:space="preserve">
-    <value>На странице {0} или {1} откройте «{2}» и выберите макет в разделе «{3}».</value>
+    <value>На странице {0} или {1} нажмите кнопку фильтра («{2}») и выберите макет в разделе «{3}».</value>
   </data>
   <data name="Help_Installed_CardLayouts_Step2" xml:space="preserve">
     <value>Чтобы сделать свой, нажмите там «{0}», затем «{1}». Отметьте нужные поля и перетащите их в нужном порядке.</value>
@@ -11061,7 +11061,7 @@
     <value>«{0}» нельзя изменить. На странице «Установленные» макет также задаёт, что показывают строки видов «Группы» и «Список».</value>
   </data>
   <data name="Help_Installed_CardLayouts_Keywords" xml:space="preserve">
-    <value>макет карточек, вид карточек, макет, поля, компактный, размер карточки, ширина, изображение, миниатюра, баннер, столбцы списка, настроить карточки</value>
+    <value>макет карточек, вид карточек, макет, поля, компактный, размер карточки, ширина, изображение, миниатюра, баннер, столбцы списка, настроить карточки, кнопки, кнопки внизу, кнопки сбоку</value>
   </data>
   <data name="CardLayout_PreviewListHeader" xml:space="preserve">
     <value>Строка вида «Список»</value>
@@ -12295,5 +12295,38 @@
   </data>
   <data name="Tour_New133_CardActions_Body" xml:space="preserve">
     <value>Открывает одобрение, реакции, подписку и добавление в список sp-mod для этого мода прямо здесь.</value>
+  </data>
+  <data name="Help_Installed_CardLayouts_Step5" xml:space="preserve">
+    <value>На странице {0} параметр «{1}» размещает кнопки карточки в ряд внизу ({2}) или слева сбоку ({3}).</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Title" xml:space="preserve">
+    <value>Одобрить мод или отреагировать</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step1" xml:space="preserve">
+    <value>Сначала войдите в sp-mod: нажмите кнопку с человеком вверху окна.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step2" xml:space="preserve">
+    <value>На странице {0} или {1} нажмите кнопку с большим пальцем вверх на карточке мода.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Step3" xml:space="preserve">
+    <value>Во всплывающем окне одобрите мод, отреагируйте, подпишитесь или добавьте его в список. Чтобы закрыть окно, нажмите ✕ или щёлкните за его пределами.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Note" xml:space="preserve">
+    <value>Большой палец вверх вверху окна делает то же для самого TCFModManager. Макет карточек может скрыть эту кнопку.</value>
+  </data>
+  <data name="Help_Browse_SpModActions_Keywords" xml:space="preserve">
+    <value>одобрить, реакция, отреагировать, лайк, большой палец, подписаться, добавить в список, sp-mod</value>
+  </data>
+  <data name="Help_AppUpdate_History_Title" xml:space="preserve">
+    <value>Прочитать заметки к прежней версии</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step1" xml:space="preserve">
+    <value>Откройте «{0}». В разделе «{1}» внизу перечислены 5 последних версий приложения, ваша отмечена как «{2}».</value>
+  </data>
+  <data name="Help_AppUpdate_History_Step2" xml:space="preserve">
+    <value>Щёлкните версию, чтобы прочитать её заметки, и ещё раз, чтобы закрыть их.</value>
+  </data>
+  <data name="Help_AppUpdate_History_Keywords" xml:space="preserve">
+    <value>история версий, заметки к выпуску, список изменений, прежние версии, старые версии, что нового</value>
   </data>
 </root>
