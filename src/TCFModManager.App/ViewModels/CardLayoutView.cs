@@ -100,6 +100,14 @@ public sealed class CardLayoutView
 
     public bool DetailsInDropdown => !DetailsInWindow;
 
+    // OPEN-77: an Installed card's buttons down its left side, or (the default) in a row along its bottom.
+    public bool ButtonsAtSide => Page == CardLayoutPage.Installed && Layout.Buttons == CardButtons.Side;
+
+    public bool ButtonsAtBottom => Page == CardLayoutPage.Installed && !ButtonsAtSide;
+
+    public System.Windows.Controls.Orientation ButtonsOrientation =>
+        ButtonsAtSide ? System.Windows.Controls.Orientation.Vertical : System.Windows.Controls.Orientation.Horizontal;
+
     public double WidthFactor => Width switch
     {
         CardWidth.Narrow => 0.75,
@@ -114,7 +122,7 @@ public sealed class CardLayoutView
             var (title, line, chip) = Behaviors.CardDensity.FontSizes(Size);
             var gap = Behaviors.CardDensity.LineGap(Size);
 
-            var buttons = 26 + (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0);
+            var buttons = 26 + (ButtonsAtSide ? (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0) : 0);
 
             var inlineRuns = Fields.Count(f => f.Kind == CardFieldKind.Line);
             var chipRuns = 0;

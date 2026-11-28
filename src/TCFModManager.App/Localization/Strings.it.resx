@@ -11793,4 +11793,13 @@ Fai clic per mostrarle.</value>
   <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
     <value>Consiglia TCFModManager o reagisci su sp-mod</value>
   </data>
+  <data name="CardLayout_ButtonPlacementHeader" xml:space="preserve">
+    <value>Dove vanno i pulsanti</value>
+  </data>
+  <data name="CardLayout_ButtonsBottom" xml:space="preserve">
+    <value>Lungo il fondo</value>
+  </data>
+  <data name="CardLayout_ButtonsSide" xml:space="preserve">
+    <value>Sul lato</value>
+  </data>
 </root>

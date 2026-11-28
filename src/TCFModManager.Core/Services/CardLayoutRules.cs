@@ -58,6 +58,7 @@ public static class CardLayoutRules
         if (!Enum.IsDefined(layout.Size)) layout.Size = CardSize.Normal;
         if (!Enum.IsDefined(layout.Width)) layout.Width = CardWidth.Normal;
         if (!Enum.IsDefined(layout.Picture)) layout.Picture = CardPicture.Off;
+        if (!Enum.IsDefined(layout.Buttons)) layout.Buttons = CardButtons.Bottom;
 
         return layout;
     }
@@ -73,6 +74,7 @@ public static class CardLayoutRules
         Width = layout.Width,
         Picture = layout.Picture,
         DetailsInWindow = layout.DetailsInWindow,
+        Buttons = layout.Buttons,
         FieldsRevision = layout.FieldsRevision,
     };
 }

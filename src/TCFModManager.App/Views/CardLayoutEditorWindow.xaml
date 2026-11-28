@@ -172,15 +172,20 @@
                         <TextBlock Margin="28,2,0,0" Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_DetailsInWindowHint}" />
                     </StackPanel>
 
+                    <StackPanel Margin="0,14,0,0" Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}">
+                        <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_ButtonPlacementHeader}" />
+                        <ComboBox HorizontalAlignment="Left" MinWidth="200" ItemsSource="{Binding ButtonPlacementOptions}" SelectedItem="{Binding SelectedButtonPlacement}" DisplayMemberPath="Label" IsEnabled="{Binding IsEditable}" />
+                    </StackPanel>
+
                     <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_FieldsHeader}" />
                     <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_FieldsHint}" />
                     <ItemsControl ItemsSource="{Binding FieldRows}" ItemTemplate="{StaticResource FieldRowTemplate}" Focusable="False" />
 
-                    <StackPanel Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}">
-                        <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_ButtonsHeader}" />
-                        <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_ButtonsHint}" />
-                        <ItemsControl ItemsSource="{Binding ButtonRows}" ItemTemplate="{StaticResource ButtonRowTemplate}" Focusable="False" />
+                    <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_ButtonsHeader}" />
+                    <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_ButtonsHint}" Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}" />
+                    <ItemsControl ItemsSource="{Binding ButtonRows}" ItemTemplate="{StaticResource ButtonRowTemplate}" Focusable="False" />
 
+                    <StackPanel Visibility="{Binding IsInstalled, Converter={StaticResource BoolToVis}}">
                         <TextBlock Style="{StaticResource EditorHeader}" Text="{loc:Str CardLayout_ListFieldsHeader}" />
                         <TextBlock Style="{StaticResource EditorHint}" Text="{loc:Str CardLayout_ListFieldsHint}" />
                         <ItemsControl ItemsSource="{Binding ListRows}" ItemTemplate="{StaticResource FieldRowTemplate}" Focusable="False" />

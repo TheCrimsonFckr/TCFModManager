@@ -33,6 +33,14 @@ public enum CardPicture
     Banner,
 }
 
+// OPEN-77: where an Installed card's buttons go.
+[JsonConverter(typeof(JsonStringEnumConverter<CardButtons>))]
+public enum CardButtons
+{
+    Bottom,
+    Side,
+}
+
 public sealed class CardLayout
 {
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -52,6 +60,8 @@ public sealed class CardLayout
     public CardPicture Picture { get; set; } = CardPicture.Off;
 
     public bool DetailsInWindow { get; set; }
+
+    public CardButtons Buttons { get; set; } = CardButtons.Bottom;
 
     public int? FieldsRevision { get; set; }
 }

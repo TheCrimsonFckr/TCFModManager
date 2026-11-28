@@ -184,6 +184,145 @@
             Visibility="{Binding PreviewTeaser, Converter={StaticResource CardNullToCollapsed}}" />
     </DataTemplate>
 
+    <!-- OPEN-77: the card's buttons, in a row along the bottom (default) or down the side (CardButtons.Side). -->
+    <Style x:Key="CardActionButton" TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+        <Setter Property="Margin" Value="0,0,4,0" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding (controls:CardLayoutScope.Layout).ButtonsAtSide, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Margin" Value="0,2,10,0" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate x:Key="InstalledCardButtons" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
+            <StackPanel Orientation="{Binding (controls:CardLayoutScope.Layout).ButtonsOrientation, RelativeSource={RelativeSource Self}}">
+
+                <ui:Button
+                    Style="{StaticResource CardActionButton}"
+                    Padding="0"
+                    MinWidth="0"
+                    MinHeight="0"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Appearance="Transparent"
+                    Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{Binding DisableToggleTooltip}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowDisableToggle, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
+                </ui:Button>
+
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowQuickUpdate, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:Button
+                        Style="{StaticResource CardActionButton}"
+                        Padding="0"
+                        MinWidth="0"
+                        MinHeight="0"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        Appearance="Transparent"
+                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                        Visibility="{Binding CanQuickUpdate, Converter={StaticResource CardBoolToVis}}"
+                        Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding}"
+                        ToolTip="{Binding QuickUpdateToolTip}">
+                        <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
+                    </ui:Button>
+                </Border>
+
+                <ui:Button
+                    Style="{StaticResource CardActionButton}"
+                    Padding="0"
+                    MinWidth="0"
+                    MinHeight="0"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Appearance="Transparent"
+                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{Binding PinTooltip}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon Symbol="{Binding PinGlyph}" FontSize="16" />
+                </ui:Button>
+
+                <ui:Button
+                    Style="{StaticResource CardActionButton}"
+                    Padding="0"
+                    MinWidth="0"
+                    MinHeight="0"
+                    Width="30"
+                    Height="30"
+                    HorizontalAlignment="Center"
+                    Appearance="Transparent"
+                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                    Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                    CommandParameter="{Binding}"
+                    ToolTip="{loc:Str Installed_RemoveToolTip}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowRemoveButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon Symbol="Delete24" FontSize="16" />
+                </ui:Button>
+
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowInstalledAddons, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:Button
+                        Style="{StaticResource CardActionButton}"
+                        Padding="0"
+                        MinWidth="0"
+                        MinHeight="0"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        Appearance="Transparent"
+                        Visibility="{Binding HasInstalledAddons, Converter={StaticResource CardBoolToVis}}"
+                        Command="{Binding DataContext.ShowFamilyCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding}"
+                        ToolTip="{Binding InstalledAddonsToolTip}">
+                        <ui:SymbolIcon Symbol="PuzzlePiece24" FontSize="16" />
+                    </ui:Button>
+                </Border>
+
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowNeededBy, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:Button
+                        Style="{StaticResource CardActionButton}"
+                        Padding="0"
+                        MinWidth="0"
+                        MinHeight="0"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        Appearance="Transparent"
+                        Visibility="{Binding IsNeeded, Converter={StaticResource CardBoolToVis}}"
+                        Command="{Binding DataContext.ShowNeededByCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding}"
+                        ToolTip="{Binding NeededByToolTip}">
+                        <ui:SymbolIcon Symbol="Branch24" FontSize="16" />
+                    </ui:Button>
+                </Border>
+
+                <!-- OPEN-76 R11: sp-mod's Subscribe / Endorse / Add to list and reactions, signed in only. -->
+                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSpModActions, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <Border Visibility="{Binding SpModActionsModId, Converter={StaticResource CardNullToCollapsed}}">
+                        <ui:Button
+                            Style="{StaticResource CardActionButton}"
+                            Padding="0"
+                            MinWidth="0"
+                            MinHeight="0"
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            Appearance="Transparent"
+                            behaviors:SpModActions.ModId="{Binding SpModActionsModId}"
+                            ToolTip="{loc:Str SpModActions_ToolTip}"
+                            Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource CardBoolToVis}}">
+                            <ui:SymbolIcon Symbol="ThumbLike24" FontSize="16" />
+                        </ui:Button>
+                    </Border>
+                </Border>
+            </StackPanel>
+    </DataTemplate>
+
     <DataTemplate x:Key="InstalledCardHeader" DataType="{x:Type viewmodels:InstalledModCardViewModel}">
         <Grid
             Margin="0,0,8,0"
@@ -196,6 +335,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" SharedSizeGroup="InstalledCardBody" />
+                <RowDefinition Height="Auto" SharedSizeGroup="InstalledCardButtonRow" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -240,129 +380,11 @@
                     Style="{StaticResource StatusIcon}"
                     ToolTip="{Binding StatusTooltip}" />
 
-                <ui:Button
-                    Margin="0,4,10,0"
-                    Padding="0"
-                    MinWidth="0"
-                    MinHeight="0"
-                    Width="30"
-                    Height="30"
-                    HorizontalAlignment="Center"
-                    Appearance="Transparent"
-                    Command="{Binding DataContext.ToggleDisableCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{Binding DisableToggleTooltip}"
-                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowDisableToggle, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:SymbolIcon Symbol="{Binding DisableToggleGlyph}" FontSize="16" />
-                </ui:Button>
-
-                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowQuickUpdate, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:Button
-                        Margin="0,2,10,0"
-                        Padding="0"
-                        MinWidth="0"
-                        MinHeight="0"
-                        Width="30"
-                        Height="30"
-                        HorizontalAlignment="Center"
-                        Appearance="Transparent"
-                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                        Visibility="{Binding CanQuickUpdate, Converter={StaticResource CardBoolToVis}}"
-                        Command="{Binding DataContext.UpdateOneCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding}"
-                        ToolTip="{Binding QuickUpdateToolTip}">
-                        <ui:SymbolIcon Symbol="ArrowDownload24" FontSize="16" />
-                    </ui:Button>
-                </Border>
-
-                <ui:Button
-                    Margin="0,2,10,0"
-                    Padding="0"
-                    MinWidth="0"
-                    MinHeight="0"
-                    Width="30"
-                    Height="30"
-                    HorizontalAlignment="Center"
-                    Appearance="Transparent"
-                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{Binding PinTooltip}"
-                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:SymbolIcon Symbol="{Binding PinGlyph}" FontSize="16" />
-                </ui:Button>
-
-                <ui:Button
-                    Margin="0,2,10,0"
-                    Padding="0"
-                    MinWidth="0"
-                    MinHeight="0"
-                    Width="30"
-                    Height="30"
-                    HorizontalAlignment="Center"
-                    Appearance="Transparent"
-                    Foreground="{DynamicResource SystemFillColorCriticalBrush}"
-                    Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{loc:Str Installed_RemoveToolTip}"
-                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowRemoveButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:SymbolIcon Symbol="Delete24" FontSize="16" />
-                </ui:Button>
-
-                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowInstalledAddons, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:Button
-                        Margin="0,2,10,0"
-                        Padding="0"
-                        MinWidth="0"
-                        MinHeight="0"
-                        Width="30"
-                        Height="30"
-                        HorizontalAlignment="Center"
-                        Appearance="Transparent"
-                        Visibility="{Binding HasInstalledAddons, Converter={StaticResource CardBoolToVis}}"
-                        Command="{Binding DataContext.ShowFamilyCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding}"
-                        ToolTip="{Binding InstalledAddonsToolTip}">
-                        <ui:SymbolIcon Symbol="PuzzlePiece24" FontSize="16" />
-                    </ui:Button>
-                </Border>
-
-                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowNeededBy, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:Button
-                        Margin="0,2,10,0"
-                        Padding="0"
-                        MinWidth="0"
-                        MinHeight="0"
-                        Width="30"
-                        Height="30"
-                        HorizontalAlignment="Center"
-                        Appearance="Transparent"
-                        Visibility="{Binding IsNeeded, Converter={StaticResource CardBoolToVis}}"
-                        Command="{Binding DataContext.ShowNeededByCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                        CommandParameter="{Binding}"
-                        ToolTip="{Binding NeededByToolTip}">
-                        <ui:SymbolIcon Symbol="Branch24" FontSize="16" />
-                    </ui:Button>
-                </Border>
-
-                <!-- OPEN-76 R11: sp-mod's Subscribe / Endorse / Add to list and reactions, signed in only. -->
-                <Border Visibility="{Binding (controls:CardLayoutScope.Layout).ShowSpModActions, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <Border Visibility="{Binding SpModActionsModId, Converter={StaticResource CardNullToCollapsed}}">
-                        <ui:Button
-                            Margin="0,2,10,0"
-                            Padding="0"
-                            MinWidth="0"
-                            MinHeight="0"
-                            Width="30"
-                            Height="30"
-                            HorizontalAlignment="Center"
-                            Appearance="Transparent"
-                            behaviors:SpModActions.ModId="{Binding SpModActionsModId}"
-                            ToolTip="{loc:Str SpModActions_ToolTip}"
-                            Visibility="{Binding IsSignedIn, Source={x:Static app:AppServices.SpModAccount}, Converter={StaticResource CardBoolToVis}}">
-                            <ui:SymbolIcon Symbol="ThumbLike24" FontSize="16" />
-                        </ui:Button>
-                    </Border>
-                </Border>
+                <ContentPresenter
+                    Margin="0,2,0,0"
+                    ContentTemplate="{StaticResource InstalledCardButtons}"
+                    Content="{Binding}"
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ButtonsAtSide, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}" />
             </StackPanel>
 
             <Border
@@ -401,6 +423,15 @@
                     TemplatePrefix="CardField.Installed."
                     Fields="{Binding (controls:CardLayoutScope.Layout).Fields, RelativeSource={RelativeSource Self}}" />
             </StackPanel>
+
+            <ContentPresenter
+                Grid.Row="2"
+                Grid.ColumnSpan="4"
+                Margin="0,6,0,0"
+                HorizontalAlignment="Left"
+                ContentTemplate="{StaticResource InstalledCardButtons}"
+                Content="{Binding}"
+                Visibility="{Binding (controls:CardLayoutScope.Layout).ButtonsAtBottom, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}" />
         </Grid>
     </DataTemplate>
 

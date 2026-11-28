@@ -14545,4 +14545,16 @@ Click to show them.</value>
     <value>Endorse or react to TCFModManager on sp-mod</value>
     <comment>Tooltip on the title bar's thumbs-up, shown while signed in to sp-mod.</comment>
   </data>
+  <data name="CardLayout_ButtonPlacementHeader" xml:space="preserve">
+    <value>Where the buttons go</value>
+    <comment>Card layout editor: label over the choice of where an Installed card's buttons go.</comment>
+  </data>
+  <data name="CardLayout_ButtonsBottom" xml:space="preserve">
+    <value>Along the bottom</value>
+    <comment>Choice: the buttons in a row along the bottom of the card (the default).</comment>
+  </data>
+  <data name="CardLayout_ButtonsSide" xml:space="preserve">
+    <value>Down the side</value>
+    <comment>Choice: the buttons in a column down the card's left side.</comment>
+  </data>
 </root>

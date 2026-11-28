@@ -62,6 +62,11 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
             new(CardPicture.Small, Strings.CardLayout_PictureSmall),
             new(CardPicture.Banner, Strings.CardLayout_PictureBanner),
         ];
+        ButtonPlacementOptions =
+        [
+            new(CardButtons.Bottom, Strings.CardLayout_ButtonsBottom),
+            new(CardButtons.Side, Strings.CardLayout_ButtonsSide),
+        ];
 
         _preview = CardLayoutView.Default(page);
         ReloadLayouts(current);
@@ -93,6 +98,8 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
 
     public IReadOnlyList<CardOption<CardPicture>> PictureOptions { get; }
 
+    public IReadOnlyList<CardOption<CardButtons>> ButtonPlacementOptions { get; }
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEditable))]
     [NotifyPropertyChangedFor(nameof(IsLocked))]
@@ -113,6 +120,9 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
 
     [ObservableProperty]
     private bool _detailsInWindow;
+
+    [ObservableProperty]
+    private CardOption<CardButtons>? _selectedButtonPlacement;
 
     [ObservableProperty]
     private CardLayoutView _preview;
@@ -141,6 +151,8 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
     partial void OnSelectedPictureChanged(CardOption<CardPicture>? value) => Commit();
 
     partial void OnDetailsInWindowChanged(bool value) => Commit();
+
+    partial void OnSelectedButtonPlacementChanged(CardOption<CardButtons>? value) => Commit();
 
     private void ReloadLayouts(Guid? select)
     {
@@ -176,6 +188,7 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
             SelectedWidth = WidthOptions.First(o => o.Value == layout.Width);
             SelectedPicture = PictureOptions.First(o => o.Value == layout.Picture);
             DetailsInWindow = layout.DetailsInWindow;
+            SelectedButtonPlacement = ButtonPlacementOptions.First(o => o.Value == layout.Buttons);
             Preview = view;
             StatusMessage = view.IsDefault ? Strings.CardLayout_DefaultLocked : null;
         }
@@ -238,6 +251,7 @@ public sealed partial class CardLayoutEditorViewModel : LocalizedViewModel
             Width = SelectedWidth?.Value ?? CardWidth.Normal,
             Picture = SelectedPicture?.Value ?? CardPicture.Off,
             DetailsInWindow = IsInstalled && DetailsInWindow,
+            Buttons = SelectedButtonPlacement?.Value ?? CardButtons.Bottom,
         };
     }
 

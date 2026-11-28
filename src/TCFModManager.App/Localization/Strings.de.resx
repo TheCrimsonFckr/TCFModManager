@@ -11793,4 +11793,13 @@ Klicken, um sie anzuzeigen.</value>
   <data name="MainWindow_EndorseAppToolTip" xml:space="preserve">
     <value>TCFModManager auf sp-mod empfehlen oder darauf reagieren</value>
   </data>
+  <data name="CardLayout_ButtonPlacementHeader" xml:space="preserve">
+    <value>Wo die Schaltflächen sitzen</value>
+  </data>
+  <data name="CardLayout_ButtonsBottom" xml:space="preserve">
+    <value>Unten entlang</value>
+  </data>
+  <data name="CardLayout_ButtonsSide" xml:space="preserve">
+    <value>An der Seite</value>
+  </data>
 </root>
