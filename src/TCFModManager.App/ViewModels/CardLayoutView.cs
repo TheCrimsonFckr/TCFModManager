@@ -23,8 +23,8 @@ public sealed class CardLayoutView
         _fields = shown.Select(f => f.Key).ToHashSet();
         _listFields = listShown.Select(f => f.Key).ToHashSet();
 
-        Fields = [.. shown.Where(f => f.Kind != CardFieldKind.Button)];
-        RowFields = [.. Fields.Where(f => !RowOwnColumns.Contains(f.Key))];
+        Fields = [.. shown.Where(f => f.Kind != CardFieldKind.Button && !(f.Key == F.Pinned && ButtonsAtBottom))];
+        RowFields = [.. shown.Where(f => f.Kind != CardFieldKind.Button && !RowOwnColumns.Contains(f.Key))];
         ListFields = [.. listShown.Where(f => f.Kind != CardFieldKind.Button && !RowOwnColumns.Contains(f.Key))];
     }
 
@@ -105,10 +105,8 @@ public sealed class CardLayoutView
 
     public bool ButtonsAtBottom => Page == CardLayoutPage.Installed && !ButtonsAtSide;
 
-    // OPEN-77: with the buttons along the bottom, Pin sits under the status icon instead.
-    public bool ShowPinInButtons => ShowPinButton && ButtonsAtSide;
-
-    public bool ShowPinUnderStatus => ShowPinButton && ButtonsAtBottom;
+    // OPEN-77: with the buttons along the bottom, the Pinned mark sits under the status icon instead of among the chips.
+    public bool ShowPinnedUnderStatus => Has(F.Pinned) && ButtonsAtBottom;
 
     public System.Windows.Controls.Orientation ButtonsOrientation =>
         ButtonsAtSide ? System.Windows.Controls.Orientation.Vertical : System.Windows.Controls.Orientation.Horizontal;
@@ -127,7 +125,7 @@ public sealed class CardLayoutView
             var (title, line, chip) = Behaviors.CardDensity.FontSizes(Size);
             var gap = Behaviors.CardDensity.LineGap(Size);
 
-            var buttons = 26 + (ButtonsAtSide ? (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0) : (ShowPinButton ? 34 : 0));
+            var buttons = 26 + (ButtonsAtSide ? (ShowDisableToggle ? 34 : 0) + (ShowQuickUpdate ? 32 : 0) + (ShowPinButton ? 32 : 0) + (ShowRemoveButton ? 32 : 0) : (ShowPinnedUnderStatus ? 20 : 0));
 
             var inlineRuns = Fields.Count(f => f.Kind == CardFieldKind.Line);
             var chipRuns = 0;

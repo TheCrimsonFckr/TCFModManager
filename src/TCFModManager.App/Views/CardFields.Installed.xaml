@@ -244,7 +244,7 @@
                     Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
                     CommandParameter="{Binding}"
                     ToolTip="{Binding PinTooltip}"
-                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinInButtons, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinButton, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
                     <ui:SymbolIcon Symbol="{Binding PinGlyph}" FontSize="16" />
                 </ui:Button>
 
@@ -380,21 +380,17 @@
                     Style="{StaticResource StatusIcon}"
                     ToolTip="{Binding StatusTooltip}" />
 
-                <ui:Button
-                    Margin="0,4,10,0"
-                    Padding="0"
-                    MinWidth="0"
-                    MinHeight="0"
-                    Width="30"
-                    Height="30"
+                <Border
+                    Margin="0,6,10,0"
                     HorizontalAlignment="Center"
-                    Appearance="Transparent"
-                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
-                    CommandParameter="{Binding}"
-                    ToolTip="{Binding PinTooltip}"
-                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinUnderStatus, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
-                    <ui:SymbolIcon Symbol="{Binding PinGlyph}" FontSize="16" />
-                </ui:Button>
+                    Visibility="{Binding (controls:CardLayoutScope.Layout).ShowPinnedUnderStatus, RelativeSource={RelativeSource Self}, Converter={StaticResource CardBoolToVis}}">
+                    <ui:SymbolIcon
+                        Symbol="Pin24"
+                        FontSize="14"
+                        Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                        ToolTip="{loc:Str Common_PinnedToolTip}"
+                        Visibility="{Binding IsPinned, Converter={StaticResource CardBoolToVis}}" />
+                </Border>
 
                 <ContentPresenter
                     Margin="0,2,0,0"
